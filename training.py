@@ -588,3 +588,45 @@ class period:
         return strResult
 
 
+#
+#
+#
+
+def CalendarPeriod(intYear):
+
+    ''' returns a plain calendar year period '''
+    
+    s = period(str(intYear))
+
+    try:
+        datetime.date(intYear, 2, 29)
+        s.append(cycle('All',366))
+    except ValueError:
+        s.append(cycle('All',365))
+
+    s.schedule(intYear,1,1)
+
+    return s
+  
+        
+def CalendarMonthPeriod(intYear):
+
+    ''' returns a calendar year containing month periods '''
+    
+    s = period(str(intYear))
+
+    for m in range(1,13):
+        if m > 11:
+            d = date(intYear+1,1,1) - date(intYear,m,1)
+        else:
+            d = date(intYear,m+1,1) - date(intYear,m,1)
+
+        p = period(str(intYear) + '.' + str(m))
+        p.append(cycle(str(m), d.days))
+        s.append(p)
+        
+    s.schedule(intYear,1,1)
+
+    return s
+  
+        
