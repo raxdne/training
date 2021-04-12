@@ -153,7 +153,10 @@ class unit:
 
 
     def toXML(self):
-        c = {'W': '#ff5555', 'R': '#ffaaaa', 'L': '#aaffaa', 'K': '#aaaaff'}
+
+        # TODO: make colorcoding configurable
+        c = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
+
         strResult = ' TEXT="{date} {dist:.1f} {type} {time}"'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
         if self.type[0] in c:
             strResult += ' BACKGROUND_COLOR="' + c[self.type[0]] + '"'
@@ -481,8 +484,10 @@ class period:
             c.report(arrArg)
 
         n = self.getNumberOfUnits()
-        p = self.getPeriod()
-        strResult += str(n) + ' Units in ' + str(p) + ' Days = ' + '{:.02f}'.format(n/p * 7.0) + ' Units/Week' + '\n'
+        if n > 0:
+            p = self.getPeriod()
+            strResult += str(n) + ' Units in ' + str(p) + ' Days = ' + '{:.02f}'.format(n/p * 7.0) + ' Units/Week' + '\n'
+            
         for k in sorted(arrArg.keys()):
             strResult += "{:3} x {:3} {:5.0f}\n".format(arrArg[k][1], k, arrArg[k][0])
         
@@ -571,7 +576,8 @@ class period:
 
         e = self.dateEnd + timedelta(days=1)
         
-        strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{ye:04}{me:02}{de:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.strTitle, y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
+        strResult = ''
+        # strResult += "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{ye:04}{me:02}{de:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.strTitle, y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
 
         for c in self.child:
             strResult += c.toiCalString()
