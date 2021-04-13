@@ -375,11 +375,17 @@ class cycle:
 
 class period:
 
-    def __init__(self,strArg=None):
+    def __init__(self,strArg=None,intArg=None):
         """ constructor """
 
+        self.reset(strArg,intArg)
+
+        
+    def reset(self,strArg=None,intArg=None):
+        
         self.strTitle = strArg
         self.arrDescription = []
+        self.setPeriod(intArg)
 
         self.child = []
         self.dateBegin = date.today()
@@ -410,10 +416,6 @@ class period:
         self.strTitle = strArg
         
 
-    def getLength(self):
-        return len(self.child)
-    
-
     def getNumberOfUnits(self):
         intResult = 0
         for c in self.child:
@@ -443,16 +445,20 @@ class period:
             c.insertByDate(objUnit)
 
 
-    def period(self, intArg):
+    def setPeriod(self, intArg):
+
         self.periodInt = intArg
             
 
     def getPeriod(self):
 
-        self.periodInt = 0
+        l = 0
         for c in self.child:
-            self.periodInt += c.getPeriod()
-                
+            l += c.getPeriod()
+            
+        if self.periodInt == None or l > self.periodInt:
+            self.setPeriod(l)
+            
         return self.periodInt
             
 
