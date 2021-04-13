@@ -308,17 +308,19 @@ class cycle:
             arrArg = {}
         strResult = ''
 
-        strResult += '\nMiC '
+        #strResult += '\nMiC '
         for v in self.child:
             for u in v:
                 k = u.type[0:self.lengthType]
                 if k in arrArg:
                     arrArg[k][0] += u.dist
                     arrArg[k][1] += 1
+                    arrArg[k][2] += u.time.hour * 3600 + u.time.minute * 60 + u.time.second
                 else:
                     arrArg[k] = []
                     arrArg[k].append(u.dist)
                     arrArg[k].append(1)
+                    arrArg[k].append(u.time.hour * 3600 + u.time.minute * 60 + u.time.second)
                     
         strResult += self.strTitle + ' (' + str(self.getPeriod()) + ')' + '\n'
         for k in sorted(arrArg.keys()):
@@ -495,7 +497,7 @@ class period:
             strResult += str(n) + ' Units in ' + str(p) + ' Days = ' + '{:.02f}'.format(n/p * 7.0) + ' Units/Week' + '\n'
             
         for k in sorted(arrArg.keys()):
-            strResult += "{:3} x {:3} {:5.0f}\n".format(arrArg[k][1], k, arrArg[k][0])
+            strResult += "{:3} x {:3} {:5.0f} km {:5} h\n".format(arrArg[k][1], k, arrArg[k][0], int(arrArg[k][2] / 3600))
         
         return strResult
 
