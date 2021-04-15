@@ -37,21 +37,27 @@ class unit:
     def __init__(self,strArg=None):
         """ constructor """
         
-        self.arrComment = []
         if strArg == None:
-            self.setTypeStr('tbd')
-            self.setDistStr(0.0)
-            self.setTimeStr('00:00:00')
+            self.reset()
         else:
             self.parse(strArg)
 
 
+    def reset(self):
+        """  """
+        
+        self.dist = None
+        self.type = None
+        self.time = None
+        self.arrComment = []
+
+        
     def setTypeStr(self,strArg):
         if strArg == None or strArg == '':
-            self.type = '  '
+            self.type = ''
         else:
             self.type = strArg.replace(' ','')
-            return True
+        return True
         
 
     def appendCommentStr(self,strArg):
@@ -63,16 +69,17 @@ class unit:
 
     def setDistStr(self,strArg):
         if strArg == None or strArg == '':
-            self.dist = 0.0
+            pass
         else:
             self.dist = float(strArg)
             if self.dist < 0.001:
-                self.dist = 0.0
-            else:
-                return True
+                self.dist = None
+
+        return True
 
 
     def setTimeStr(self,strArg):
+        
         if strArg == None or strArg == '':
             self.time = time()
         else:
@@ -83,10 +90,12 @@ class unit:
                 self.time = time(hour=int(entry[0]), minute=int(entry[1]), second=int(entry[2]))
             else:
                 self.time = time()
-            return True
+                
+        return True
 
 
     def setDateTime(self,objArg):
+        
         self.DateTime = objArg
         
 
@@ -106,7 +115,12 @@ class unit:
 
 
     def scale(self,floatScale):
-        self.dist *= floatScale
+
+        if self.dist == None or self.dist < 0.01:
+            pass
+        else:
+            self.dist *= floatScale
+            
         minutes = (self.time.hour * 60 + self.time.minute)
         minutes *= floatScale
         self.time = time(hour=int(minutes / 60), minute=int(minutes % 60))
@@ -119,6 +133,7 @@ class unit:
     def parse(self,strArg):
         """  """
 
+        self.reset()
         entry = strArg.split(';')
         if len(entry) == 3:
              return self.parse(';' + strArg)
@@ -135,12 +150,20 @@ class unit:
         
 
     def getSpeedStr(self):
+
         strResult = ''
-        s = float(self.time.hour * 3600 + self.time.minute * 60 + self.time.second)
-        spk = s / self.dist
-        strResult += '{0}:{1:02} min/km '.format(int(spk // 60), int(spk % 60))
-        kph = self.dist / (s / 3600)
-        strResult += '{:.1f} km/h '.format(kph)
+        if self.dist == None or self.dist < 0.01 or self.time == None:
+            pass
+        else:
+            s = float(self.time.hour * 3600 + self.time.minute * 60 + self.time.second)
+            if s < 1:
+                pass
+            else:
+                spk = s / self.dist
+                strResult += '{0}:{1:02} min/km '.format(int(spk // 60), int(spk % 60))
+                kph = self.dist / (s / 3600)
+                strResult += '{:.1f} km/h '.format(kph)
+            
         return strResult
     
 
@@ -157,11 +180,16 @@ class unit:
         # TODO: make colorcoding configurable
         c = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
 
-        strResult = ' TEXT="{date} {dist:.1f} {type} {time}"'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
-        if self.type[0] in c:
+        if self.dist == None or self.dist < 0.01:
+            strResult = ' TEXT="{date} {type} {time}"'.format(date=self.DateTime.isoformat(), type=self.type, time=self.time.isoformat())
+            strC = ''
+        else:
+            strResult = ' TEXT="{date} {dist:.1f} {type} {time}"'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
+            strC = '<node TEXT="' + self.getSpeedStr() + '"/>'
+
+        if len(self.type) > 0 and self.type[0] in c:
             strResult += ' BACKGROUND_COLOR="' + c[self.type[0]] + '"'
 
-        strC = '<node TEXT="' + self.getSpeedStr() + '"/>'
         if len(self.arrComment) > 0:
             for i in self.arrComment:
                 strC += '<node TEXT="' + i + '"/>'
@@ -170,12 +198,19 @@ class unit:
 
 
     def toSQL(self):
-        return "insert ({date};{dist:.0f};{type};{time};{comment})\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), comment='')
+
+        if self.dist == None or self.dist < 0.01:
+            return "insert ({date};{dist:.0f};{type};{time};{comment})\n".format(date=self.DateTime.isoformat(), dist=0.0, type=self.type, time=self.time.isoformat(), comment='')
+        else:
+            return "insert ({date};{dist:.0f};{type};{time};{comment})\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), comment='')
 
 
     def toiCalString(self):
         
-        return "BEGIN:VEVENT\nSUMMARY:{dist:.0f} {type} {time} {comment}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(y=self.DateTime.year, m=self.DateTime.month, d=self.DateTime.day, dist=self.dist, type=self.type, time=self.time.isoformat(), comment='')
+        if self.dist == None or self.dist < 0.01:
+            return "BEGIN:VEVENT\nSUMMARY:{type} {time} {comment}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(y=self.DateTime.year, m=self.DateTime.month, d=self.DateTime.day, type=self.type, time=self.time.isoformat(), comment='')
+        else:
+            return "BEGIN:VEVENT\nSUMMARY:{dist:.0f} {type} {time} {comment}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(y=self.DateTime.year, m=self.DateTime.month, d=self.DateTime.day, dist=self.dist, type=self.type, time=self.time.isoformat(), comment='')
 
 
 #
@@ -267,7 +302,9 @@ class cycle:
         for v in self.child:
             for u in v:
                 k = u.type[0:self.lengthType]
-                if k in arrArg:
+                if len(k) < 1:
+                    pass
+                elif k in arrArg:
                     None
                 else:
                     arrArg.append(k)
@@ -308,24 +345,26 @@ class cycle:
             arrArg = {}
         strResult = ''
 
-        #strResult += '\nMiC '
         for v in self.child:
             for u in v:
                 k = u.type[0:self.lengthType]
-                if k in arrArg:
-                    arrArg[k][0] += u.dist
+                if len(k) < 1:
+                    pass
+                elif k in arrArg:
+                    if u.dist != None and u.dist > 0.01:
+                        arrArg[k][0] += u.dist
                     arrArg[k][1] += 1
                     arrArg[k][2] += u.time.hour * 3600 + u.time.minute * 60 + u.time.second
                 else:
                     arrArg[k] = []
-                    arrArg[k].append(u.dist)
+                    if u.dist != None and u.dist > 0.01:
+                        arrArg[k].append(u.dist)
+                    else:
+                        arrArg[k].append(None)
+
                     arrArg[k].append(1)
                     arrArg[k].append(u.time.hour * 3600 + u.time.minute * 60 + u.time.second)
                     
-        strResult += self.strTitle + ' (' + str(self.getPeriod()) + ')' + '\n'
-        for k in sorted(arrArg.keys()):
-            strResult += "{:3} x {:3} {:5.0f}\n".format(arrArg[k][1], k, arrArg[k][0])
-        
         return strResult
 
 
@@ -497,8 +536,11 @@ class period:
             strResult += str(n) + ' Units in ' + str(p) + ' Days = ' + '{:.02f}'.format(n/p * 7.0) + ' Units/Week' + '\n'
             
         for k in sorted(arrArg.keys()):
-            strResult += "{:3} x {:3} {:5.0f} km {:5} h\n".format(arrArg[k][1], k, arrArg[k][0], int(arrArg[k][2] / 3600))
-        
+            if arrArg[k][0] == None or arrArg[k][0] < 0.01:
+                strResult += "{:3} x {:3} {:5}    {:5} h\n".format(arrArg[k][1], k, ' ', int(arrArg[k][2] / 3600))
+            else:
+                strResult += "{:3} x {:3} {:5.0f} km {:5} h\n".format(arrArg[k][1], k, arrArg[k][0], int(arrArg[k][2] / 3600))        
+
         return strResult
 
 
