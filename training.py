@@ -400,7 +400,13 @@ class cycle:
 
     
     def toXML(self):
-        strResult = '<node FOLDED="true" TEXT="' + self.strTitle + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '">\n'
+        
+        strResult = '<node FOLDED="true"'
+        if self.getNumberOfUnits() < 1:
+            strResult += ' BACKGROUND_COLOR="#ffaaaa"'
+
+        strResult += ' TEXT="' + self.strTitle + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '">\n'
+        
         for d in self.arrDescription:
             strResult += '<node BACKGROUND_COLOR="#ffffaa" TEXT="' + d + '"/>\n'
         for v in self.child:
@@ -560,7 +566,7 @@ class period:
 
     def stat(self, arrArg=None):
 
-        t = self.getTypeOfUnits()
+        t = sorted(self.getTypeOfUnits())
         if arrArg == None:
             arrArg = []
             for m in range(12):
@@ -621,7 +627,12 @@ class period:
 
     
     def toXML(self):
-        strResult = '<node TEXT="' + self.strTitle + '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+
+        strResult = '<node'
+        if self.getNumberOfUnits() < 1:
+            strResult += ' BACKGROUND_COLOR="#ffaaaa"'
+
+        strResult += ' TEXT="' + self.strTitle + '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
         strResult += '<font BOLD="true" NAME="Monospaced" SIZE="12"/>'
         for d in self.arrDescription:
             strResult += '<node BACKGROUND_COLOR="#ffffaa" TEXT="' + d + '"/>\n'
