@@ -236,7 +236,7 @@ class cycle:
         self.strTitle = strArg
         self.arrDescription = []
 
-        self.lengthType = 1
+        self.lengthType = 3
         self.periodInt = intArg
         
         self.child = []
@@ -283,7 +283,7 @@ class cycle:
     def insertDescriptionStr(self,intIndex,strArg):
         
         if strArg == None or strArg == '':
-            None
+            pass
         elif len(self.child) > intIndex and len(self.child[intIndex]) > 0:
             self.child[intIndex][len(self.child[intIndex]) - 1].appendDescriptionStr(strArg)
         
@@ -400,7 +400,7 @@ class cycle:
 
     
     def toXML(self):
-        strResult = '<node FOLDED="true" TEXT="' + self.strTitle + '&#xa;(' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '">\n'
+        strResult = '<node FOLDED="true" TEXT="' + self.strTitle + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '">\n'
         for d in self.arrDescription:
             strResult += '<node BACKGROUND_COLOR="#ffffaa" TEXT="' + d + '"/>\n'
         for v in self.child:
@@ -412,10 +412,15 @@ class cycle:
     
     def toiCalString(self):
 
-        strResult = ''
-        for v in self.child:
-            for u in v:
-                strResult += u.toiCalString()
+        e = self.dateEnd + timedelta(days=1)
+        
+        if self.getNumberOfUnits() < 1:
+            strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{ye:04}{me:02}{de:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.strTitle, y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
+        else:
+            strResult = ''
+            for v in self.child:
+                for u in v:
+                    strResult += u.toiCalString()
                 
         return strResult
 
@@ -535,23 +540,21 @@ class period:
 
         if arrArg == None:
             arrArg = {}
-        strResult = self.strTitle + '\n'
+        strResult = ''
 
         for c in self.child:
-            #strResult += c.report()
             c.report(arrArg)
 
+        for k in sorted(arrArg.keys()):
+            if arrArg[k][0] == None or arrArg[k][0] < 0.01:
+                strResult += "{:4} x {:3} {:5}    {:5.0f} h\n".format(arrArg[k][1], k, ' ', round(arrArg[k][2] / 3600, 1))
+            else:
+                strResult += "{:4} x {:3} {:5.0f} km {:5.0f} h\n".format(arrArg[k][1], k, arrArg[k][0], round(arrArg[k][2] / 3600, 1))        
         n = self.getNumberOfUnits()
         if n > 0:
             p = self.getPeriod()
-            strResult += str(n) + ' Units in ' + str(p) + ' Days = ' + '{:.02f}'.format(n/p * 7.0) + ' Units/Week' + '\n'
+            strResult += "{:4} Units in {} Days = {:.02f} Units/Week\n".format(n, p, n/p * 7.0)
             
-        for k in sorted(arrArg.keys()):
-            if arrArg[k][0] == None or arrArg[k][0] < 0.01:
-                strResult += "{:3} x {:3} {:5}    {:5} h\n".format(arrArg[k][1], k, ' ', int(arrArg[k][2] / 3600))
-            else:
-                strResult += "{:3} x {:3} {:5.0f} km {:5} h\n".format(arrArg[k][1], k, arrArg[k][0], int(arrArg[k][2] / 3600))        
-
         return strResult
 
 
@@ -618,7 +621,7 @@ class period:
 
     
     def toXML(self):
-        strResult = '<node TEXT="' + self.report().replace('\n','&#xa;') + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + '">\n'
+        strResult = '<node TEXT="' + self.strTitle + '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
         strResult += '<font BOLD="true" NAME="Monospaced" SIZE="12"/>'
         for d in self.arrDescription:
             strResult += '<node BACKGROUND_COLOR="#ffffaa" TEXT="' + d + '"/>\n'
@@ -639,11 +642,12 @@ class period:
 
         e = self.dateEnd + timedelta(days=1)
         
-        strResult = ''
-        # strResult += "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{ye:04}{me:02}{de:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.strTitle, y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
-
-        for c in self.child:
-            strResult += c.toiCalString()
+        if len(self.child) < 1:
+            strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{ye:04}{me:02}{de:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.strTitle, y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
+        else:
+            strResult = ''
+            for c in self.child:
+                strResult += c.toiCalString()
                 
         return strResult
 
