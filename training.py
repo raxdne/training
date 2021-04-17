@@ -37,42 +37,52 @@ class unit:
     def __init__(self,strArg=None):
         """ constructor """
         
-        self.arrComment = []
         if strArg == None:
-            self.setTypeStr('tbd')
-            self.setDistStr(0.0)
-            self.setTimeStr('00:00:00')
+            self.reset()
         else:
             self.parse(strArg)
 
 
+    def reset(self):
+        """  """
+        
+        # TODO: make colorcoding configurable
+        self.color = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
+
+        self.dist = None
+        self.type = None
+        self.time = None
+        self.arrDescription = []
+
+        
     def setTypeStr(self,strArg):
         if strArg == None or strArg == '':
-            self.type = '  '
+            pass
         else:
             self.type = strArg.replace(' ','')
-            return True
+        return True
         
 
-    def appendCommentStr(self,strArg):
+    def appendDescriptionStr(self,strArg):
         if strArg == None or strArg == '':
-            self.arrComment = []
+            self.arrDescription = []
         else:
-            self.arrComment.append(strArg)
+            self.arrDescription.append(strArg)
 
 
     def setDistStr(self,strArg):
         if strArg == None or strArg == '':
-            self.dist = 0.0
+            pass
         else:
             self.dist = float(strArg)
             if self.dist < 0.001:
-                self.dist = 0.0
-            else:
-                return True
+                self.dist = None
+
+        return True
 
 
     def setTimeStr(self,strArg):
+        
         if strArg == None or strArg == '':
             self.time = time()
         else:
@@ -83,10 +93,12 @@ class unit:
                 self.time = time(hour=int(entry[0]), minute=int(entry[1]), second=int(entry[2]))
             else:
                 self.time = time()
-            return True
+                
+        return True
 
 
     def setDateTime(self,objArg):
+        
         self.DateTime = objArg
         
 
@@ -106,7 +118,12 @@ class unit:
 
 
     def scale(self,floatScale):
-        self.dist *= floatScale
+
+        if self.dist == None or self.dist < 0.01:
+            pass
+        else:
+            self.dist *= floatScale
+            
         minutes = (self.time.hour * 60 + self.time.minute)
         minutes *= floatScale
         self.time = time(hour=int(minutes / 60), minute=int(minutes % 60))
@@ -119,15 +136,16 @@ class unit:
     def parse(self,strArg):
         """  """
 
+        self.reset()
         entry = strArg.split(';')
         if len(entry) == 3:
              return self.parse(';' + strArg)
         elif len(entry) > 3 and self.setDistStr(entry[1]) and self.setTypeStr(entry[2]) and self.setTimeStr(entry[3]):
             self.setDateStr(entry[0])
 
-            self.arrComment = []
+            self.arrDescription = []
             for i in range(4,len(entry)):
-                self.appendCommentStr(entry[i])
+                self.appendDescriptionStr(entry[i])
 
             return True
         else:
@@ -135,44 +153,70 @@ class unit:
         
 
     def getSpeedStr(self):
+
         strResult = ''
-        s = float(self.time.hour * 3600 + self.time.minute * 60 + self.time.second)
-        spk = s / self.dist
-        strResult += '{0}:{1:02} min/km '.format(int(spk // 60), int(spk % 60))
-        kph = self.dist / (s / 3600)
-        strResult += '{:.1f} km/h '.format(kph)
+        if self.dist == None or self.dist < 0.01 or self.time == None:
+            pass
+        else:
+            s = float(self.time.hour * 3600 + self.time.minute * 60 + self.time.second)
+            if s < 1:
+                pass
+            else:
+                spk = s / self.dist
+                strResult += '{0}:{1:02} min/km '.format(int(spk // 60), int(spk % 60))
+                kph = self.dist / (s / 3600)
+                strResult += '{:.1f} km/h '.format(kph)
+            
         return strResult
     
 
     def toString(self):
-        return "{date} {dist:5.0f} {type} {time} {comment}\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), comment='')
+        return "{date} {dist:5.0f} {type} {time} {description}\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), description='')
 
 
     def toCSV(self):
-        return "{date};{dist:.0f};{type};{time};{comment}\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), comment='')
+        return "{date};{dist:.0f};{type};{time};{description}\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), description='')
 
 
     def toXML(self):
-        c = {'W': '#ff5555', 'R': '#ffaaaa', 'L': '#aaffaa', 'K': '#aaaaff'}
-        strResult = ' TEXT="{date} {dist:.1f} {type} {time}"'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
-        if self.type[0] in c:
-            strResult += ' BACKGROUND_COLOR="' + c[self.type[0]] + '"'
 
-        strC = '<node TEXT="' + self.getSpeedStr() + '"/>'
-        if len(self.arrComment) > 0:
-            for i in self.arrComment:
-                strC += '<node TEXT="' + i + '"/>'
+        strResult = '<node'
+        if self.type == None:
+            strResult += ' TEXT="{date}"'.format(date=self.DateTime.isoformat())
+        elif self.dist == None or self.dist < 0.01:
+            strResult += ' TEXT="{date} {type} {time}"'.format(date=self.DateTime.isoformat(), type=self.type, time=self.time.isoformat())
+        else:
+            strResult += ' TEXT="{date} {dist:.1f} {type} {time}"'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
+
+        if self.type != None and len(self.type) > 0 and self.type[0] in self.color:
+            strResult += ' BACKGROUND_COLOR="' + self.color[self.type[0]] + '"'
+        strResult += '>'
+        
+        if self.dist != None and self.dist > 0.01:
+            strResult += '<node TEXT="' + self.getSpeedStr() + '"/>'
             
-        return '<node' + strResult + '>' + strC + '</node>\n'
+        for i in self.arrDescription:
+            strResult += '<node TEXT="' + i + '"/>'
+                
+        strResult += '</node>\n'
+
+        return strResult
 
 
     def toSQL(self):
-        return "insert ({date};{dist:.0f};{type};{time};{comment})\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), comment='')
+
+        if self.dist == None or self.dist < 0.01:
+            return "insert ({date};{dist:.0f};{type};{time};{description})\n".format(date=self.DateTime.isoformat(), dist=0.0, type=self.type, time=self.time.isoformat(), description='')
+        else:
+            return "insert ({date};{dist:.0f};{type};{time};{description})\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), description='')
 
 
     def toiCalString(self):
         
-        return "BEGIN:VEVENT\nSUMMARY:{dist:.0f} {type} {time} {comment}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(y=self.DateTime.year, m=self.DateTime.month, d=self.DateTime.day, dist=self.dist, type=self.type, time=self.time.isoformat(), comment='')
+        if self.dist == None or self.dist < 0.01:
+            return "BEGIN:VEVENT\nSUMMARY:{type} {time} {description}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(y=self.DateTime.year, m=self.DateTime.month, d=self.DateTime.day, type=self.type, time=self.time.isoformat(), description='')
+        else:
+            return "BEGIN:VEVENT\nSUMMARY:{dist:.0f} {type} {time} {description}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(y=self.DateTime.year, m=self.DateTime.month, d=self.DateTime.day, dist=self.dist, type=self.type, time=self.time.isoformat(), description='')
 
 
 #
@@ -192,7 +236,7 @@ class cycle:
         self.strTitle = strArg
         self.arrDescription = []
 
-        self.lengthType = 1
+        self.lengthType = 3
         self.periodInt = intArg
         
         self.child = []
@@ -239,19 +283,23 @@ class cycle:
     def insertDescriptionStr(self,intIndex,strArg):
         
         if strArg == None or strArg == '':
-            None
+            pass
         elif len(self.child) > intIndex and len(self.child[intIndex]) > 0:
-            self.child[intIndex][len(self.child[intIndex]) - 1].appendCommentStr(strArg)
+            self.child[intIndex][len(self.child[intIndex]) - 1].appendDescriptionStr(strArg)
         
 
     def getPeriod(self):
+        
         return len(self.child)
             
 
     def getNumberOfUnits(self):
+        
         intResult = 0
         for v in self.child:
-            intResult += len(v)
+            for u in v:
+                if u.type != None and len(u.type) > 0:
+                    intResult += 1
 
         return intResult
 
@@ -263,11 +311,12 @@ class cycle:
             
         for v in self.child:
             for u in v:
-                k = u.type[0:self.lengthType]
-                if k in arrArg:
-                    None
-                else:
-                    arrArg.append(k)
+                if u.type != None and len(u.type) > 0:
+                    k = u.type[0:self.lengthType]
+                    if k in arrArg:
+                        pass
+                    else:
+                        arrArg.append(k)
 
         return arrArg
 
@@ -295,8 +344,11 @@ class cycle:
 
         for v in self.child:
             for u in v:
-                k = u.type[0:self.lengthType]
-                arrArg[u.DateTime.month - 1][k] += u.dist
+                if u.dist == None or u.dist < 0.01 or u.type == None or len(u.type) < 1:
+                    pass
+                else:
+                    k = u.type[0:self.lengthType]
+                    arrArg[u.DateTime.month - 1][k] += u.dist
 
 
     def report(self, arrArg=None):
@@ -305,22 +357,25 @@ class cycle:
             arrArg = {}
         strResult = ''
 
-        strResult += '\nMiC '
         for v in self.child:
             for u in v:
-                k = u.type[0:self.lengthType]
-                if k in arrArg:
-                    arrArg[k][0] += u.dist
-                    arrArg[k][1] += 1
-                else:
-                    arrArg[k] = []
-                    arrArg[k].append(u.dist)
-                    arrArg[k].append(1)
+                if u.type != None and len(u.type) > 0:
+                    k = u.type[0:self.lengthType]
+                    if k in arrArg:
+                        if u.dist != None and u.dist > 0.01:
+                            arrArg[k][0] += u.dist
+                        arrArg[k][1] += 1
+                        arrArg[k][2] += u.time.hour * 3600 + u.time.minute * 60 + u.time.second
+                    else:
+                        arrArg[k] = []
+                        if u.dist != None and u.dist > 0.01:
+                            arrArg[k].append(u.dist)
+                        else:
+                            arrArg[k].append(None)
+
+                        arrArg[k].append(1)
+                        arrArg[k].append(u.time.hour * 3600 + u.time.minute * 60 + u.time.second)
                     
-        strResult += self.strTitle + ' (' + str(self.getPeriod()) + ')' + '\n'
-        for k in sorted(arrArg.keys()):
-            strResult += "{:3} x {:3} {:5.0f}\n".format(arrArg[k][1], k, arrArg[k][0])
-        
         return strResult
 
 
@@ -345,7 +400,7 @@ class cycle:
 
     
     def toXML(self):
-        strResult = '<node FOLDED="true" TEXT="' + self.strTitle + '&#xa;(' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '">\n'
+        strResult = '<node FOLDED="true" TEXT="' + self.strTitle + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '">\n'
         for d in self.arrDescription:
             strResult += '<node BACKGROUND_COLOR="#ffffaa" TEXT="' + d + '"/>\n'
         for v in self.child:
@@ -357,10 +412,15 @@ class cycle:
     
     def toiCalString(self):
 
-        strResult = ''
-        for v in self.child:
-            for u in v:
-                strResult += u.toiCalString()
+        e = self.dateEnd + timedelta(days=1)
+        
+        if self.getNumberOfUnits() < 1:
+            strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{ye:04}{me:02}{de:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.strTitle, y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
+        else:
+            strResult = ''
+            for v in self.child:
+                for u in v:
+                    strResult += u.toiCalString()
                 
         return strResult
 
@@ -372,11 +432,17 @@ class cycle:
 
 class period:
 
-    def __init__(self,strArg=None):
+    def __init__(self,strArg=None,intArg=None):
         """ constructor """
 
+        self.reset(strArg,intArg)
+
+        
+    def reset(self,strArg=None,intArg=None):
+        
         self.strTitle = strArg
         self.arrDescription = []
+        self.setPeriod(intArg)
 
         self.child = []
         self.dateBegin = date.today()
@@ -407,10 +473,6 @@ class period:
         self.strTitle = strArg
         
 
-    def getLength(self):
-        return len(self.child)
-    
-
     def getNumberOfUnits(self):
         intResult = 0
         for c in self.child:
@@ -440,16 +502,20 @@ class period:
             c.insertByDate(objUnit)
 
 
-    def period(self, intArg):
+    def setPeriod(self, intArg):
+
         self.periodInt = intArg
             
 
     def getPeriod(self):
 
-        self.periodInt = 0
+        l = 0
         for c in self.child:
-            self.periodInt += c.getPeriod()
-                
+            l += c.getPeriod()
+            
+        if self.periodInt == None or l > self.periodInt:
+            self.setPeriod(l)
+            
         return self.periodInt
             
 
@@ -474,18 +540,21 @@ class period:
 
         if arrArg == None:
             arrArg = {}
-        strResult = self.strTitle + '\n'
+        strResult = ''
 
         for c in self.child:
-            #strResult += c.report()
             c.report(arrArg)
 
-        n = self.getNumberOfUnits()
-        p = self.getPeriod()
-        strResult += str(n) + ' Units in ' + str(p) + ' Days = ' + '{:.02f}'.format(n/p * 7.0) + ' Units/Week' + '\n'
         for k in sorted(arrArg.keys()):
-            strResult += "{:3} x {:3} {:5.0f}\n".format(arrArg[k][1], k, arrArg[k][0])
-        
+            if arrArg[k][0] == None or arrArg[k][0] < 0.01:
+                strResult += "{:4} x {:3} {:5}    {:5.0f} h\n".format(arrArg[k][1], k, ' ', round(arrArg[k][2] / 3600, 1))
+            else:
+                strResult += "{:4} x {:3} {:5.0f} km {:5.0f} h\n".format(arrArg[k][1], k, arrArg[k][0], round(arrArg[k][2] / 3600, 1))        
+        n = self.getNumberOfUnits()
+        if n > 0:
+            p = self.getPeriod()
+            strResult += "{:4} Units in {} Days = {:.02f} Units/Week\n".format(n, p, n/p * 7.0)
+            
         return strResult
 
 
@@ -526,9 +595,11 @@ class period:
         t = unit()
         for l in content:
             if l == None or l == '':
-                print('skip: ' + l)
+                pass
             elif t.parse(l):
                 self.insertByDate(t)
+            else:
+                print('error: ' + l)
 
             
     def dup(self):
@@ -550,7 +621,7 @@ class period:
 
     
     def toXML(self):
-        strResult = '<node TEXT="' + self.report().replace('\n','&#xa;') + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + '">\n'
+        strResult = '<node TEXT="' + self.strTitle + '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
         strResult += '<font BOLD="true" NAME="Monospaced" SIZE="12"/>'
         for d in self.arrDescription:
             strResult += '<node BACKGROUND_COLOR="#ffffaa" TEXT="' + d + '"/>\n'
@@ -571,10 +642,12 @@ class period:
 
         e = self.dateEnd + timedelta(days=1)
         
-        strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{ye:04}{me:02}{de:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.strTitle, y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
-
-        for c in self.child:
-            strResult += c.toiCalString()
+        if len(self.child) < 1:
+            strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{ye:04}{me:02}{de:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.strTitle, y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
+        else:
+            strResult = ''
+            for c in self.child:
+                strResult += c.toiCalString()
                 
         return strResult
 
@@ -588,3 +661,45 @@ class period:
         return strResult
 
 
+#
+#
+#
+
+def CalendarPeriod(intYear):
+
+    ''' returns a plain calendar year period '''
+    
+    s = period(str(intYear))
+
+    try:
+        datetime.date(intYear, 2, 29)
+        s.append(cycle('All',366))
+    except ValueError:
+        s.append(cycle('All',365))
+
+    s.schedule(intYear,1,1)
+
+    return s
+  
+        
+def CalendarMonthPeriod(intYear):
+
+    ''' returns a calendar year containing month periods '''
+    
+    s = period(str(intYear))
+
+    for m in range(1,13):
+        if m > 11:
+            d = date(intYear+1,1,1) - date(intYear,m,1)
+        else:
+            d = date(intYear,m+1,1) - date(intYear,m,1)
+
+        p = period(str(intYear) + '.' + str(m))
+        p.append(cycle(str(m), d.days))
+        s.append(p)
+        
+    s.schedule(intYear,1,1)
+
+    return s
+  
+        
