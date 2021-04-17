@@ -46,25 +46,28 @@ class unit:
     def reset(self):
         """  """
         
+        # TODO: make colorcoding configurable
+        self.color = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
+
         self.dist = None
         self.type = None
         self.time = None
-        self.arrComment = []
+        self.arrDescription = []
 
         
     def setTypeStr(self,strArg):
         if strArg == None or strArg == '':
-            self.type = ''
+            pass
         else:
             self.type = strArg.replace(' ','')
         return True
         
 
-    def appendCommentStr(self,strArg):
+    def appendDescriptionStr(self,strArg):
         if strArg == None or strArg == '':
-            self.arrComment = []
+            self.arrDescription = []
         else:
-            self.arrComment.append(strArg)
+            self.arrDescription.append(strArg)
 
 
     def setDistStr(self,strArg):
@@ -140,9 +143,9 @@ class unit:
         elif len(entry) > 3 and self.setDistStr(entry[1]) and self.setTypeStr(entry[2]) and self.setTimeStr(entry[3]):
             self.setDateStr(entry[0])
 
-            self.arrComment = []
+            self.arrDescription = []
             for i in range(4,len(entry)):
-                self.appendCommentStr(entry[i])
+                self.appendDescriptionStr(entry[i])
 
             return True
         else:
@@ -168,49 +171,52 @@ class unit:
     
 
     def toString(self):
-        return "{date} {dist:5.0f} {type} {time} {comment}\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), comment='')
+        return "{date} {dist:5.0f} {type} {time} {description}\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), description='')
 
 
     def toCSV(self):
-        return "{date};{dist:.0f};{type};{time};{comment}\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), comment='')
+        return "{date};{dist:.0f};{type};{time};{description}\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), description='')
 
 
     def toXML(self):
 
-        # TODO: make colorcoding configurable
-        c = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
-
-        if self.dist == None or self.dist < 0.01:
-            strResult = ' TEXT="{date} {type} {time}"'.format(date=self.DateTime.isoformat(), type=self.type, time=self.time.isoformat())
-            strC = ''
+        strResult = '<node'
+        if self.type == None:
+            strResult += ' TEXT="{date}"'.format(date=self.DateTime.isoformat())
+        elif self.dist == None or self.dist < 0.01:
+            strResult += ' TEXT="{date} {type} {time}"'.format(date=self.DateTime.isoformat(), type=self.type, time=self.time.isoformat())
         else:
-            strResult = ' TEXT="{date} {dist:.1f} {type} {time}"'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
-            strC = '<node TEXT="' + self.getSpeedStr() + '"/>'
+            strResult += ' TEXT="{date} {dist:.1f} {type} {time}"'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
 
-        if len(self.type) > 0 and self.type[0] in c:
-            strResult += ' BACKGROUND_COLOR="' + c[self.type[0]] + '"'
-
-        if len(self.arrComment) > 0:
-            for i in self.arrComment:
-                strC += '<node TEXT="' + i + '"/>'
+        if self.type != None and len(self.type) > 0 and self.type[0] in self.color:
+            strResult += ' BACKGROUND_COLOR="' + self.color[self.type[0]] + '"'
+        strResult += '>'
+        
+        if self.dist != None and self.dist > 0.01:
+            strResult += '<node TEXT="' + self.getSpeedStr() + '"/>'
             
-        return '<node' + strResult + '>' + strC + '</node>\n'
+        for i in self.arrDescription:
+            strResult += '<node TEXT="' + i + '"/>'
+                
+        strResult += '</node>\n'
+
+        return strResult
 
 
     def toSQL(self):
 
         if self.dist == None or self.dist < 0.01:
-            return "insert ({date};{dist:.0f};{type};{time};{comment})\n".format(date=self.DateTime.isoformat(), dist=0.0, type=self.type, time=self.time.isoformat(), comment='')
+            return "insert ({date};{dist:.0f};{type};{time};{description})\n".format(date=self.DateTime.isoformat(), dist=0.0, type=self.type, time=self.time.isoformat(), description='')
         else:
-            return "insert ({date};{dist:.0f};{type};{time};{comment})\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), comment='')
+            return "insert ({date};{dist:.0f};{type};{time};{description})\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), description='')
 
 
     def toiCalString(self):
         
         if self.dist == None or self.dist < 0.01:
-            return "BEGIN:VEVENT\nSUMMARY:{type} {time} {comment}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(y=self.DateTime.year, m=self.DateTime.month, d=self.DateTime.day, type=self.type, time=self.time.isoformat(), comment='')
+            return "BEGIN:VEVENT\nSUMMARY:{type} {time} {description}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(y=self.DateTime.year, m=self.DateTime.month, d=self.DateTime.day, type=self.type, time=self.time.isoformat(), description='')
         else:
-            return "BEGIN:VEVENT\nSUMMARY:{dist:.0f} {type} {time} {comment}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(y=self.DateTime.year, m=self.DateTime.month, d=self.DateTime.day, dist=self.dist, type=self.type, time=self.time.isoformat(), comment='')
+            return "BEGIN:VEVENT\nSUMMARY:{dist:.0f} {type} {time} {description}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(y=self.DateTime.year, m=self.DateTime.month, d=self.DateTime.day, dist=self.dist, type=self.type, time=self.time.isoformat(), description='')
 
 
 #
@@ -279,7 +285,7 @@ class cycle:
         if strArg == None or strArg == '':
             None
         elif len(self.child) > intIndex and len(self.child[intIndex]) > 0:
-            self.child[intIndex][len(self.child[intIndex]) - 1].appendCommentStr(strArg)
+            self.child[intIndex][len(self.child[intIndex]) - 1].appendDescriptionStr(strArg)
         
 
     def getPeriod(self):
@@ -301,13 +307,14 @@ class cycle:
             
         for v in self.child:
             for u in v:
-                k = u.type[0:self.lengthType]
-                if len(k) < 1:
+                if u.type == None or len(u.type) < 1:
                     pass
-                elif k in arrArg:
-                    None
                 else:
-                    arrArg.append(k)
+                    k = u.type[0:self.lengthType]
+                    if k in arrArg:
+                        pass
+                    else:
+                        arrArg.append(k)
 
         return arrArg
 
@@ -335,8 +342,11 @@ class cycle:
 
         for v in self.child:
             for u in v:
-                k = u.type[0:self.lengthType]
-                arrArg[u.DateTime.month - 1][k] += u.dist
+                if u.type == None or len(u.type) < 1:
+                    pass
+                else:
+                    k = u.type[0:self.lengthType]
+                    arrArg[u.DateTime.month - 1][k] += u.dist
 
 
     def report(self, arrArg=None):
@@ -347,23 +357,24 @@ class cycle:
 
         for v in self.child:
             for u in v:
-                k = u.type[0:self.lengthType]
-                if len(k) < 1:
+                if u.type == None or len(u.type) < 1:
                     pass
-                elif k in arrArg:
-                    if u.dist != None and u.dist > 0.01:
-                        arrArg[k][0] += u.dist
-                    arrArg[k][1] += 1
-                    arrArg[k][2] += u.time.hour * 3600 + u.time.minute * 60 + u.time.second
                 else:
-                    arrArg[k] = []
-                    if u.dist != None and u.dist > 0.01:
-                        arrArg[k].append(u.dist)
+                    k = u.type[0:self.lengthType]
+                    if k in arrArg:
+                        if u.dist != None and u.dist > 0.01:
+                            arrArg[k][0] += u.dist
+                        arrArg[k][1] += 1
+                        arrArg[k][2] += u.time.hour * 3600 + u.time.minute * 60 + u.time.second
                     else:
-                        arrArg[k].append(None)
+                        arrArg[k] = []
+                        if u.dist != None and u.dist > 0.01:
+                            arrArg[k].append(u.dist)
+                        else:
+                            arrArg[k].append(None)
 
-                    arrArg[k].append(1)
-                    arrArg[k].append(u.time.hour * 3600 + u.time.minute * 60 + u.time.second)
+                        arrArg[k].append(1)
+                        arrArg[k].append(u.time.hour * 3600 + u.time.minute * 60 + u.time.second)
                     
         return strResult
 
