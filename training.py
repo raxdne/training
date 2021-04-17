@@ -289,13 +289,17 @@ class cycle:
         
 
     def getPeriod(self):
+        
         return len(self.child)
             
 
     def getNumberOfUnits(self):
+        
         intResult = 0
         for v in self.child:
-            intResult += len(v)
+            for u in v:
+                if u.type != None and len(u.type) > 0:
+                    intResult += 1
 
         return intResult
 
@@ -307,9 +311,7 @@ class cycle:
             
         for v in self.child:
             for u in v:
-                if u.type == None or len(u.type) < 1:
-                    pass
-                else:
+                if u.type != None and len(u.type) > 0:
                     k = u.type[0:self.lengthType]
                     if k in arrArg:
                         pass
@@ -342,7 +344,7 @@ class cycle:
 
         for v in self.child:
             for u in v:
-                if u.type == None or len(u.type) < 1:
+                if u.dist == None or u.dist < 0.01 or u.type == None or len(u.type) < 1:
                     pass
                 else:
                     k = u.type[0:self.lengthType]
@@ -357,9 +359,7 @@ class cycle:
 
         for v in self.child:
             for u in v:
-                if u.type == None or len(u.type) < 1:
-                    pass
-                else:
+                if u.type != None and len(u.type) > 0:
                     k = u.type[0:self.lengthType]
                     if k in arrArg:
                         if u.dist != None and u.dist > 0.01:
@@ -592,9 +592,11 @@ class period:
         t = unit()
         for l in content:
             if l == None or l == '':
-                print('skip: ' + l)
+                pass
             elif t.parse(l):
                 self.insertByDate(t)
+            else:
+                print('error: ' + l)
 
             
     def dup(self):
