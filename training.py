@@ -222,7 +222,7 @@ class unit:
             strResult += ' TEXT="{date} {dist:.1f} {type} {time}"'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
 
         if self.type != None and len(self.type) > 0 and self.type[0] in self.color:
-            strResult += ' BACKGROUND_COLOR="' + self.color[self.type[0]] + '"'
+            strResult += ' BACKGROUND_COLOR="{}"'.format(self.color[self.type[0]])
         strResult += '>'
         
         if self.dist != None and self.dist > 0.01:
@@ -493,10 +493,13 @@ class cycle:
 
         """  """
         
-        strResult = '<node FOLDED="true"'
+        strResult = '<node'
+        
         if self.getNumberOfUnits() < 1:
-            strResult += ' BACKGROUND_COLOR="#ffaaaa"'
-
+            strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')
+        else:
+            strResult += ' FOLDED="{}"'.format('true')
+            
         strResult += ' TEXT="' + self.strTitle + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '">\n'
         
         strResult += listToXML(self.listDescription)
@@ -505,6 +508,7 @@ class cycle:
             for u in v:
                 strResult += u.toXML()
         strResult += '</node>\n'
+
         return strResult
 
     
@@ -785,7 +789,9 @@ class period:
         
         strResult = '<node'
         if self.getNumberOfUnits() < 1:
-            strResult += ' BACKGROUND_COLOR="#ffaaaa"'
+           strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')
+        else:
+            strResult += ' FOLDED="{}"'.format('false')
 
         strResult += ' TEXT="' + self.strTitle + '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
         strResult += '<font BOLD="true" NAME="Monospaced" SIZE="12"/>'
@@ -848,7 +854,7 @@ def listToXML(listArg=None):
     elif type(listArg) is list and len(listArg) > 0:
         for c in listArg:
             if type(c) is str:
-                strResult += '<node TEXT="{}"/>\n'.format(c)
+                strResult += '<node BACKGROUND_COLOR="{}" TEXT="{}"/>\n'.format('#ffffaa',c)
             elif type(c) is list:
                 strResult += listToXML(c)
             else:
