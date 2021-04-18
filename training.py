@@ -254,10 +254,21 @@ class cycle:
 
         
     def appendDescriptionStr(self,strArg):
+
         if strArg == None or strArg == '':
             self.arrDescription = []
         else:
             self.arrDescription.append(strArg)
+        
+
+    def appendDescription(self,listArg):
+        
+        if listArg == None or not type(listArg) is list or len(listArg) < 1:
+            self.arrDescription = []
+        elif len(self.arrDescription) > 0:
+            self.arrDescription.append(listArg)
+        else:
+            self.arrDescription = listArg
         
 
     def setTitleStr(self,strArg):
@@ -407,8 +418,11 @@ class cycle:
 
         strResult += ' TEXT="' + self.strTitle + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '">\n'
         
-        for d in self.arrDescription:
-            strResult += '<node BACKGROUND_COLOR="#ffffaa" TEXT="' + d + '"/>\n'
+        #for d in self.arrDescription:
+        #    strResult += '<node BACKGROUND_COLOR="#ffffaa" TEXT="' + d + '"/>\n'
+
+        strResult += listToXML(self.arrDescription)
+        
         for v in self.child:
             for u in v:
                 strResult += u.toXML()
@@ -462,10 +476,21 @@ class period:
 
             
     def appendDescriptionStr(self,strArg):
+        
         if strArg == None or strArg == '':
             self.arrDescription = []
         else:
             self.arrDescription.append(strArg)
+        
+
+    def appendDescription(self,listArg):
+        
+        if listArg == None or not type(listArg) is list or len(listArg) < 1:
+            self.arrDescription = []
+        elif len(self.arrDescription) < 1:
+            self.arrDescription.insert(0,listArg)
+        else:
+            self.arrDescription.append(listArg)
         
 
     def appendChildDescriptionStr(self,strArg):
@@ -634,8 +659,11 @@ class period:
 
         strResult += ' TEXT="' + self.strTitle + '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
         strResult += '<font BOLD="true" NAME="Monospaced" SIZE="12"/>'
-        for d in self.arrDescription:
-            strResult += '<node BACKGROUND_COLOR="#ffffaa" TEXT="' + d + '"/>\n'
+
+        #for d in self.arrDescription:
+        #    strResult += '<node BACKGROUND_COLOR="#ffffaa" TEXT="' + d + '"/>\n'
+        strResult += listToXML(self.arrDescription)
+
         for c in self.child:
             strResult += c.toXML()
         strResult += '</node>\n'
@@ -670,6 +698,28 @@ class period:
             strResult += c.toiCalString()
         strResult += "END:VCALENDAR"
         return strResult
+
+
+def listToXML(listArg=None):
+
+    ''' returns a XML string of nested listArg '''
+    
+    strResult = ''
+
+    if listArg == None:
+        print('fail')
+    elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
+        strResult += '<node TEXT="{}">\n'.format(listArg[0]) + listToXML(listArg[1]) + '</node>\n'
+    elif type(listArg) is list and len(listArg) > 0:
+        for c in listArg:
+            if type(c) is str:
+                strResult += '<node TEXT="{}"/>\n'.format(c)
+            elif type(c) is list:
+                strResult += listToXML(c)
+            else:
+                print('fail')
+
+    return strResult
 
 
 #
