@@ -50,7 +50,7 @@ class unit:
         
         # TODO: make colorcoding configurable
         self.color = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
-
+        # TODO: implement a self.unitDist = (km|mi)
         self.dist = None
         self.type = None
         self.time = None
