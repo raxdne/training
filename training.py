@@ -28,6 +28,8 @@ from datetime import (
     time
 )
 
+#from suntime import Sun
+
 #
 #
 #
@@ -193,7 +195,22 @@ class unit:
                 strResult += '{:.1f} km/h '.format(kph)
             
         return strResult
+
     
+    def getSunStr(self):
+
+        """  """
+
+        latitude = 47.8
+        longitude = 9.6
+
+        sun = Sun(latitude, longitude)
+
+        abd_sr = sun.get_local_sunrise_time(self.DateTime)
+        abd_ss = sun.get_local_sunset_time(self.DateTime)
+
+        return '{} -- {}'.format(abd_sr.strftime('%H:%M'), abd_ss.strftime('%H:%M'))
+
 
     def toString(self):
 
@@ -227,6 +244,7 @@ class unit:
         
         if self.dist != None and self.dist > 0.01:
             strResult += '<node TEXT="' + self.getSpeedStr() + '"/>'
+            #strResult += '<node TEXT="' + self.getSunStr() + '"/>'
             
         for i in self.listDescription:
             strResult += '<node TEXT="' + i + '"/>'
