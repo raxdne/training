@@ -270,8 +270,7 @@ class unit(description):
             else:
                 spk = s / self.dist
                 strResult += '{0}:{1:02} min/km '.format(int(spk // 60), int(spk % 60))
-                kph = self.dist / (s / 3600)
-                strResult += '{:.1f} km/h '.format(kph)
+                strResult += '{:.0f} km/h '.format(self.dist / (s / 3600))
             
         return strResult
 
