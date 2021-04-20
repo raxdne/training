@@ -28,11 +28,102 @@ from datetime import (
     time
 )
 
+#from suntime import Sun
+
 #
 #
 #
 
-class unit:
+class title:
+
+    """ abstract class to handle title """
+    
+    def __init__(self,strArg=None):
+        
+        """ constructor """
+        
+        self.setTitleStr(strArg)
+
+
+    def setTitleStr(self,strArg):
+
+        """  """
+        
+        self.strTitle = strArg
+        
+        
+    def getTitleStr(self):
+
+        """  """
+        
+        return self.strTitle
+        
+
+        
+#
+#
+#
+
+class description:
+
+    """ abstract class to handle description list """
+    
+    def __init__(self,strArg=None):
+        
+        """ constructor """
+        
+        self.appendDescription()
+
+        
+    def appendDescriptionStr(self,strArg):
+
+        """  """
+        
+        if strArg == None or strArg == '':
+            self.listDescription = []
+        else:
+            self.listDescription.append(strArg)
+        
+
+    def appendDescription(self,listArg=None):
+
+        """  """
+        
+        if listArg == None or not type(listArg) is list or len(listArg) < 1:
+            self.listDescription = []
+        elif len(self.listDescription) > 0:
+            self.listDescription.append(listArg)
+        else:
+            self.listDescription = listArg
+        
+
+    def __listDescriptionToXML__(self,listArg=None):
+
+        """ returns a Freemind XML string of nested self.listDescription """
+
+        strResult = ''
+
+        if listArg == None:
+            strResult += self.__listDescriptionToXML__(self.listDescription)
+        elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
+            strResult += '<node TEXT="{}">\n'.format(listArg[0]) + self.__listDescriptionToXML__(listArg[1]) + '</node>\n'
+        elif type(listArg) is list and len(listArg) > 0:
+            for c in listArg:
+                if type(c) is str:
+                    strResult += '<node BACKGROUND_COLOR="{}" TEXT="{}"/>\n'.format('#ffffaa',c)
+                elif type(c) is list:
+                    strResult += self.__listDescriptionToXML__(c)
+                else:
+                    print('fail')
+
+        return strResult
+
+
+#
+#
+#
+
+class unit(description):
     
     def __init__(self,strArg=None):
         
@@ -54,7 +145,7 @@ class unit:
         self.dist = None
         self.type = None
         self.time = None
-        self.listDescription = []
+        self.appendDescription()
 
         
     def setTypeStr(self,strArg):
@@ -67,16 +158,6 @@ class unit:
             self.type = strArg.replace(' ','')
         return True
         
-
-    def appendDescriptionStr(self,strArg):
-
-        """  """
-        
-        if strArg == None or strArg == '':
-            self.listDescription = []
-        else:
-            self.listDescription.append(strArg)
-
 
     def setDistStr(self,strArg):
 
@@ -189,11 +270,25 @@ class unit:
             else:
                 spk = s / self.dist
                 strResult += '{0}:{1:02} min/km '.format(int(spk // 60), int(spk % 60))
-                kph = self.dist / (s / 3600)
-                strResult += '{:.1f} km/h '.format(kph)
+                strResult += '{:.0f} km/h '.format(self.dist / (s / 3600))
             
         return strResult
+
     
+    def getSunStr(self):
+
+        """  """
+
+        latitude = 47.8
+        longitude = 9.6
+
+        sun = Sun(latitude, longitude)
+
+        abd_sr = sun.get_local_sunrise_time(self.DateTime)
+        abd_ss = sun.get_local_sunset_time(self.DateTime)
+
+        return '{} -- {}'.format(abd_sr.strftime('%H:%M'), abd_ss.strftime('%H:%M'))
+
 
     def toString(self):
 
@@ -222,28 +317,18 @@ class unit:
             strResult += ' TEXT="{date} {dist:.1f} {type} {time}"'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
 
         if self.type != None and len(self.type) > 0 and self.type[0] in self.color:
-            strResult += ' BACKGROUND_COLOR="' + self.color[self.type[0]] + '"'
+            strResult += ' BACKGROUND_COLOR="{}"'.format(self.color[self.type[0]])
         strResult += '>'
         
         if self.dist != None and self.dist > 0.01:
             strResult += '<node TEXT="' + self.getSpeedStr() + '"/>'
+            #strResult += '<node TEXT="' + self.getSunStr() + '"/>'
             
-        for i in self.listDescription:
-            strResult += '<node TEXT="' + i + '"/>'
+        strResult += self.__listDescriptionToXML__()
                 
         strResult += '</node>\n'
 
         return strResult
-
-
-    def toSQL(self):
-
-        """  """
-        
-        if self.dist == None or self.dist < 0.01:
-            return "insert ({date};{dist:.0f};{type};{time};{description})\n".format(date=self.DateTime.isoformat(), dist=0.0, type=self.type, time=self.time.isoformat(), description='')
-        else:
-            return "insert ({date};{dist:.0f};{type};{time};{description})\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), description='')
 
 
     def toiCalString(self):
@@ -260,7 +345,7 @@ class unit:
 #
 #
 
-class cycle:
+class cycle(title,description):
 
     def __init__(self,strArg=None,intArg=7):
         """ constructor """
@@ -272,8 +357,8 @@ class cycle:
 
         """  """
         
-        self.strTitle = strArg
-        self.listDescription = []
+        self.setTitleStr(strArg)
+        self.appendDescription()
 
         self.lengthType = 3
         self.periodInt = intArg
@@ -294,35 +379,6 @@ class cycle:
             del v[0:]
 
         
-    def appendDescriptionStr(self,strArg):
-
-        """  """
-        
-        if strArg == None or strArg == '':
-            self.listDescription = []
-        else:
-            self.listDescription.append(strArg)
-        
-
-    def appendDescription(self,listArg):
-
-        """  """
-        
-        if listArg == None or not type(listArg) is list or len(listArg) < 1:
-            self.listDescription = []
-        elif len(self.listDescription) > 0:
-            self.listDescription.append(listArg)
-        else:
-            self.listDescription = listArg
-        
-
-    def setTitleStr(self,strArg):
-
-        """  """
-        
-        self.strTitle = strArg
-        
-
     def getLength(self):
 
         """  """
@@ -471,7 +527,7 @@ class cycle:
 
         """  """
         
-        strResult = '\n' + self.strTitle + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
+        strResult = '\n' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
         for v in self.child:
             for u in v:
                 strResult += u.toString()
@@ -482,7 +538,7 @@ class cycle:
 
         """  """
         
-        strResult = '\n*' + self.strTitle + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
+        strResult = '\n*' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
         for v in self.child:
             for u in v:
                 strResult += u.toCSV()
@@ -493,18 +549,22 @@ class cycle:
 
         """  """
         
-        strResult = '<node FOLDED="true"'
-        if self.getNumberOfUnits() < 1:
-            strResult += ' BACKGROUND_COLOR="#ffaaaa"'
-
-        strResult += ' TEXT="' + self.strTitle + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '">\n'
+        strResult = '<node'
         
-        strResult += listToXML(self.listDescription)
+        if self.getNumberOfUnits() < 1:
+            strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')
+        else:
+            strResult += ' FOLDED="{}"'.format('true')
+            
+        strResult += ' TEXT="' + self.getTitleStr() + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '">\n'
+        
+        strResult += self.__listDescriptionToXML__()
         
         for v in self.child:
             for u in v:
                 strResult += u.toXML()
         strResult += '</node>\n'
+
         return strResult
 
     
@@ -515,7 +575,7 @@ class cycle:
         e = self.dateEnd + timedelta(days=1)
         
         if self.getNumberOfUnits() < 1:
-            strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{ye:04}{me:02}{de:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.strTitle, y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
+            strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{ye:04}{me:02}{de:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.getTitleStr(), y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
         else:
             strResult = ''
             for v in self.child:
@@ -530,7 +590,7 @@ class cycle:
 #
 #
 
-class period:
+class period(title,description):
 
     def __init__(self,strArg=None,intArg=None):
         """ constructor """
@@ -542,8 +602,9 @@ class period:
 
         """  """
         
-        self.strTitle = strArg
-        self.listDescription = []
+        self.setTitleStr(strArg)
+        self.appendDescription()
+
         self.setPeriod(intArg)
 
         self.child = []
@@ -559,28 +620,6 @@ class period:
             c.resetUnits()
 
             
-    def appendDescriptionStr(self,strArg):
-
-        """  """
-        
-        if strArg == None or strArg == '':
-            self.listDescription = []
-        else:
-            self.listDescription.append(strArg)
-        
-
-    def appendDescription(self,listArg):
-
-        """  """
-        
-        if listArg == None or not type(listArg) is list or len(listArg) < 1:
-            self.listDescription = []
-        elif len(self.listDescription) < 1:
-            self.listDescription.insert(0,listArg)
-        else:
-            self.listDescription.append(listArg)
-        
-
     def appendChildDescriptionStr(self,strArg):
 
         """  """
@@ -589,13 +628,6 @@ class period:
             None
         elif len(self.child) > 0:
             self.child[len(self.child) - 1].appendDescriptionStr(strArg)
-        
-
-    def setTitleStr(self,strArg):
-
-        """  """
-        
-        self.strTitle = strArg
         
 
     def getNumberOfUnits(self):
@@ -717,7 +749,7 @@ class period:
                     a[u] = 0.0
                 arrArg.append(a)
                 
-        strResult = self.strTitle + '\n'
+        strResult = self.getTitleStr() + '\n'
 
         for c in self.child:
             c.stat(arrArg)
@@ -763,7 +795,7 @@ class period:
 
         """  """
         
-        strResult = '\n' + self.strTitle + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
+        strResult = '\n' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
         for c in self.child:
             strResult += c.toString() + '\n'
         return strResult
@@ -773,7 +805,7 @@ class period:
 
         """  """
         
-        strResult = '\n*' + self.strTitle + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
+        strResult = '\n*' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
         for c in self.child:
             strResult += c.toCSV()
         return strResult
@@ -785,12 +817,14 @@ class period:
         
         strResult = '<node'
         if self.getNumberOfUnits() < 1:
-            strResult += ' BACKGROUND_COLOR="#ffaaaa"'
+           strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')
+        else:
+            strResult += ' FOLDED="{}"'.format('false')
 
-        strResult += ' TEXT="' + self.strTitle + '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+        strResult += ' TEXT="' + self.getTitleStr() + '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
         strResult += '<font BOLD="true" NAME="Monospaced" SIZE="12"/>'
 
-        strResult += listToXML(self.listDescription)
+        strResult += self.__listDescriptionToXML__()
 
         for c in self.child:
             strResult += c.toXML()
@@ -815,7 +849,7 @@ class period:
         e = self.dateEnd + timedelta(days=1)
         
         if len(self.child) < 1:
-            strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{ye:04}{me:02}{de:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.strTitle, y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
+            strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{ye:04}{me:02}{de:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.getTitleStr(), y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
         else:
             strResult = ''
             for c in self.child:
@@ -828,33 +862,12 @@ class period:
 
         """  """
         
-        strResult = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//{title}//  //\n".format(title=self.strTitle)
+        strResult = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//{title}//  //\n".format(title=self.getTitleStr())
         for c in self.child:
             strResult += c.toiCalString()
         strResult += "END:VCALENDAR"
+        
         return strResult
-
-
-def listToXML(listArg=None):
-
-    """ returns a Freemind XML string of nested listArg """
-    
-    strResult = ''
-
-    if listArg == None:
-        print('fail')
-    elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
-        strResult += '<node TEXT="{}">\n'.format(listArg[0]) + listToXML(listArg[1]) + '</node>\n'
-    elif type(listArg) is list and len(listArg) > 0:
-        for c in listArg:
-            if type(c) is str:
-                strResult += '<node TEXT="{}"/>\n'.format(c)
-            elif type(c) is list:
-                strResult += listToXML(c)
-            else:
-                print('fail')
-
-    return strResult
 
 
 #
