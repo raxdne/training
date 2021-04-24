@@ -380,11 +380,26 @@ class unit(description):
     def toiCalString(self):
 
         """  """
-        
-        if self.dist == None or self.dist < 0.01:
-            return "BEGIN:VEVENT\nSUMMARY:{type} {time} {description}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(y=self.DateTime.year, m=self.DateTime.month, d=self.DateTime.day, type=self.type, time=self.time.isoformat(), description='')
+
+        dateNow = date.today()
+
+        strResult = 'BEGIN:VEVENT\n'
+
+        if self.type == None:
+            strResult += "SUMMARY:{description}\n".format(description = self.__listDescriptionToPlain__())
+        elif self.dist == None or self.dist < 0.01:
+            strResult += "SUMMARY:{type} {time} {description}\n".format(type=self.type, time=self.time.isoformat(), description = self.__listDescriptionToPlain__())
         else:
-            return "BEGIN:VEVENT\nSUMMARY:{dist:.0f} {type} {time} {description}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(y=self.DateTime.year, m=self.DateTime.month, d=self.DateTime.day, dist=self.dist, type=self.type, time=self.time.isoformat(), description='')
+            strResult += "SUMMARY:{dist:.0f} {type} {time} {description}\n".format(dist=self.dist, type=self.type, time=self.time.isoformat(), description = self.__listDescriptionToPlain__())
+
+        strResult += "DTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\n".format(y=self.DateTime.year, m=self.DateTime.month, d=self.DateTime.day)
+
+        strResult += "DTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\n".format(y=dateNow.year, m=dateNow.month, d=dateNow.day)
+
+        strResult += 'END:VEVENT\n'
+        
+        return strResult
+
 
 
 #
