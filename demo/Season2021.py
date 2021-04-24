@@ -20,7 +20,7 @@ def RegenerationGeneral():
 
 def BasicsGeneral():
     p = training.period('General Basics')
-    p.appendDescriptionStr('Regeneration')
+    p.appendDescription('Regeneration')
 
     c = training.cycle('General Endurance')
     c.insert(1,training.unit('3.5;RB;25:00'))
@@ -34,8 +34,8 @@ def BasicsGeneral():
     p.append(c)
     p.append(RegenerationGeneral())
 
-    c.appendDescriptionStr('Nutrition ABC')
-    f.appendDescriptionStr('Maximum')
+    c.appendDescription('Nutrition ABC')
+    f.appendDescription('Maximum')
     
     p.append(c)
     p.append(c)
@@ -50,15 +50,15 @@ def BasicsAlternative():
     p = BasicsGeneral()
     p.setTitleStr('Alternative Basics')
     p.scale(1.2)
-    p.appendDescriptionStr('Extension')
+    p.appendDescription('Extension')
     
     return p
 
 
 def BasicsBicycle():
     p = training.period('Basics Endurance Bicycle')
-    p.appendDescriptionStr('Weight, Metabolism, Nutrition')
-    p.appendDescriptionStr('1000 km, switch to Racing bike')
+    p.appendDescription('Weight, Metabolism, Nutrition')
+    p.appendDescription('1000 km, switch to Racing bike')
     
     c = training.cycle('Focus Bicycle')
     c.insert(1,training.unit('30;BB;1:15:00'))
@@ -69,7 +69,7 @@ def BasicsBicycle():
     p.append(c)
     p.append(c)
     p.append(c)
-    p.appendChildDescriptionStr('Test 5km Time trial')
+    p.appendChildDescription('Test 5km Time trial')
     p.append(RegenerationGeneral())
     p.append(c)
     c.scale(1.2)
@@ -86,7 +86,7 @@ def BasicsBicycle():
 
 def BuildupBicycleSpeed():
     p = training.period('Buildup Bicycle Speed')
-    p.appendDescriptionStr('Sprint Final speed')
+    p.appendDescription('Sprint Final speed')
 
     c = training.cycle('Focus Bicycle Speed')
     c.insert(1,training.unit('30;BI;1:15:00'))
@@ -107,7 +107,7 @@ def HighlightBicycle1():
     c = training.cycle('Highlight Bicycle Distance')
     
     h = training.unit('100;BB;5:00:00')
-    h.appendDescriptionStr('Bicycle about 100 km')
+    h.appendDescription('Bicycle about 100 km')
     
     c.insert(1,training.unit('30;BR;25:00'))
     c.insert(3,training.unit('3.5;RR;25:00'))
@@ -118,7 +118,7 @@ def HighlightBicycle1():
 
 def BuildupBicycleForce():
     p = training.period('Buildup Bicycle Force')
-    p.appendDescriptionStr('Force uphill')
+    p.appendDescription('Force uphill')
 
     c = training.cycle('Focus Bicycle Force')
     c.insert(1,training.unit('30;BI;1:15:00'))
@@ -136,10 +136,10 @@ def BuildupBicycleForce():
 
 
 def HighlightBicycle2():
-    c = training.cycle('Highlight Bicycle Berg')
+    c = training.cycle('Highlight Bicycle Mountain')
 
     h = training.unit('60;BI;03:00:00')
-    h.appendDescriptionStr('Mountain')
+    h.appendDescription('Mountain')
     
     c.insert(1,training.unit('30;BR;1:15:00'))
     c.insert(3,training.unit(';FB;25:00'))
@@ -150,7 +150,7 @@ def HighlightBicycle2():
 
 def BuildupBicycleSpeed():
     p = training.period('Buildup Bicycle Speed')
-    p.appendDescriptionStr('Speed Trime Trial')
+    p.appendDescription('Speed Trime Trial')
 
     c = training.cycle('Focus Bicycle Speed')
     c.insert(1,training.unit('30;BI;1:15:00'))
@@ -160,11 +160,11 @@ def BuildupBicycleSpeed():
 
     p.append(c)
     p.append(c)
-    p.appendChildDescriptionStr('Test 5km Trime Trial')
+    p.appendChildDescription('Test 5km Trime Trial')
     p.append(RegenerationGeneral())
     p.append(c)
     p.append(c)
-    p.appendChildDescriptionStr('Test 5km Trime Trial')
+    p.appendChildDescription('Test 5km Trime Trial')
     p.append(RegenerationGeneral())
     
     return p
@@ -174,7 +174,7 @@ def HighlightBicycle3():
     c = training.cycle('Highlight Bicycle Trime Trial')
 
     h = training.unit('20;BI;40:00')
-    h.appendDescriptionStr('Trime Trial')
+    h.appendDescription('Trime Trial')
     
     c.insert(1,training.unit('30;BR;1:15:00'))
     c.insert(3,training.unit(';FB;25:00'))
@@ -198,8 +198,8 @@ def Bicycle2021():
 
 
 def BasicsRunning():
-    p = training.period('Spezielle Basics Running')
-    p.appendDescriptionStr('Change of Focus')
+    p = training.period('Specific Basics Running')
+    p.appendDescription('Change of Focus')
 
     c = training.cycle('Focus Running')
     c.insert(2,training.unit('3.5;RB;25:00'))
@@ -209,12 +209,12 @@ def BasicsRunning():
     
     p.append(c)
     p.append(c)
-    p.appendChildDescriptionStr('Test 1000m speed run')
+    p.appendChildDescription('Test 1000m speed run')
     p.append(RegenerationGeneral())
     c.scale(1.2)
     p.append(c)
     p.append(c)
-    p.appendChildDescriptionStr('Test 1000m speed run')
+    p.appendChildDescription('Test 1000m speed run')
     p.append(RegenerationGeneral())
 
     return p
@@ -224,7 +224,7 @@ def BuildupRunningSpeed():
     p = training.period('Buildup Running Speed')
     
     c = training.cycle('Focus Running')
-    c.appendDescriptionStr('Test 1000m speed run')
+    c.appendDescription('Test 1000m speed run')
     c.insert(1,training.unit('30;BR;1:25:00'))
     c.insert(3,training.unit('5;BI;25:00'))
     c.insert(3,training.unit(';FB;25:00'))
@@ -241,7 +241,7 @@ def BuildupRunningSpeed():
     p = training.period('Buildup Running Speed')
     
     c = training.cycle('Focus Running')
-    c.appendDescriptionStr('Test 1000m speed run')
+    c.appendDescription('Test 1000m speed run')
     c.insert(1,training.unit('30;BR;1:25:00'))
     c.insert(3,training.unit('5;BI;25:00'))
     c.insertDescriptionStr(3,'Test 3 x 1000m speed run')
@@ -259,7 +259,7 @@ def HighlightRunning1():
     c = training.cycle('Highlight Running Distance')
 
     h = training.unit('10;RB;1:00:00')
-    h.appendDescriptionStr('Running über mind. 10 km')
+    h.appendDescription('Running min. 10 km')
     c.insert(6,h)
     
     return c
@@ -269,7 +269,7 @@ def HighlightRunning2():
     c = training.cycle('Highlight Running Competition',1)
 
     h = training.unit('6.5;RC;35:00')
-    h.appendDescriptionStr('High Mountain Uphill Run')
+    h.appendDescription('High Mountain Uphill Run')
     c.insert(0,h)
     
     return c
@@ -277,7 +277,7 @@ def HighlightRunning2():
 
 def Running2021():
     p = training.period('Running')
-    p.appendDescriptionStr('Compensation swimming')
+    p.appendDescription('Compensation swimming')
     
     p.append(BasicsRunning())
     p.append(HighlightRunning1())

@@ -75,37 +75,31 @@ class description:
         self.setDescription()
 
         
-    def appendDescriptionStr(self,strArg):
+    def setDescription(self,objArg=None):
 
         """  """
         
-        if strArg == None or strArg == '':
-            pass
-        else:
-            self.listDescription.append(strArg)
-        
-
-    def setDescription(self,listArg=None):
-
-        """  """
-        
-        if listArg == None or not type(listArg) is list or len(listArg) < 1:
+        if objArg == None or len(objArg) < 1:
             self.listDescription = []
-        else:
-            self.listDescription = listArg
+        elif type(objArg) is str:
+            self.listDescription.append([objArg])
+        elif type(objArg) is list:
+            self.listDescription = [objArg]
         
 
-    def appendDescription(self,listArg):
+    def appendDescription(self,objArg):
 
         """  """
         
-        if listArg == None or not type(listArg) is list or len(listArg) < 1:
+        if objArg == None or len(objArg) < 1:
             pass
-        elif len(self.listDescription) > 0:
-            self.listDescription.append(listArg)
-        else:
-            self.setDescription(listArg)
-        
+        elif len(self.listDescription) < 1:
+            self.setDescription(objArg)
+        elif type(objArg) is str:
+            self.listDescription.append([objArg])
+        elif type(objArg) is list:
+            self.listDescription.append(objArg)
+            
 
     def __listDescriptionToPlain__(self,listArg=None):
 
@@ -124,7 +118,7 @@ class description:
                 elif type(c) is list:
                     strResult += self.__listDescriptionToPlain__(c)
                 else:
-                    print('fail')
+                    print('fail: ',c)
 
         return strResult
 
@@ -146,7 +140,7 @@ class description:
                 elif type(c) is list:
                     strResult += self.__listDescriptionToXML__(c)
                 else:
-                    print('fail')
+                    print('fail: ',c)
 
         return strResult
 
@@ -270,22 +264,26 @@ class unit(description):
         return copy.deepcopy(self)
 
 
-    def parse(self,strArg):
+    def parse(self,objArg):
         
         """  """
 
-        self.reset()
-        entry = strArg.split(';')
-        if len(entry) == 3:
-             return self.parse(';' + strArg)
-        elif len(entry) > 3 and self.setDistStr(entry[1]) and self.setTypeStr(entry[2]) and self.setTimeStr(entry[3]):
-            self.setDateStr(entry[0])
-
-            self.listDescription = []
-            for i in range(4,len(entry)):
-                self.appendDescriptionStr(entry[i])
-
-            return True
+        if objArg == None or len(objArg) < 1:
+            return False
+        elif type(objArg) is str:
+            entry = objArg.split(';')
+            # TODO: test elements of entry
+            if len(entry) == 3:
+                entry.insert(0,'')
+            return self.parse(entry)
+        elif type(objArg) is list and len(objArg) > 3:
+            self.reset()
+            if self.setDistStr(objArg[1]) and self.setTypeStr(objArg[2]) and self.setTimeStr(objArg[3]):
+                self.setDateStr(objArg[0])
+                self.appendDescription(objArg[4:])
+                return True
+            else:
+                return False
         else:
             return False
         
@@ -335,7 +333,7 @@ class unit(description):
         else:
             strResult = '{date} {dist:5.1f} {type} {time}'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
 
-        strResult += self.__listDescriptionToPlain__()
+        #strResult += self.__listDescriptionToPlain__()
         
         return strResult
 
@@ -409,7 +407,7 @@ class cycle(title,description):
         self.setTitleStr(strArg)
         self.setDescription()
 
-        self.lengthType = 3
+        self.lengthType = 10
         self.periodInt = intArg
         
         self.child = []
@@ -469,7 +467,7 @@ class cycle(title,description):
         if strArg == None or strArg == '':
             pass
         elif len(self.child) > intIndex and len(self.child[intIndex]) > 0:
-            self.child[intIndex][len(self.child[intIndex]) - 1].appendDescriptionStr(strArg)
+            self.child[intIndex][len(self.child[intIndex]) - 1].appendDescription(strArg)
         
 
     def getPeriod(self):
@@ -684,14 +682,12 @@ class period(title,description):
             c.resetUnits()
 
             
-    def appendChildDescriptionStr(self,strArg):
+    def appendChildDescription(self,objArg):
 
         """  """
         
-        if strArg == None or strArg == '':
-            None
-        elif len(self.child) > 0:
-            self.child[len(self.child) - 1].appendDescriptionStr(strArg)
+        if len(self.child) > 0:
+            self.child[len(self.child) - 1].appendDescription(objArg)
         
 
     def getNumberOfUnits(self):
