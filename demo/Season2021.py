@@ -1,18 +1,4 @@
 
-"""
-
-(query-replace "KG" "FB")
-(query-replace "LE" "RR")
-(query-replace "LG" "RB")
-(query-replace "LI" "RI")
-(query-replace "LK" "RI")
-(query-replace "RE" "BR")
-(query-replace "RG" "BB")
-(query-replace "RI" "BI")
-(query-replace "WL" "CR")
-
-"""
-
 from datetime import (
     timedelta,
     date,
@@ -39,7 +25,7 @@ def BasicsGeneral():
     c = training.cycle('General Endurance')
     c.insert(1,training.unit('3.5;RB;25:00'))
     c.insert(3,training.unit('3.5;RB;25:00'))
-    c.insert(3,training.unit(';FB;25:00'))
+    f = c.insert(4,training.unit(';FB;25:00'))
     c.insert(5,training.unit(';FB;25:00'))
     c.insert(6,training.unit('30;BB;02:00:00'))
 
@@ -47,8 +33,13 @@ def BasicsGeneral():
     p.append(c)
     p.append(c)
     p.append(RegenerationGeneral())
+
+    c.appendDescriptionStr('Nutrition ABC')
+    f.appendDescriptionStr('Maximum')
+    
     p.append(c)
     p.append(c)
+    f.setDescription()
     p.append(c)
     p.append(RegenerationGeneral())
     
@@ -324,7 +315,6 @@ def Plan2021(strArg):
 
 s = Plan2021('Season 2021')
 
-#print(s.toString())
 #print(s.report())
 print(s.stat())
 
@@ -334,5 +324,13 @@ f.close()
 
 f = open('Plan2021.ics', 'w')
 f.write(s.toVCalendar())
+f.close()
+
+f = open('Plan2021.txt', 'w')
+f.write(s.toString())
+f.close()
+
+f = open('Plan2021.csv', 'w')
+f.write(s.toCSV())
 f.close()
 

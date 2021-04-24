@@ -72,7 +72,7 @@ class description:
         
         """ constructor """
         
-        self.appendDescription()
+        self.setDescription()
 
         
     def appendDescriptionStr(self,strArg):
@@ -80,22 +80,54 @@ class description:
         """  """
         
         if strArg == None or strArg == '':
-            self.listDescription = []
+            pass
         else:
             self.listDescription.append(strArg)
         
 
-    def appendDescription(self,listArg=None):
+    def setDescription(self,listArg=None):
 
         """  """
         
         if listArg == None or not type(listArg) is list or len(listArg) < 1:
             self.listDescription = []
-        elif len(self.listDescription) > 0:
-            self.listDescription.append(listArg)
         else:
             self.listDescription = listArg
         
+
+    def appendDescription(self,listArg):
+
+        """  """
+        
+        if listArg == None or not type(listArg) is list or len(listArg) < 1:
+            pass
+        elif len(self.listDescription) > 0:
+            self.listDescription.append(listArg)
+        else:
+            self.setDescription(listArg)
+        
+
+    def __listDescriptionToPlain__(self,listArg=None):
+
+        """ returns a CSV string of nested self.listDescription """
+
+        strResult = ''
+
+        if listArg == None:
+            strResult += self.__listDescriptionToPlain__(self.listDescription)
+        elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
+            strResult += ' {}'.format(listArg[0]) + self.__listDescriptionToPlain__(listArg[1])
+        elif type(listArg) is list and len(listArg) > 0:
+            for c in listArg:
+                if type(c) is str:
+                    strResult += c + ' '
+                elif type(c) is list:
+                    strResult += self.__listDescriptionToPlain__(c)
+                else:
+                    print('fail')
+
+        return strResult
+
 
     def __listDescriptionToXML__(self,listArg=None):
 
@@ -125,6 +157,8 @@ class description:
 
 class unit(description):
     
+    """ class for training units """
+    
     def __init__(self,strArg=None):
         
         """ constructor """
@@ -145,7 +179,7 @@ class unit(description):
         self.dist = None
         self.type = None
         self.time = None
-        self.appendDescription()
+        self.setDescription()
 
         
     def setTypeStr(self,strArg):
@@ -293,15 +327,33 @@ class unit(description):
     def toString(self):
 
         """  """
+
+        if self.type == None:
+            strResult = '{date}'.format(date=self.DateTime.isoformat())
+        elif self.dist == None or self.dist < 0.01:
+            strResult = '{date} {type} {time}'.format(date=self.DateTime.isoformat(), type=self.type, time=self.time.isoformat())
+        else:
+            strResult = '{date} {dist:5.1f} {type} {time}'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
+
+        strResult += self.__listDescriptionToPlain__()
         
-        return "{date} {dist:5.0f} {type} {time} {description}\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), description='')
+        return strResult
 
 
     def toCSV(self):
 
         """  """
         
-        return "{date};{dist:.0f};{type};{time};{description}\n".format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat(), description='')
+        if self.type == None:
+            strResult = '{date};;;'.format(date=self.DateTime.isoformat())
+        elif self.dist == None or self.dist < 0.01:
+            strResult = '{date};;{type};{time}'.format(date=self.DateTime.isoformat(), type=self.type, time=self.time.isoformat())
+        else:
+            strResult = '{date};{dist:.1f};{type};{time}'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
+
+        strResult += ';' + self.__listDescriptionToPlain__()
+                
+        return strResult
 
 
     def toXML(self):
@@ -309,12 +361,8 @@ class unit(description):
         """  """
         
         strResult = '<node'
-        if self.type == None:
-            strResult += ' TEXT="{date}"'.format(date=self.DateTime.isoformat())
-        elif self.dist == None or self.dist < 0.01:
-            strResult += ' TEXT="{date} {type} {time}"'.format(date=self.DateTime.isoformat(), type=self.type, time=self.time.isoformat())
-        else:
-            strResult += ' TEXT="{date} {dist:.1f} {type} {time}"'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
+
+        strResult += ' TEXT="' + self.toString() + '"'
 
         if self.type != None and len(self.type) > 0 and self.type[0] in self.color:
             strResult += ' BACKGROUND_COLOR="{}"'.format(self.color[self.type[0]])
@@ -348,6 +396,7 @@ class unit(description):
 class cycle(title,description):
 
     def __init__(self,strArg=None,intArg=7):
+        
         """ constructor """
 
         self.reset(strArg,intArg)
@@ -358,7 +407,7 @@ class cycle(title,description):
         """  """
         
         self.setTitleStr(strArg)
-        self.appendDescription()
+        self.setDescription()
 
         self.lengthType = 3
         self.periodInt = intArg
@@ -390,18 +439,29 @@ class cycle(title,description):
 
         """  """
         
-        self.child[intIndex].append(objUnit.dup())
+        objResult = None
+        
+        if objUnit != None:
+            objResult = objUnit.dup()
+            self.child[intIndex].append(objResult)
+
+        return objResult
 
         
     def insertByDate(self,objUnit):
 
         """  """
         
-        if self.dateBegin <= objUnit.DateTime and objUnit.DateTime <= self.dateEnd:
-            delta = objUnit.DateTime - self.dateBegin
-            self.child[delta.days].append(objUnit.dup())
+        objResult = None
+        
+        if objUnit != None and self.dateBegin <= objUnit.DateTime and objUnit.DateTime <= self.dateEnd:
+            objResult = objUnit.dup()
+            delta = objResult.DateTime - self.dateBegin
+            self.child[delta.days].append(objResult)
 
+        return objResult
 
+    
     def insertDescriptionStr(self,intIndex,strArg):
 
         """  """
@@ -520,6 +580,9 @@ class cycle(title,description):
 
 
     def dup(self):
+
+        """  """
+        
         return copy.deepcopy(self)
 
 
@@ -527,10 +590,10 @@ class cycle(title,description):
 
         """  """
         
-        strResult = '\n' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
+        strResult = '\n** ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
         for v in self.child:
             for u in v:
-                strResult += u.toString()
+                strResult += u.toString() + '\n'
         return strResult
 
 
@@ -538,10 +601,10 @@ class cycle(title,description):
 
         """  """
         
-        strResult = '\n*' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
+        strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
         for v in self.child:
             for u in v:
-                strResult += u.toCSV()
+                strResult += u.toCSV() + '\n'
         return strResult
 
     
@@ -593,6 +656,7 @@ class cycle(title,description):
 class period(title,description):
 
     def __init__(self,strArg=None,intArg=None):
+
         """ constructor """
 
         self.reset(strArg,intArg)
@@ -603,7 +667,7 @@ class period(title,description):
         """  """
         
         self.setTitleStr(strArg)
-        self.appendDescription()
+        self.setDescription()
 
         self.setPeriod(intArg)
 
@@ -795,7 +859,7 @@ class period(title,description):
 
         """  """
         
-        strResult = '\n' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
+        strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
         for c in self.child:
             strResult += c.toString() + '\n'
         return strResult
@@ -805,9 +869,9 @@ class period(title,description):
 
         """  """
         
-        strResult = '\n*' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
+        strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
         for c in self.child:
-            strResult += c.toCSV()
+            strResult += c.toCSV() + '\n'
         return strResult
 
     
