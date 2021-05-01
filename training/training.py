@@ -81,7 +81,8 @@ class description:
         
         """ constructor """
         
-        self.setDescription()
+        self.listDescription = []
+        self.setDescription(strArg)
 
         
     def setDescription(self,objArg=None):

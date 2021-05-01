@@ -1,5 +1,5 @@
 #
-#
+# Copyright (C) 2021 by Alexander Tenbusch
 #
 
 from distutils.core import setup
