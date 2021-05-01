@@ -21,6 +21,8 @@ import math
 
 import copy
 
+import re
+
 from datetime import (
     timedelta,
     date,
@@ -173,6 +175,8 @@ class unit(description):
         self.dist = None
         self.type = None
         self.time = None
+        self.date = None
+        self.clock = None
         self.setDescription()
 
         
@@ -219,11 +223,11 @@ class unit(description):
         return True
 
 
-    def setDateTime(self,objArg):
+    def setDate(self,objArg):
 
         """  """
         
-        self.DateTime = objArg
+        self.date = objArg
         
 
     def setDateStr(self,strArg):
@@ -231,15 +235,26 @@ class unit(description):
         """  """
         
         if strArg == None or strArg == '':
-            self.setDateTime(date.today())
-        elif len(strArg) == 8:
-            return self.setDateStr(strArg[0] + strArg[1] + strArg[2] + strArg[3] + '-' + strArg[4] + strArg[5] + '-' + strArg[6] + strArg[7])
+            pass
         else:
-            entry = strArg.split('-')
-            if len(entry) == 3:
-                self.setDateTime(date(int(entry[0]),int(entry[1]),int(entry[2])))
+            m = re.match(r"\s*([0-9]{4}-*[0-9]{2}-*[0-9]{2})[\sT]+([0-2][0-9]:[0-5]{2})\s*",strArg)
+            if m != None:
+                #print("date + time: ",m.group(1), " ",m.group(2))
+                self.setDateStr(m.group(1))
+                self.setDateStr(m.group(2))
             else:
-                self.setDateTime(date.today())
+                m = re.match(r"([0-9]{4})-*([0-9]{2})-*([0-9]{2})",strArg)
+                if m != None:
+                    #print("date: ",m.group(0))
+                    self.date = date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+                else:
+                    m = re.match(r"([0-2][0-9]:[0-5]{2})",strArg)
+                    if m != None:
+                        #print("time: ",m.group(1))
+                        self.clock = time.fromisoformat("{}:00".format(m.group(1)))
+                    else:
+                        print('ignoring: ',strArg)
+
         return True
 
 
@@ -316,8 +331,8 @@ class unit(description):
 
         sun = Sun(latitude, longitude)
 
-        abd_sr = sun.get_local_sunrise_time(self.DateTime)
-        abd_ss = sun.get_local_sunset_time(self.DateTime)
+        abd_sr = sun.get_local_sunrise_time(self.date)
+        abd_ss = sun.get_local_sunset_time(self.date)
 
         return '{} -- {}'.format(abd_sr.strftime('%H:%M'), abd_ss.strftime('%H:%M'))
 
@@ -327,11 +342,11 @@ class unit(description):
         """  """
 
         if self.type == None:
-            strResult = '{date}'.format(date=self.DateTime.isoformat())
+            strResult = '{date}'.format(date=self.date.isoformat())
         elif self.dist == None or self.dist < 0.01:
-            strResult = '{date} {type} {time}'.format(date=self.DateTime.isoformat(), type=self.type, time=self.time.isoformat())
+            strResult = '{date} {type} {time}'.format(date=self.date.isoformat(), type=self.type, time=self.time.isoformat())
         else:
-            strResult = '{date} {dist:5.1f} {type} {time}'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
+            strResult = '{date} {dist:5.1f} {type} {time}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
 
         #strResult += self.__listDescriptionToPlain__()
         
@@ -343,11 +358,11 @@ class unit(description):
         """  """
         
         if self.type == None:
-            strResult = '{date};;;'.format(date=self.DateTime.isoformat())
+            strResult = '{date};;;'.format(date=self.date.isoformat())
         elif self.dist == None or self.dist < 0.01:
-            strResult = '{date};;{type};{time}'.format(date=self.DateTime.isoformat(), type=self.type, time=self.time.isoformat())
+            strResult = '{date};;{type};{time}'.format(date=self.date.isoformat(), type=self.type, time=self.time.isoformat())
         else:
-            strResult = '{date};{dist:.1f};{type};{time}'.format(date=self.DateTime.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
+            strResult = '{date};{dist:.1f};{type};{time}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
 
         strResult += ';' + self.__listDescriptionToPlain__()
                 
@@ -392,7 +407,13 @@ class unit(description):
         else:
             strResult += "SUMMARY:{dist:.0f} {type} {time} {description}\n".format(dist=self.dist, type=self.type, time=self.time.isoformat(), description = self.__listDescriptionToPlain__())
 
-        strResult += "DTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\n".format(y=self.DateTime.year, m=self.DateTime.month, d=self.DateTime.day)
+        if self.clock == None or self.time == None:
+            strResult += "DTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\n".format(y=self.date.year, m=self.date.month, d=self.date.day)
+        else:
+            t = datetime(self.date.year, self.date.month, self.date.day, self.clock.hour, self.clock.minute)
+            strResult += "DTSTART;VALUE=DATE:{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=t.year, m=t.month, d=t.day, h=t.hour, min=t.minute, s=0)
+            t += timedelta(hours = self.time.hour, minutes = self.time.minute)
+            strResult +=   "DTEND;VALUE=DATE:{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=t.year, m=t.month, d=t.day, h=t.hour, min=t.minute, s=0)
 
         strResult += "DTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\n".format(y=dateNow.year, m=dateNow.month, d=dateNow.day)
 
@@ -467,9 +488,9 @@ class cycle(title,description):
         
         objResult = None
         
-        if objUnit != None and self.dateBegin <= objUnit.DateTime and objUnit.DateTime <= self.dateEnd:
+        if objUnit != None and self.dateBegin <= objUnit.date and objUnit.date <= self.dateEnd:
             objResult = objUnit.dup()
-            delta = objResult.DateTime - self.dateBegin
+            delta = objResult.date - self.dateBegin
             self.child[delta.days].append(objResult)
 
         return objResult
@@ -542,7 +563,7 @@ class cycle(title,description):
         for v in self.child:
             o = self.child.index(v)
             for u in v:
-                u.setDateTime(d + timedelta(days=o))
+                u.setDate(d + timedelta(days=o))
                     
         self.dateBegin = date(intYear, intMonth, intDay)
         self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
@@ -558,7 +579,7 @@ class cycle(title,description):
                     pass
                 else:
                     k = u.type[0:self.lengthType]
-                    arrArg[u.DateTime.month - 1][k] += u.dist
+                    arrArg[u.date.month - 1][k] += u.dist
 
 
     def report(self, arrArg=None):
