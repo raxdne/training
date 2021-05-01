@@ -54,6 +54,13 @@ class title:
         self.strTitle = strArg
         
         
+    def hasTitle(self):
+
+        """  """
+        
+        return self.strTitle != None and len(self.strTitle) > 0
+        
+
     def getTitleStr(self):
 
         """  """
@@ -87,6 +94,13 @@ class description:
             self.listDescription.append([objArg])
         elif type(objArg) is list:
             self.listDescription = [objArg]
+        
+
+    def hasDescription(self):
+
+        """  """
+        
+        return self.listDescription != None and len(self.listDescription) > 0
         
 
     def appendDescription(self,objArg):
@@ -396,26 +410,29 @@ class unit(description):
 
         """  """
 
-        dateNow = date.today()
+        dateNow = datetime.now()
 
         strResult = 'BEGIN:VEVENT\n'
 
         if self.type == None:
             strResult += "SUMMARY:{description}\n".format(description = self.__listDescriptionToPlain__())
         elif self.dist == None or self.dist < 0.01:
-            strResult += "SUMMARY:{type} {time} {description}\n".format(type=self.type, time=self.time.isoformat(), description = self.__listDescriptionToPlain__())
+            strResult += "SUMMARY:{type} {time}\n".format(type=self.type, time=self.time.isoformat())
         else:
-            strResult += "SUMMARY:{dist:.0f} {type} {time} {description}\n".format(dist=self.dist, type=self.type, time=self.time.isoformat(), description = self.__listDescriptionToPlain__())
+            strResult += "SUMMARY:{dist:.0f} {type} {time}\n".format(dist=self.dist, type=self.type, time=self.time.isoformat())
+
+        if self.hasDescription():
+            strResult += 'DESCRIPTION:{}\n'.format(self.__listDescriptionToPlain__())
 
         if self.clock == None or self.time == None:
-            strResult += "DTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{y:04}{m:02}{d:02}\n".format(y=self.date.year, m=self.date.month, d=self.date.day)
+            strResult += "DTSTART;{y:04}{m:02}{d:02}\nDTEND;{y:04}{m:02}{d:02}\n".format(y=self.date.year, m=self.date.month, d=self.date.day)
         else:
             t = datetime(self.date.year, self.date.month, self.date.day, self.clock.hour, self.clock.minute)
-            strResult += "DTSTART;VALUE=DATE:{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=t.year, m=t.month, d=t.day, h=t.hour, min=t.minute, s=0)
+            strResult += "DTSTART;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=t.year, m=t.month, d=t.day, h=t.hour, min=t.minute, s=0)
             t += timedelta(hours = self.time.hour, minutes = self.time.minute)
-            strResult +=   "DTEND;VALUE=DATE:{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=t.year, m=t.month, d=t.day, h=t.hour, min=t.minute, s=0)
+            strResult +=   "DTEND;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=t.year, m=t.month, d=t.day, h=t.hour, min=t.minute, s=0)
 
-        strResult += "DTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\n".format(y=dateNow.year, m=dateNow.month, d=dateNow.day)
+        strResult += "DTSTAMP;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=dateNow.year, m=dateNow.month, d=dateNow.day, h=dateNow.hour, min=dateNow.minute, s=dateNow.second)
 
         strResult += 'END:VEVENT\n'
         
@@ -488,7 +505,7 @@ class cycle(title,description):
         
         objResult = None
         
-        if objUnit != None and self.dateBegin <= objUnit.date and objUnit.date <= self.dateEnd:
+        if objUnit != None and objUnit.date != None and self.dateBegin <= objUnit.date and objUnit.date <= self.dateEnd:
             objResult = objUnit.dup()
             delta = objResult.date - self.dateBegin
             self.child[delta.days].append(objResult)
@@ -672,7 +689,7 @@ class cycle(title,description):
         e = self.dateEnd + timedelta(days=1)
         
         if self.getNumberOfUnits() < 1:
-            strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{ye:04}{me:02}{de:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.getTitleStr(), y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
+            strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;{y:04}{m:02}{d:02}\nDTEND;{ye:04}{me:02}{de:02}\nDTSTAMP;{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.getTitleStr(), y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
         else:
             strResult = ''
             for v in self.child:
@@ -945,7 +962,7 @@ class period(title,description):
         e = self.dateEnd + timedelta(days=1)
         
         if len(self.child) < 1:
-            strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;VALUE=DATE:{y:04}{m:02}{d:02}\nDTEND;VALUE=DATE:{ye:04}{me:02}{de:02}\nDTSTAMP;VALUE=DATE:{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.getTitleStr(), y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
+            strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;{y:04}{m:02}{d:02}\nDTEND;{ye:04}{me:02}{de:02}\nDTSTAMP;{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.getTitleStr(), y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
         else:
             strResult = ''
             for c in self.child:
