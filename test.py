@@ -1,5 +1,5 @@
 #
-#
+# Copyright (C) 2021 by Alexander Tenbusch
 #
 
 import unittest
@@ -66,9 +66,24 @@ class TestTraining(unittest.TestCase):
         u = training.unit('30;BR;1:15:00')
         self.assertEqual(u.toString(),'  30.0 BR 01:15:00')
 
-        u.setDateStr('20191103 13:30')
-        self.assertEqual(u.toString(),'2019-11-03  30.0 BR 01:15:00')
+        u.setDateStr("14:00")
+        self.assertEqual(u.toString(),'  30.0 BR 01:15:00')
+        
+        u.setDateStr("2021-03-03 14:00 ")
+        self.assertEqual(u.toString(),'2021-03-03  30.0 BR 01:15:00')
+        
+        u.setDateStr(" 2021-03-03T14:00:00")
+        self.assertEqual(u.toString(),'2021-03-03  30.0 BR 01:15:00')
+        
+        u.setDateStr("2021-03-03")
+        self.assertEqual(u.toString(),'2021-03-03  30.0 BR 01:15:00')
+        
+        u.setDateStr("20210303")
+        self.assertEqual(u.toString(),'2021-03-03  30.0 BR 01:15:00')
 
+        u.setDateStr('')
+        self.assertEqual(u.toString(),'2021-03-03  30.0 BR 01:15:00')
+        
         u.reset()
         self.assertEqual(u.toString(),'EMPTY')
         
