@@ -61,10 +61,10 @@ def BasicsBicycle():
     p.appendDescription('1000 km, switch to Racing bike')
     
     c = training.cycle('Focus Bicycle')
-    c.insert(1,training.unit('30;BB;1:15:00'))
-    c.insert(3,training.unit('3.5;RR;25:00'))
+    c.insert(1,training.unit('14:00;30;BB;1:15:00'))
+    c.insert(3,training.unit('17:15;3.5;RR;25:00'))
     c.insert(3,training.unit(';FB;25:00'))
-    c.insert(6,training.unit('40;BB;02:00:00'))
+    c.insert(6,training.unit('16:00;40;BB;02:00:00'))
 
     p.append(c)
     p.append(c)
