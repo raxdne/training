@@ -356,10 +356,14 @@ class unit(description):
 
         """  """
 
-        if self.type == None:
+        if self.type == None and self.dist == None and self.date == None:
+            strResult = 'EMPTY'
+        elif self.type == None:
             strResult = '{date}'.format(date=self.date.isoformat())
         elif self.dist == None or self.dist < 0.01:
             strResult = '{date} {type} {time}'.format(date=self.date.isoformat(), type=self.type, time=self.time.isoformat())
+        elif self.date == None:
+            strResult = '{date} {dist:5.1f} {type} {time}'.format(date='', dist=self.dist, type=self.type, time=self.time.isoformat())
         else:
             strResult = '{date} {dist:5.1f} {type} {time}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
 

@@ -64,20 +64,43 @@ class TestTraining(unittest.TestCase):
         """
 
         u = training.unit('30;BR;1:15:00')
-        self.assertEqual(u.toString(),' ABCDEF HIJ ')
+        self.assertEqual(u.toString(),'  30.0 BR 01:15:00')
 
+        u.setDateStr('20191103 13:30')
+        self.assertEqual(u.toString(),'2019-11-03  30.0 BR 01:15:00')
+
+        u.reset()
+        self.assertEqual(u.toString(),'EMPTY')
         
+        u.parse('20191223 14:30;33;Bicycle;1:00:00')
+        self.assertEqual(u.toString(),'2019-12-23  33.0 Bicycle 01:00:00')
+
+
     def test_class_cycle(self):
         """
         Test all methods of cycle class
         """
 
+        c = training.cycle('General Regeneration')
+        self.assertTrue(c.hasTitle())
+
+        c.insert(1,training.unit('11:00;30;BR;1:15:00'))
+        c.insert(3,training.unit('3.5;RR;25:00'))
+        c.insert(3,training.unit('07:00;30;BR;1:15:00'))
+        c.insert(6,training.unit('07:00;30;BR;1:15:00'))
+
+        self.assertEqual(c.getNumberOfUnits(),4)
+        self.assertEqual(c.getTypeOfUnits(),['BR','RR'])
+        #self.assertEqual(c.toString(),'2019-11-03  30.0 BR 01:15:00')
 
         
     def test_class_period(self):
         """
         Test all methods of period class
         """
+
+        p = training.cycle('General Regeneration')
+        self.assertTrue(p.hasTitle())
 
 
         
