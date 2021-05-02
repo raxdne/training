@@ -273,18 +273,23 @@ class unit(description):
         return True
 
 
-    def scale(self,floatScale):
+    def scale(self,floatScale,patternType=None):
 
         """  """
-        
-        if self.dist == None or self.dist < 0.01:
-            pass
-        else:
-            self.dist *= floatScale
+
+        if patternType == None or re.match(patternType,self.type):
             
-        minutes = (self.time.hour * 60 + self.time.minute)
-        minutes *= floatScale
-        self.time = time(hour=int(minutes / 60), minute=int(minutes % 60))
+            if self.dist == None or self.dist < 0.01:
+                pass
+            else:
+                self.dist *= floatScale
+
+            if self.time == None:
+                pass
+            else:
+                minutes = (self.time.hour * 60 + self.time.minute)
+                minutes *= floatScale
+                self.time = time(hour=int(minutes / 60), minute=int(minutes % 60))
 
 
     def dup(self):
@@ -567,13 +572,13 @@ class cycle(title,description):
         return arrArg
 
     
-    def scale(self,floatScale):
+    def scale(self,floatScale,patternType=None):
 
         """  """
         
         for v in self.child:
             for u in v:
-                u.scale(floatScale)
+                u.scale(floatScale,patternType)
 
 
     def schedule(self, intYear, intMonth, intDay):
@@ -808,12 +813,12 @@ class period(title,description):
         return self.periodInt
             
 
-    def scale(self,floatScale):
+    def scale(self,floatScale,patternType=None):
 
         """  """
         
         for c in self.child:
-            c.scale(floatScale)
+            c.scale(floatScale,patternType)
 
 
     def schedule(self, intYear, intMonth, intDay):

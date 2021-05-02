@@ -97,7 +97,13 @@ class TestTraining(unittest.TestCase):
         u.parse('20191223 14:30;33;Bicycle;1:00:00')
         self.assertEqual(u.toString(),'2019-12-23  33.0 Bicycle 01:00:00')
 
+        u.scale(2.0,r"Foo")
+        self.assertEqual(u.toString(),'2019-12-23  33.0 Bicycle 01:00:00')
+        
+        u.scale(2.0,r"Bic.*")
+        self.assertEqual(u.toString(),'2019-12-23  66.0 Bicycle 02:00:00')
 
+        
     def test_class_cycle(self):
         """
         Test all methods of cycle class

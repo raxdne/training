@@ -31,6 +31,7 @@ def BasicsGeneral():
 
     p.append(c)
     p.append(c)
+    c.scale(1.2,r"FB")
     p.append(c)
     p.append(RegenerationGeneral())
 
@@ -68,11 +69,11 @@ def BasicsBicycle():
 
     p.append(c)
     p.append(c)
+    c.scale(1.2,r"BB")
     p.append(c)
     p.appendChildDescription('Test 5km Time trial')
     p.append(RegenerationGeneral())
     p.append(c)
-    c.scale(1.2)
     p.append(c)
     p.append(c)
     p.append(RegenerationGeneral())
