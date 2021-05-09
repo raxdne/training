@@ -305,6 +305,8 @@ def Plan2021(strArg):
     #s.append(RegenerationGeneral())
     s.append(Running2021())
 
+    s.switchToMiles()
+
     s.schedule(2021,1,4)
 
     #s.resetUnits()
