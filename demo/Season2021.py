@@ -308,7 +308,8 @@ def Plan2021(strArg):
     s.switchToMiles()
 
     s.schedule(2021,1,4)
-
+    s.setTypeChars(1)
+    
     #s.resetUnits()
     #s.parseFile('Training2021.csv')
 

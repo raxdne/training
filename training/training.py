@@ -570,6 +570,13 @@ class cycle(title,description):
         return intResult
 
 
+    def setTypeChars(self, intArg=10):
+
+        """  """
+        
+        self.lengthType = intArg
+            
+
     def getTypeOfUnits(self,arrArg=None):
 
         """  """
@@ -817,6 +824,14 @@ class period(title,description):
         self.du   = 'mi'
         for c in self.child:
             c.switchToMiles()
+            
+
+    def setTypeChars(self, intArg=10):
+
+        """  """
+        
+        for c in self.child:
+            c.setTypeChars(intArg)
             
 
     def setPeriod(self, intArg):

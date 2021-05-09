@@ -124,6 +124,7 @@ class TestTraining(unittest.TestCase):
         #self.assertEqual(c.toString(),'2019-11-03  30.0 Foo 01:15:00')
 
         c.switchToMiles()
+        c.setTypeChars(2)
         
         
     def test_class_period(self):
@@ -140,6 +141,7 @@ class TestTraining(unittest.TestCase):
         self.assertTrue(p.hasTitle())
 
         p.switchToMiles()
+        p.setTypeChars(1)
 
         p.appendDescription('additional Notes')
         self.assertTrue(p.hasDescription())
