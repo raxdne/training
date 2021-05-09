@@ -185,9 +185,7 @@ class unit(description):
         
         """  """
         
-        # TODO: make colorcoding configurable
         self.color = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
-        # TODO: implement a self.unitDist = (km|mi)
         self.dist = None
         self.type = None
         self.time = None
@@ -888,15 +886,20 @@ class period(title,description):
         for c in self.child:
             c.report(arrArg)
 
+        sum_h = 0.0
         for k in sorted(arrArg.keys()):
             if arrArg[k][0] == None or arrArg[k][0] < 0.01:
                 strResult += "{:4} x {:3} {:5}    {:5.0f} h\n".format(arrArg[k][1], k, ' ', round(arrArg[k][2] / 3600, 1))
             else:
                 strResult += "{:4} x {:3} {:5.0f} {} {:5.0f} h\n".format(arrArg[k][1], k, arrArg[k][0], self.du, round(arrArg[k][2] / 3600, 1))        
+            sum_h += arrArg[k][2]
+
+        sum_h /= 3600.0
         n = self.getNumberOfUnits()
         if n > 0:
             p = self.getPeriod()
-            strResult += "{:4} Units in {} Days = {:.02f} Units/Week\n".format(n, p, n/p * 7.0)
+            #strResult += "{:4} Units in {} Days = {:4.01f} Units/Week\n".format(n, p, n/p * 7.0)
+            strResult += "{:4} h     in {} Days = {:4.01f} h/Week\n".format(round(sum_h), p, sum_h/p * 7.0)
             
         return strResult
 

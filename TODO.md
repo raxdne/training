@@ -1,7 +1,9 @@
 
 # TODO
 
-## Requierements
+## Requirements
+
+TODO: make colorcoding configurable
 
 TODO: link some units of different types into one unit
 
