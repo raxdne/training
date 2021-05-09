@@ -174,6 +174,7 @@ class unit(description):
         
         """ constructor """
         
+        self.du   = 'km'     # default for distance unit
         if strArg == None:
             self.reset()
         else:
@@ -205,6 +206,13 @@ class unit(description):
             self.type = strArg.replace(' ','')
         return True
         
+
+    def switchToMiles(self):
+
+        """ switch distance unit to miles, but without conversion! """
+        
+        self.du   = 'mi'     # distance unit 'miles'
+            
 
     def setDistStr(self,strArg):
 
@@ -273,18 +281,23 @@ class unit(description):
         return True
 
 
-    def scale(self,floatScale):
+    def scale(self,floatScale,patternType=None):
 
         """  """
-        
-        if self.dist == None or self.dist < 0.01:
-            pass
-        else:
-            self.dist *= floatScale
+
+        if patternType == None or re.match(patternType,self.type):
             
-        minutes = (self.time.hour * 60 + self.time.minute)
-        minutes *= floatScale
-        self.time = time(hour=int(minutes / 60), minute=int(minutes % 60))
+            if self.dist == None or self.dist < 0.01:
+                pass
+            else:
+                self.dist *= floatScale
+
+            if self.time == None:
+                pass
+            else:
+                minutes = (self.time.hour * 60 + self.time.minute)
+                minutes *= floatScale
+                self.time = time(hour=int(minutes / 60), minute=int(minutes % 60))
 
 
     def dup(self):
@@ -331,8 +344,8 @@ class unit(description):
                 pass
             else:
                 spk = s / self.dist
-                strResult += '{0}:{1:02} min/km '.format(int(spk // 60), int(spk % 60))
-                strResult += '{:.0f} km/h '.format(self.dist / (s / 3600))
+                strResult += '{}:{:02} min/{} '.format(int(spk // 60), int(spk % 60), self.du)
+                strResult += '{:.0f} {}/h '.format(self.dist / (s / 3600), self.du)
             
         return strResult
 
@@ -528,6 +541,15 @@ class cycle(title,description):
             self.child[intIndex][len(self.child[intIndex]) - 1].appendDescription(strArg)
         
 
+    def switchToMiles(self):
+
+        """ switch distance unit to miles, but without conversion! """
+        
+        for v in self.child:
+            for u in v:
+                u.switchToMiles()
+            
+
     def getPeriod(self):
 
         """  """
@@ -548,6 +570,13 @@ class cycle(title,description):
         return intResult
 
 
+    def setTypeChars(self, intArg=10):
+
+        """  """
+        
+        self.lengthType = intArg
+            
+
     def getTypeOfUnits(self,arrArg=None):
 
         """  """
@@ -567,13 +596,13 @@ class cycle(title,description):
         return arrArg
 
     
-    def scale(self,floatScale):
+    def scale(self,floatScale,patternType=None):
 
         """  """
         
         for v in self.child:
             for u in v:
-                u.scale(floatScale)
+                u.scale(floatScale,patternType)
 
 
     def schedule(self, intYear, intMonth, intDay):
@@ -715,6 +744,7 @@ class period(title,description):
 
         """ constructor """
 
+        self.du   = 'km'     # default for distance unit
         self.reset(strArg,intArg)
 
         
@@ -787,6 +817,23 @@ class period(title,description):
             c.insertByDate(objUnit)
 
 
+    def switchToMiles(self):
+
+        """ switch distance unit to miles, but without conversion! """
+        
+        self.du   = 'mi'
+        for c in self.child:
+            c.switchToMiles()
+            
+
+    def setTypeChars(self, intArg=10):
+
+        """  """
+        
+        for c in self.child:
+            c.setTypeChars(intArg)
+            
+
     def setPeriod(self, intArg):
 
         """  """
@@ -808,12 +855,12 @@ class period(title,description):
         return self.periodInt
             
 
-    def scale(self,floatScale):
+    def scale(self,floatScale,patternType=None):
 
         """  """
         
         for c in self.child:
-            c.scale(floatScale)
+            c.scale(floatScale,patternType)
 
 
     def schedule(self, intYear, intMonth, intDay):
@@ -845,7 +892,7 @@ class period(title,description):
             if arrArg[k][0] == None or arrArg[k][0] < 0.01:
                 strResult += "{:4} x {:3} {:5}    {:5.0f} h\n".format(arrArg[k][1], k, ' ', round(arrArg[k][2] / 3600, 1))
             else:
-                strResult += "{:4} x {:3} {:5.0f} km {:5.0f} h\n".format(arrArg[k][1], k, arrArg[k][0], round(arrArg[k][2] / 3600, 1))        
+                strResult += "{:4} x {:3} {:5.0f} {} {:5.0f} h\n".format(arrArg[k][1], k, arrArg[k][0], self.du, round(arrArg[k][2] / 3600, 1))        
         n = self.getNumberOfUnits()
         if n > 0:
             p = self.getPeriod()

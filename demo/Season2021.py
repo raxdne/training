@@ -31,6 +31,7 @@ def BasicsGeneral():
 
     p.append(c)
     p.append(c)
+    c.scale(1.2,r"FB")
     p.append(c)
     p.append(RegenerationGeneral())
 
@@ -68,11 +69,11 @@ def BasicsBicycle():
 
     p.append(c)
     p.append(c)
+    c.scale(1.2,r"BB")
     p.append(c)
     p.appendChildDescription('Test 5km Time trial')
     p.append(RegenerationGeneral())
     p.append(c)
-    c.scale(1.2)
     p.append(c)
     p.append(c)
     p.append(RegenerationGeneral())
@@ -304,8 +305,11 @@ def Plan2021(strArg):
     #s.append(RegenerationGeneral())
     s.append(Running2021())
 
-    s.schedule(2021,1,4)
+    s.switchToMiles()
 
+    s.schedule(2021,1,4)
+    s.setTypeChars(1)
+    
     #s.resetUnits()
     #s.parseFile('Training2021.csv')
 
