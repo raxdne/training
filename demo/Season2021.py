@@ -322,6 +322,10 @@ s = Plan2021('Season 2021')
 #print(s.report())
 print(s.stat())
 
+f = open('Plan2021.svg', 'w')
+f.write(s.toSVGDiagram())
+f.close()
+
 f = open('Plan2021.mm', 'w')
 f.write(s.toFreeMind())
 f.close()

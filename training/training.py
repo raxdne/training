@@ -30,6 +30,13 @@ from datetime import (
     time
 )
 
+scale_dist = 6
+
+bar_height = 6
+
+diagram_offset = 150
+diagram_width = diagram_offset + scale_dist * 150
+
 #from suntime import Sun
 
 #
@@ -399,6 +406,34 @@ class unit(description):
         return strResult
 
 
+    def toSVG(self,x,y):
+
+        """  """
+        
+        strResult = ''
+
+        #strResult += ' TEXT="' + self.getTitleStr() + '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+
+        #strResult += self.__listDescriptionToXML__()
+
+        strResult = '<rect '
+
+        if self.type != None and len(self.type) > 0 and self.type[0] in self.color:
+            strResult += ' fill="{}"'.format(self.color[self.type[0]])
+
+        if self.dist == None or self.dist < .001:
+            pass
+        else:
+            strResult += ' height="{}px" stroke="black" stroke-width=".5" width="{:.0f}px" x="{}" y="{}"'.format(bar_height, self.dist * scale_dist, x, y)
+        strResult += '>'
+
+        strResult += '<title>{}</title>'.format(self.toString())
+        
+        strResult += '</rect>\n'
+        
+        return strResult
+
+    
     def toXML(self):
 
         """  """
@@ -688,6 +723,31 @@ class cycle(title,description):
         for v in self.child:
             for u in v:
                 strResult += u.toCSV() + '\n'
+        return strResult
+
+    
+    def toSVG(self,x,y):
+
+        """  """
+        
+        strResult = '<g>'
+
+        strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+diagram_width,y)
+
+        strResult += '<text x="{}" y="{}" font-size="9" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
+
+        y += bar_height / 2
+        for v in self.child:
+            strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+bar_height)
+            x_i = x
+            for u in v:
+                strResult += u.toSVG(x_i,y)
+                if u.dist != None:
+                    x_i += int(u.dist * scale_dist)
+            y += bar_height * 2
+
+        strResult += '</g>'
+        
         return strResult
 
     
@@ -1007,6 +1067,41 @@ class period(title,description):
         strResult = '<map>\n'
         strResult += self.toXML()
         strResult += '</map>\n'
+        return strResult
+
+    
+    def toSVG(self,x= diagram_offset ,y=20):
+
+        """  """
+        
+        strResult = '<g>'
+
+        for c in self.child:
+            #strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x+400,y)
+            #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x+400,y,c.getTitleStr())
+            strResult += c.toSVG(x,y)
+            y += c.getPeriod() * bar_height * 2
+
+        strResult += '</g>'
+
+        return strResult
+
+    
+    def toSVGDiagram(self):
+
+        """  """
+
+        diagram_height = self.getPeriod() * (bar_height * 2 + 1)
+        strResult = '<svg baseProfile="full" height="{}px" version="1.1" width="{}px" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, diagram_width)
+
+        #'<text x="210" y="110">Period 2.2021</text>
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +   5 * scale_dist, 20, diagram_offset +  5 * scale_dist, diagram_height)
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +  10 * scale_dist, 20, diagram_offset + 10 * scale_dist, diagram_height)
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +  50 * scale_dist, 20, diagram_offset + 50 * scale_dist, diagram_height)
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 100 * scale_dist, 20, diagram_offset +100 * scale_dist, diagram_height)
+
+        strResult += self.toSVG()
+        strResult += '</svg>\n'
         return strResult
 
     
