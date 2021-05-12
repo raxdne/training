@@ -35,7 +35,7 @@ scale_dist = 6
 bar_height = 6
 
 diagram_offset = 150
-diagram_width = diagram_offset + scale_dist * 150
+diagram_width = diagram_offset + scale_dist * 205
 
 #from suntime import Sun
 
@@ -736,15 +736,18 @@ class cycle(title,description):
 
         strResult += '<text x="{}" y="{}" font-size="9" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
 
-        y += bar_height / 2
-        for v in self.child:
-            strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+bar_height)
-            x_i = x
-            for u in v:
-                strResult += u.toSVG(x_i,y)
-                if u.dist != None:
-                    x_i += int(u.dist * scale_dist)
-            y += bar_height * 2
+        if len(self.child) < 1:
+            pass
+        else:
+            y += bar_height / 2
+            for v in self.child:
+                strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+bar_height)
+                x_i = x
+                for u in v:
+                    strResult += u.toSVG(x_i,y)
+                    if u.dist != None:
+                        x_i += int(u.dist * scale_dist)
+                y += bar_height * 2
 
         strResult += '</g>'
         
@@ -1076,11 +1079,17 @@ class period(title,description):
         
         strResult = '<g>'
 
-        for c in self.child:
-            #strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x+400,y)
-            #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x+400,y,c.getTitleStr())
-            strResult += c.toSVG(x,y)
-            y += c.getPeriod() * bar_height * 2
+        if len(self.child) < 1:
+            strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+diagram_width,y)
+            for d in range(0,self.getPeriod()):
+                strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+bar_height)
+                y += bar_height * 2
+        else:
+            for c in self.child:
+                #strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x+400,y)
+                #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x+400,y,c.getTitleStr())
+                strResult += c.toSVG(x,y)
+                y += c.getPeriod() * bar_height * 2
 
         strResult += '</g>'
 
@@ -1091,14 +1100,16 @@ class period(title,description):
 
         """  """
 
-        diagram_height = self.getPeriod() * (bar_height * 2 + 1)
+        diagram_height = self.getPeriod() * (bar_height * 2) + 100
         strResult = '<svg baseProfile="full" height="{}px" version="1.1" width="{}px" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, diagram_width)
 
         #'<text x="210" y="110">Period 2.2021</text>
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +   5 * scale_dist, 20, diagram_offset +  5 * scale_dist, diagram_height)
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +  10 * scale_dist, 20, diagram_offset + 10 * scale_dist, diagram_height)
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +  50 * scale_dist, 20, diagram_offset + 50 * scale_dist, diagram_height)
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 100 * scale_dist, 20, diagram_offset +100 * scale_dist, diagram_height)
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +   5 * scale_dist, 20, diagram_offset +   5 * scale_dist, diagram_height)
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +  10 * scale_dist, 20, diagram_offset +  10 * scale_dist, diagram_height)
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +  50 * scale_dist, 20, diagram_offset +  50 * scale_dist, diagram_height)
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 100 * scale_dist, 20, diagram_offset + 100 * scale_dist, diagram_height)
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 150 * scale_dist, 20, diagram_offset + 150 * scale_dist, diagram_height)
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 200 * scale_dist, 20, diagram_offset + 200 * scale_dist, diagram_height)
 
         strResult += self.toSVG()
         strResult += '</svg>\n'
@@ -1144,12 +1155,37 @@ def CalendarPeriod(intYear):
     s = period(str(intYear))
 
     try:
-        datetime.date(intYear, 2, 29)
+        date(intYear, 2, 29)
         s.append(cycle('All',366))
     except ValueError:
         s.append(cycle('All',365))
 
     s.schedule(intYear,1,1)
+
+    return s
+  
+        
+def CalendarWeekPeriod(intYear):
+
+    """ returns a calendar year containing week periods """
+    
+    s = period(str(intYear))
+
+    for w in range(1,53):
+        u = 'CW' + str(w) + '/' + str(intYear)
+        p = period(u)
+        p.append(cycle(u, 7))
+        s.append(p)
+        
+    d = date(intYear,1,1)
+    if d.isoweekday() > 4:
+        # skip to next monday
+        d += timedelta(days=(8 - d.isoweekday())) 
+    else:
+        # skip to previous monday
+        d -= timedelta(days=(d.isoweekday() - 1))
+    
+    s.schedule(d.year,d.month,d.day)
 
     return s
   
