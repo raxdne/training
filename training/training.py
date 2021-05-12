@@ -1080,6 +1080,7 @@ class period(title,description):
         strResult = '<g>'
 
         if len(self.child) < 1:
+            strResult += '<text x="{}" y="{}" font-size="9" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
             strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+diagram_width,y)
             for d in range(0,self.getPeriod()):
                 strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+bar_height)
@@ -1103,6 +1104,7 @@ class period(title,description):
         diagram_height = self.getPeriod() * (bar_height * 2) + 100
         strResult = '<svg baseProfile="full" height="{}px" version="1.1" width="{}px" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, diagram_width)
 
+        #strResult += '<g transform="rotate(90)">'
         #'<text x="210" y="110">Period 2.2021</text>
         strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +   5 * scale_dist, 20, diagram_offset +   5 * scale_dist, diagram_height)
         strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +  10 * scale_dist, 20, diagram_offset +  10 * scale_dist, diagram_height)
@@ -1112,6 +1114,7 @@ class period(title,description):
         strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 200 * scale_dist, 20, diagram_offset + 200 * scale_dist, diagram_height)
 
         strResult += self.toSVG()
+        #strResult += '</g>'
         strResult += '</svg>\n'
         return strResult
 
