@@ -30,6 +30,13 @@ from datetime import (
     time
 )
 
+scale_dist = 6
+
+bar_height = 6
+
+diagram_offset = 150
+diagram_width = diagram_offset + scale_dist * 205
+
 #from suntime import Sun
 
 #
@@ -185,9 +192,7 @@ class unit(description):
         
         """  """
         
-        # TODO: make colorcoding configurable
         self.color = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
-        # TODO: implement a self.unitDist = (km|mi)
         self.dist = None
         self.type = None
         self.time = None
@@ -401,6 +406,34 @@ class unit(description):
         return strResult
 
 
+    def toSVG(self,x,y):
+
+        """  """
+        
+        strResult = ''
+
+        #strResult += ' TEXT="' + self.getTitleStr() + '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+
+        #strResult += self.__listDescriptionToXML__()
+
+        strResult = '<rect '
+
+        if self.type != None and len(self.type) > 0 and self.type[0] in self.color:
+            strResult += ' fill="{}"'.format(self.color[self.type[0]])
+
+        if self.dist == None or self.dist < .001:
+            pass
+        else:
+            strResult += ' height="{}px" stroke="black" stroke-width=".5" width="{:.0f}px" x="{}" y="{}"'.format(bar_height, self.dist * scale_dist, x, y)
+        strResult += '>'
+
+        strResult += '<title>{}</title>'.format(self.toString())
+        
+        strResult += '</rect>\n'
+        
+        return strResult
+
+    
     def toXML(self):
 
         """  """
@@ -693,6 +726,34 @@ class cycle(title,description):
         return strResult
 
     
+    def toSVG(self,x,y):
+
+        """  """
+        
+        strResult = '<g>'
+
+        strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+diagram_width,y)
+
+        strResult += '<text x="{}" y="{}" font-size="9" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
+
+        if len(self.child) < 1:
+            pass
+        else:
+            y += bar_height / 2
+            for v in self.child:
+                strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+bar_height)
+                x_i = x
+                for u in v:
+                    strResult += u.toSVG(x_i,y)
+                    if u.dist != None:
+                        x_i += int(u.dist * scale_dist)
+                y += bar_height * 2
+
+        strResult += '</g>'
+        
+        return strResult
+
+    
     def toXML(self):
 
         """  """
@@ -888,15 +949,20 @@ class period(title,description):
         for c in self.child:
             c.report(arrArg)
 
+        sum_h = 0.0
         for k in sorted(arrArg.keys()):
             if arrArg[k][0] == None or arrArg[k][0] < 0.01:
                 strResult += "{:4} x {:3} {:5}    {:5.0f} h\n".format(arrArg[k][1], k, ' ', round(arrArg[k][2] / 3600, 1))
             else:
                 strResult += "{:4} x {:3} {:5.0f} {} {:5.0f} h\n".format(arrArg[k][1], k, arrArg[k][0], self.du, round(arrArg[k][2] / 3600, 1))        
+            sum_h += arrArg[k][2]
+
+        sum_h /= 3600.0
         n = self.getNumberOfUnits()
         if n > 0:
             p = self.getPeriod()
-            strResult += "{:4} Units in {} Days = {:.02f} Units/Week\n".format(n, p, n/p * 7.0)
+            #strResult += "{:4} Units in {} Days = {:4.01f} Units/Week\n".format(n, p, n/p * 7.0)
+            strResult += "{:4} h     in {} Days = {:4.01f} h/Week\n".format(round(sum_h), p, sum_h/p * 7.0)
             
         return strResult
 
@@ -1007,6 +1073,52 @@ class period(title,description):
         return strResult
 
     
+    def toSVG(self,x= diagram_offset ,y=20):
+
+        """  """
+        
+        strResult = '<g>'
+
+        if len(self.child) < 1:
+            strResult += '<text x="{}" y="{}" font-size="9" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
+            strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+diagram_width,y)
+            for d in range(0,self.getPeriod()):
+                strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+bar_height)
+                y += bar_height * 2
+        else:
+            for c in self.child:
+                #strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x+400,y)
+                #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x+400,y,c.getTitleStr())
+                strResult += c.toSVG(x,y)
+                y += c.getPeriod() * bar_height * 2
+
+        strResult += '</g>'
+
+        return strResult
+
+    
+    def toSVGDiagram(self):
+
+        """  """
+
+        diagram_height = self.getPeriod() * (bar_height * 2) + 100
+        strResult = '<svg baseProfile="full" height="{}px" version="1.1" width="{}px" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, diagram_width)
+
+        #strResult += '<g transform="rotate(90)">'
+        #'<text x="210" y="110">Period 2.2021</text>
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +   5 * scale_dist, 20, diagram_offset +   5 * scale_dist, diagram_height)
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +  10 * scale_dist, 20, diagram_offset +  10 * scale_dist, diagram_height)
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +  50 * scale_dist, 20, diagram_offset +  50 * scale_dist, diagram_height)
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 100 * scale_dist, 20, diagram_offset + 100 * scale_dist, diagram_height)
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 150 * scale_dist, 20, diagram_offset + 150 * scale_dist, diagram_height)
+        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 200 * scale_dist, 20, diagram_offset + 200 * scale_dist, diagram_height)
+
+        strResult += self.toSVG()
+        #strResult += '</g>'
+        strResult += '</svg>\n'
+        return strResult
+
+    
     def toiCalString(self):
 
         """  """
@@ -1046,12 +1158,37 @@ def CalendarPeriod(intYear):
     s = period(str(intYear))
 
     try:
-        datetime.date(intYear, 2, 29)
+        date(intYear, 2, 29)
         s.append(cycle('All',366))
     except ValueError:
         s.append(cycle('All',365))
 
     s.schedule(intYear,1,1)
+
+    return s
+  
+        
+def CalendarWeekPeriod(intYear):
+
+    """ returns a calendar year containing week periods """
+    
+    s = period(str(intYear))
+
+    for w in range(1,53):
+        u = 'CW' + str(w) + '/' + str(intYear)
+        p = period(u)
+        p.append(cycle(u, 7))
+        s.append(p)
+        
+    d = date(intYear,1,1)
+    if d.isoweekday() > 4:
+        # skip to next monday
+        d += timedelta(days=(8 - d.isoweekday())) 
+    else:
+        # skip to previous monday
+        d -= timedelta(days=(d.isoweekday() - 1))
+    
+    s.schedule(d.year,d.month,d.day)
 
     return s
   

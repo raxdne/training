@@ -164,6 +164,10 @@ s = PlanTriathlon('Season Triathlon Basics')
 #print(s.report())
 print(s.stat())
 
+f = open('TriathlonPlan.svg', 'w')
+f.write(s.toSVGDiagram())
+f.close()
+
 f = open('TriathlonPlan.mm', 'w')
 f.write(s.toFreeMind())
 f.close()

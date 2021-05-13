@@ -322,19 +322,23 @@ s = Plan2021('Season 2021')
 #print(s.report())
 print(s.stat())
 
-f = open('Plan2021.mm', 'w')
+f = open('Season2021.svg', 'w')
+f.write(s.toSVGDiagram())
+f.close()
+
+f = open('Season2021.mm', 'w')
 f.write(s.toFreeMind())
 f.close()
 
-f = open('Plan2021.ics', 'w')
+f = open('Season2021.ics', 'w')
 f.write(s.toVCalendar())
 f.close()
 
-f = open('Plan2021.txt', 'w')
+f = open('Season2021.txt', 'w')
 f.write(s.toString())
 f.close()
 
-f = open('Plan2021.csv', 'w')
+f = open('Season2021.csv', 'w')
 f.write(s.toCSV())
 f.close()
 
