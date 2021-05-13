@@ -11,6 +11,8 @@ DONE: configuration of significant chars of type string ('B' or 'Bic' or 'Bicycl
 
 DONE: configuration of distance units
 
+TODO: configure Apache HTTP Server `mod_python` https://github.com/grisha/mod_python
+
 ## Output Formats
 
 ### Plain text

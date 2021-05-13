@@ -208,6 +208,10 @@ s = PlanSimple('Season Simple')
 #print(s.report())
 print(s.stat())
 
+f = open('SimplePlan.svg', 'w')
+f.write(s.toSVGDiagram())
+f.close()
+
 f = open('SimplePlan.mm', 'w')
 f.write(s.toFreeMind())
 f.close()
