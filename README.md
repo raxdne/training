@@ -21,4 +21,4 @@ Main features
    - plain
    - Freemind XML
    - vCalendar
-
+   - SVG

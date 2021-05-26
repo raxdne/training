@@ -30,12 +30,12 @@ from datetime import (
     time
 )
 
-scale_dist = 6
+scale_dist = 8
 
-bar_height = 6
+bar_height = 8
 
 diagram_offset = 150
-diagram_width = diagram_offset + scale_dist * 205
+diagram_width = diagram_offset + scale_dist * 150
 
 #from suntime import Sun
 
@@ -412,25 +412,22 @@ class unit(description):
         
         strResult = ''
 
-        #strResult += ' TEXT="' + self.getTitleStr() + '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
-
-        #strResult += self.__listDescriptionToXML__()
-
-        strResult = '<rect '
-
-        if self.type != None and len(self.type) > 0 and self.type[0] in self.color:
-            strResult += ' fill="{}"'.format(self.color[self.type[0]])
-
-        if self.dist == None or self.dist < .001:
-            pass
+        if self.type == None or len(self.type) < 1 or self.dist == None or self.dist < 0.01:
+            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + bar_height / 2, y + bar_height, self.__listDescriptionToPlain__(), self.toString())
         else:
-            strResult += ' height="{}px" stroke="black" stroke-width=".5" width="{:.0f}px" x="{}" y="{}"'.format(bar_height, self.dist * scale_dist, x, y)
-        strResult += '>'
+            strResult += '<rect '
 
-        strResult += '<title>{}</title>'.format(self.toString())
+            if self.type[0] in self.color:
+                strResult += ' fill="{}"'.format(self.color[self.type[0]])
+
+            strResult += ' height="{}px" stroke="black" stroke-width=".5" width="{:.0f}px" x="{}" y="{}"'.format(bar_height, self.dist * scale_dist, x, y)
+            strResult += '>'
+
+            strResult += '<title>{}: {}</title>'.format(self.toString(), self.__listDescriptionToPlain__())
+
+            strResult += '</rect>\n'
         
-        strResult += '</rect>\n'
-        
+            #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x + 20 + self.dist * scale_dist, y+6, self.__listDescriptionToPlain__())
         return strResult
 
     
@@ -734,14 +731,23 @@ class cycle(title,description):
 
         strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+diagram_width,y)
 
-        strResult += '<text x="{}" y="{}" font-size="9" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
+        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
 
         if len(self.child) < 1:
             pass
         else:
             y += bar_height / 2
+            t = date.today()
+            d = self.dateBegin
             for v in self.child:
                 strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+bar_height)
+                
+                if d.month == t.month and d.day == t.day:
+                    strResult += '<rect fill="{}" x="{}" y="{}" height="{}px" width="{}px"/>\n'.format('#ffaaaa',x,y-1,bar_height+2,diagram_width - diagram_offset)
+                elif d.isoweekday() == 6 or d.isoweekday() == 7:
+                    strResult += '<rect fill="{}" x="{}" y="{}" height="{}px" width="{}px"/>\n'.format('#eeeeee',x,y-1,bar_height+2,diagram_width - diagram_offset)
+                d += timedelta(days=1)
+                    
                 x_i = x
                 for u in v:
                     strResult += u.toSVG(x_i,y)
@@ -1080,7 +1086,7 @@ class period(title,description):
         strResult = '<g>'
 
         if len(self.child) < 1:
-            strResult += '<text x="{}" y="{}" font-size="9" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
+            strResult += '<text x="{}" y="{}" style="vertical-align:top"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
             strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+diagram_width,y)
             for d in range(0,self.getPeriod()):
                 strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+bar_height)
@@ -1104,6 +1110,8 @@ class period(title,description):
         diagram_height = self.getPeriod() * (bar_height * 2) + 100
         strResult = '<svg baseProfile="full" height="{}px" version="1.1" width="{}px" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, diagram_width)
 
+        strResult += '<style type="text/css">svg { font-family: Arial; font-size: 8pt; }</style>'
+        
         #strResult += '<g transform="rotate(90)">'
         #'<text x="210" y="110">Period 2.2021</text>
         strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +   5 * scale_dist, 20, diagram_offset +   5 * scale_dist, diagram_height)
