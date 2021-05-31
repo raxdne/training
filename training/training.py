@@ -195,7 +195,7 @@ class unit(description):
         self.color = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
         self.dist = None
         self.type = None
-        self.time = None
+        self.duration = None
         self.date = None
         self.clock = None
         self.setDescription()
@@ -233,23 +233,34 @@ class unit(description):
         return True
 
 
-    def setTimeStr(self,strArg):
+    def setDurationStr(self,strArg):
 
         """  """
         
         if strArg == None or strArg == '':
-            self.time = time()
+            self.duration = timedelta(0)
         else:
             entry = strArg.split(':')
             if len(entry) == 2:
-                self.time = time(minute=int(entry[0]), second=int(entry[1]))
+                self.duration = timedelta(minutes=int(entry[0]), seconds=int(entry[1]))
             elif len(entry) == 3:
-                self.time = time(hour=int(entry[0]), minute=int(entry[1]), second=int(entry[2]))
+                self.duration = timedelta(hours=int(entry[0]), minutes=int(entry[1]), seconds=int(entry[2]))
             else:
-                self.time = time()
+                self.duration = timedelta(0)
                 
         return True
 
+
+    def getDurationStr(self):
+
+        """  """
+        
+        if self.duration == None:
+            return "0:00:00"
+        else:
+            seconds = self.duration.total_seconds()
+            return time(hour = int(seconds // 3600), minute = int((seconds % 3600) // 60), second = int(seconds % 60)).strftime("%H:%M:%S")
+        
 
     def setDate(self,objArg):
 
@@ -297,12 +308,10 @@ class unit(description):
             else:
                 self.dist *= floatScale
 
-            if self.time == None:
+            if self.duration == None:
                 pass
             else:
-                minutes = (self.time.hour * 60 + self.time.minute)
-                minutes *= floatScale
-                self.time = time(hour=int(minutes / 60), minute=int(minutes % 60))
+                self.duration *= floatScale
 
 
     def dup(self):
@@ -326,7 +335,7 @@ class unit(description):
             return self.parse(entry)
         elif type(objArg) is list and len(objArg) > 3:
             self.reset()
-            if self.setDistStr(objArg[1]) and self.setTypeStr(objArg[2]) and self.setTimeStr(objArg[3]):
+            if self.setDistStr(objArg[1]) and self.setTypeStr(objArg[2]) and self.setDurationStr(objArg[3]):
                 self.setDateStr(objArg[0])
                 self.appendDescription(objArg[4:])
                 return True
@@ -341,10 +350,10 @@ class unit(description):
         """  """
         
         strResult = ''
-        if self.dist == None or self.dist < 0.01 or self.time == None:
+        if self.dist == None or self.dist < 0.01 or self.duration == None:
             pass
         else:
-            s = float(self.time.hour * 3600 + self.time.minute * 60 + self.time.second)
+            s = float(self.duration.total_seconds())
             if s < 1:
                 pass
             else:
@@ -379,11 +388,11 @@ class unit(description):
         elif self.type == None:
             strResult = '{date}'.format(date=self.date.isoformat())
         elif self.dist == None or self.dist < 0.01:
-            strResult = '{date} {type} {time}'.format(date=self.date.isoformat(), type=self.type, time=self.time.isoformat())
+            strResult = '{date} {type} {duration}'.format(date=self.date.isoformat(), type=self.type, duration=self.getDurationStr())
         elif self.date == None:
-            strResult = '{date} {dist:5.1f} {type} {time}'.format(date='', dist=self.dist, type=self.type, time=self.time.isoformat())
+            strResult = '{date} {dist:5.1f} {type} {duration}'.format(date='', dist=self.dist, type=self.type, duration=self.getDurationStr())
         else:
-            strResult = '{date} {dist:5.1f} {type} {time}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
+            strResult = '{date} {dist:5.1f} {type} {duration}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
 
         #strResult += self.__listDescriptionToPlain__()
         
@@ -397,9 +406,9 @@ class unit(description):
         if self.type == None:
             strResult = '{date};;;'.format(date=self.date.isoformat())
         elif self.dist == None or self.dist < 0.01:
-            strResult = '{date};;{type};{time}'.format(date=self.date.isoformat(), type=self.type, time=self.time.isoformat())
+            strResult = '{date};;{type};{duration}'.format(date=self.date.isoformat(), type=self.type, duration=self.getDurationStr())
         else:
-            strResult = '{date};{dist:.1f};{type};{time}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
+            strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
 
         strResult += ';' + self.__listDescriptionToPlain__()
                 
@@ -412,7 +421,7 @@ class unit(description):
         
         strResult = ''
 
-        if self.type == None or len(self.type) < 1 or self.dist == None or self.dist < 0.01:
+        if self.type == None or len(self.type) < 1:
             strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + bar_height / 2, y + bar_height, self.__listDescriptionToPlain__(), self.toString())
         else:
             strResult += '<rect '
@@ -420,14 +429,18 @@ class unit(description):
             if self.type[0] in self.color:
                 strResult += ' fill="{}"'.format(self.color[self.type[0]])
 
-            strResult += ' height="{}px" stroke="black" stroke-width=".5" width="{:.0f}px" x="{}" y="{}"'.format(bar_height, self.dist * scale_dist, x, y)
+            if self.dist == None or self.dist < 0.01:
+                bar_width = self.duration.total_seconds() / 60
+            else:
+                bar_width = self.dist * scale_dist
+                
+            strResult += ' height="{}px" stroke="black" stroke-width=".5" width="{:.0f}px" x="{}" y="{}"'.format(bar_height, bar_width, x, y)
             strResult += '>'
 
             strResult += '<title>{}: {}</title>'.format(self.toString(), self.__listDescriptionToPlain__())
 
             strResult += '</rect>\n'
-        
-            #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x + 20 + self.dist * scale_dist, y+6, self.__listDescriptionToPlain__())
+
         return strResult
 
     
@@ -465,19 +478,19 @@ class unit(description):
         if self.type == None:
             strResult += "SUMMARY:{description}\n".format(description = self.__listDescriptionToPlain__())
         elif self.dist == None or self.dist < 0.01:
-            strResult += "SUMMARY:{type} {time}\n".format(type=self.type, time=self.time.isoformat())
+            strResult += "SUMMARY:{type} {time}\n".format(type=self.type, time=self.getDurationStr())
         else:
-            strResult += "SUMMARY:{dist:.0f} {type} {time}\n".format(dist=self.dist, type=self.type, time=self.time.isoformat())
+            strResult += "SUMMARY:{dist:.0f} {type} {time}\n".format(dist=self.dist, type=self.type, time=self.getDurationStr())
 
         if self.hasDescription():
             strResult += 'DESCRIPTION:{}\n'.format(self.__listDescriptionToPlain__())
 
-        if self.clock == None or self.time == None:
+        if self.clock == None or self.duration == None:
             strResult += "DTSTART;{y:04}{m:02}{d:02}\nDTEND;{y:04}{m:02}{d:02}\n".format(y=self.date.year, m=self.date.month, d=self.date.day)
         else:
             t = datetime(self.date.year, self.date.month, self.date.day, self.clock.hour, self.clock.minute)
             strResult += "DTSTART;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=t.year, m=t.month, d=t.day, h=t.hour, min=t.minute, s=0)
-            t += timedelta(hours = self.time.hour, minutes = self.time.minute)
+            t += self.duration
             strResult +=   "DTEND;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=t.year, m=t.month, d=t.day, h=t.hour, min=t.minute, s=0)
 
         strResult += "DTSTAMP;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=dateNow.year, m=dateNow.month, d=dateNow.day, h=dateNow.hour, min=dateNow.minute, s=dateNow.second)
@@ -680,7 +693,7 @@ class cycle(title,description):
                         if u.dist != None and u.dist > 0.01:
                             arrArg[k][0] += u.dist
                         arrArg[k][1] += 1
-                        arrArg[k][2] += u.time.hour * 3600 + u.time.minute * 60 + u.time.second
+                        arrArg[k][2] += u.duration.total_seconds()
                     else:
                         arrArg[k] = []
                         if u.dist != None and u.dist > 0.01:
@@ -689,7 +702,7 @@ class cycle(title,description):
                             arrArg[k].append(None)
 
                         arrArg[k].append(1)
-                        arrArg[k].append(u.time.hour * 3600 + u.time.minute * 60 + u.time.second)
+                        arrArg[k].append(u.duration.total_seconds())
                     
         return strResult
 
