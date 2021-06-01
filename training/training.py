@@ -30,12 +30,12 @@ from datetime import (
     time
 )
 
-scale_dist = 8
+scale_dist = 6
 
 bar_height = 8
 
-diagram_offset = 150
-diagram_width = diagram_offset + scale_dist * 150
+diagram_offset = 175
+diagram_width = diagram_offset + 6 * 25 * scale_dist
 
 #from suntime import Sun
 
@@ -434,8 +434,9 @@ class unit(description):
             if self.type[0] in self.color:
                 strResult += ' fill="{}"'.format(self.color[self.type[0]])
 
-            if self.dist == None:
-                bar_width = self.duration.total_seconds() / 60
+            if self.dist == None or True:
+                # "about 25 distance units per hour"
+                bar_width = self.duration.total_seconds() / 3600 * 25 * scale_dist
             else:
                 bar_width = self.dist * scale_dist
                 
@@ -781,8 +782,9 @@ class cycle(title,description):
                 x_i = x
                 for u in v:
                     strResult += u.toSVG(x_i,y)
-                    if u.dist != None:
-                        x_i += int(u.dist * scale_dist)
+                    #if u.dist != None:
+                    #    x_i += int(u.dist * scale_dist)
+                    x_i += u.duration.total_seconds() / 3600 * 25 * scale_dist
                 y += bar_height * 2
 
         strResult += '</g>'
@@ -1152,12 +1154,10 @@ class period(title,description):
         
         #strResult += '<g transform="rotate(90)">'
         #'<text x="210" y="110">Period 2.2021</text>
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +   5 * scale_dist, 20, diagram_offset +   5 * scale_dist, diagram_height)
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +  10 * scale_dist, 20, diagram_offset +  10 * scale_dist, diagram_height)
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +  50 * scale_dist, 20, diagram_offset +  50 * scale_dist, diagram_height)
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 100 * scale_dist, 20, diagram_offset + 100 * scale_dist, diagram_height)
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 150 * scale_dist, 20, diagram_offset + 150 * scale_dist, diagram_height)
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 200 * scale_dist, 20, diagram_offset + 200 * scale_dist, diagram_height)
+
+        for i in [3600/4,3600/2,3600,2*3600,3*3600,4*3600,5*3600,6*3600]:
+            w = i / 3600 * 25 * scale_dist
+            strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + w, 20, diagram_offset + w, diagram_height)
 
         strResult += self.toSVG()
         #strResult += '</g>'
