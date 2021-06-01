@@ -224,7 +224,7 @@ class unit(description):
         """  """
         
         if strArg == None or strArg == '':
-            pass
+            self.dist = None
         else:
             self.dist = float(strArg)
             if self.dist < 0.001:
@@ -301,19 +301,24 @@ class unit(description):
 
         """  """
 
-        if patternType == None or re.match(patternType,self.type):
+        if floatScale > 0.1 and (patternType == None or re.match(patternType,self.type)):
             
-            if self.dist == None or self.dist < 0.01:
-                pass
-            else:
-                self.dist *= floatScale
+            if self.dist != None:
+                if self.dist < 15.0:
+                    self.dist *= floatScale
+                else:
+                    # round distance to 5.0
+                    self.dist = round(self.dist * floatScale / 5.0) * 5.0
 
-            if self.duration == None:
-                pass
-            else:
-                self.duration *= floatScale
+            if self.duration != None:
+                s = self.duration.total_seconds()
+                if s < 900.0:
+                    self.duration *= floatScale
+                else:
+                    # round duration to 5:00 min
+                    self.duration = timedelta(seconds=(round(s * floatScale / 300.0) * 300.0))
 
-
+                    
     def dup(self):
 
         """  """
@@ -350,7 +355,7 @@ class unit(description):
         """  """
         
         strResult = ''
-        if self.dist == None or self.dist < 0.01 or self.duration == None:
+        if self.dist == None or self.duration == None:
             pass
         else:
             s = float(self.duration.total_seconds())
@@ -387,7 +392,7 @@ class unit(description):
             strResult = 'EMPTY'
         elif self.type == None:
             strResult = '{date}'.format(date=self.date.isoformat())
-        elif self.dist == None or self.dist < 0.01:
+        elif self.dist == None:
             strResult = '{date} {type} {duration}'.format(date=self.date.isoformat(), type=self.type, duration=self.getDurationStr())
         elif self.date == None:
             strResult = '{date} {dist:5.1f} {type} {duration}'.format(date='', dist=self.dist, type=self.type, duration=self.getDurationStr())
@@ -405,7 +410,7 @@ class unit(description):
         
         if self.type == None:
             strResult = '{date};;;'.format(date=self.date.isoformat())
-        elif self.dist == None or self.dist < 0.01:
+        elif self.dist == None:
             strResult = '{date};;{type};{duration}'.format(date=self.date.isoformat(), type=self.type, duration=self.getDurationStr())
         else:
             strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
@@ -429,7 +434,7 @@ class unit(description):
             if self.type[0] in self.color:
                 strResult += ' fill="{}"'.format(self.color[self.type[0]])
 
-            if self.dist == None or self.dist < 0.01:
+            if self.dist == None:
                 bar_width = self.duration.total_seconds() / 60
             else:
                 bar_width = self.dist * scale_dist
@@ -456,7 +461,7 @@ class unit(description):
             strResult += ' BACKGROUND_COLOR="{}"'.format(self.color[self.type[0]])
         strResult += '>'
         
-        if self.dist != None and self.dist > 0.01:
+        if self.dist != None:
             strResult += '<node TEXT="' + self.getSpeedStr() + '"/>'
             #strResult += '<node TEXT="' + self.getSunStr() + '"/>'
             
@@ -477,7 +482,7 @@ class unit(description):
 
         if self.type == None:
             strResult += "SUMMARY:{description}\n".format(description = self.__listDescriptionToPlain__())
-        elif self.dist == None or self.dist < 0.01:
+        elif self.dist == None:
             strResult += "SUMMARY:{type} {time}\n".format(type=self.type, time=self.getDurationStr())
         else:
             strResult += "SUMMARY:{dist:.0f} {type} {time}\n".format(dist=self.dist, type=self.type, time=self.getDurationStr())
@@ -532,6 +537,15 @@ class cycle(title,description):
         self.dateEnd = date.today()
 
         
+    def resetDistances(self):
+
+        """  """
+        
+        for v in self.child:
+            for u in v:
+                u.setDistStr(None)
+
+            
     def resetUnits(self):
 
         """  """
@@ -669,7 +683,7 @@ class cycle(title,description):
         
         for v in self.child:
             for u in v:
-                if u.dist == None or u.dist < 0.01 or u.type == None or len(u.type) < 1:
+                if u.dist == None or u.type == None or len(u.type) < 1:
                     pass
                 else:
                     k = u.type[0:self.lengthType]
@@ -690,13 +704,16 @@ class cycle(title,description):
                 if u.type != None and len(u.type) > 0:
                     k = u.type[0:self.lengthType]
                     if k in arrArg:
-                        if u.dist != None and u.dist > 0.01:
-                            arrArg[k][0] += u.dist
+                        if u.dist != None:
+                            if arrArg[k][0] == None:
+                                arrArg[k][0] = u.dist
+                            else:
+                                arrArg[k][0] += u.dist
                         arrArg[k][1] += 1
                         arrArg[k][2] += u.duration.total_seconds()
                     else:
                         arrArg[k] = []
-                        if u.dist != None and u.dist > 0.01:
+                        if u.dist != None:
                             arrArg[k].append(u.dist)
                         else:
                             arrArg[k].append(None)
@@ -842,6 +859,14 @@ class period(title,description):
         self.dateEnd = date.today()
 
         
+    def resetDistances(self):
+
+        """  """
+        
+        for c in self.child:
+            c.resetDistances()
+
+            
     def resetUnits(self):
 
         """  """
