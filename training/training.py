@@ -581,10 +581,11 @@ class cycle(title,description):
         
         objResult = None
         
-        if objUnit != None and objUnit.date != None and self.dateBegin <= objUnit.date and objUnit.date <= self.dateEnd:
-            objResult = objUnit.dup()
-            delta = objResult.date - self.dateBegin
-            self.child[delta.days].append(objResult)
+        if objUnit != None and objUnit.date != None:
+            delta = objUnit.date - self.dateBegin
+            if delta.days > -1 and objUnit.date <= self.dateEnd:
+                objResult = objUnit.dup()
+                self.child[delta.days].append(objResult)
 
         return objResult
 
@@ -860,7 +861,9 @@ class period(title,description):
         self.dateBegin = date.today()
         self.dateEnd = date.today()
 
-        
+        self.setTypeChars()
+
+
     def resetDistances(self):
 
         """  """
@@ -919,9 +922,21 @@ class period(title,description):
     def insertByDate(self,objUnit):
 
         """  """
-        
-        for c in self.child:
-            c.insertByDate(objUnit)
+
+        if objUnit != None and objUnit.date != None:
+            if len(self.child) < 1:
+                # there is no child cycle yet
+                delta = objUnit.date - self.dateBegin
+                if delta.days > -1 and objUnit.date <= self.dateEnd:
+                    l = self.dateEnd - self.dateBegin
+                    c = cycle(self.getTitleStr(), l.days + 1)
+                    c.setTypeChars(self.lengthType)
+                    c.schedule(self.dateBegin.year,self.dateBegin.month,self.dateBegin.day)
+                    c.insertByDate(objUnit)
+                    self.append(c)
+            else:        
+                for c in self.child:
+                    c.insertByDate(objUnit)
 
 
     def switchToMiles(self):
@@ -937,6 +952,8 @@ class period(title,description):
 
         """  """
         
+        self.lengthType = intArg
+
         for c in self.child:
             c.setTypeChars(intArg)
             
