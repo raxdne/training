@@ -11,5 +11,6 @@ setup(name='training',
       author_email='raxdne@web.de',
       url='https://github.com/raxdne/training',
       packages=['training'],
+      scripts=['report.py'],
       # install_requires=['suntime'],
      )
