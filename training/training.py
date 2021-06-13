@@ -518,6 +518,7 @@ class cycle(title,description):
         """ constructor """
 
         self.reset(strArg,intArg)
+        self.du   = 'km'     # default for distance unit
 
         
     def reset(self,strArg=None,intArg=7):
@@ -604,6 +605,7 @@ class cycle(title,description):
 
         """ switch distance unit to miles, but without conversion! """
         
+        self.du   = 'mi'
         for v in self.child:
             for u in v:
                 u.switchToMiles()
@@ -723,6 +725,20 @@ class cycle(title,description):
                         arrArg[k].append(1)
                         arrArg[k].append(u.duration.total_seconds())
                     
+        sum_h = 0.0
+        for k in sorted(arrArg.keys()):
+            if arrArg[k][0] == None or arrArg[k][0] < 0.01:
+                strResult += "{:4} x {:3} {:5}    {:5.0f} h\n".format(arrArg[k][1], k, ' ', round(arrArg[k][2] / 3600, 1))
+            else:
+                strResult += "{:4} x {:3} {:5.0f} {} {:5.0f} h\n".format(arrArg[k][1], k, arrArg[k][0], self.du, round(arrArg[k][2] / 3600, 1))        
+            sum_h += arrArg[k][2]
+
+        sum_h /= 3600.0
+        n = self.getNumberOfUnits()
+        if n > 0:
+            p = self.getPeriod()
+            strResult += "{:4} h     in {} Days = {:4.01f} h/Week\n".format(round(sum_h), p, sum_h/p * 7.0)
+            
         return strResult
 
 
@@ -804,7 +820,8 @@ class cycle(title,description):
         else:
             strResult += ' FOLDED="{}"'.format('true')
             
-        strResult += ' TEXT="' + self.getTitleStr() + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '">\n'
+        strResult += ' TEXT="' + self.getTitleStr() + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+        strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
         
         strResult += self.__listDescriptionToXML__()
         
@@ -1214,17 +1231,15 @@ class period(title,description):
 #
 #
 
-def CalendarPeriod(intYear):
+def CalendarYearPeriod(intYear):
 
     """ returns a plain calendar year period """
     
-    s = period(str(intYear))
-
     try:
         date(intYear, 2, 29)
-        s.append(cycle('All',366))
+        s = cycle(str(intYear),366)
     except ValueError:
-        s.append(cycle('All',365))
+        s = cycle(str(intYear),365)
 
     s.schedule(intYear,1,1)
 
@@ -1239,9 +1254,8 @@ def CalendarWeekPeriod(intYear):
 
     for w in range(1,53):
         u = 'CW' + str(w) + '/' + str(intYear)
-        p = period(u)
-        p.append(cycle(u, 7))
-        s.append(p)
+        c = cycle(u, 7)
+        s.append(c)
         
     d = date(intYear,1,1)
     if d.isoweekday() > 4:
@@ -1268,9 +1282,8 @@ def CalendarMonthPeriod(intYear):
         else:
             d = date(intYear,m+1,1) - date(intYear,m,1)
 
-        p = period(str(intYear) + '.' + str(m))
-        p.append(cycle(str(m), d.days))
-        s.append(p)
+        c = cycle(str(intYear) + '.' + str(m),d.days)
+        s.append(c)
         
     s.schedule(intYear,1,1)
 
