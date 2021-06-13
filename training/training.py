@@ -940,6 +940,8 @@ class period(title,description):
 
         """  """
 
+        objResult = None
+        
         if objUnit != None and objUnit.date != None:
             if len(self.child) < 1:
                 # there is no child cycle yet
@@ -947,13 +949,18 @@ class period(title,description):
                 if delta.days > -1 and objUnit.date <= self.dateEnd:
                     l = self.dateEnd - self.dateBegin
                     c = cycle(self.getTitleStr(), l.days + 1)
-                    c.setTypeChars(self.lengthType)
                     c.schedule(self.dateBegin.year,self.dateBegin.month,self.dateBegin.day)
-                    c.insertByDate(objUnit)
-                    self.append(c)
+                    objResult = c.insertByDate(objUnit)
+                    if objResult != None:
+                        c.setTypeChars(self.lengthType)
+                        self.append(c)
             else:        
                 for c in self.child:
-                    c.insertByDate(objUnit)
+                    objResult = c.insertByDate(objUnit)
+                    if objResult != None:
+                        break
+
+        return objResult
 
 
     def switchToMiles(self):
@@ -1076,25 +1083,55 @@ class period(title,description):
         return strResult
 
 
-    def parseFile(self,filename):
+    def parseFile(self,listFilename):
 
         """  """
-        
-        print("* ",filename)
-        with open(filename) as f:
-            content = f.read().splitlines()
-        f.close()
 
-        t = unit()
-        for l in content:
-            if l == None or l == '':
-                pass
-            elif t.parse(l):
-                self.insertByDate(t)
-            else:
-                print('error: ' + l)
-
+        if type(listFilename) == str:
+            listFilename = [listFilename]
             
+        a = []
+        d0 = None
+        d1 = None
+        t = unit()
+
+        for filename in listFilename:
+            print("* ",filename)
+            with open(filename) as f:
+                content = f.read().splitlines()
+            f.close()
+
+            for l in content:
+                if l == None or l == '':
+                    pass
+                elif t.parse(l) and t.date != None:
+                    if d0 == None or t.date < d0:
+                        d0 = t.date
+                    if d1 == None or t.date > d1:
+                        d1 = t.date
+                    a.append(t)
+                    t = unit()
+                else:
+                    print('error: ' + l)
+
+        print('Report {} .. {}'.format(d0.isoformat(),d1.isoformat()))
+
+        delta = d1 - d0
+        if delta.days < 365:
+            for y in range(d0.year,d1.year+1):
+                self.append(CalendarWeekPeriod(y))
+        elif delta.days < 3 * 365:
+            for y in range(d0.year,d1.year+1):
+                self.append(CalendarMonthPeriod(y))
+        else:
+            for y in range(d0.year,d1.year+1):
+                self.append(CalendarYearPeriod(y))
+
+        for t in a:
+            #print(t.toString())
+            self.insertByDate(t)
+
+
     def dup(self):
 
         """  """
@@ -1252,7 +1289,7 @@ def CalendarWeekPeriod(intYear):
     
     s = period(str(intYear))
 
-    for w in range(1,53):
+    for w in range(1,54):
         u = 'CW' + str(w) + '/' + str(intYear)
         c = cycle(u, 7)
         s.append(c)
