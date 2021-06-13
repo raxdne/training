@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 
 """
  (setq python-shell-interpreter "/usr/bin/python3")
