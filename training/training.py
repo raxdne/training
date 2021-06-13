@@ -30,12 +30,12 @@ from datetime import (
     time
 )
 
-scale_dist = 8
+scale_dist = 6
 
 bar_height = 8
 
-diagram_offset = 150
-diagram_width = diagram_offset + scale_dist * 150
+diagram_offset = 175
+diagram_width = diagram_offset + 6 * 25 * scale_dist
 
 #from suntime import Sun
 
@@ -195,7 +195,7 @@ class unit(description):
         self.color = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
         self.dist = None
         self.type = None
-        self.time = None
+        self.duration = None
         self.date = None
         self.clock = None
         self.setDescription()
@@ -224,7 +224,7 @@ class unit(description):
         """  """
         
         if strArg == None or strArg == '':
-            pass
+            self.dist = None
         else:
             self.dist = float(strArg)
             if self.dist < 0.001:
@@ -233,23 +233,34 @@ class unit(description):
         return True
 
 
-    def setTimeStr(self,strArg):
+    def setDurationStr(self,strArg):
 
         """  """
         
         if strArg == None or strArg == '':
-            self.time = time()
+            self.duration = timedelta(0)
         else:
             entry = strArg.split(':')
             if len(entry) == 2:
-                self.time = time(minute=int(entry[0]), second=int(entry[1]))
+                self.duration = timedelta(minutes=int(entry[0]), seconds=int(entry[1]))
             elif len(entry) == 3:
-                self.time = time(hour=int(entry[0]), minute=int(entry[1]), second=int(entry[2]))
+                self.duration = timedelta(hours=int(entry[0]), minutes=int(entry[1]), seconds=int(entry[2]))
             else:
-                self.time = time()
+                self.duration = timedelta(0)
                 
         return True
 
+
+    def getDurationStr(self):
+
+        """  """
+        
+        if self.duration == None:
+            return "0:00:00"
+        else:
+            seconds = self.duration.total_seconds()
+            return time(hour = int(seconds // 3600), minute = int((seconds % 3600) // 60), second = int(seconds % 60)).strftime("%H:%M:%S")
+        
 
     def setDate(self,objArg):
 
@@ -290,21 +301,24 @@ class unit(description):
 
         """  """
 
-        if patternType == None or re.match(patternType,self.type):
+        if floatScale > 0.1 and (patternType == None or re.match(patternType,self.type)):
             
-            if self.dist == None or self.dist < 0.01:
-                pass
-            else:
-                self.dist *= floatScale
+            if self.dist != None:
+                if self.dist < 15.0:
+                    self.dist *= floatScale
+                else:
+                    # round distance to 5.0
+                    self.dist = round(self.dist * floatScale / 5.0) * 5.0
 
-            if self.time == None:
-                pass
-            else:
-                minutes = (self.time.hour * 60 + self.time.minute)
-                minutes *= floatScale
-                self.time = time(hour=int(minutes / 60), minute=int(minutes % 60))
+            if self.duration != None:
+                s = self.duration.total_seconds()
+                if s < 900.0:
+                    self.duration *= floatScale
+                else:
+                    # round duration to 5:00 min
+                    self.duration = timedelta(seconds=(round(s * floatScale / 300.0) * 300.0))
 
-
+                    
     def dup(self):
 
         """  """
@@ -326,7 +340,7 @@ class unit(description):
             return self.parse(entry)
         elif type(objArg) is list and len(objArg) > 3:
             self.reset()
-            if self.setDistStr(objArg[1]) and self.setTypeStr(objArg[2]) and self.setTimeStr(objArg[3]):
+            if self.setDistStr(objArg[1]) and self.setTypeStr(objArg[2]) and self.setDurationStr(objArg[3]):
                 self.setDateStr(objArg[0])
                 self.appendDescription(objArg[4:])
                 return True
@@ -341,10 +355,10 @@ class unit(description):
         """  """
         
         strResult = ''
-        if self.dist == None or self.dist < 0.01 or self.time == None:
+        if self.dist == None or self.duration == None:
             pass
         else:
-            s = float(self.time.hour * 3600 + self.time.minute * 60 + self.time.second)
+            s = float(self.duration.total_seconds())
             if s < 1:
                 pass
             else:
@@ -378,12 +392,12 @@ class unit(description):
             strResult = 'EMPTY'
         elif self.type == None:
             strResult = '{date}'.format(date=self.date.isoformat())
-        elif self.dist == None or self.dist < 0.01:
-            strResult = '{date} {type} {time}'.format(date=self.date.isoformat(), type=self.type, time=self.time.isoformat())
+        elif self.dist == None:
+            strResult = '{date} {type} {duration}'.format(date=self.date.isoformat(), type=self.type, duration=self.getDurationStr())
         elif self.date == None:
-            strResult = '{date} {dist:5.1f} {type} {time}'.format(date='', dist=self.dist, type=self.type, time=self.time.isoformat())
+            strResult = '{date} {dist:5.1f} {type} {duration}'.format(date='', dist=self.dist, type=self.type, duration=self.getDurationStr())
         else:
-            strResult = '{date} {dist:5.1f} {type} {time}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
+            strResult = '{date} {dist:5.1f} {type} {duration}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
 
         #strResult += self.__listDescriptionToPlain__()
         
@@ -396,10 +410,10 @@ class unit(description):
         
         if self.type == None:
             strResult = '{date};;;'.format(date=self.date.isoformat())
-        elif self.dist == None or self.dist < 0.01:
-            strResult = '{date};;{type};{time}'.format(date=self.date.isoformat(), type=self.type, time=self.time.isoformat())
+        elif self.dist == None:
+            strResult = '{date};;{type};{duration}'.format(date=self.date.isoformat(), type=self.type, duration=self.getDurationStr())
         else:
-            strResult = '{date};{dist:.1f};{type};{time}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, time=self.time.isoformat())
+            strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
 
         strResult += ';' + self.__listDescriptionToPlain__()
                 
@@ -412,7 +426,7 @@ class unit(description):
         
         strResult = ''
 
-        if self.type == None or len(self.type) < 1 or self.dist == None or self.dist < 0.01:
+        if self.type == None or len(self.type) < 1:
             strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + bar_height / 2, y + bar_height, self.__listDescriptionToPlain__(), self.toString())
         else:
             strResult += '<rect '
@@ -420,14 +434,19 @@ class unit(description):
             if self.type[0] in self.color:
                 strResult += ' fill="{}"'.format(self.color[self.type[0]])
 
-            strResult += ' height="{}px" stroke="black" stroke-width=".5" width="{:.0f}px" x="{}" y="{}"'.format(bar_height, self.dist * scale_dist, x, y)
+            if self.dist == None or True:
+                # "about 25 distance units per hour"
+                bar_width = self.duration.total_seconds() / 3600 * 25 * scale_dist
+            else:
+                bar_width = self.dist * scale_dist
+                
+            strResult += ' height="{}px" stroke="black" stroke-width=".5" width="{:.0f}px" x="{}" y="{}"'.format(bar_height, bar_width, x, y)
             strResult += '>'
 
             strResult += '<title>{}: {}</title>'.format(self.toString(), self.__listDescriptionToPlain__())
 
             strResult += '</rect>\n'
-        
-            #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x + 20 + self.dist * scale_dist, y+6, self.__listDescriptionToPlain__())
+
         return strResult
 
     
@@ -443,7 +462,7 @@ class unit(description):
             strResult += ' BACKGROUND_COLOR="{}"'.format(self.color[self.type[0]])
         strResult += '>'
         
-        if self.dist != None and self.dist > 0.01:
+        if self.dist != None:
             strResult += '<node TEXT="' + self.getSpeedStr() + '"/>'
             #strResult += '<node TEXT="' + self.getSunStr() + '"/>'
             
@@ -464,20 +483,20 @@ class unit(description):
 
         if self.type == None:
             strResult += "SUMMARY:{description}\n".format(description = self.__listDescriptionToPlain__())
-        elif self.dist == None or self.dist < 0.01:
-            strResult += "SUMMARY:{type} {time}\n".format(type=self.type, time=self.time.isoformat())
+        elif self.dist == None:
+            strResult += "SUMMARY:{type} {time}\n".format(type=self.type, time=self.getDurationStr())
         else:
-            strResult += "SUMMARY:{dist:.0f} {type} {time}\n".format(dist=self.dist, type=self.type, time=self.time.isoformat())
+            strResult += "SUMMARY:{dist:.0f} {type} {time}\n".format(dist=self.dist, type=self.type, time=self.getDurationStr())
 
         if self.hasDescription():
             strResult += 'DESCRIPTION:{}\n'.format(self.__listDescriptionToPlain__())
 
-        if self.clock == None or self.time == None:
+        if self.clock == None or self.duration == None:
             strResult += "DTSTART;{y:04}{m:02}{d:02}\nDTEND;{y:04}{m:02}{d:02}\n".format(y=self.date.year, m=self.date.month, d=self.date.day)
         else:
             t = datetime(self.date.year, self.date.month, self.date.day, self.clock.hour, self.clock.minute)
             strResult += "DTSTART;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=t.year, m=t.month, d=t.day, h=t.hour, min=t.minute, s=0)
-            t += timedelta(hours = self.time.hour, minutes = self.time.minute)
+            t += self.duration
             strResult +=   "DTEND;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=t.year, m=t.month, d=t.day, h=t.hour, min=t.minute, s=0)
 
         strResult += "DTSTAMP;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=dateNow.year, m=dateNow.month, d=dateNow.day, h=dateNow.hour, min=dateNow.minute, s=dateNow.second)
@@ -499,6 +518,7 @@ class cycle(title,description):
         """ constructor """
 
         self.reset(strArg,intArg)
+        self.du   = 'km'     # default for distance unit
 
         
     def reset(self,strArg=None,intArg=7):
@@ -519,6 +539,15 @@ class cycle(title,description):
         self.dateEnd = date.today()
 
         
+    def resetDistances(self):
+
+        """  """
+        
+        for v in self.child:
+            for u in v:
+                u.setDistStr(None)
+
+            
     def resetUnits(self):
 
         """  """
@@ -553,10 +582,11 @@ class cycle(title,description):
         
         objResult = None
         
-        if objUnit != None and objUnit.date != None and self.dateBegin <= objUnit.date and objUnit.date <= self.dateEnd:
-            objResult = objUnit.dup()
-            delta = objResult.date - self.dateBegin
-            self.child[delta.days].append(objResult)
+        if objUnit != None and objUnit.date != None:
+            delta = objUnit.date - self.dateBegin
+            if delta.days > -1 and objUnit.date <= self.dateEnd:
+                objResult = objUnit.dup()
+                self.child[delta.days].append(objResult)
 
         return objResult
 
@@ -575,6 +605,7 @@ class cycle(title,description):
 
         """ switch distance unit to miles, but without conversion! """
         
+        self.du   = 'mi'
         for v in self.child:
             for u in v:
                 u.switchToMiles()
@@ -656,7 +687,7 @@ class cycle(title,description):
         
         for v in self.child:
             for u in v:
-                if u.dist == None or u.dist < 0.01 or u.type == None or len(u.type) < 1:
+                if u.dist == None or u.type == None or len(u.type) < 1:
                     pass
                 else:
                     k = u.type[0:self.lengthType]
@@ -677,20 +708,37 @@ class cycle(title,description):
                 if u.type != None and len(u.type) > 0:
                     k = u.type[0:self.lengthType]
                     if k in arrArg:
-                        if u.dist != None and u.dist > 0.01:
-                            arrArg[k][0] += u.dist
+                        if u.dist != None:
+                            if arrArg[k][0] == None:
+                                arrArg[k][0] = u.dist
+                            else:
+                                arrArg[k][0] += u.dist
                         arrArg[k][1] += 1
-                        arrArg[k][2] += u.time.hour * 3600 + u.time.minute * 60 + u.time.second
+                        arrArg[k][2] += u.duration.total_seconds()
                     else:
                         arrArg[k] = []
-                        if u.dist != None and u.dist > 0.01:
+                        if u.dist != None:
                             arrArg[k].append(u.dist)
                         else:
                             arrArg[k].append(None)
 
                         arrArg[k].append(1)
-                        arrArg[k].append(u.time.hour * 3600 + u.time.minute * 60 + u.time.second)
+                        arrArg[k].append(u.duration.total_seconds())
                     
+        sum_h = 0.0
+        for k in sorted(arrArg.keys()):
+            if arrArg[k][0] == None or arrArg[k][0] < 0.01:
+                strResult += "{:4} x {:3} {:5}    {:5.0f} h\n".format(arrArg[k][1], k, ' ', round(arrArg[k][2] / 3600, 1))
+            else:
+                strResult += "{:4} x {:3} {:5.0f} {} {:5.0f} h\n".format(arrArg[k][1], k, arrArg[k][0], self.du, round(arrArg[k][2] / 3600, 1))        
+            sum_h += arrArg[k][2]
+
+        sum_h /= 3600.0
+        n = self.getNumberOfUnits()
+        if n > 0:
+            p = self.getPeriod()
+            strResult += "{:4} h     in {} Days = {:4.01f} h/Week\n".format(round(sum_h), p, sum_h/p * 7.0)
+            
         return strResult
 
 
@@ -751,8 +799,9 @@ class cycle(title,description):
                 x_i = x
                 for u in v:
                     strResult += u.toSVG(x_i,y)
-                    if u.dist != None:
-                        x_i += int(u.dist * scale_dist)
+                    #if u.dist != None:
+                    #    x_i += int(u.dist * scale_dist)
+                    x_i += u.duration.total_seconds() / 3600 * 25 * scale_dist
                 y += bar_height * 2
 
         strResult += '</g>'
@@ -771,7 +820,8 @@ class cycle(title,description):
         else:
             strResult += ' FOLDED="{}"'.format('true')
             
-        strResult += ' TEXT="' + self.getTitleStr() + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '">\n'
+        strResult += ' TEXT="' + self.getTitleStr() + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+        strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
         
         strResult += self.__listDescriptionToXML__()
         
@@ -828,7 +878,17 @@ class period(title,description):
         self.dateBegin = date.today()
         self.dateEnd = date.today()
 
+        self.setTypeChars()
+
+
+    def resetDistances(self):
+
+        """  """
         
+        for c in self.child:
+            c.resetDistances()
+
+            
     def resetUnits(self):
 
         """  """
@@ -879,9 +939,28 @@ class period(title,description):
     def insertByDate(self,objUnit):
 
         """  """
+
+        objResult = None
         
-        for c in self.child:
-            c.insertByDate(objUnit)
+        if objUnit != None and objUnit.date != None:
+            if len(self.child) < 1:
+                # there is no child cycle yet
+                delta = objUnit.date - self.dateBegin
+                if delta.days > -1 and objUnit.date <= self.dateEnd:
+                    l = self.dateEnd - self.dateBegin
+                    c = cycle(self.getTitleStr(), l.days + 1)
+                    c.schedule(self.dateBegin.year,self.dateBegin.month,self.dateBegin.day)
+                    objResult = c.insertByDate(objUnit)
+                    if objResult != None:
+                        c.setTypeChars(self.lengthType)
+                        self.append(c)
+            else:        
+                for c in self.child:
+                    objResult = c.insertByDate(objUnit)
+                    if objResult != None:
+                        break
+
+        return objResult
 
 
     def switchToMiles(self):
@@ -897,6 +976,8 @@ class period(title,description):
 
         """  """
         
+        self.lengthType = intArg
+
         for c in self.child:
             c.setTypeChars(intArg)
             
@@ -1002,25 +1083,55 @@ class period(title,description):
         return strResult
 
 
-    def parseFile(self,filename):
+    def parseFile(self,listFilename):
 
         """  """
-        
-        print("* ",filename)
-        with open(filename) as f:
-            content = f.read().splitlines()
-        f.close()
 
-        t = unit()
-        for l in content:
-            if l == None or l == '':
-                pass
-            elif t.parse(l):
-                self.insertByDate(t)
-            else:
-                print('error: ' + l)
-
+        if type(listFilename) == str:
+            listFilename = [listFilename]
             
+        a = []
+        d0 = None
+        d1 = None
+        t = unit()
+
+        for filename in listFilename:
+            print("* ",filename)
+            with open(filename) as f:
+                content = f.read().splitlines()
+            f.close()
+
+            for l in content:
+                if l == None or l == '':
+                    pass
+                elif t.parse(l) and t.date != None:
+                    if d0 == None or t.date < d0:
+                        d0 = t.date
+                    if d1 == None or t.date > d1:
+                        d1 = t.date
+                    a.append(t)
+                    t = unit()
+                else:
+                    print('error: ' + l)
+
+        print('Report {} .. {}'.format(d0.isoformat(),d1.isoformat()))
+
+        delta = d1 - d0
+        if delta.days < 365:
+            for y in range(d0.year,d1.year+1):
+                self.append(CalendarWeekPeriod(y))
+        elif delta.days < 3 * 365:
+            for y in range(d0.year,d1.year+1):
+                self.append(CalendarMonthPeriod(y))
+        else:
+            for y in range(d0.year,d1.year+1):
+                self.append(CalendarYearPeriod(y))
+
+        for t in a:
+            #print(t.toString())
+            self.insertByDate(t)
+
+
     def dup(self):
 
         """  """
@@ -1114,12 +1225,10 @@ class period(title,description):
         
         #strResult += '<g transform="rotate(90)">'
         #'<text x="210" y="110">Period 2.2021</text>
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +   5 * scale_dist, 20, diagram_offset +   5 * scale_dist, diagram_height)
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +  10 * scale_dist, 20, diagram_offset +  10 * scale_dist, diagram_height)
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset +  50 * scale_dist, 20, diagram_offset +  50 * scale_dist, diagram_height)
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 100 * scale_dist, 20, diagram_offset + 100 * scale_dist, diagram_height)
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 150 * scale_dist, 20, diagram_offset + 150 * scale_dist, diagram_height)
-        strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + 200 * scale_dist, 20, diagram_offset + 200 * scale_dist, diagram_height)
+
+        for i in [3600/4,3600/2,3600,2*3600,3*3600,4*3600,5*3600,6*3600]:
+            w = i / 3600 * 25 * scale_dist
+            strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + w, 20, diagram_offset + w, diagram_height)
 
         strResult += self.toSVG()
         #strResult += '</g>'
@@ -1159,17 +1268,15 @@ class period(title,description):
 #
 #
 
-def CalendarPeriod(intYear):
+def CalendarYearPeriod(intYear):
 
     """ returns a plain calendar year period """
     
-    s = period(str(intYear))
-
     try:
         date(intYear, 2, 29)
-        s.append(cycle('All',366))
+        s = cycle(str(intYear),366)
     except ValueError:
-        s.append(cycle('All',365))
+        s = cycle(str(intYear),365)
 
     s.schedule(intYear,1,1)
 
@@ -1182,11 +1289,10 @@ def CalendarWeekPeriod(intYear):
     
     s = period(str(intYear))
 
-    for w in range(1,53):
+    for w in range(1,54):
         u = 'CW' + str(w) + '/' + str(intYear)
-        p = period(u)
-        p.append(cycle(u, 7))
-        s.append(p)
+        c = cycle(u, 7)
+        s.append(c)
         
     d = date(intYear,1,1)
     if d.isoweekday() > 4:
@@ -1213,9 +1319,8 @@ def CalendarMonthPeriod(intYear):
         else:
             d = date(intYear,m+1,1) - date(intYear,m,1)
 
-        p = period(str(intYear) + '.' + str(m))
-        p.append(cycle(str(m), d.days))
-        s.append(p)
+        c = cycle(str(intYear) + '.' + str(m),d.days)
+        s.append(c)
         
     s.schedule(intYear,1,1)
 
