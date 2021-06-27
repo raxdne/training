@@ -159,7 +159,9 @@ class description:
             strResult += '<node TEXT="{}">\n'.format(listArg[0]) + self.__listDescriptionToXML__(listArg[1]) + '</node>\n'
         elif type(listArg) is list and len(listArg) > 0:
             for c in listArg:
-                if type(c) is str:
+                if len(c) < 1:
+                    pass
+                elif type(c) is str and len(c) > 0:
                     strResult += '<node BACKGROUND_COLOR="{}" TEXT="{}"/>\n'.format('#ffffaa',c)
                 elif type(c) is list:
                     strResult += self.__listDescriptionToXML__(c)
