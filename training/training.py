@@ -485,13 +485,10 @@ class unit(description):
 
         if self.type == None:
             strResult += "SUMMARY:{description}\n".format(description = self.__listDescriptionToPlain__())
-        elif self.dist == None:
-            strResult += "SUMMARY:{type} {time}\n".format(type=self.type, time=self.getDurationStr())
         else:
-            strResult += "SUMMARY:{dist:.0f} {type} {time}\n".format(dist=self.dist, type=self.type, time=self.getDurationStr())
-
-        if self.hasDescription():
-            strResult += 'DESCRIPTION:{}\n'.format(self.__listDescriptionToPlain__())
+            strResult += "SUMMARY:{type} {time}\n".format(type=self.type, time=self.getDurationStr())
+            if self.hasDescription():
+                strResult += 'DESCRIPTION:{}\n'.format(self.__listDescriptionToPlain__())
 
         if self.clock == None or self.duration == None:
             strResult += "DTSTART;{y:04}{m:02}{d:02}\nDTEND;{y:04}{m:02}{d:02}\n".format(y=self.date.year, m=self.date.month, d=self.date.day)
@@ -954,7 +951,6 @@ class period(title,description):
                     c.schedule(self.dateBegin.year,self.dateBegin.month,self.dateBegin.day)
                     objResult = c.insertByDate(objUnit)
                     if objResult != None:
-                        c.setTypeChars(self.lengthType)
                         self.append(c)
             else:        
                 for c in self.child:
@@ -1119,7 +1115,11 @@ class period(title,description):
         print('Report {} .. {}'.format(d0.isoformat(),d1.isoformat()))
 
         delta = d1 - d0
-        if delta.days < 365:
+
+        if len(self.child) > 0:
+            # there is a child list already
+            pass
+        elif delta.days < 365:
             for y in range(d0.year,d1.year+1):
                 self.append(CalendarWeekPeriod(y))
         elif delta.days < 3 * 365:
