@@ -3,13 +3,13 @@
 
 ## Requirements
 
-REQ: make colorcoding configurable
+REQ: make colorcoding configurable ✔
 
 REQ: link some units of different types into one unit (e.g. Triathlon)
 
-DONE: configuration of significant chars of type string ('B' or 'Bic' or 'Bicycle')
+DONE: configuration of significant chars of type string ('B' or 'Bic' or 'Bicycle') ✔
 
-DONE: configuration of distance units
+DONE: configuration of distance units ✔
 
 DONE: configure Apache HTTP Server `mod_python` https://github.com/grisha/mod_python
 
@@ -25,7 +25,7 @@ DONE: configure Apache HTTP Server `mod_wsgi`  ('libapache2-mod-wsgi-py3')
 
 TODO: configure Apache HTTP Server using simple CGI
 
-REQ: simple generic frontend script
+REQ: simple generic frontend script ✔
 
 ## Output Formats
 

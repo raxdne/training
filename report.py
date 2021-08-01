@@ -47,7 +47,8 @@ def main(args=None):
 
     s = training.period('Report ' + datetime.date.today().isoformat())
     s.parseFile(options.infile)
-    s.setTypeChars(1)
+    training.max_length_type = 1
+    #training.unit_distance = 'mi'
     
     try:
         if options.type == "xml":

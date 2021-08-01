@@ -101,10 +101,8 @@ class TestTraining(unittest.TestCase):
         self.assertEqual(u.toString(),'2019-12-23  33.0 Bicycle 01:00:00')
         
         u.scale(2.0,r"Bic.*")
-        self.assertEqual(u.toString(),'2019-12-23  66.0 Bicycle 02:00:00')
+        self.assertEqual(u.toString(),'2019-12-23  65.0 Bicycle 02:00:00')
 
-        u.switchToMiles()
-        
         
     def test_class_cycle(self):
         """
@@ -123,9 +121,6 @@ class TestTraining(unittest.TestCase):
         self.assertEqual(c.getTypeOfUnits(),['Foo','RR'])
         #self.assertEqual(c.toString(),'2019-11-03  30.0 Foo 01:15:00')
 
-        c.switchToMiles()
-        c.setTypeChars(2)
-        
         
     def test_class_period(self):
         """
@@ -139,9 +134,6 @@ class TestTraining(unittest.TestCase):
 
         p = training.period('Period')
         self.assertTrue(p.hasTitle())
-
-        p.switchToMiles()
-        p.setTypeChars(1)
 
         p.appendDescription('additional Notes')
         self.assertTrue(p.hasDescription())
