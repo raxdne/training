@@ -30,14 +30,28 @@ from datetime import (
     time
 )
 
-scale_dist = 6
+#from suntime import Sun
 
-bar_height = 8
+#
+# Module Variables
+#
+
+diagram_scale_dist = 6
+
+diagram_bar_height = 8
 
 diagram_offset = 175
-diagram_width = diagram_offset + 6 * 25 * scale_dist
 
-#from suntime import Sun
+diagram_width = diagram_offset + 6 * 25 * diagram_scale_dist
+
+# default colors in diagram
+colors = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
+
+# maximum for length of type string
+max_length_type = 10
+
+# distance unit 'mi' or 'km'
+unit_distance = 'km'
 
 #
 #
@@ -183,7 +197,6 @@ class unit(description):
         
         """ constructor """
         
-        self.du   = 'km'     # default for distance unit
         if strArg == None:
             self.reset()
         else:
@@ -194,7 +207,6 @@ class unit(description):
         
         """  """
         
-        self.color = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
         self.dist = None
         self.type = None
         self.duration = None
@@ -210,15 +222,8 @@ class unit(description):
         if strArg == None or strArg == '':
             pass
         else:
-            self.type = strArg.replace(' ','')
+            self.type = strArg.replace(' ','')[0:max_length_type]
         return True
-        
-
-    def switchToMiles(self):
-
-        """ switch distance unit to miles, but without conversion! """
-        
-        self.du   = 'mi'     # distance unit 'miles'
             
 
     def setDistStr(self,strArg):
@@ -365,8 +370,8 @@ class unit(description):
                 pass
             else:
                 spk = s / self.dist
-                strResult += '{}:{:02} min/{} '.format(int(spk // 60), int(spk % 60), self.du)
-                strResult += '{:.0f} {}/h '.format(self.dist / (s / 3600), self.du)
+                strResult += '{}:{:02} min/{} '.format(int(spk // 60), int(spk % 60), unit_distance)
+                strResult += '{:.0f} {}/h '.format(self.dist / (s / 3600), unit_distance)
             
         return strResult
 
@@ -429,20 +434,20 @@ class unit(description):
         strResult = ''
 
         if self.type == None or len(self.type) < 1:
-            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + bar_height / 2, y + bar_height, self.__listDescriptionToPlain__(), self.toString())
+            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + diagram_bar_height / 2, y + diagram_bar_height, self.__listDescriptionToPlain__(), self.toString())
         else:
             strResult += '<rect '
 
-            if self.type[0] in self.color:
-                strResult += ' fill="{}"'.format(self.color[self.type[0]])
+            if self.type[0] in colors:
+                strResult += ' fill="{}"'.format(colors[self.type[0]])
 
             if self.dist == None or True:
                 # "about 25 distance units per hour"
-                bar_width = self.duration.total_seconds() / 3600 * 25 * scale_dist
+                bar_width = self.duration.total_seconds() / 3600 * 25 * diagram_scale_dist
             else:
-                bar_width = self.dist * scale_dist
+                bar_width = self.dist * diagram_scale_dist
                 
-            strResult += ' height="{}px" stroke="black" stroke-width=".5" width="{:.0f}px" x="{}" y="{}"'.format(bar_height, bar_width, x, y)
+            strResult += ' height="{}px" stroke="black" stroke-width=".5" width="{:.0f}px" x="{}" y="{}"'.format(diagram_bar_height, bar_width, x, y)
             strResult += '>'
 
             strResult += '<title>{}: {}</title>'.format(self.toString(), self.__listDescriptionToPlain__())
@@ -460,8 +465,8 @@ class unit(description):
 
         strResult += ' TEXT="' + self.toString() + '"'
 
-        if self.type != None and len(self.type) > 0 and self.type[0] in self.color:
-            strResult += ' BACKGROUND_COLOR="{}"'.format(self.color[self.type[0]])
+        if self.type != None and len(self.type) > 0 and self.type[0] in colors:
+            strResult += ' BACKGROUND_COLOR="{}"'.format(colors[self.type[0]])
         strResult += '>'
         
         if self.dist != None:
@@ -485,13 +490,10 @@ class unit(description):
 
         if self.type == None:
             strResult += "SUMMARY:{description}\n".format(description = self.__listDescriptionToPlain__())
-        elif self.dist == None:
-            strResult += "SUMMARY:{type} {time}\n".format(type=self.type, time=self.getDurationStr())
         else:
-            strResult += "SUMMARY:{dist:.0f} {type} {time}\n".format(dist=self.dist, type=self.type, time=self.getDurationStr())
-
-        if self.hasDescription():
-            strResult += 'DESCRIPTION:{}\n'.format(self.__listDescriptionToPlain__())
+            strResult += "SUMMARY:{type} {time}\n".format(type=self.type, time=self.getDurationStr())
+            if self.hasDescription():
+                strResult += 'DESCRIPTION:{}\n'.format(self.__listDescriptionToPlain__())
 
         if self.clock == None or self.duration == None:
             strResult += "DTSTART;{y:04}{m:02}{d:02}\nDTEND;{y:04}{m:02}{d:02}\n".format(y=self.date.year, m=self.date.month, d=self.date.day)
@@ -520,7 +522,6 @@ class cycle(title,description):
         """ constructor """
 
         self.reset(strArg,intArg)
-        self.du   = 'km'     # default for distance unit
 
         
     def reset(self,strArg=None,intArg=7):
@@ -530,7 +531,6 @@ class cycle(title,description):
         self.setTitleStr(strArg)
         self.setDescription()
 
-        self.lengthType = 10
         self.periodInt = intArg
         
         self.child = []
@@ -603,16 +603,6 @@ class cycle(title,description):
             self.child[intIndex][len(self.child[intIndex]) - 1].appendDescription(strArg)
         
 
-    def switchToMiles(self):
-
-        """ switch distance unit to miles, but without conversion! """
-        
-        self.du   = 'mi'
-        for v in self.child:
-            for u in v:
-                u.switchToMiles()
-            
-
     def getPeriod(self):
 
         """  """
@@ -633,13 +623,6 @@ class cycle(title,description):
         return intResult
 
 
-    def setTypeChars(self, intArg=10):
-
-        """  """
-        
-        self.lengthType = intArg
-            
-
     def getTypeOfUnits(self,arrArg=None):
 
         """  """
@@ -650,11 +633,10 @@ class cycle(title,description):
         for v in self.child:
             for u in v:
                 if u.type != None and len(u.type) > 0:
-                    k = u.type[0:self.lengthType]
-                    if k in arrArg:
+                    if u.type in arrArg:
                         pass
                     else:
-                        arrArg.append(k)
+                        arrArg.append(u.type)
 
         return arrArg
 
@@ -692,8 +674,7 @@ class cycle(title,description):
                 if u.dist == None or u.type == None or len(u.type) < 1:
                     pass
                 else:
-                    k = u.type[0:self.lengthType]
-                    arrArg[u.date.month - 1][k] += u.dist
+                    arrArg[u.date.month - 1][u.type] += u.dist
 
 
     def report(self, arrArg=None):
@@ -708,31 +689,30 @@ class cycle(title,description):
         for v in self.child:
             for u in v:
                 if u.type != None and len(u.type) > 0:
-                    k = u.type[0:self.lengthType]
-                    if k in arrArg:
+                    if u.type in arrArg:
                         if u.dist != None:
-                            if arrArg[k][0] == None:
-                                arrArg[k][0] = u.dist
+                            if arrArg[u.type][0] == None:
+                                arrArg[u.type][0] = u.dist
                             else:
-                                arrArg[k][0] += u.dist
-                        arrArg[k][1] += 1
-                        arrArg[k][2] += u.duration.total_seconds()
+                                arrArg[u.type][0] += u.dist
+                        arrArg[u.type][1] += 1
+                        arrArg[u.type][2] += u.duration.total_seconds()
                     else:
-                        arrArg[k] = []
+                        arrArg[u.type] = []
                         if u.dist != None:
-                            arrArg[k].append(u.dist)
+                            arrArg[u.type].append(u.dist)
                         else:
-                            arrArg[k].append(None)
+                            arrArg[u.type].append(None)
 
-                        arrArg[k].append(1)
-                        arrArg[k].append(u.duration.total_seconds())
+                        arrArg[u.type].append(1)
+                        arrArg[u.type].append(u.duration.total_seconds())
                     
         sum_h = 0.0
         for k in sorted(arrArg.keys()):
             if arrArg[k][0] == None or arrArg[k][0] < 0.01:
                 strResult += "{:4} x {:3} {:5}    {:5.0f} h\n".format(arrArg[k][1], k, ' ', round(arrArg[k][2] / 3600, 1))
             else:
-                strResult += "{:4} x {:3} {:5.0f} {} {:5.0f} h\n".format(arrArg[k][1], k, arrArg[k][0], self.du, round(arrArg[k][2] / 3600, 1))        
+                strResult += "{:4} x {:3} {:5.0f} {} {:5.0f} h\n".format(arrArg[k][1], k, arrArg[k][0], unit_distance, round(arrArg[k][2] / 3600, 1))        
             sum_h += arrArg[k][2]
 
         sum_h /= 3600.0
@@ -786,25 +766,25 @@ class cycle(title,description):
         if len(self.child) < 1:
             pass
         else:
-            y += bar_height / 2
+            y += diagram_bar_height / 2
             t = date.today()
             d = self.dateBegin
             for v in self.child:
-                strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+bar_height)
+                strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+diagram_bar_height)
                 
                 if d.month == t.month and d.day == t.day:
-                    strResult += '<rect fill="{}" x="{}" y="{}" height="{}px" width="{}px"/>\n'.format('#ffaaaa',x,y-1,bar_height+2,diagram_width - diagram_offset)
+                    strResult += '<rect fill="{}" x="{}" y="{}" height="{}px" width="{}px"/>\n'.format('#ffaaaa',x,y-1,diagram_bar_height+2,diagram_width - diagram_offset)
                 elif d.isoweekday() == 6 or d.isoweekday() == 7:
-                    strResult += '<rect fill="{}" x="{}" y="{}" height="{}px" width="{}px"/>\n'.format('#eeeeee',x,y-1,bar_height+2,diagram_width - diagram_offset)
+                    strResult += '<rect fill="{}" x="{}" y="{}" height="{}px" width="{}px"/>\n'.format('#eeeeee',x,y-1,diagram_bar_height+2,diagram_width - diagram_offset)
                 d += timedelta(days=1)
                     
                 x_i = x
                 for u in v:
                     strResult += u.toSVG(x_i,y)
                     #if u.dist != None:
-                    #    x_i += int(u.dist * scale_dist)
-                    x_i += u.duration.total_seconds() / 3600 * 25 * scale_dist
-                y += bar_height * 2
+                    #    x_i += int(u.dist * diagram_scale_dist)
+                    x_i += u.duration.total_seconds() / 3600 * 25 * diagram_scale_dist
+                y += diagram_bar_height * 2
 
         strResult += '</g>'
         
@@ -863,7 +843,6 @@ class period(title,description):
 
         """ constructor """
 
-        self.du   = 'km'     # default for distance unit
         self.reset(strArg,intArg)
 
         
@@ -879,8 +858,6 @@ class period(title,description):
         self.child = []
         self.dateBegin = date.today()
         self.dateEnd = date.today()
-
-        self.setTypeChars()
 
 
     def resetDistances(self):
@@ -954,7 +931,6 @@ class period(title,description):
                     c.schedule(self.dateBegin.year,self.dateBegin.month,self.dateBegin.day)
                     objResult = c.insertByDate(objUnit)
                     if objResult != None:
-                        c.setTypeChars(self.lengthType)
                         self.append(c)
             else:        
                 for c in self.child:
@@ -964,25 +940,6 @@ class period(title,description):
 
         return objResult
 
-
-    def switchToMiles(self):
-
-        """ switch distance unit to miles, but without conversion! """
-        
-        self.du   = 'mi'
-        for c in self.child:
-            c.switchToMiles()
-            
-
-    def setTypeChars(self, intArg=10):
-
-        """  """
-        
-        self.lengthType = intArg
-
-        for c in self.child:
-            c.setTypeChars(intArg)
-            
 
     def setPeriod(self, intArg):
 
@@ -1043,7 +1000,7 @@ class period(title,description):
             if arrArg[k][0] == None or arrArg[k][0] < 0.01:
                 strResult += "{:4} x {:3} {:5}    {:5.0f} h\n".format(arrArg[k][1], k, ' ', round(arrArg[k][2] / 3600, 1))
             else:
-                strResult += "{:4} x {:3} {:5.0f} {} {:5.0f} h\n".format(arrArg[k][1], k, arrArg[k][0], self.du, round(arrArg[k][2] / 3600, 1))        
+                strResult += "{:4} x {:3} {:5.0f} {} {:5.0f} h\n".format(arrArg[k][1], k, arrArg[k][0], unit_distance, round(arrArg[k][2] / 3600, 1))        
             sum_h += arrArg[k][2]
 
         sum_h /= 3600.0
@@ -1119,7 +1076,11 @@ class period(title,description):
         print('Report {} .. {}'.format(d0.isoformat(),d1.isoformat()))
 
         delta = d1 - d0
-        if delta.days < 365:
+
+        if len(self.child) > 0:
+            # there is a child list already
+            pass
+        elif delta.days < 365:
             for y in range(d0.year,d1.year+1):
                 self.append(CalendarWeekPeriod(y))
         elif delta.days < 3 * 365:
@@ -1202,14 +1163,14 @@ class period(title,description):
             strResult += '<text x="{}" y="{}" style="vertical-align:top"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
             strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+diagram_width,y)
             for d in range(0,self.getPeriod()):
-                strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+bar_height)
-                y += bar_height * 2
+                strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+diagram_bar_height)
+                y += diagram_bar_height * 2
         else:
             for c in self.child:
                 #strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x+400,y)
                 #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x+400,y,c.getTitleStr())
                 strResult += c.toSVG(x,y)
-                y += c.getPeriod() * bar_height * 2
+                y += c.getPeriod() * diagram_bar_height * 2
 
         strResult += '</g>'
 
@@ -1220,7 +1181,7 @@ class period(title,description):
 
         """  """
 
-        diagram_height = self.getPeriod() * (bar_height * 2) + 100
+        diagram_height = self.getPeriod() * (diagram_bar_height * 2) + 100
         strResult = '<svg baseProfile="full" height="{}px" version="1.1" width="{}px" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, diagram_width)
 
         strResult += '<style type="text/css">svg { font-family: Arial; font-size: 8pt; }</style>'
@@ -1229,7 +1190,7 @@ class period(title,description):
         #'<text x="210" y="110">Period 2.2021</text>
 
         for i in [3600/4,3600/2,3600,2*3600,3*3600,4*3600,5*3600,6*3600]:
-            w = i / 3600 * 25 * scale_dist
+            w = i / 3600 * 25 * diagram_scale_dist
             strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( diagram_offset + w, 20, diagram_offset + w, diagram_height)
 
         strResult += self.toSVG()
