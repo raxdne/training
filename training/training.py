@@ -52,6 +52,26 @@ max_length_type = 10
 
 # distance unit 'mi' or 'km'
 unit_distance = 'km'
+  
+        
+#
+#
+#
+def getSettingsStr():
+
+    """ returns a Python string containing all module settings """
+    
+    strResult = '# Diagram\n'
+    strResult += 'diagram_scale_dist = {}\n'.format(diagram_scale_dist)
+    strResult += 'diagram_bar_height = {}\n'.format(diagram_bar_height)
+    strResult += 'diagram_offset = {}\n'.format(diagram_offset)
+    strResult += 'diagram_width = {}\n'.format(diagram_width)
+    
+    strResult += 'colors = {}\n'.format(colors)
+    strResult += 'max_length_type = {}\n'.format(max_length_type)
+    strResult += 'unit_distance = \'{}\'\n'.format(unit_distance)
+
+    return strResult
 
 #
 #
@@ -1288,5 +1308,3 @@ def CalendarMonthPeriod(intYear):
     s.schedule(intYear,1,1)
 
     return s
-  
-        
