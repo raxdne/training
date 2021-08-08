@@ -44,6 +44,10 @@ diagram_offset = 175
 
 diagram_width = diagram_offset + 6 * 25 * diagram_scale_dist
 
+font_family = 'Arial'
+
+font_size = 8
+
 # default colors in diagram
 colors = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
 
@@ -66,7 +70,9 @@ def getSettingsStr():
     strResult += 'diagram_bar_height = {}\n'.format(diagram_bar_height)
     strResult += 'diagram_offset = {}\n'.format(diagram_offset)
     strResult += 'diagram_width = {}\n'.format(diagram_width)
-    
+    strResult += 'font_family = {}\n'.format(font_family)
+    strResult += 'font_size = {}\n'.format(font_size)
+
     strResult += 'colors = {}\n'.format(colors)
     strResult += 'max_length_type = {}\n'.format(max_length_type)
     strResult += 'unit_distance = \'{}\'\n'.format(unit_distance)
@@ -799,11 +805,19 @@ class cycle(title,description):
                 d += timedelta(days=1)
 
                 x_i = x
+
                 for u in v:
-                    strResult += u.toSVG(x_i,y)
-                    #if u.dist != None:
-                    #    x_i += int(u.dist * diagram_scale_dist)
-                    x_i += u.duration.total_seconds() / 3600 * 25 * diagram_scale_dist
+                    # all units first
+                    if u.type != None:
+                        strResult += u.toSVG(x_i,y)
+                        x_i += u.duration.total_seconds() / 3600 * 25 * diagram_scale_dist
+
+                for u in v:
+                    # all remarks after
+                    if u.type == None:
+                        strResult += u.toSVG(x_i,y)
+                        x_i += len(u.toString()) * font_size
+
                 y += diagram_bar_height * 2
 
         strResult += '</g>'
@@ -1204,8 +1218,8 @@ class period(title,description):
         diagram_height = self.getPeriod() * (diagram_bar_height * 2) + 100
         strResult = '<svg baseProfile="full" height="{}px" version="1.1" width="{}px" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, diagram_width)
 
-        strResult += '<style type="text/css">svg { font-family: Arial; font-size: 8pt; }</style>'
-        
+        strResult += '<style type="text/css">svg { font-family: ' + font_family + '; font-size: ' + str(font_size) + 'pt; }</style>'
+
         #strResult += '<g transform="rotate(90)">'
         #'<text x="210" y="110">Period 2.2021</text>
 
