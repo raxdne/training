@@ -5,7 +5,7 @@
 from distutils.core import setup
 
 setup(name='training',
-      version='1.12',
+      version='1.13',
       description='simple Data Management for Physical Training',
       author='Alexander Tenbusch',
       author_email='raxdne@web.de',
