@@ -52,15 +52,15 @@ max_length_type = 10
 
 # distance unit 'mi' or 'km'
 unit_distance = 'km'
-  
-        
+
+
 #
 #
 #
 def getSettingsStr():
 
     """ returns a Python string containing all module settings """
-    
+
     strResult = '# Diagram\n'
     strResult += 'diagram_scale_dist = {}\n'.format(diagram_scale_dist)
     strResult += 'diagram_bar_height = {}\n'.format(diagram_bar_height)
@@ -80,36 +80,36 @@ def getSettingsStr():
 class title:
 
     """ abstract class to handle title """
-    
+
     def __init__(self,strArg=None):
-        
+
         """ constructor """
-        
+
         self.setTitleStr(strArg)
 
 
     def setTitleStr(self,strArg):
 
         """  """
-        
+
         self.strTitle = strArg
-        
-        
+
+
     def hasTitle(self):
 
         """  """
-        
+
         return self.strTitle != None and len(self.strTitle) > 0
-        
+
 
     def getTitleStr(self):
 
         """  """
-        
-        return self.strTitle
-        
 
-        
+        return self.strTitle
+
+
+
 #
 #
 #
@@ -117,38 +117,38 @@ class title:
 class description:
 
     """ abstract class to handle description list """
-    
+
     def __init__(self,strArg=None):
-        
+
         """ constructor """
-        
+
         self.listDescription = []
         self.setDescription(strArg)
 
-        
+
     def setDescription(self,objArg=None):
 
         """  """
-        
+
         if objArg == None or len(objArg) < 1:
             self.listDescription = []
         elif type(objArg) is str:
             self.listDescription.append([objArg])
         elif type(objArg) is list:
             self.listDescription = [objArg]
-        
+
 
     def hasDescription(self):
 
         """  """
-        
+
         return self.listDescription != None and len(self.listDescription) > 0
-        
+
 
     def appendDescription(self,objArg):
 
         """  """
-        
+
         if objArg == None or len(objArg) < 1:
             pass
         elif len(self.listDescription) < 1:
@@ -157,7 +157,7 @@ class description:
             self.listDescription.append([objArg])
         elif type(objArg) is list:
             self.listDescription.append(objArg)
-            
+
 
     def __listDescriptionToPlain__(self,listArg=None):
 
@@ -210,13 +210,13 @@ class description:
 #
 
 class unit(description):
-    
+
     """ class for training units """
-    
+
     def __init__(self,strArg=None):
-        
+
         """ constructor """
-        
+
         if strArg == None:
             self.reset()
         else:
@@ -224,9 +224,9 @@ class unit(description):
 
 
     def reset(self):
-        
+
         """  """
-        
+
         self.dist = None
         self.type = None
         self.duration = None
@@ -234,22 +234,22 @@ class unit(description):
         self.clock = None
         self.setDescription()
 
-        
+
     def setTypeStr(self,strArg):
 
         """  """
-        
+
         if strArg == None or strArg == '':
             pass
         else:
             self.type = strArg.replace(' ','')[0:max_length_type]
         return True
-            
+
 
     def setDistStr(self,strArg):
 
         """  """
-        
+
         if strArg == None or strArg == '':
             self.dist = None
         else:
@@ -263,7 +263,7 @@ class unit(description):
     def setDurationStr(self,strArg):
 
         """  """
-        
+
         if strArg == None or strArg == '':
             self.duration = timedelta(0)
         else:
@@ -274,32 +274,32 @@ class unit(description):
                 self.duration = timedelta(hours=int(entry[0]), minutes=int(entry[1]), seconds=int(entry[2]))
             else:
                 self.duration = timedelta(0)
-                
+
         return True
 
 
     def getDurationStr(self):
 
         """  """
-        
+
         if self.duration == None:
             return "0:00:00"
         else:
             seconds = self.duration.total_seconds()
             return time(hour = int(seconds // 3600), minute = int((seconds % 3600) // 60), second = int(seconds % 60)).strftime("%H:%M:%S")
-        
+
 
     def setDate(self,objArg):
 
         """  """
-        
+
         self.date = objArg
-        
+
 
     def setDateStr(self,strArg):
 
         """  """
-        
+
         if strArg == None or strArg == '':
             pass
         else:
@@ -329,7 +329,7 @@ class unit(description):
         """  """
 
         if floatScale > 0.1 and (patternType == None or re.match(patternType,self.type)):
-            
+
             if self.dist != None:
                 if self.dist < 15.0:
                     self.dist *= floatScale
@@ -345,16 +345,16 @@ class unit(description):
                     # round duration to 5:00 min
                     self.duration = timedelta(seconds=(round(s * floatScale / 300.0) * 300.0))
 
-                    
+
     def dup(self):
 
         """  """
-        
+
         return copy.deepcopy(self)
 
 
     def parse(self,objArg):
-        
+
         """  """
 
         if objArg == None or len(objArg) < 1:
@@ -375,12 +375,12 @@ class unit(description):
                 return False
         else:
             return False
-        
+
 
     def getSpeedStr(self):
 
         """  """
-        
+
         strResult = ''
         if self.dist == None or self.duration == None:
             pass
@@ -392,10 +392,10 @@ class unit(description):
                 spk = s / self.dist
                 strResult += '{}:{:02} min/{} '.format(int(spk // 60), int(spk % 60), unit_distance)
                 strResult += '{:.0f} {}/h '.format(self.dist / (s / 3600), unit_distance)
-            
+
         return strResult
 
-    
+
     def getSunStr(self):
 
         """  """
@@ -427,14 +427,14 @@ class unit(description):
             strResult = '{date} {dist:5.1f} {type} {duration}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
 
         #strResult += self.__listDescriptionToPlain__()
-        
+
         return strResult
 
 
     def toCSV(self):
 
         """  """
-        
+
         if self.type == None:
             strResult = '{date};;;'.format(date=self.date.isoformat())
         elif self.dist == None:
@@ -443,14 +443,14 @@ class unit(description):
             strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
 
         strResult += ';' + self.__listDescriptionToPlain__()
-                
+
         return strResult
 
 
     def toSVG(self,x,y):
 
         """  """
-        
+
         strResult = ''
 
         if self.type == None or len(self.type) < 1:
@@ -466,7 +466,7 @@ class unit(description):
                 bar_width = self.duration.total_seconds() / 3600 * 25 * diagram_scale_dist
             else:
                 bar_width = self.dist * diagram_scale_dist
-                
+
             strResult += ' height="{}px" stroke="black" stroke-width=".5" width="{:.0f}px" x="{}" y="{}"'.format(diagram_bar_height, bar_width, x, y)
             strResult += '>'
 
@@ -476,11 +476,11 @@ class unit(description):
 
         return strResult
 
-    
+
     def toXML(self):
 
         """  """
-        
+
         strResult = '<node'
 
         strResult += ' TEXT="' + self.toString() + '"'
@@ -488,13 +488,13 @@ class unit(description):
         if self.type != None and len(self.type) > 0 and self.type[0] in colors:
             strResult += ' BACKGROUND_COLOR="{}"'.format(colors[self.type[0]])
         strResult += '>'
-        
+
         if self.dist != None:
             strResult += '<node TEXT="' + self.getSpeedStr() + '"/>'
             #strResult += '<node TEXT="' + self.getSunStr() + '"/>'
-            
+
         strResult += self.__listDescriptionToXML__()
-                
+
         strResult += '</node>\n'
 
         return strResult
@@ -526,7 +526,7 @@ class unit(description):
         strResult += "DTSTAMP;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=dateNow.year, m=dateNow.month, d=dateNow.day, h=dateNow.hour, min=dateNow.minute, s=dateNow.second)
 
         strResult += 'END:VEVENT\n'
-        
+
         return strResult
 
 
@@ -538,21 +538,21 @@ class unit(description):
 class cycle(title,description):
 
     def __init__(self,strArg=None,intArg=7):
-        
+
         """ constructor """
 
         self.reset(strArg,intArg)
 
-        
+
     def reset(self,strArg=None,intArg=7):
 
         """  """
-        
+
         self.setTitleStr(strArg)
         self.setDescription()
 
         self.periodInt = intArg
-        
+
         self.child = []
         for i in range(0,int(intArg)):
             self.child.append([])
@@ -560,50 +560,50 @@ class cycle(title,description):
         self.dateBegin = date.today()
         self.dateEnd = date.today()
 
-        
+
     def resetDistances(self):
 
         """  """
-        
+
         for v in self.child:
             for u in v:
                 u.setDistStr(None)
 
-            
+
     def resetUnits(self):
 
         """  """
-        
+
         for v in self.child:
             del v[0:]
 
-        
+
     def getLength(self):
 
         """  """
-        
+
         return len(self.child)
-    
+
 
     def insert(self,intIndex,objUnit):
 
         """  """
-        
+
         objResult = None
-        
+
         if objUnit != None:
             objResult = objUnit.dup()
             self.child[intIndex].append(objResult)
 
         return objResult
 
-        
+
     def insertByDate(self,objUnit):
 
         """  """
-        
+
         objResult = None
-        
+
         if objUnit != None and objUnit.date != None:
             delta = objUnit.date - self.dateBegin
             if delta.days > -1 and objUnit.date <= self.dateEnd:
@@ -612,28 +612,28 @@ class cycle(title,description):
 
         return objResult
 
-    
+
     def insertDescriptionStr(self,intIndex,strArg):
 
         """  """
-        
+
         if strArg == None or strArg == '':
             pass
         elif len(self.child) > intIndex and len(self.child[intIndex]) > 0:
             self.child[intIndex][len(self.child[intIndex]) - 1].appendDescription(strArg)
-        
+
 
     def getPeriod(self):
 
         """  """
-        
+
         return len(self.child)
-            
+
 
     def getNumberOfUnits(self):
 
         """  """
-        
+
         intResult = 0
         for v in self.child:
             for u in v:
@@ -646,10 +646,10 @@ class cycle(title,description):
     def getTypeOfUnits(self,arrArg=None):
 
         """  """
-        
+
         if arrArg == None:
             arrArg = []
-            
+
         for v in self.child:
             for u in v:
                 if u.type != None and len(u.type) > 0:
@@ -660,11 +660,11 @@ class cycle(title,description):
 
         return arrArg
 
-    
+
     def scale(self,floatScale,patternType=None):
 
         """  """
-        
+
         for v in self.child:
             for u in v:
                 u.scale(floatScale,patternType)
@@ -673,14 +673,14 @@ class cycle(title,description):
     def schedule(self, intYear, intMonth, intDay):
 
         """  """
-        
+
         d = date(intYear, intMonth, intDay)
-        
+
         for v in self.child:
             o = self.child.index(v)
             for u in v:
                 u.setDate(d + timedelta(days=o))
-                    
+
         self.dateBegin = date(intYear, intMonth, intDay)
         self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
 
@@ -688,7 +688,7 @@ class cycle(title,description):
     def stat(self, arrArg):
 
         """  """
-        
+
         for v in self.child:
             for u in v:
                 if u.dist == None or u.type == None or len(u.type) < 1:
@@ -700,10 +700,10 @@ class cycle(title,description):
     def report(self, arrArg=None):
 
         """  """
-        
+
         if arrArg == None:
             arrArg = {}
-            
+
         strResult = ''
 
         for v in self.child:
@@ -726,7 +726,7 @@ class cycle(title,description):
 
                         arrArg[u.type].append(1)
                         arrArg[u.type].append(u.duration.total_seconds())
-                    
+
         sum_h = 0.0
         for k in sorted(arrArg.keys()):
             if arrArg[k][0] == None or arrArg[k][0] < 0.01:
@@ -740,21 +740,21 @@ class cycle(title,description):
         if n > 0:
             p = self.getPeriod()
             strResult += "{:4} h     in {} Days = {:4.01f} h/Week\n".format(round(sum_h), p, sum_h/p * 7.0)
-            
+
         return strResult
 
 
     def dup(self):
 
         """  """
-        
+
         return copy.deepcopy(self)
 
 
     def toString(self):
 
         """  """
-        
+
         strResult = '\n** ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
         for v in self.child:
             for u in v:
@@ -765,18 +765,18 @@ class cycle(title,description):
     def toCSV(self):
 
         """  """
-        
+
         strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
         for v in self.child:
             for u in v:
                 strResult += u.toCSV() + '\n'
         return strResult
 
-    
+
     def toSVG(self,x,y):
 
         """  """
-        
+
         strResult = '<g>'
 
         strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+diagram_width,y)
@@ -791,13 +791,13 @@ class cycle(title,description):
             d = self.dateBegin
             for v in self.child:
                 strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+diagram_bar_height)
-                
+
                 if d.month == t.month and d.day == t.day:
                     strResult += '<rect fill="{}" x="{}" y="{}" height="{}px" width="{}px"/>\n'.format('#ffaaaa',x,y-1,diagram_bar_height+2,diagram_width - diagram_offset)
                 elif d.isoweekday() == 6 or d.isoweekday() == 7:
                     strResult += '<rect fill="{}" x="{}" y="{}" height="{}px" width="{}px"/>\n'.format('#eeeeee',x,y-1,diagram_bar_height+2,diagram_width - diagram_offset)
                 d += timedelta(days=1)
-                    
+
                 x_i = x
                 for u in v:
                     strResult += u.toSVG(x_i,y)
@@ -807,26 +807,26 @@ class cycle(title,description):
                 y += diagram_bar_height * 2
 
         strResult += '</g>'
-        
+
         return strResult
 
-    
+
     def toXML(self):
 
         """  """
-        
+
         strResult = '<node'
-        
+
         if self.getNumberOfUnits() < 1:
             strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')
         else:
             strResult += ' FOLDED="{}"'.format('true')
-            
+
         strResult += ' TEXT="' + self.getTitleStr() + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
         strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
-        
+
         strResult += self.__listDescriptionToXML__()
-        
+
         for v in self.child:
             for u in v:
                 strResult += u.toXML()
@@ -834,13 +834,13 @@ class cycle(title,description):
 
         return strResult
 
-    
+
     def toiCalString(self):
 
         """  """
-        
+
         e = self.dateEnd + timedelta(days=1)
-        
+
         if self.getNumberOfUnits() < 1:
             strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;{y:04}{m:02}{d:02}\nDTEND;{ye:04}{me:02}{de:02}\nDTSTAMP;{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.getTitleStr(), y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
         else:
@@ -848,10 +848,10 @@ class cycle(title,description):
             for v in self.child:
                 for u in v:
                     strResult += u.toiCalString()
-                
+
         return strResult
 
-        
+
 
 #
 #
@@ -865,11 +865,11 @@ class period(title,description):
 
         self.reset(strArg,intArg)
 
-        
+
     def reset(self,strArg=None,intArg=None):
 
         """  """
-        
+
         self.setTitleStr(strArg)
         self.setDescription()
 
@@ -883,31 +883,31 @@ class period(title,description):
     def resetDistances(self):
 
         """  """
-        
+
         for c in self.child:
             c.resetDistances()
 
-            
+
     def resetUnits(self):
 
         """  """
-        
+
         for c in self.child:
             c.resetUnits()
 
-            
+
     def appendChildDescription(self,objArg):
 
         """  """
-        
+
         if len(self.child) > 0:
             self.child[len(self.child) - 1].appendDescription(objArg)
-        
+
 
     def getNumberOfUnits(self):
 
         """  """
-        
+
         intResult = 0
         for c in self.child:
             intResult += c.getNumberOfUnits()
@@ -918,7 +918,7 @@ class period(title,description):
     def getTypeOfUnits(self,arrArg=None):
 
         """  """
-        
+
         if arrArg == None:
             arrArg = []
         for c in self.child:
@@ -926,11 +926,11 @@ class period(title,description):
 
         return arrArg
 
-    
+
     def append(self,objChild):
 
         """  """
-        
+
         c = objChild.dup()
         self.child.append(c)
 
@@ -940,7 +940,7 @@ class period(title,description):
         """  """
 
         objResult = None
-        
+
         if objUnit != None and objUnit.date != None:
             if len(self.child) < 1:
                 # there is no child cycle yet
@@ -964,28 +964,28 @@ class period(title,description):
     def setPeriod(self, intArg):
 
         """  """
-        
+
         self.periodInt = intArg
-            
+
 
     def getPeriod(self):
 
         """  """
-        
+
         l = 0
         for c in self.child:
             l += c.getPeriod()
-            
+
         if self.periodInt == None or l > self.periodInt:
             self.setPeriod(l)
-            
+
         return self.periodInt
-            
+
 
     def scale(self,floatScale,patternType=None):
 
         """  """
-        
+
         for c in self.child:
             c.scale(floatScale,patternType)
 
@@ -993,13 +993,13 @@ class period(title,description):
     def schedule(self, intYear, intMonth, intDay):
 
         """  """
-        
+
         d = date(intYear, intMonth, intDay)
-        
+
         for c in self.child:
             c.schedule(d.year, d.month, d.day)
             d += timedelta(days=c.getPeriod())
-                    
+
         self.dateBegin = date(intYear, intMonth, intDay)
         self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
 
@@ -1007,7 +1007,7 @@ class period(title,description):
     def report(self, arrArg=None):
 
         """  """
-        
+
         if arrArg == None:
             arrArg = {}
         strResult = ''
@@ -1029,14 +1029,14 @@ class period(title,description):
             p = self.getPeriod()
             #strResult += "{:4} Units in {} Days = {:4.01f} Units/Week\n".format(n, p, n/p * 7.0)
             strResult += "{:4} h     in {} Days = {:4.01f} h/Week\n".format(round(sum_h), p, sum_h/p * 7.0)
-            
+
         return strResult
 
 
     def stat(self, arrArg=None):
 
         """  """
-        
+
         t = sorted(self.getTypeOfUnits())
         if arrArg == None:
             arrArg = []
@@ -1045,7 +1045,7 @@ class period(title,description):
                 for u in t:
                     a[u] = 0.0
                 arrArg.append(a)
-                
+
         strResult = self.getTitleStr() + '\n'
 
         for c in self.child:
@@ -1053,12 +1053,12 @@ class period(title,description):
 
         for u in t:
             strResult += "\t{}".format(u)
-            
+
         for m in range(12):
             strResult += "\n{}".format(m+1)
             for u in arrArg[m]:
                 strResult += "\t{:.0f}".format(arrArg[m][u])
-        
+
         return strResult
 
 
@@ -1068,7 +1068,7 @@ class period(title,description):
 
         if type(listFilename) == str:
             listFilename = [listFilename]
-            
+
         a = []
         d0 = None
         d1 = None
@@ -1118,14 +1118,14 @@ class period(title,description):
     def dup(self):
 
         """  """
-        
+
         return copy.deepcopy(self)
 
 
     def toString(self):
 
         """  """
-        
+
         strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
         for c in self.child:
             strResult += c.toString() + '\n'
@@ -1135,17 +1135,17 @@ class period(title,description):
     def toCSV(self):
 
         """  """
-        
+
         strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
         for c in self.child:
             strResult += c.toCSV() + '\n'
         return strResult
 
-    
+
     def toXML(self):
 
         """  """
-        
+
         strResult = '<node'
         if self.getNumberOfUnits() < 1:
            strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')
@@ -1162,21 +1162,21 @@ class period(title,description):
         strResult += '</node>\n'
         return strResult
 
-    
+
     def toFreeMind(self):
 
         """  """
-        
+
         strResult = '<map>\n'
         strResult += self.toXML()
         strResult += '</map>\n'
         return strResult
 
-    
+
     def toSVG(self,x= diagram_offset ,y=20):
 
         """  """
-        
+
         strResult = '<g>'
 
         if len(self.child) < 1:
@@ -1196,7 +1196,7 @@ class period(title,description):
 
         return strResult
 
-    
+
     def toSVGDiagram(self):
 
         """  """
@@ -1218,32 +1218,32 @@ class period(title,description):
         strResult += '</svg>\n'
         return strResult
 
-    
+
     def toiCalString(self):
 
         """  """
-        
+
         e = self.dateEnd + timedelta(days=1)
-        
+
         if len(self.child) < 1:
             strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;{y:04}{m:02}{d:02}\nDTEND;{ye:04}{me:02}{de:02}\nDTSTAMP;{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.getTitleStr(), y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
         else:
             strResult = ''
             for c in self.child:
                 strResult += c.toiCalString()
-                
+
         return strResult
 
-        
+
     def toVCalendar(self):
 
         """  """
-        
+
         strResult = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//{title}//  //\n".format(title=self.getTitleStr())
         for c in self.child:
             strResult += c.toiCalString()
         strResult += "END:VCALENDAR"
-        
+
         return strResult
 
 
@@ -1254,7 +1254,7 @@ class period(title,description):
 def CalendarYearPeriod(intYear):
 
     """ returns a plain calendar year period """
-    
+
     try:
         date(intYear, 2, 29)
         s = cycle(str(intYear),366)
@@ -1264,19 +1264,19 @@ def CalendarYearPeriod(intYear):
     s.schedule(intYear,1,1)
 
     return s
-  
-        
+
+
 def CalendarWeekPeriod(intYear):
 
     """ returns a calendar year containing week periods """
-    
+
     s = period(str(intYear))
 
     for w in range(1,54):
         u = 'CW' + str(w) + '/' + str(intYear)
         c = cycle(u, 7)
         s.append(c)
-        
+
     d = date(intYear,1,1)
     if d.isoweekday() > 4:
         # skip to next monday
@@ -1284,16 +1284,16 @@ def CalendarWeekPeriod(intYear):
     else:
         # skip to previous monday
         d -= timedelta(days=(d.isoweekday() - 1))
-    
+
     s.schedule(d.year,d.month,d.day)
 
     return s
-  
-        
+
+
 def CalendarMonthPeriod(intYear):
 
     """ returns a calendar year containing month periods """
-    
+
     s = period(str(intYear))
 
     for m in range(1,13):
@@ -1304,7 +1304,7 @@ def CalendarMonthPeriod(intYear):
 
         c = cycle(str(intYear) + '.' + str(m),d.days)
         s.append(c)
-        
+
     s.schedule(intYear,1,1)
 
     return s
