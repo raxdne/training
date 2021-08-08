@@ -8,7 +8,6 @@ from datetime import (
 
 from training import training
 
-
 def RegenerationGeneral():
     r = training.cycle('General Regeneration')
     r.insert(1,training.unit('30;Bicycle;1:15:00'))
@@ -202,6 +201,7 @@ def PlanSimple(strArg):
     return s
 
 
+print(training.getSettingsStr())
 
 s = PlanSimple('Season Simple')
 

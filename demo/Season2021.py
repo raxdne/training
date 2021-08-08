@@ -9,6 +9,11 @@ from datetime import (
 from training import training
 
 
+training.colors = {'W': '#ff5555', 'B': '#ffdddd', 'R': '#ddffdd', 'F': '#aaaaff', 'S': '#ddddff'}
+training.unit_distance = 'mi'
+#training.max_length_type = 1
+#print(training.getSettingsStr())
+
 def RegenerationGeneral():
     r = training.cycle('General Regeneration')
     r.insert(1,training.unit('30;BR;1:15:00'))
@@ -305,16 +310,13 @@ def Plan2021(strArg):
     #s.append(RegenerationGeneral())
     s.append(Running2021())
 
-    s.switchToMiles()
 
     s.schedule(2021,1,4)
-    s.setTypeChars(1)
     
     #s.resetUnits()
     #s.parseFile('Training2021.csv')
 
     return s
-
 
 
 s = Plan2021('Season 2021')
