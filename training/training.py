@@ -26,13 +26,14 @@ import copy
 import re
 
 from datetime import (
-    timedelta,
     date,
     datetime,
-    time
+    time,
+    timedelta,
+    timezone
 )
 
-#from suntime import Sun
+from suntime import Sun
 
 #
 # Module Variables
@@ -59,6 +60,14 @@ max_length_type = 10
 # distance unit 'mi' or 'km'
 unit_distance = 'km'
 
+#
+latitude = 47.8
+longitude = 9.6
+
+try:
+    sun = Sun(latitude, longitude)
+except NameError:
+    sun = None
 
 #
 #
@@ -415,21 +424,6 @@ class unit(description):
         return strResult
 
 
-    def getSunStr(self):
-
-        """  """
-
-        latitude = 47.8
-        longitude = 9.6
-
-        sun = Sun(latitude, longitude)
-
-        abd_sr = sun.get_local_sunrise_time(self.date)
-        abd_ss = sun.get_local_sunset_time(self.date)
-
-        return '{} -- {}'.format(abd_sr.strftime('%H:%M'), abd_ss.strftime('%H:%M'))
-
-
     def toString(self):
 
         """  """
@@ -512,7 +506,6 @@ class unit(description):
 
         if self.dist != None:
             strResult += '<node TEXT="' + self.getSpeedStr() + '"/>'
-            #strResult += '<node TEXT="' + self.getSunStr() + '"/>'
 
         strResult += self.__listDescriptionToXML__()
 
@@ -537,14 +530,31 @@ class unit(description):
                 strResult += 'DESCRIPTION:{}\n'.format(self.__listDescriptionToPlain__())
 
         if self.clock == None or self.duration == None:
-            strResult += "DTSTART;{y:04}{m:02}{d:02}\nDTEND;{y:04}{m:02}{d:02}\n".format(y=self.date.year, m=self.date.month, d=self.date.day)
+            strResult += self.date.strftime("DTSTART;%Y%m%d\nDTEND;%Y%m%d\n")
         else:
-            t = datetime(self.date.year, self.date.month, self.date.day, self.clock.hour, self.clock.minute)
-            strResult += "DTSTART;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=t.year, m=t.month, d=t.day, h=t.hour, min=t.minute, s=0)
-            t += self.duration
-            strResult +=   "DTEND;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=t.year, m=t.month, d=t.day, h=t.hour, min=t.minute, s=0)
+            t0 = datetime.combine(self.date, self.clock).astimezone(None)
+            t1 = t0 + self.duration
 
-        strResult += "DTSTAMP;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=dateNow.year, m=dateNow.month, d=dateNow.day, h=dateNow.hour, min=dateNow.minute, s=dateNow.second)
+            if sun != None:
+                # fix 't' according to sunrise/sunset
+                t_earliest = sun.get_local_sunrise_time(self.date) + timedelta(seconds=1800)
+                t_latest = sun.get_local_sunset_time(self.date) - timedelta(seconds=1800)
+                # TODO: use 15min steps
+                #print(self.date,' ',self.clock,' ',self.type,' ',t1,' ',t_latest,file=sys.stderr)
+
+                if t_earliest > t0:
+                    # shift start time after twilight
+                    t0 = t_earliest
+                    t1 = t0 + self.duration
+                elif t_latest < t1:
+                    # shift end time before twilight
+                    t1 = t_latest
+                    t0 = t1 - self.duration
+
+            strResult += t0.strftime("DTSTART;%Y%m%dT%H%M%S\n")
+            strResult += t1.strftime("DTEND;%Y%m%dT%H%M%S\n")
+
+        strResult += dateNow.strftime("DTSTAMP;%Y%m%dT%H%M%S\n")
 
         strResult += 'END:VEVENT\n'
 
