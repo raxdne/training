@@ -17,6 +17,8 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
+import sys
+
 import math
 
 import copy
@@ -182,7 +184,7 @@ class description:
                 elif type(c) is list:
                     strResult += self.__listDescriptionToPlain__(c)
                 else:
-                    print('fail: ',c)
+                    print('fail: ',c, file=sys.stderr)
 
         return strResult
 
@@ -206,7 +208,7 @@ class description:
                 elif type(c) is list:
                     strResult += self.__listDescriptionToXML__(c)
                 else:
-                    print('fail: ',c)
+                    print('fail: ',c, file=sys.stderr)
 
         return strResult
 
@@ -274,7 +276,18 @@ class unit(description):
             self.duration = timedelta(0)
         else:
             entry = strArg.split(':')
-            if len(entry) == 2:
+            if len(entry) == 1:
+                # nothing to split
+                entry = strArg.split('min')
+                if len(entry) == 2:
+                    self.duration = timedelta(minutes=int(entry[0]))
+                else:
+                    entry = strArg.split('h')
+                    if len(entry) == 2:
+                        self.duration = timedelta(hours=int(entry[0]))
+                    else:
+                        self.duration = timedelta(0)
+            elif len(entry) == 2:
                 self.duration = timedelta(minutes=int(entry[0]), seconds=int(entry[1]))
             elif len(entry) == 3:
                 self.duration = timedelta(hours=int(entry[0]), minutes=int(entry[1]), seconds=int(entry[2]))
@@ -317,15 +330,15 @@ class unit(description):
             else:
                 m = re.match(r"([0-9]{4})-*([0-9]{2})-*([0-9]{2})",strArg)
                 if m != None:
-                    #print("date: ",m.group(0))
+                    #print("date: ",m.group(0), file=sys.stderr)
                     self.date = date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
                 else:
                     m = re.match(r"([0-2][0-9]:[0-5]{2})",strArg)
                     if m != None:
-                        #print("time: ",m.group(1))
+                        #print("time: ",m.group(1), file=sys.stderr)
                         self.clock = time.fromisoformat("{}:00".format(m.group(1)))
                     else:
-                        print('ignoring: ',strArg)
+                        print('ignoring: ',strArg, file=sys.stderr)
 
         return True
 
@@ -424,7 +437,7 @@ class unit(description):
         if self.type == None and self.dist == None and self.date == None:
             strResult = 'EMPTY'
         elif self.type == None:
-            strResult = '{date}'.format(date=self.date.isoformat())
+            strResult = '{date} {duration}'.format(date=self.date.isoformat(), duration=self.getDurationStr())
         elif self.dist == None:
             strResult = '{date} {type} {duration}'.format(date=self.date.isoformat(), type=self.type, duration=self.getDurationStr())
         elif self.date == None:
@@ -459,12 +472,14 @@ class unit(description):
 
         strResult = ''
 
-        if self.type == None or len(self.type) < 1:
+        if self.duration == None or self.duration.total_seconds() < 60:
             strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + diagram_bar_height / 2, y + diagram_bar_height, self.__listDescriptionToPlain__(), self.toString())
         else:
             strResult += '<rect '
 
-            if self.type[0] in colors:
+            if self.type == None or len(self.type) < 1:
+                strResult += ' fill="{}"'.format('#cccccc')
+            elif self.type[0] in colors:
                 strResult += ' fill="{}"'.format(colors[self.type[0]])
 
             if self.dist == None or True:
@@ -644,6 +659,8 @@ class cycle(title,description):
         for v in self.child:
             for u in v:
                 if u.type != None and len(u.type) > 0:
+                    intResult += 1
+                elif u.duration != None and u.duration.total_seconds() > 59:
                     intResult += 1
 
         return intResult
@@ -1089,7 +1106,7 @@ class period(title,description):
         t = unit()
 
         for filename in listFilename:
-            print("* ",filename)
+            print("* ",filename, file=sys.stderr)
             with open(filename) as f:
                 content = f.read().splitlines()
             f.close()
@@ -1105,9 +1122,9 @@ class period(title,description):
                     a.append(t)
                     t = unit()
                 else:
-                    print('error: ' + l)
+                    print('error: ' + l, file=sys.stderr)
 
-        print('Report {} .. {}'.format(d0.isoformat(),d1.isoformat()))
+        print('Report {} .. {}'.format(d0.isoformat(),d1.isoformat()), file=sys.stderr)
 
         delta = d1 - d0
 
