@@ -27,6 +27,10 @@ TODO: configure Apache HTTP Server using simple CGI
 
 REQ: simple generic frontend script ✔
 
+REQ: combination of units like `20211010;25RG+5LG+KG;3:00;`
+
+REQ: different parser/generator modules for input formats
+
 ## Output Formats
 
 ### Plain text
@@ -35,7 +39,7 @@ REQ: simple generic frontend script ✔
 
 TEST: calendar output format in different applications
 
-+ Thunderbird Lightning
++ Thunderbird Lightning ✔
 
 + https://github.com/Etar-Group/Etar-Calendar
 
@@ -47,7 +51,10 @@ REQ: use Mindmap as input (`mm2py.xsl`)
 
 ### SVG
 
+REQ: accumulated Diagram for comparison of multiple periods
+
 <https://pypi.org/project/svgwrite/>
 
 <https://pypi.org/project/drawSvg/>
+
 

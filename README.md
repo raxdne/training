@@ -9,7 +9,7 @@ Copyright (C) 2021 by Alexander Tenbusch <https://github.com/raxdne/training>
 
 This is a small Python module which supports Data Management for a personal endurance Training (planning, reporting).
 
-![Demo](https://github.com/raxdne/training/blob/main/demo/Season2021.png)
+![Demo](https://github.com/raxdne/training/blob/main/demo/ThunderbirdLightning.png)
 
 Main features
 1) plans for training periods and cycles
@@ -25,9 +25,13 @@ Main features
    - vCalendar
    - SVG
 
+![Demo](https://github.com/raxdne/training/blob/main/demo/Freemind.png)
+
+![Demo](https://github.com/raxdne/training/blob/main/demo/Diagram.png)
+
 ## Installation
 
 using `pip`
 
-	python3 -m pip install -e git+https://github.com/raxdne/training.git@v1.9#egg=training
+	python3 -m pip install -e git+https://github.com/raxdne/training.git@v1.14#egg=training
 
