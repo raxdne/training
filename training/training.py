@@ -17,6 +17,8 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
+import sys
+
 import math
 
 import copy
@@ -24,13 +26,16 @@ import copy
 import re
 
 from datetime import (
-    timedelta,
     date,
     datetime,
-    time
+    time,
+    timedelta,
+    timezone
 )
 
 #from suntime import Sun
+
+from icalendar import Calendar, Event
 
 #
 # Module Variables
@@ -57,6 +62,9 @@ max_length_type = 10
 # distance unit 'mi' or 'km'
 unit_distance = 'km'
 
+#
+twilight = 1800
+sun = None
 
 #
 #
@@ -182,7 +190,7 @@ class description:
                 elif type(c) is list:
                     strResult += self.__listDescriptionToPlain__(c)
                 else:
-                    print('fail: ',c)
+                    print('fail: ',c, file=sys.stderr)
 
         return strResult
 
@@ -206,7 +214,7 @@ class description:
                 elif type(c) is list:
                     strResult += self.__listDescriptionToXML__(c)
                 else:
-                    print('fail: ',c)
+                    print('fail: ',c, file=sys.stderr)
 
         return strResult
 
@@ -274,7 +282,18 @@ class unit(description):
             self.duration = timedelta(0)
         else:
             entry = strArg.split(':')
-            if len(entry) == 2:
+            if len(entry) == 1:
+                # nothing to split
+                entry = strArg.split('min')
+                if len(entry) == 2:
+                    self.duration = timedelta(minutes=int(entry[0]))
+                else:
+                    entry = strArg.split('h')
+                    if len(entry) == 2:
+                        self.duration = timedelta(hours=int(entry[0]))
+                    else:
+                        self.duration = timedelta(0)
+            elif len(entry) == 2:
                 self.duration = timedelta(minutes=int(entry[0]), seconds=int(entry[1]))
             elif len(entry) == 3:
                 self.duration = timedelta(hours=int(entry[0]), minutes=int(entry[1]), seconds=int(entry[2]))
@@ -317,15 +336,15 @@ class unit(description):
             else:
                 m = re.match(r"([0-9]{4})-*([0-9]{2})-*([0-9]{2})",strArg)
                 if m != None:
-                    #print("date: ",m.group(0))
+                    #print("date: ",m.group(0), file=sys.stderr)
                     self.date = date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
                 else:
                     m = re.match(r"([0-2][0-9]:[0-5]{2})",strArg)
                     if m != None:
-                        #print("time: ",m.group(1))
+                        #print("time: ",m.group(1), file=sys.stderr)
                         self.clock = time.fromisoformat("{}:00".format(m.group(1)))
                     else:
-                        print('ignoring: ',strArg)
+                        print('ignoring: ',strArg, file=sys.stderr)
 
         return True
 
@@ -402,21 +421,6 @@ class unit(description):
         return strResult
 
 
-    def getSunStr(self):
-
-        """  """
-
-        latitude = 47.8
-        longitude = 9.6
-
-        sun = Sun(latitude, longitude)
-
-        abd_sr = sun.get_local_sunrise_time(self.date)
-        abd_ss = sun.get_local_sunset_time(self.date)
-
-        return '{} -- {}'.format(abd_sr.strftime('%H:%M'), abd_ss.strftime('%H:%M'))
-
-
     def toString(self):
 
         """  """
@@ -424,7 +428,7 @@ class unit(description):
         if self.type == None and self.dist == None and self.date == None:
             strResult = 'EMPTY'
         elif self.type == None:
-            strResult = '{date}'.format(date=self.date.isoformat())
+            strResult = '{date} {duration}'.format(date=self.date.isoformat(), duration=self.getDurationStr())
         elif self.dist == None:
             strResult = '{date} {type} {duration}'.format(date=self.date.isoformat(), type=self.type, duration=self.getDurationStr())
         elif self.date == None:
@@ -459,12 +463,14 @@ class unit(description):
 
         strResult = ''
 
-        if self.type == None or len(self.type) < 1:
+        if self.duration == None or self.duration.total_seconds() < 60:
             strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + diagram_bar_height / 2, y + diagram_bar_height, self.__listDescriptionToPlain__(), self.toString())
         else:
             strResult += '<rect '
 
-            if self.type[0] in colors:
+            if self.type == None or len(self.type) < 1:
+                strResult += ' fill="{}"'.format('#cccccc')
+            elif self.type[0] in colors:
                 strResult += ' fill="{}"'.format(colors[self.type[0]])
 
             if self.dist == None or True:
@@ -497,7 +503,6 @@ class unit(description):
 
         if self.dist != None:
             strResult += '<node TEXT="' + self.getSpeedStr() + '"/>'
-            #strResult += '<node TEXT="' + self.getSunStr() + '"/>'
 
         strResult += self.__listDescriptionToXML__()
 
@@ -522,18 +527,85 @@ class unit(description):
                 strResult += 'DESCRIPTION:{}\n'.format(self.__listDescriptionToPlain__())
 
         if self.clock == None or self.duration == None:
-            strResult += "DTSTART;{y:04}{m:02}{d:02}\nDTEND;{y:04}{m:02}{d:02}\n".format(y=self.date.year, m=self.date.month, d=self.date.day)
+            strResult += self.date.strftime("DTSTART;%Y%m%d\nDTEND;%Y%m%d\n")
         else:
-            t = datetime(self.date.year, self.date.month, self.date.day, self.clock.hour, self.clock.minute)
-            strResult += "DTSTART;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=t.year, m=t.month, d=t.day, h=t.hour, min=t.minute, s=0)
-            t += self.duration
-            strResult +=   "DTEND;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=t.year, m=t.month, d=t.day, h=t.hour, min=t.minute, s=0)
+            t0 = datetime.combine(self.date, self.clock).astimezone(None)
+            t1 = t0 + self.duration
 
-        strResult += "DTSTAMP;{y:04}{m:02}{d:02}T{h:02}{min:02}{s:02}\n".format(y=dateNow.year, m=dateNow.month, d=dateNow.day, h=dateNow.hour, min=dateNow.minute, s=dateNow.second)
+            if sun != None:
+                # fix 't' according to sunrise/sunset
+                t_earliest = sun.get_local_sunrise_time(self.date) + timedelta(seconds=twilight)
+                t_latest = sun.get_local_sunset_time(self.date) - timedelta(seconds=twilight)
+
+                if t_earliest > t0:
+                    # shift start time after twilight
+                    t0 = t_earliest
+                    # adjust to 15min steps
+                    t0 -= timedelta(minutes=(t0.minute % 15))
+                    t1 = t0 + self.duration
+                elif t_latest < t1:
+                    # shift end time before twilight
+                    t0 = t_latest - self.duration
+                    t0 -= timedelta(minutes=(t0.minute % 15))
+                    t1 = t0 + self.duration
+
+            #print(self.date,' ',self.clock,' ',self.type,' ',t0,' ',t_latest,file=sys.stderr)
+
+            strResult += t0.strftime("DTSTART;%Y%m%dT%H%M%S\n")
+            strResult += t1.strftime("DTEND;%Y%m%dT%H%M%S\n")
+
+        strResult += dateNow.strftime("DTSTAMP;%Y%m%dT%H%M%S\n")
 
         strResult += 'END:VEVENT\n'
 
         return strResult
+
+
+    def to_ical(self,cal):
+
+        """  """
+
+        event = Event()
+
+        if self.type == None:
+            event.add('summary', self.__listDescriptionToPlain__())
+        else:
+            event.add('summary', "{} {}".format(self.type, self.getDurationStr()))
+            if self.hasDescription():
+                event.add('description', self.__listDescriptionToPlain__())
+
+        if self.clock == None or self.duration == None:
+            event.add('dtstart', self.date)
+            event.add('dtend', self.date + timedelta(days=1))
+        else:
+            t0 = datetime.combine(self.date, self.clock).astimezone(None)
+            t1 = t0 + self.duration
+
+            if sun != None:
+                # fix 't' according to sunrise/sunset
+                t_earliest = sun.get_local_sunrise_time(self.date) + timedelta(seconds=twilight)
+                t_latest = sun.get_local_sunset_time(self.date) - timedelta(seconds=twilight)
+
+                if t_earliest > t0:
+                    # shift start time after twilight
+                    t0 = t_earliest
+                    # adjust to 15min steps
+                    t0 -= timedelta(minutes=(t0.minute % 15))
+                    t1 = t0 + self.duration
+                elif t_latest < t1:
+                    # shift end time before twilight
+                    t0 = t_latest - self.duration
+                    t0 -= timedelta(minutes=(t0.minute % 15))
+                    t1 = t0 + self.duration
+
+            #print(self.date,' ',self.clock,' ',self.type,' ',t0,' ',t_latest,file=sys.stderr)
+
+            event.add('dtstart', t0)
+            event.add('dtend', t1)
+
+        # TODO: add reminder
+        event.add('dtstamp', datetime.now().astimezone(None))
+        cal.add_component(event)
 
 
 
@@ -644,6 +716,8 @@ class cycle(title,description):
         for v in self.child:
             for u in v:
                 if u.type != None and len(u.type) > 0:
+                    intResult += 1
+                elif u.duration != None and u.duration.total_seconds() > 59:
                     intResult += 1
 
         return intResult
@@ -865,6 +939,21 @@ class cycle(title,description):
 
         return strResult
 
+
+    def to_ical(self,cal):
+
+        """  """
+
+        event = Event()
+        event.add('summary', 'Cycle: {}'.format(self.getTitleStr()))
+        event.add('dtstart', self.dateBegin)
+        event.add('dtend', self.dateEnd + timedelta(days=1))
+        event.add('dtstamp', datetime.now().astimezone(None))
+        cal.add_component(event)
+
+        for v in self.child:
+            for u in v:
+                u.to_ical(cal)
 
 
 #
@@ -1089,7 +1178,7 @@ class period(title,description):
         t = unit()
 
         for filename in listFilename:
-            print("* ",filename)
+            print("* ",filename, file=sys.stderr)
             with open(filename) as f:
                 content = f.read().splitlines()
             f.close()
@@ -1105,9 +1194,9 @@ class period(title,description):
                     a.append(t)
                     t = unit()
                 else:
-                    print('error: ' + l)
+                    print('error: ' + l, file=sys.stderr)
 
-        print('Report {} .. {}'.format(d0.isoformat(),d1.isoformat()))
+        print('Report {} .. {}'.format(d0.isoformat(),d1.isoformat()), file=sys.stderr)
 
         delta = d1 - d0
 
@@ -1249,17 +1338,38 @@ class period(title,description):
         return strResult
 
 
+    def to_ical(self,cal):
+
+        """  """
+
+        event = Event()
+        event.add('summary', 'Period: {}'.format(self.getTitleStr()))
+        event.add('dtstart', self.dateBegin)
+        event.add('dtend', self.dateEnd + timedelta(days=1))
+        event.add('dtstamp', datetime.now().astimezone(None))
+        cal.add_component(event)
+
+        for c in self.child:
+            c.to_ical(cal)
+
+
     def toVCalendar(self):
 
         """  """
 
-        strResult = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//{title}//  //\n".format(title=self.getTitleStr())
-        for c in self.child:
-            strResult += c.toiCalString()
-        strResult += "END:VCALENDAR"
-
-        return strResult
-
+        try:
+            cal = Calendar()
+            cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleStr()))
+            cal.add('version', '2.0')
+            self.to_ical(cal)
+            return cal.to_ical()
+        except NameError:
+            # TODO: remove all toiCalString() legacy code
+            strResult = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//{title}//  //\n".format(title=self.getTitleStr())
+            for c in self.child:
+                strResult += c.toiCalString()
+            strResult += "END:VCALENDAR"
+            return strResult
 
 #
 #

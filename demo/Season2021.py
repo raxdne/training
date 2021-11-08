@@ -8,6 +8,11 @@ from datetime import (
 
 from training import training
 
+from suntime import Sun
+
+# location Berlin/Germany
+training.sun = Sun(52.5,13.5)
+training.twilight = 1800
 
 training.colors = {'W': '#ff5555', 'B': '#ffdddd', 'R': '#ddffdd', 'F': '#aaaaff', 'S': '#ddddff'}
 training.unit_distance = 'mi'
@@ -28,11 +33,11 @@ def BasicsGeneral():
     p.appendDescription('Regeneration')
 
     c = training.cycle('General Endurance')
-    c.insert(1,training.unit('3.5;RB;25:00'))
-    c.insert(3,training.unit('3.5;RB;25:00'))
+    c.insert(1,training.unit('18:00;3.5;RB;25:00'))
+    c.insert(3,training.unit('18:00;3.5;RB;25:00'))
     f = c.insert(4,training.unit(';FB;25:00'))
     c.insert(5,training.unit(';FB;25:00'))
-    c.insert(6,training.unit('30;BB;02:00:00'))
+    c.insert(6,training.unit('08:00;30;BB;02:00:00'))
 
     p.append(c)
     p.append(c)
@@ -332,7 +337,7 @@ f = open('Season2021.mm', 'w')
 f.write(s.toFreeMind())
 f.close()
 
-f = open('Season2021.ics', 'w')
+f = open('Season2021.ics', 'wb')
 f.write(s.toVCalendar())
 f.close()
 
