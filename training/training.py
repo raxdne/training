@@ -33,7 +33,7 @@ from datetime import (
     timezone
 )
 
-from suntime import Sun
+#from suntime import Sun
 
 from icalendar import Calendar, Event
 
@@ -63,14 +63,8 @@ max_length_type = 10
 unit_distance = 'km'
 
 #
-latitude = 47.8
-longitude = 9.6
 twilight = 1800
-
-try:
-    sun = Sun(latitude, longitude)
-except NameError:
-    sun = None
+sun = None
 
 #
 #
@@ -582,7 +576,7 @@ class unit(description):
 
         if self.clock == None or self.duration == None:
             event.add('dtstart', self.date)
-            event.add('dtend', self.date)
+            event.add('dtend', self.date + timedelta(days=1))
         else:
             t0 = datetime.combine(self.date, self.clock).astimezone(None)
             t1 = t0 + self.duration
@@ -950,17 +944,16 @@ class cycle(title,description):
 
         """  """
 
-        if self.getNumberOfUnits() < 1:
-            event = Event()
-            event.add('summary', self.getTitleStr())
-            event.add('dtstart', self.dateBegin)
-            event.add('dtend', self.dateEnd + timedelta(days=1))
-            event.add('dtstamp', datetime.now().astimezone(None))
-            cal.add_component(event)
-        else:
-            for v in self.child:
-                for u in v:
-                    u.to_ical(cal)
+        event = Event()
+        event.add('summary', 'Cycle: {}'.format(self.getTitleStr()))
+        event.add('dtstart', self.dateBegin)
+        event.add('dtend', self.dateEnd + timedelta(days=1))
+        event.add('dtstamp', datetime.now().astimezone(None))
+        cal.add_component(event)
+
+        for v in self.child:
+            for u in v:
+                u.to_ical(cal)
 
 
 #
@@ -1350,7 +1343,7 @@ class period(title,description):
         """  """
 
         event = Event()
-        event.add('summary', 'Period {}'.format(self.getTitleStr()))
+        event.add('summary', 'Period: {}'.format(self.getTitleStr()))
         event.add('dtstart', self.dateBegin)
         event.add('dtend', self.dateEnd + timedelta(days=1))
         event.add('dtstamp', datetime.now().astimezone(None))
@@ -1371,6 +1364,7 @@ class period(title,description):
             self.to_ical(cal)
             return cal.to_ical()
         except NameError:
+            # TODO: remove all toiCalString() legacy code
             strResult = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//{title}//  //\n".format(title=self.getTitleStr())
             for c in self.child:
                 strResult += c.toiCalString()
