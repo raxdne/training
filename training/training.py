@@ -35,6 +35,8 @@ from datetime import (
 
 from suntime import Sun
 
+from icalendar import Calendar, Event
+
 #
 # Module Variables
 #
@@ -63,6 +65,7 @@ unit_distance = 'km'
 #
 latitude = 47.8
 longitude = 9.6
+twilight = 1800
 
 try:
     sun = Sun(latitude, longitude)
@@ -537,8 +540,8 @@ class unit(description):
 
             if sun != None:
                 # fix 't' according to sunrise/sunset
-                t_earliest = sun.get_local_sunrise_time(self.date) + timedelta(seconds=1800)
-                t_latest = sun.get_local_sunset_time(self.date) - timedelta(seconds=1800)
+                t_earliest = sun.get_local_sunrise_time(self.date) + timedelta(seconds=twilight)
+                t_latest = sun.get_local_sunset_time(self.date) - timedelta(seconds=twilight)
 
                 if t_earliest > t0:
                     # shift start time after twilight
@@ -562,6 +565,53 @@ class unit(description):
         strResult += 'END:VEVENT\n'
 
         return strResult
+
+
+    def to_ical(self,cal):
+
+        """  """
+
+        event = Event()
+
+        if self.type == None:
+            event.add('summary', self.__listDescriptionToPlain__())
+        else:
+            event.add('summary', "{} {}".format(self.type, self.getDurationStr()))
+            if self.hasDescription():
+                event.add('description', self.__listDescriptionToPlain__())
+
+        if self.clock == None or self.duration == None:
+            event.add('dtstart', self.date)
+            event.add('dtend', self.date)
+        else:
+            t0 = datetime.combine(self.date, self.clock).astimezone(None)
+            t1 = t0 + self.duration
+
+            if sun != None:
+                # fix 't' according to sunrise/sunset
+                t_earliest = sun.get_local_sunrise_time(self.date) + timedelta(seconds=twilight)
+                t_latest = sun.get_local_sunset_time(self.date) - timedelta(seconds=twilight)
+
+                if t_earliest > t0:
+                    # shift start time after twilight
+                    t0 = t_earliest
+                    # adjust to 15min steps
+                    t0 -= timedelta(minutes=(t0.minute % 15))
+                    t1 = t0 + self.duration
+                elif t_latest < t1:
+                    # shift end time before twilight
+                    t0 = t_latest - self.duration
+                    t0 -= timedelta(minutes=(t0.minute % 15))
+                    t1 = t0 + self.duration
+
+            #print(self.date,' ',self.clock,' ',self.type,' ',t0,' ',t_latest,file=sys.stderr)
+
+            event.add('dtstart', t0)
+            event.add('dtend', t1)
+
+        # TODO: add reminder
+        event.add('dtstamp', datetime.now().astimezone(None))
+        cal.add_component(event)
 
 
 
@@ -895,6 +945,22 @@ class cycle(title,description):
 
         return strResult
 
+
+    def to_ical(self,cal):
+
+        """  """
+
+        if self.getNumberOfUnits() < 1:
+            event = Event()
+            event.add('summary', self.getTitleStr())
+            event.add('dtstart', self.dateBegin)
+            event.add('dtend', self.dateEnd + timedelta(days=1))
+            event.add('dtstamp', datetime.now().astimezone(None))
+            cal.add_component(event)
+        else:
+            for v in self.child:
+                for u in v:
+                    u.to_ical(cal)
 
 
 #
@@ -1279,17 +1345,37 @@ class period(title,description):
         return strResult
 
 
+    def to_ical(self,cal):
+
+        """  """
+
+        event = Event()
+        event.add('summary', 'Period {}'.format(self.getTitleStr()))
+        event.add('dtstart', self.dateBegin)
+        event.add('dtend', self.dateEnd + timedelta(days=1))
+        event.add('dtstamp', datetime.now().astimezone(None))
+        cal.add_component(event)
+
+        for c in self.child:
+            c.to_ical(cal)
+
+
     def toVCalendar(self):
 
         """  """
 
-        strResult = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//{title}//  //\n".format(title=self.getTitleStr())
-        for c in self.child:
-            strResult += c.toiCalString()
-        strResult += "END:VCALENDAR"
-
-        return strResult
-
+        try:
+            cal = Calendar()
+            cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleStr()))
+            cal.add('version', '2.0')
+            self.to_ical(cal)
+            return cal.to_ical()
+        except NameError:
+            strResult = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//{title}//  //\n".format(title=self.getTitleStr())
+            for c in self.child:
+                strResult += c.toiCalString()
+            strResult += "END:VCALENDAR"
+            return strResult
 
 #
 #

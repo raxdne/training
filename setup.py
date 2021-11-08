@@ -12,5 +12,5 @@ setup(name='training',
       url='https://github.com/raxdne/training',
       packages=['training'],
       scripts=['report.py'],
-      install_requires=['suntime'],
+      install_requires=['suntime','icalendar'],
      )
