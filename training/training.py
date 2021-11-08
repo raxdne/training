@@ -539,17 +539,20 @@ class unit(description):
                 # fix 't' according to sunrise/sunset
                 t_earliest = sun.get_local_sunrise_time(self.date) + timedelta(seconds=1800)
                 t_latest = sun.get_local_sunset_time(self.date) - timedelta(seconds=1800)
-                # TODO: use 15min steps
-                #print(self.date,' ',self.clock,' ',self.type,' ',t1,' ',t_latest,file=sys.stderr)
 
                 if t_earliest > t0:
                     # shift start time after twilight
                     t0 = t_earliest
+                    # adjust to 15min steps
+                    t0 -= timedelta(minutes=(t0.minute % 15))
                     t1 = t0 + self.duration
                 elif t_latest < t1:
                     # shift end time before twilight
-                    t1 = t_latest
-                    t0 = t1 - self.duration
+                    t0 = t_latest - self.duration
+                    t0 -= timedelta(minutes=(t0.minute % 15))
+                    t1 = t0 + self.duration
+
+            #print(self.date,' ',self.clock,' ',self.type,' ',t0,' ',t_latest,file=sys.stderr)
 
             strResult += t0.strftime("DTSTART;%Y%m%dT%H%M%S\n")
             strResult += t1.strftime("DTEND;%Y%m%dT%H%M%S\n")
