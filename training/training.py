@@ -33,7 +33,7 @@ from datetime import (
     timezone
 )
 
-#from suntime import Sun
+from suntime import Sun
 
 from icalendar import Calendar, Event
 
@@ -286,11 +286,11 @@ class unit(description):
                 # nothing to split
                 entry = strArg.split('min')
                 if len(entry) == 2:
-                    self.duration = timedelta(minutes=int(entry[0]))
+                    self.duration = timedelta(minutes=float(entry[0]))
                 else:
                     entry = strArg.split('h')
                     if len(entry) == 2:
-                        self.duration = timedelta(hours=int(entry[0]))
+                        self.duration = timedelta(hours=float(entry[0]))
                     else:
                         self.duration = timedelta(0)
             elif len(entry) == 2:
