@@ -479,7 +479,7 @@ class unit(description):
             else:
                 bar_width = self.dist * diagram_scale_dist
 
-            strResult += ' height="{}px" stroke="black" stroke-width=".5" width="{:.0f}px" x="{}" y="{}"'.format(diagram_bar_height, bar_width, x, y)
+            strResult += ' height="{}" stroke="black" stroke-width=".5" width="{:.0f}" x="{}" y="{}"'.format(diagram_bar_height, bar_width, x, y)
             strResult += '>'
 
             strResult += '<title>{}: {}</title>'.format(self.toString(), self.__listDescriptionToPlain__())
@@ -873,9 +873,9 @@ class cycle(title,description):
                 strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+diagram_bar_height)
 
                 if d.month == t.month and d.day == t.day:
-                    strResult += '<rect fill="{}" x="{}" y="{}" height="{}px" width="{}px"/>\n'.format('#ffaaaa',x,y-1,diagram_bar_height+2,diagram_width - diagram_offset)
+                    strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format('#ffaaaa',x,y-1,diagram_bar_height+2,diagram_width - diagram_offset)
                 elif d.isoweekday() == 6 or d.isoweekday() == 7:
-                    strResult += '<rect fill="{}" x="{}" y="{}" height="{}px" width="{}px"/>\n'.format('#eeeeee',x,y-1,diagram_bar_height+2,diagram_width - diagram_offset)
+                    strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format('#eeeeee',x,y-1,diagram_bar_height+2,diagram_width - diagram_offset)
                 d += timedelta(days=1)
 
                 x_i = x
@@ -894,6 +894,25 @@ class cycle(title,description):
 
                 y += diagram_bar_height * 2
 
+        strResult += '</g>'
+
+        return strResult
+
+
+    def toSVGGantt(self,dateBase,y=0):
+
+        """  """
+    
+        strResult = '<g>'
+
+        l = self.dateEnd - self.dateBegin
+        x_i = (self.dateBegin - dateBase).days * 2
+
+        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format('#ffaaaa', x_i, y, diagram_bar_height*2, (l.days + 1) * 2)
+        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + self.__listDescriptionToPlain__())
+        strResult += '</rect>'
+
+        #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i,y,self.getTitleStr())
         strResult += '</g>'
 
         return strResult
@@ -1305,7 +1324,7 @@ class period(title,description):
         """  """
 
         diagram_height = self.getPeriod() * (diagram_bar_height * 2) + 100
-        strResult = '<svg baseProfile="full" height="{}px" version="1.1" width="{}px" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, diagram_width)
+        strResult = '<svg baseProfile="full" height="{}" version="1.1" width="{}" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, diagram_width)
 
         strResult += '<style type="text/css">svg { font-family: ' + font_family + '; font-size: ' + str(font_size) + 'pt; }</style>'
 
@@ -1318,6 +1337,69 @@ class period(title,description):
 
         strResult += self.toSVG()
         #strResult += '</g>'
+        strResult += '</svg>\n'
+        return strResult
+
+
+    def toSVGGantt(self,dateBase,y=0):
+
+        """  """
+
+        l = self.dateEnd - self.dateBegin
+        x_i = (self.dateBegin - dateBase).days * 2
+
+        strResult = '<g>'
+
+        strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format('#aaaaff', x_i, y, diagram_bar_height*2, (l.days + 1) * 2)
+        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + self.__listDescriptionToPlain__())
+        strResult += '</rect>'
+        strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 10,self.getTitleStr())
+
+        y_i = y + diagram_bar_height * 3
+        for c in self.child:
+            strResult += c.toSVGGantt(dateBase,y_i)
+            #if type(c) is period:
+            y_i += diagram_bar_height * 3
+
+        strResult += '<line stroke-dasharray="4" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x_i + (l.days + 1) * 2, y, x_i + (l.days + 1) * 2, y_i)
+        
+        strResult += '</g>'
+
+        return strResult
+
+
+    def toSVGGanttChart(self):
+
+        """ Gantt chart of periods and cycles """
+
+        d_0 = self.child[0].dateBegin
+        d_1 = self.child[len(self.child) - 1].dateEnd
+
+        diagram_height = 30 * (diagram_bar_height * 2) + 100
+        diagram_width = ((d_1 - d_0).days) * 2 + 100
+        
+        strResult = '<svg baseProfile="full" height="{}" version="1.1" width="{}" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, diagram_width)
+
+        strResult += '<style type="text/css">svg { font-family: ' + font_family + '; font-size: ' + str(font_size) + 'pt; }</style>'
+
+        strResult += '<g transform="translate(10,10)">'
+
+        strResult += '<g>'
+
+        # for i in range(1,13):
+        #     d_i = date(d_0.year,i,1)
+        #     w = ((d_i - d_0).days + 1) * 2
+        #     strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 20, w, diagram_height)
+        # d_i = date(2022,1,1)
+        # w = ((d_i - d_0).days + 1) * 2
+        # strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 20, w, diagram_height)
+
+        w = ((date.today() - d_0).days + 1) * 2
+        strResult += '<line stroke="red" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 0, w, diagram_height)
+        strResult += '</g>'
+
+        strResult += self.toSVGGantt(d_0)
+        strResult += '</g>'
         strResult += '</svg>\n'
         return strResult
 
