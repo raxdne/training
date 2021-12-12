@@ -529,7 +529,7 @@ class unit(description):
         if self.clock == None or self.duration == None:
             strResult += self.date.strftime("DTSTART;%Y%m%d\nDTEND;%Y%m%d\n")
         else:
-            t0 = datetime.combine(self.date, self.clock).astimezone(None)
+            t0 = datetime.combine(self.date, self.clock).astimezone(tz=LOCAL)
             t1 = t0 + self.duration
 
             if sun != None:
