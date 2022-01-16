@@ -874,6 +874,8 @@ class cycle(title,description):
 
                 if d.month == t.month and d.day == t.day:
                     strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format('#ffaaaa',x,y-1,diagram_bar_height+2,diagram_width - diagram_offset)
+                    if d.year == t.year:
+                        strResult +=  '<foreignObject x="{}" y="{}" height="{}" width="{}"><a xmlns="http://www.w3.org/1999/xhtml" name="today"/></foreignObject>\n'.format(x,y-1,diagram_bar_height+2,diagram_width - diagram_offset)
                 elif d.isoweekday() == 6 or d.isoweekday() == 7:
                     strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format('#eeeeee',x,y-1,diagram_bar_height+2,diagram_width - diagram_offset)
                 d += timedelta(days=1)
