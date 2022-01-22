@@ -727,6 +727,19 @@ class cycle(title,description):
         return intResult
 
 
+    def getDurationOfUnits(self):
+
+        """ in minutes """
+
+        intResult = 0
+        for v in self.child:
+            for u in v:
+                if u.type != None and len(u.type) > 0 and u.duration != None and u.duration.total_seconds() > 59:
+                    intResult += u.duration.total_seconds()
+
+        return intResult / 60
+
+
     def getTypeOfUnits(self,arrArg=None):
 
         """  """
@@ -865,7 +878,7 @@ class cycle(title,description):
 
         strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+diagram_width,y)
 
-        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
+        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ')
 
         if len(self.child) < 1:
             pass
@@ -915,7 +928,18 @@ class cycle(title,description):
         x_i = (self.dateBegin - dateBase).days * 2
 
         strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format('#ffaaaa', x_i, y, diagram_bar_height*2, (l.days + 1) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + self.__listDescriptionToPlain__())
+        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToPlain__())
+        strResult += '</rect>'
+
+        # add a bar for training hours
+        base = 30 * (diagram_bar_height * 2) + 100
+
+        #n = self.getNumberOfUnits()
+        n = round(self.getDurationOfUnits() / (l.days + 1))
+        h = n
+        
+        strResult += '<rect opacity=".75" stroke="green" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format('#aaffaa', x_i, base - h - 10, h, (l.days + 1) * 2)
+        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToPlain__() + ' ' + str(n) + ' min/d' )
         strResult += '</rect>'
 
         #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i,y,self.getTitleStr())
@@ -1357,7 +1381,7 @@ class period(title,description):
         strResult = '<g>'
 
         strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format('#aaaaff', x_i, y, diagram_bar_height*2, (l.days + 1) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + self.__listDescriptionToPlain__())
+        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToPlain__())
         strResult += '</rect>'
         strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 10,self.getTitleStr())
 
@@ -1404,6 +1428,9 @@ class period(title,description):
         strResult += '<line stroke="red" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 0, w, diagram_height)
         strResult += '</g>'
 
+        for i in [0,30,45,60]:
+            strResult += '<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0, diagram_height - 10 - i, diagram_width, diagram_height - 10 - i)
+            
         strResult += self.toSVGGantt(d_0)
         strResult += '</g>'
         strResult += '</svg>\n'
