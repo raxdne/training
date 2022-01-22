@@ -676,7 +676,7 @@ class cycle(title,description):
         return objResult
 
 
-    def insertByDate(self,objUnit):
+    def insertByDate(self,objUnit,flagReplace=False):
 
         """  """
 
@@ -686,7 +686,11 @@ class cycle(title,description):
             delta = objUnit.date - self.dateBegin
             if delta.days > -1 and objUnit.date <= self.dateEnd:
                 objResult = objUnit.dup()
-                self.child[delta.days].append(objResult)
+                if flagReplace:
+                    # delete exisiting
+                    self.child[delta.days] = [objResult]
+                else:
+                    self.child[delta.days].append(objResult)
 
         return objResult
 
@@ -1059,7 +1063,7 @@ class period(title,description):
         self.child.append(c)
 
 
-    def insertByDate(self,objUnit):
+    def insertByDate(self,objUnit,flagReplace=False):
 
         """  """
 
@@ -1076,9 +1080,9 @@ class period(title,description):
                     objResult = c.insertByDate(objUnit)
                     if objResult != None:
                         self.append(c)
-            else:        
+            else:
                 for c in self.child:
-                    objResult = c.insertByDate(objUnit)
+                    objResult = c.insertByDate(objUnit,flagReplace)
                     if objResult != None:
                         break
 
