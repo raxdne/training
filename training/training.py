@@ -931,14 +931,14 @@ class cycle(title,description):
         strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToPlain__())
         strResult += '</rect>'
 
-        # add a bar for training hours
-        base = 30 * (diagram_bar_height * 2) + 100
+        # TODO: make training.diagram_height configurable
+        diagram_height = 40 * (diagram_bar_height * 2) + 100
 
         #n = self.getNumberOfUnits()
         n = round(self.getDurationOfUnits() / (l.days + 1))
         h = n
         
-        strResult += '<rect opacity=".75" stroke="green" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format('#aaffaa', x_i, base - h - 10, h, (l.days + 1) * 2)
+        strResult += '<rect opacity=".75" stroke="green" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format('#aaffaa', x_i, diagram_height - h - 10, h, (l.days + 1) * 2)
         strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToPlain__() + ' ' + str(n) + ' min/d' )
         strResult += '</rect>'
 
@@ -1405,7 +1405,7 @@ class period(title,description):
         d_0 = self.child[0].dateBegin
         d_1 = self.child[len(self.child) - 1].dateEnd
 
-        diagram_height = 30 * (diagram_bar_height * 2) + 100
+        diagram_height = 40 * (diagram_bar_height * 2) + 100
         diagram_width = ((d_1 - d_0).days) * 2 + 100
         
         strResult = '<svg baseProfile="full" height="{}" version="1.1" width="{}" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, diagram_width)
@@ -1428,7 +1428,7 @@ class period(title,description):
         strResult += '<line stroke="red" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 0, w, diagram_height)
         strResult += '</g>'
 
-        for i in [0,30,45,60]:
+        for i in [0,30,45,60,90]:
             strResult += '<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0, diagram_height - 10 - i, diagram_width, diagram_height - 10 - i)
             
         strResult += self.toSVGGantt(d_0)
@@ -1457,12 +1457,12 @@ class period(title,description):
 
         """  """
 
-        event = Event()
-        event.add('summary', 'Period: {}'.format(self.getTitleStr()))
-        event.add('dtstart', self.dateBegin)
-        event.add('dtend', self.dateEnd + timedelta(days=1))
-        event.add('dtstamp', datetime.now().astimezone(None))
-        cal.add_component(event)
+        #event = Event()
+        #event.add('summary', 'Period: {}'.format(self.getTitleStr()))
+        #event.add('dtstart', self.dateBegin)
+        #event.add('dtend', self.dateEnd + timedelta(days=1))
+        #event.add('dtstamp', datetime.now().astimezone(None))
+        #cal.add_component(event)
 
         for c in self.child:
             c.to_ical(cal)
