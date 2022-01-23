@@ -934,12 +934,21 @@ class cycle(title,description):
         # TODO: make training.diagram_height configurable
         diagram_height = 40 * (diagram_bar_height * 2) + 100
 
-        #n = self.getNumberOfUnits()
-        n = round(self.getDurationOfUnits() / (l.days + 1))
-        h = n
-        
-        strResult += '<rect opacity=".75" stroke="green" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format('#aaffaa', x_i, diagram_height - h - 10, h, (l.days + 1) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToPlain__() + ' ' + str(n) + ' min/d' )
+        h = round(self.getDurationOfUnits() / (l.days + 1))
+
+        if h > 20:
+            scolor = 'green'
+            color = '#aaffaa'
+        elif h > 4:
+            scolor = 'red'
+            color = '#ffaaaa'
+        else:
+            h = 2
+            scolor = 'red'
+            color = 'red'
+            
+        strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, diagram_height - h - 10, h, (l.days + 1) * 2 - 2)
+        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToPlain__() + ' ' + str(h) + ' min/d' )
         strResult += '</rect>'
 
         #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i,y,self.getTitleStr())
@@ -1416,13 +1425,23 @@ class period(title,description):
 
         strResult += '<g>'
 
-        # for i in range(1,13):
-        #     d_i = date(d_0.year,i,1)
-        #     w = ((d_i - d_0).days + 1) * 2
-        #     strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 20, w, diagram_height)
-        # d_i = date(2022,1,1)
-        # w = ((d_i - d_0).days + 1) * 2
-        # strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 20, w, diagram_height)
+        m = round((d_1 - d_0).total_seconds() / (30 * 24 * 60 * 60))
+        for i in range(0,m+1):
+            d_i = date(d_0.year+round(i//12),i%12+1,1)
+            w = ((d_i - d_0).days + 1) * 2
+            if i % 12:
+                color = 'black'
+            else:
+                color = 'red'
+                
+            strResult += '<line stroke-dasharray="8" stroke="{}" stroke-width="1" opacity="0.25" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(color,w, 0, w, diagram_height)
+            strResult += '<title>{}</title>\n'.format(d_i.isoformat())
+            strResult += '</line>'
+            strResult += '<g transform="translate({},{})">'.format(w+8, diagram_height - 105)
+            strResult += '<g transform="rotate(-45)">'
+            strResult += '<text x="{}" y="{}">{}</text>\n'.format(0, 0, d_i.isoformat())
+            strResult += '</g>'
+            strResult += '</g>'
 
         w = ((date.today() - d_0).days + 1) * 2
         strResult += '<line stroke="red" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 0, w, diagram_height)
@@ -1499,6 +1518,40 @@ def CalendarYearPeriod(intYear):
         s = cycle(str(intYear),366)
     except ValueError:
         s = cycle(str(intYear),365)
+
+    s.schedule(intYear,1,1)
+
+    return s
+
+
+def CalendarSeasonPeriod(intYear):
+
+    """ returns a plain calendar year containing seasons periods """
+
+    s = period(str(intYear))
+
+    # begin of year
+    d_0 = date(intYear,1,1)
+
+    # begin of spring
+    d_1 = date(intYear,3,21)
+    s.append(cycle('Winter ' + str(intYear), round((d_1 - d_0).total_seconds() / (24 * 60 * 60))))
+
+    # begin of summer
+    d_2 = date(intYear,6,21)
+    s.append(cycle('Spring ' + str(intYear), round((d_2 - d_1).total_seconds() / (24 * 60 * 60))))
+
+    # begin of autumn
+    d_3 = date(intYear,9,21)
+    s.append(cycle('Summer ' + str(intYear), round((d_3 - d_2).total_seconds() / (24 * 60 * 60))))
+    
+    # begin of winter
+    d_4 = date(intYear,12,21)
+    s.append(cycle('Autumn ' + str(intYear), round((d_4 - d_3).total_seconds() / (24 * 60 * 60))))
+    
+    # begin of next year
+    d_5 = date(intYear+1,1,1)
+    s.append(cycle('Winter ' + str(intYear+1), round((d_5 - d_4).total_seconds() / (24 * 60 * 60))))
 
     s.schedule(intYear,1,1)
 
