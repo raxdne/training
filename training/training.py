@@ -35,7 +35,7 @@ from datetime import (
 
 from suntime import Sun
 
-from icalendar import Calendar, Event
+from icalendar import Calendar, Event, Alarm
 
 #
 # Module Variables
@@ -603,7 +603,12 @@ class unit(description):
             event.add('dtstart', t0)
             event.add('dtend', t1)
 
-        # TODO: add reminder
+            # TODO: add reminder
+            alarm = Alarm()
+            alarm.add('action', 'none')
+            alarm.add('trigger', t0 - timedelta(minutes=15))
+            event.add_component(alarm)
+        
         event.add('dtstamp', datetime.now().astimezone(None))
         cal.add_component(event)
 
@@ -766,6 +771,8 @@ class cycle(title,description):
             for u in v:
                 u.scale(floatScale,patternType)
 
+        return self
+
 
     def schedule(self, intYear, intMonth, intDay):
 
@@ -781,6 +788,8 @@ class cycle(title,description):
         self.dateBegin = date(intYear, intMonth, intDay)
         self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
 
+        return self
+    
 
     def stat(self, arrArg):
 
@@ -1040,6 +1049,8 @@ class period(title,description):
         self.dateBegin = date.today()
         self.dateEnd = date.today()
 
+        return self
+
 
     def resetDistances(self):
 
@@ -1048,6 +1059,8 @@ class period(title,description):
         for c in self.child:
             c.resetDistances()
 
+        return self
+
 
     def resetUnits(self):
 
@@ -1055,6 +1068,8 @@ class period(title,description):
 
         for c in self.child:
             c.resetUnits()
+
+        return self
 
 
     def appendChildDescription(self,objArg):
@@ -1095,7 +1110,9 @@ class period(title,description):
         c = objChild.dup()
         self.child.append(c)
 
+        return self
 
+    
     def insertByDate(self,objUnit,flagReplace=False):
 
         """  """
@@ -1150,6 +1167,8 @@ class period(title,description):
         for c in self.child:
             c.scale(floatScale,patternType)
 
+        return self
+
 
     def schedule(self, intYear, intMonth, intDay):
 
@@ -1163,6 +1182,8 @@ class period(title,description):
 
         self.dateBegin = date(intYear, intMonth, intDay)
         self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
+
+        return self
 
 
     def report(self, arrArg=None):
