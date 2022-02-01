@@ -643,6 +643,8 @@ class cycle(title,description):
         self.dateBegin = date.today()
         self.dateEnd = date.today()
 
+        self.color = None
+
 
     def resetDistances(self):
 
@@ -659,6 +661,14 @@ class cycle(title,description):
 
         for v in self.child:
             del v[0:]
+
+
+    def setColor(self,strColor):
+
+        """  """
+
+        if strColor != None and len(strColor) > 0:
+            self.color = strColor
 
 
     def getLength(self):
@@ -887,6 +897,9 @@ class cycle(title,description):
 
         strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+diagram_width,y)
 
+        if self.color != None:
+            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,0,y,(diagram_bar_height * 2)*len(self.child),x+diagram_width)
+
         strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ')
 
         if len(self.child) < 1:
@@ -936,7 +949,12 @@ class cycle(title,description):
         l = self.dateEnd - self.dateBegin
         x_i = (self.dateBegin - dateBase).days * 2
 
-        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format('#ffaaaa', x_i, y, diagram_bar_height*2, (l.days + 1) * 2)
+        if self.color == None:
+            color = '#ffaaaa'
+        else:
+            color = self.color
+            
+        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, diagram_bar_height*2, (l.days + 1) * 2)
         strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToPlain__())
         strResult += '</rect>'
 
@@ -945,7 +963,10 @@ class cycle(title,description):
 
         h = round(self.getDurationOfUnits() / (l.days + 1))
 
-        if h > 20:
+        if self.color != None:
+            scolor = 'red'
+            color = self.color
+        elif h > 20:
             scolor = 'green'
             color = '#aaffaa'
         elif h > 4:
@@ -972,7 +993,9 @@ class cycle(title,description):
 
         strResult = '<node'
 
-        if self.getNumberOfUnits() < 1:
+        if self.color != None:
+            strResult += ' BACKGROUND_COLOR="{}"'.format(self.color)
+        elif self.getNumberOfUnits() < 1:
             strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')
         else:
             strResult += ' FOLDED="{}"'.format('true')
