@@ -353,7 +353,7 @@ class unit(description):
 
         """  """
 
-        if floatScale > 0.1 and (patternType == None or re.match(patternType,self.type)):
+        if floatScale > 0.1 and (patternType == None or self.type == None or re.match(patternType,self.type)):
 
             if self.dist != None:
                 if self.dist < 15.0:
@@ -369,6 +369,8 @@ class unit(description):
                 else:
                     # round duration to 5:00 min
                     self.duration = timedelta(seconds=(round(s * floatScale / 300.0) * 300.0))
+
+        return self
 
 
     def dup(self):
