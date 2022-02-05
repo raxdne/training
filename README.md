@@ -36,5 +36,5 @@ Main features
 
 using `pip`
 
-	python3 -m pip install -e git+https://github.com/raxdne/training.git@v1.15#egg=training
+	python3 -m pip install -e git+https://github.com/raxdne/training.git@v1.16#egg=training
 
