@@ -329,6 +329,10 @@ s = Plan2021('Season 2021')
 #print(s.report())
 print(s.stat())
 
+f = open('Season2021Gantt.svg', 'w')
+f.write(s.toSVGGanttChart())
+f.close()
+
 f = open('Season2021.svg', 'w')
 f.write(s.toSVGDiagram())
 f.close()
@@ -347,5 +351,9 @@ f.close()
 
 f = open('Season2021.csv', 'w')
 f.write(s.toCSV())
+f.close()
+
+f = open('Season2021.html', 'w')
+f.write(s.toHtmlFile())
 f.close()
 

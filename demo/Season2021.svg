@@ -1,4 +1,4 @@
-<svg baseProfile="full" height="6276px" version="1.1" width="1075px" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink"><style type="text/css">svg { font-family: Arial; font-size: 8pt; }</style><line stroke="black" stroke-width=".5" x1="212.5" y1="20" x2="212.5" y2="6276"/>
+<svg baseProfile="full" height="6276" version="1.1" width="1075" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink"><style type="text/css">svg { font-family: Arial; font-size: 8pt; }</style><line stroke="black" stroke-width=".5" x1="212.5" y1="20" x2="212.5" y2="6276"/>
 <line stroke="black" stroke-width=".5" x1="250.0" y1="20" x2="250.0" y2="6276"/>
 <line stroke="black" stroke-width=".5" x1="325.0" y1="20" x2="325.0" y2="6276"/>
 <line stroke="black" stroke-width=".5" x1="475.0" y1="20" x2="475.0" y2="6276"/>
@@ -7,441 +7,442 @@
 <line stroke="black" stroke-width=".5" x1="925.0" y1="20" x2="925.0" y2="6276"/>
 <line stroke="black" stroke-width=".5" x1="1075.0" y1="20" x2="1075.0" y2="6276"/>
 <g><g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="20" x2="1250" y2="20"/>
-<text x="0" y="20" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-01-04 .. 2021-01-10)</tspan></text>
+<text x="0" y="20" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-01-04 .. 2021-01-10) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="24.0" x2="175" y2="32.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="40.0" x2="175" y2="48.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="40.0"><title>2021-01-05   3.5 RB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="40.0"><title>2021-01-05   3.5 RB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="56.0" x2="175" y2="64.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="72.0" x2="175" y2="80.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="72.0"><title>2021-01-07   3.5 RB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="72.0"><title>2021-01-07   3.5 RB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="88.0" x2="175" y2="96.0"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="88.0"><title>2021-01-08 FB 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="88.0"><title>2021-01-08 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="104.0" x2="175" y2="112.0"/>
-<rect fill="#eeeeee" x="175" y="103.0" height="10px" width="900px"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="104.0"><title>2021-01-09 FB 00:25:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="103.0" height="10" width="900"/>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="104.0"><title>2021-01-09 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="120.0" x2="175" y2="128.0"/>
-<rect fill="#eeeeee" x="175" y="119.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="120.0"><title>2021-01-10  30.0 BB 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="119.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="120.0"><title>2021-01-10  30.0 BB 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="132" x2="1250" y2="132"/>
-<text x="0" y="132" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-01-11 .. 2021-01-17)</tspan></text>
+<text x="0" y="132" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-01-11 .. 2021-01-17) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="136.0" x2="175" y2="144.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="152.0" x2="175" y2="160.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="152.0"><title>2021-01-12   3.5 RB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="152.0"><title>2021-01-12   3.5 RB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="168.0" x2="175" y2="176.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="184.0" x2="175" y2="192.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="184.0"><title>2021-01-14   3.5 RB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="184.0"><title>2021-01-14   3.5 RB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="200.0" x2="175" y2="208.0"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="200.0"><title>2021-01-15 FB 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="200.0"><title>2021-01-15 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="216.0" x2="175" y2="224.0"/>
-<rect fill="#eeeeee" x="175" y="215.0" height="10px" width="900px"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="216.0"><title>2021-01-16 FB 00:25:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="215.0" height="10" width="900"/>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="216.0"><title>2021-01-16 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="232.0" x2="175" y2="240.0"/>
-<rect fill="#eeeeee" x="175" y="231.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="232.0"><title>2021-01-17  30.0 BB 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="231.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="232.0"><title>2021-01-17  30.0 BB 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="244" x2="1250" y2="244"/>
-<text x="0" y="244" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-01-18 .. 2021-01-24)</tspan></text>
+<text x="0" y="244" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-01-18 .. 2021-01-24) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="248.0" x2="175" y2="256.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="264.0" x2="175" y2="272.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="264.0"><title>2021-01-19   3.5 RB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="264.0"><title>2021-01-19   3.5 RB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="280.0" x2="175" y2="288.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="296.0" x2="175" y2="304.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="296.0"><title>2021-01-21   3.5 RB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="296.0"><title>2021-01-21   3.5 RB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="312.0" x2="175" y2="320.0"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="75px" x="175" y="312.0"><title>2021-01-22 FB 00:30:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="312.0"><title>2021-01-22 FB 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="328.0" x2="175" y2="336.0"/>
-<rect fill="#eeeeee" x="175" y="327.0" height="10px" width="900px"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="75px" x="175" y="328.0"><title>2021-01-23 FB 00:30:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="327.0" height="10" width="900"/>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="328.0"><title>2021-01-23 FB 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="344.0" x2="175" y2="352.0"/>
-<rect fill="#eeeeee" x="175" y="343.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="344.0"><title>2021-01-24  30.0 BB 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="343.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="344.0"><title>2021-01-24  30.0 BB 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="356" x2="1250" y2="356"/>
-<text x="0" y="356" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-01-25 .. 2021-01-31)</tspan></text>
+<text x="0" y="356" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-01-25 .. 2021-01-31) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="360.0" x2="175" y2="368.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="376.0" x2="175" y2="384.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="376.0"><title>2021-01-26  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="376.0"><title>2021-01-26  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="392.0" x2="175" y2="400.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="408.0" x2="175" y2="416.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="408.0"><title>2021-01-28   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="408.0"><title>2021-01-28   3.5 RR 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="424.0" x2="175" y2="432.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="440.0" x2="175" y2="448.0"/>
-<rect fill="#eeeeee" x="175" y="439.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="439.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="456.0" x2="175" y2="464.0"/>
-<rect fill="#eeeeee" x="175" y="455.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="456.0"><title>2021-01-31  30.0 BR 01:15:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="455.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="456.0"><title>2021-01-31  30.0 BR 01:15:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="468" x2="1250" y2="468"/>
-<text x="0" y="468" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-02-01 .. 2021-02-07)</tspan></text>
+<text x="0" y="468" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-02-01 .. 2021-02-07) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="472.0" x2="175" y2="480.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="488.0" x2="175" y2="496.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="488.0"><title>2021-02-02   3.5 RB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="488.0"><title>2021-02-02   3.5 RB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="504.0" x2="175" y2="512.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="520.0" x2="175" y2="528.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="520.0"><title>2021-02-04   3.5 RB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="520.0"><title>2021-02-04   3.5 RB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="536.0" x2="175" y2="544.0"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="75px" x="175" y="536.0"><title>2021-02-05 FB 00:30:00: Maximum </title></rect>
+<rect fill="#ffaaaa" x="175" y="535.0" height="10" width="900"/>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="536.0"><title>2021-02-05 FB 00:30:00 Maximum:  Maximum</title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="552.0" x2="175" y2="560.0"/>
-<rect fill="#eeeeee" x="175" y="551.0" height="10px" width="900px"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="75px" x="175" y="552.0"><title>2021-02-06 FB 00:30:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="551.0" height="10" width="900"/>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="552.0"><title>2021-02-06 FB 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="568.0" x2="175" y2="576.0"/>
-<rect fill="#eeeeee" x="175" y="567.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="568.0"><title>2021-02-07  30.0 BB 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="567.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="568.0"><title>2021-02-07  30.0 BB 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="580" x2="1250" y2="580"/>
-<text x="0" y="580" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-02-08 .. 2021-02-14)</tspan></text>
+<text x="0" y="580" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-02-08 .. 2021-02-14) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="584.0" x2="175" y2="592.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="600.0" x2="175" y2="608.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="600.0"><title>2021-02-09   3.5 RB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="600.0"><title>2021-02-09   3.5 RB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="616.0" x2="175" y2="624.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="632.0" x2="175" y2="640.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="632.0"><title>2021-02-11   3.5 RB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="632.0"><title>2021-02-11   3.5 RB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="648.0" x2="175" y2="656.0"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="75px" x="175" y="648.0"><title>2021-02-12 FB 00:30:00: Maximum </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="648.0"><title>2021-02-12 FB 00:30:00 Maximum:  Maximum</title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="664.0" x2="175" y2="672.0"/>
-<rect fill="#eeeeee" x="175" y="663.0" height="10px" width="900px"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="75px" x="175" y="664.0"><title>2021-02-13 FB 00:30:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="663.0" height="10" width="900"/>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="664.0"><title>2021-02-13 FB 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="680.0" x2="175" y2="688.0"/>
-<rect fill="#eeeeee" x="175" y="679.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="680.0"><title>2021-02-14  30.0 BB 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="679.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="680.0"><title>2021-02-14  30.0 BB 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="692" x2="1250" y2="692"/>
-<text x="0" y="692" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-02-15 .. 2021-02-21)</tspan></text>
+<text x="0" y="692" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-02-15 .. 2021-02-21) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="696.0" x2="175" y2="704.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="712.0" x2="175" y2="720.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="712.0"><title>2021-02-16   3.5 RB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="712.0"><title>2021-02-16   3.5 RB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="728.0" x2="175" y2="736.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="744.0" x2="175" y2="752.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="744.0"><title>2021-02-18   3.5 RB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="744.0"><title>2021-02-18   3.5 RB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="760.0" x2="175" y2="768.0"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="75px" x="175" y="760.0"><title>2021-02-19 FB 00:30:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="760.0"><title>2021-02-19 FB 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="776.0" x2="175" y2="784.0"/>
-<rect fill="#eeeeee" x="175" y="775.0" height="10px" width="900px"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="75px" x="175" y="776.0"><title>2021-02-20 FB 00:30:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="775.0" height="10" width="900"/>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="776.0"><title>2021-02-20 FB 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="792.0" x2="175" y2="800.0"/>
-<rect fill="#eeeeee" x="175" y="791.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="792.0"><title>2021-02-21  30.0 BB 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="791.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="792.0"><title>2021-02-21  30.0 BB 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="804" x2="1250" y2="804"/>
-<text x="0" y="804" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-02-22 .. 2021-02-28)</tspan></text>
+<text x="0" y="804" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-02-22 .. 2021-02-28) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="808.0" x2="175" y2="816.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="824.0" x2="175" y2="832.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="824.0"><title>2021-02-23  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="824.0"><title>2021-02-23  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="840.0" x2="175" y2="848.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="856.0" x2="175" y2="864.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="856.0"><title>2021-02-25   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="856.0"><title>2021-02-25   3.5 RR 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="872.0" x2="175" y2="880.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="888.0" x2="175" y2="896.0"/>
-<rect fill="#eeeeee" x="175" y="887.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="887.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="904.0" x2="175" y2="912.0"/>
-<rect fill="#eeeeee" x="175" y="903.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="904.0"><title>2021-02-28  30.0 BR 01:15:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="903.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="904.0"><title>2021-02-28  30.0 BR 01:15:00: </title></rect>
 </g></g><g><g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="916" x2="1250" y2="916"/>
-<text x="0" y="916" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-03-01 .. 2021-03-07)</tspan></text>
+<text x="0" y="916" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-03-01 .. 2021-03-07) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="920.0" x2="175" y2="928.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="936.0" x2="175" y2="944.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="936.0"><title>2021-03-02  30.0 BB 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="936.0"><title>2021-03-02  30.0 BB 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="952.0" x2="175" y2="960.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="968.0" x2="175" y2="976.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="968.0"><title>2021-03-04   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="968.0"><title>2021-03-04 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="968.0"><title>2021-03-04   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="968.0"><title>2021-03-04 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="984.0" x2="175" y2="992.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1000.0" x2="175" y2="1008.0"/>
-<rect fill="#eeeeee" x="175" y="999.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="999.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1016.0" x2="175" y2="1024.0"/>
-<rect fill="#eeeeee" x="175" y="1015.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="1016.0"><title>2021-03-07  40.0 BB 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="1015.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="1016.0"><title>2021-03-07  40.0 BB 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1028" x2="1250" y2="1028"/>
-<text x="0" y="1028" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-03-08 .. 2021-03-14)</tspan></text>
+<text x="0" y="1028" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-03-08 .. 2021-03-14) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1032.0" x2="175" y2="1040.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1048.0" x2="175" y2="1056.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="1048.0"><title>2021-03-09  30.0 BB 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1048.0"><title>2021-03-09  30.0 BB 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1064.0" x2="175" y2="1072.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1080.0" x2="175" y2="1088.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="1080.0"><title>2021-03-11   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="1080.0"><title>2021-03-11 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1080.0"><title>2021-03-11   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="1080.0"><title>2021-03-11 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1096.0" x2="175" y2="1104.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1112.0" x2="175" y2="1120.0"/>
-<rect fill="#eeeeee" x="175" y="1111.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="1111.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1128.0" x2="175" y2="1136.0"/>
-<rect fill="#eeeeee" x="175" y="1127.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="1128.0"><title>2021-03-14  40.0 BB 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="1127.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="1128.0"><title>2021-03-14  40.0 BB 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1140" x2="1250" y2="1140"/>
-<text x="0" y="1140" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-03-15 .. 2021-03-21)</tspan></text>
+<text x="0" y="1140" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-03-15 .. 2021-03-21) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1144.0" x2="175" y2="1152.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1160.0" x2="175" y2="1168.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="225px" x="175" y="1160.0"><title>2021-03-16  35.0 BB 01:30:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="225" x="175" y="1160.0"><title>2021-03-16  35.0 BB 01:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1176.0" x2="175" y2="1184.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1192.0" x2="175" y2="1200.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="1192.0"><title>2021-03-18   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="1192.0"><title>2021-03-18 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1192.0"><title>2021-03-18   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="1192.0"><title>2021-03-18 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1208.0" x2="175" y2="1216.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1224.0" x2="175" y2="1232.0"/>
-<rect fill="#eeeeee" x="175" y="1223.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="1223.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1240.0" x2="175" y2="1248.0"/>
-<rect fill="#eeeeee" x="175" y="1239.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="362px" x="175" y="1240.0"><title>2021-03-21  50.0 BB 02:25:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="1239.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="362" x="175" y="1240.0"><title>2021-03-21  50.0 BB 02:25:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1252" x2="1250" y2="1252"/>
-<text x="0" y="1252" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-03-22 .. 2021-03-28)</tspan></text>
+<text x="0" y="1252" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-03-22 .. 2021-03-28) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1256.0" x2="175" y2="1264.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1272.0" x2="175" y2="1280.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="1272.0"><title>2021-03-23  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1272.0"><title>2021-03-23  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1288.0" x2="175" y2="1296.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1304.0" x2="175" y2="1312.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="1304.0"><title>2021-03-25   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1304.0"><title>2021-03-25   3.5 RR 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1320.0" x2="175" y2="1328.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1336.0" x2="175" y2="1344.0"/>
-<rect fill="#eeeeee" x="175" y="1335.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="1335.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1352.0" x2="175" y2="1360.0"/>
-<rect fill="#eeeeee" x="175" y="1351.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="1352.0"><title>2021-03-28  30.0 BR 01:15:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="1351.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1352.0"><title>2021-03-28  30.0 BR 01:15:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1364" x2="1250" y2="1364"/>
-<text x="0" y="1364" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-03-29 .. 2021-04-04)</tspan></text>
+<text x="0" y="1364" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-03-29 .. 2021-04-04) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1368.0" x2="175" y2="1376.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1384.0" x2="175" y2="1392.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="225px" x="175" y="1384.0"><title>2021-03-30  35.0 BB 01:30:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="225" x="175" y="1384.0"><title>2021-03-30  35.0 BB 01:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1400.0" x2="175" y2="1408.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1416.0" x2="175" y2="1424.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="1416.0"><title>2021-04-01   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="1416.0"><title>2021-04-01 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1416.0"><title>2021-04-01   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="1416.0"><title>2021-04-01 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1432.0" x2="175" y2="1440.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1448.0" x2="175" y2="1456.0"/>
-<rect fill="#eeeeee" x="175" y="1447.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="1447.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1464.0" x2="175" y2="1472.0"/>
-<rect fill="#eeeeee" x="175" y="1463.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="362px" x="175" y="1464.0"><title>2021-04-04  50.0 BB 02:25:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="1463.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="362" x="175" y="1464.0"><title>2021-04-04  50.0 BB 02:25:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1476" x2="1250" y2="1476"/>
-<text x="0" y="1476" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-04-05 .. 2021-04-11)</tspan></text>
+<text x="0" y="1476" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-04-05 .. 2021-04-11) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1480.0" x2="175" y2="1488.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1496.0" x2="175" y2="1504.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="225px" x="175" y="1496.0"><title>2021-04-06  35.0 BB 01:30:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="225" x="175" y="1496.0"><title>2021-04-06  35.0 BB 01:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1512.0" x2="175" y2="1520.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1528.0" x2="175" y2="1536.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="1528.0"><title>2021-04-08   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="1528.0"><title>2021-04-08 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1528.0"><title>2021-04-08   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="1528.0"><title>2021-04-08 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1544.0" x2="175" y2="1552.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1560.0" x2="175" y2="1568.0"/>
-<rect fill="#eeeeee" x="175" y="1559.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="1559.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1576.0" x2="175" y2="1584.0"/>
-<rect fill="#eeeeee" x="175" y="1575.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="362px" x="175" y="1576.0"><title>2021-04-11  50.0 BB 02:25:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="1575.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="362" x="175" y="1576.0"><title>2021-04-11  50.0 BB 02:25:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1588" x2="1250" y2="1588"/>
-<text x="0" y="1588" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-04-12 .. 2021-04-18)</tspan></text>
+<text x="0" y="1588" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-04-12 .. 2021-04-18) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1592.0" x2="175" y2="1600.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1608.0" x2="175" y2="1616.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="225px" x="175" y="1608.0"><title>2021-04-13  35.0 BB 01:30:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="225" x="175" y="1608.0"><title>2021-04-13  35.0 BB 01:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1624.0" x2="175" y2="1632.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1640.0" x2="175" y2="1648.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="1640.0"><title>2021-04-15   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="1640.0"><title>2021-04-15 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1640.0"><title>2021-04-15   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="1640.0"><title>2021-04-15 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1656.0" x2="175" y2="1664.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1672.0" x2="175" y2="1680.0"/>
-<rect fill="#eeeeee" x="175" y="1671.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="1671.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1688.0" x2="175" y2="1696.0"/>
-<rect fill="#eeeeee" x="175" y="1687.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="362px" x="175" y="1688.0"><title>2021-04-18  50.0 BB 02:25:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="1687.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="362" x="175" y="1688.0"><title>2021-04-18  50.0 BB 02:25:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1700" x2="1250" y2="1700"/>
-<text x="0" y="1700" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-04-19 .. 2021-04-25)</tspan></text>
+<text x="0" y="1700" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-04-19 .. 2021-04-25) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1704.0" x2="175" y2="1712.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1720.0" x2="175" y2="1728.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="1720.0"><title>2021-04-20  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1720.0"><title>2021-04-20  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1736.0" x2="175" y2="1744.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1752.0" x2="175" y2="1760.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="1752.0"><title>2021-04-22   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1752.0"><title>2021-04-22   3.5 RR 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1768.0" x2="175" y2="1776.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1784.0" x2="175" y2="1792.0"/>
-<rect fill="#eeeeee" x="175" y="1783.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="1783.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1800.0" x2="175" y2="1808.0"/>
-<rect fill="#eeeeee" x="175" y="1799.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="1800.0"><title>2021-04-25  30.0 BR 01:15:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="1799.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1800.0"><title>2021-04-25  30.0 BR 01:15:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1812" x2="1250" y2="1812"/>
-<text x="0" y="1812" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-04-26 .. 2021-05-02)</tspan></text>
+<text x="0" y="1812" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-04-26 .. 2021-05-02) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1816.0" x2="175" y2="1824.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1832.0" x2="175" y2="1840.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="275px" x="175" y="1832.0"><title>2021-04-27  40.0 BB 01:50:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="275" x="175" y="1832.0"><title>2021-04-27  40.0 BB 01:50:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1848.0" x2="175" y2="1856.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1864.0" x2="175" y2="1872.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="75px" x="175" y="1864.0"><title>2021-04-29   4.2 RR 00:30:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="75px" x="250.0" y="1864.0"><title>2021-04-29 FB 00:30:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="1864.0"><title>2021-04-29   4.2 RR 00:30:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="75" x="250.0" y="1864.0"><title>2021-04-29 FB 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1880.0" x2="175" y2="1888.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1896.0" x2="175" y2="1904.0"/>
-<rect fill="#eeeeee" x="175" y="1895.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="1895.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1912.0" x2="175" y2="1920.0"/>
-<rect fill="#eeeeee" x="175" y="1911.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="437px" x="175" y="1912.0"><title>2021-05-02  60.0 BB 02:55:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="1911.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="437" x="175" y="1912.0"><title>2021-05-02  60.0 BB 02:55:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1924" x2="1250" y2="1924"/>
-<text x="0" y="1924" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-05-03 .. 2021-05-09)</tspan></text>
+<text x="0" y="1924" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle</tspan><tspan x="10" dy="1.5em">(2021-05-03 .. 2021-05-09) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1928.0" x2="175" y2="1936.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1944.0" x2="175" y2="1952.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="275px" x="175" y="1944.0"><title>2021-05-04  40.0 BB 01:50:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="275" x="175" y="1944.0"><title>2021-05-04  40.0 BB 01:50:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1960.0" x2="175" y2="1968.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1976.0" x2="175" y2="1984.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="75px" x="175" y="1976.0"><title>2021-05-06   4.2 RR 00:30:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="75px" x="250.0" y="1976.0"><title>2021-05-06 FB 00:30:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="1976.0"><title>2021-05-06   4.2 RR 00:30:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="75" x="250.0" y="1976.0"><title>2021-05-06 FB 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1992.0" x2="175" y2="2000.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2008.0" x2="175" y2="2016.0"/>
-<rect fill="#eeeeee" x="175" y="2007.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="2007.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2024.0" x2="175" y2="2032.0"/>
-<rect fill="#eeeeee" x="175" y="2023.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="437px" x="175" y="2024.0"><title>2021-05-09  60.0 BB 02:55:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="2023.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="437" x="175" y="2024.0"><title>2021-05-09  60.0 BB 02:55:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2036" x2="1250" y2="2036"/>
-<text x="0" y="2036" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-05-10 .. 2021-05-16)</tspan></text>
+<text x="0" y="2036" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-05-10 .. 2021-05-16) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2040.0" x2="175" y2="2048.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2056.0" x2="175" y2="2064.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="2056.0"><title>2021-05-11  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2056.0"><title>2021-05-11  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2072.0" x2="175" y2="2080.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2088.0" x2="175" y2="2096.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="2088.0"><title>2021-05-13   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2088.0"><title>2021-05-13   3.5 RR 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2104.0" x2="175" y2="2112.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2120.0" x2="175" y2="2128.0"/>
-<rect fill="#eeeeee" x="175" y="2119.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="2119.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2136.0" x2="175" y2="2144.0"/>
-<rect fill="#eeeeee" x="175" y="2135.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="2136.0"><title>2021-05-16  30.0 BR 01:15:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="2135.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2136.0"><title>2021-05-16  30.0 BR 01:15:00: </title></rect>
 </g></g><g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2148" x2="1250" y2="2148"/>
-<text x="0" y="2148" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-05-17 .. 2021-05-23)</tspan></text>
+<text x="0" y="2148" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-05-17 .. 2021-05-23) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2152.0" x2="175" y2="2160.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2168.0" x2="175" y2="2176.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="2168.0"><title>2021-05-18  30.0 BI 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2168.0"><title>2021-05-18  30.0 BI 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2184.0" x2="175" y2="2192.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2200.0" x2="175" y2="2208.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="2200.0"><title>2021-05-20   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="2200.0"><title>2021-05-20 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2200.0"><title>2021-05-20   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="2200.0"><title>2021-05-20 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2216.0" x2="175" y2="2224.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2232.0" x2="175" y2="2240.0"/>
-<rect fill="#eeeeee" x="175" y="2231.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="2231.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2248.0" x2="175" y2="2256.0"/>
-<rect fill="#eeeeee" x="175" y="2247.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="2248.0"><title>2021-05-23  40.0 BI 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="2247.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="2248.0"><title>2021-05-23  40.0 BI 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2260" x2="1250" y2="2260"/>
-<text x="0" y="2260" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-05-24 .. 2021-05-30)</tspan></text>
+<text x="0" y="2260" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-05-24 .. 2021-05-30) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2264.0" x2="175" y2="2272.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2280.0" x2="175" y2="2288.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="2280.0"><title>2021-05-25  30.0 BI 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2280.0"><title>2021-05-25  30.0 BI 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2296.0" x2="175" y2="2304.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2312.0" x2="175" y2="2320.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="2312.0"><title>2021-05-27   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="2312.0"><title>2021-05-27 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2312.0"><title>2021-05-27   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="2312.0"><title>2021-05-27 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2328.0" x2="175" y2="2336.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2344.0" x2="175" y2="2352.0"/>
-<rect fill="#eeeeee" x="175" y="2343.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="2343.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2360.0" x2="175" y2="2368.0"/>
-<rect fill="#eeeeee" x="175" y="2359.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="2360.0"><title>2021-05-30  40.0 BI 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="2359.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="2360.0"><title>2021-05-30  40.0 BI 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2372" x2="1250" y2="2372"/>
-<text x="0" y="2372" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-05-31 .. 2021-06-06)</tspan></text>
+<text x="0" y="2372" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-05-31 .. 2021-06-06) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2376.0" x2="175" y2="2384.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2392.0" x2="175" y2="2400.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="2392.0"><title>2021-06-01  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2392.0"><title>2021-06-01  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2408.0" x2="175" y2="2416.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2424.0" x2="175" y2="2432.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="2424.0"><title>2021-06-03   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2424.0"><title>2021-06-03   3.5 RR 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2440.0" x2="175" y2="2448.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2456.0" x2="175" y2="2464.0"/>
-<rect fill="#eeeeee" x="175" y="2455.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="2455.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2472.0" x2="175" y2="2480.0"/>
-<rect fill="#eeeeee" x="175" y="2471.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="2472.0"><title>2021-06-06  30.0 BR 01:15:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="2471.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2472.0"><title>2021-06-06  30.0 BR 01:15:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2484" x2="1250" y2="2484"/>
-<text x="0" y="2484" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-06-07 .. 2021-06-13)</tspan></text>
+<text x="0" y="2484" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-06-07 .. 2021-06-13) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2488.0" x2="175" y2="2496.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2504.0" x2="175" y2="2512.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="2504.0"><title>2021-06-08  30.0 BI 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2504.0"><title>2021-06-08  30.0 BI 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2520.0" x2="175" y2="2528.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2536.0" x2="175" y2="2544.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="2536.0"><title>2021-06-10   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="2536.0"><title>2021-06-10 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2536.0"><title>2021-06-10   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="2536.0"><title>2021-06-10 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2552.0" x2="175" y2="2560.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2568.0" x2="175" y2="2576.0"/>
-<rect fill="#eeeeee" x="175" y="2567.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="2567.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2584.0" x2="175" y2="2592.0"/>
-<rect fill="#eeeeee" x="175" y="2583.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="2584.0"><title>2021-06-13  40.0 BI 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="2583.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="2584.0"><title>2021-06-13  40.0 BI 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2596" x2="1250" y2="2596"/>
-<text x="0" y="2596" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-06-14 .. 2021-06-20)</tspan></text>
+<text x="0" y="2596" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-06-14 .. 2021-06-20) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2600.0" x2="175" y2="2608.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2616.0" x2="175" y2="2624.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="2616.0"><title>2021-06-15  30.0 BI 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2616.0"><title>2021-06-15  30.0 BI 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2632.0" x2="175" y2="2640.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2648.0" x2="175" y2="2656.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="2648.0"><title>2021-06-17   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="2648.0"><title>2021-06-17 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2648.0"><title>2021-06-17   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="2648.0"><title>2021-06-17 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2664.0" x2="175" y2="2672.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2680.0" x2="175" y2="2688.0"/>
-<rect fill="#eeeeee" x="175" y="2679.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="2679.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2696.0" x2="175" y2="2704.0"/>
-<rect fill="#eeeeee" x="175" y="2695.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="2696.0"><title>2021-06-20  40.0 BI 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="2695.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="2696.0"><title>2021-06-20  40.0 BI 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2708" x2="1250" y2="2708"/>
-<text x="0" y="2708" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-06-21 .. 2021-06-27)</tspan></text>
+<text x="0" y="2708" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-06-21 .. 2021-06-27) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2712.0" x2="175" y2="2720.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2728.0" x2="175" y2="2736.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="2728.0"><title>2021-06-22  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2728.0"><title>2021-06-22  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2744.0" x2="175" y2="2752.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2760.0" x2="175" y2="2768.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="2760.0"><title>2021-06-24   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2760.0"><title>2021-06-24   3.5 RR 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2776.0" x2="175" y2="2784.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2792.0" x2="175" y2="2800.0"/>
-<rect fill="#eeeeee" x="175" y="2791.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="2791.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2808.0" x2="175" y2="2816.0"/>
-<rect fill="#eeeeee" x="175" y="2807.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="2808.0"><title>2021-06-27  30.0 BR 01:15:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="2807.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2808.0"><title>2021-06-27  30.0 BR 01:15:00: </title></rect>
 </g></g><g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2820" x2="1250" y2="2820"/>
-<text x="0" y="2820" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Force</tspan><tspan x="10" dy="1.5em">(2021-06-28 .. 2021-07-04)</tspan></text>
+<text x="0" y="2820" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Force</tspan><tspan x="10" dy="1.5em">(2021-06-28 .. 2021-07-04) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2824.0" x2="175" y2="2832.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2840.0" x2="175" y2="2848.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="2840.0"><title>2021-06-29  30.0 BI 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2840.0"><title>2021-06-29  30.0 BI 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2856.0" x2="175" y2="2864.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2872.0" x2="175" y2="2880.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="2872.0"><title>2021-07-01   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="2872.0"><title>2021-07-01 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2872.0"><title>2021-07-01   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="2872.0"><title>2021-07-01 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2888.0" x2="175" y2="2896.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2904.0" x2="175" y2="2912.0"/>
-<rect fill="#eeeeee" x="175" y="2903.0" height="10px" width="900px"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="2904.0"><title>2021-07-03 FB 00:25:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="2903.0" height="10" width="900"/>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2904.0"><title>2021-07-03 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2920.0" x2="175" y2="2928.0"/>
-<rect fill="#eeeeee" x="175" y="2919.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="2920.0"><title>2021-07-04  40.0 BI 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="2919.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="2920.0"><title>2021-07-04  40.0 BI 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2932" x2="1250" y2="2932"/>
-<text x="0" y="2932" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Force</tspan><tspan x="10" dy="1.5em">(2021-07-05 .. 2021-07-11)</tspan></text>
+<text x="0" y="2932" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Force</tspan><tspan x="10" dy="1.5em">(2021-07-05 .. 2021-07-11) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2936.0" x2="175" y2="2944.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2952.0" x2="175" y2="2960.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="2952.0"><title>2021-07-06  30.0 BI 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2952.0"><title>2021-07-06  30.0 BI 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2968.0" x2="175" y2="2976.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2984.0" x2="175" y2="2992.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="2984.0"><title>2021-07-08   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="2984.0"><title>2021-07-08 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2984.0"><title>2021-07-08   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="2984.0"><title>2021-07-08 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3000.0" x2="175" y2="3008.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3016.0" x2="175" y2="3024.0"/>
-<rect fill="#eeeeee" x="175" y="3015.0" height="10px" width="900px"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="3016.0"><title>2021-07-10 FB 00:25:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="3015.0" height="10" width="900"/>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="3016.0"><title>2021-07-10 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3032.0" x2="175" y2="3040.0"/>
-<rect fill="#eeeeee" x="175" y="3031.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="3032.0"><title>2021-07-11  40.0 BI 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="3031.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="3032.0"><title>2021-07-11  40.0 BI 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="3044" x2="1250" y2="3044"/>
-<text x="0" y="3044" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-07-12 .. 2021-07-18)</tspan></text>
+<text x="0" y="3044" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-07-12 .. 2021-07-18) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="3048.0" x2="175" y2="3056.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3064.0" x2="175" y2="3072.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="3064.0"><title>2021-07-13  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3064.0"><title>2021-07-13  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3080.0" x2="175" y2="3088.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3096.0" x2="175" y2="3104.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="3096.0"><title>2021-07-15   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="3096.0"><title>2021-07-15   3.5 RR 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3112.0" x2="175" y2="3120.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3128.0" x2="175" y2="3136.0"/>
-<rect fill="#eeeeee" x="175" y="3127.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="3127.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3144.0" x2="175" y2="3152.0"/>
-<rect fill="#eeeeee" x="175" y="3143.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="3144.0"><title>2021-07-18  30.0 BR 01:15:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="3143.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3144.0"><title>2021-07-18  30.0 BR 01:15:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="3156" x2="1250" y2="3156"/>
-<text x="0" y="3156" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Force</tspan><tspan x="10" dy="1.5em">(2021-07-19 .. 2021-07-25)</tspan></text>
+<text x="0" y="3156" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Force</tspan><tspan x="10" dy="1.5em">(2021-07-19 .. 2021-07-25) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="3160.0" x2="175" y2="3168.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3176.0" x2="175" y2="3184.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="3176.0"><title>2021-07-20  30.0 BI 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3176.0"><title>2021-07-20  30.0 BI 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3192.0" x2="175" y2="3200.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3208.0" x2="175" y2="3216.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="3208.0"><title>2021-07-22   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="3208.0"><title>2021-07-22 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="3208.0"><title>2021-07-22   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="3208.0"><title>2021-07-22 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3224.0" x2="175" y2="3232.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3240.0" x2="175" y2="3248.0"/>
-<rect fill="#eeeeee" x="175" y="3239.0" height="10px" width="900px"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="3240.0"><title>2021-07-24 FB 00:25:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="3239.0" height="10" width="900"/>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="3240.0"><title>2021-07-24 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3256.0" x2="175" y2="3264.0"/>
-<rect fill="#eeeeee" x="175" y="3255.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="3256.0"><title>2021-07-25  40.0 BI 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="3255.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="3256.0"><title>2021-07-25  40.0 BI 02:00:00: </title></rect>
 </g></g><g><text x="0" y="3268" style="vertical-align:top"><tspan x="10" dy="1.5em">Buildup Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-07-26 .. 2021-08-15)</tspan></text>
 <line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="3268" x2="1250" y2="3268"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3268" x2="175" y2="3276"/>
@@ -466,332 +467,331 @@
 <line stroke="black" stroke-width=".5" x1="175" y1="3572" x2="175" y2="3580"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3588" x2="175" y2="3596"/>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="3604" x2="1250" y2="3604"/>
-<text x="0" y="3604" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Highlight Bicycle Mountain</tspan><tspan x="10" dy="1.5em">(2021-08-16 .. 2021-08-22)</tspan></text>
+<text x="0" y="3604" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Highlight Bicycle Mountain</tspan><tspan x="10" dy="1.5em">(2021-08-16 .. 2021-08-22) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="3608.0" x2="175" y2="3616.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3624.0" x2="175" y2="3632.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="3624.0"><title>2021-08-17  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3624.0"><title>2021-08-17  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3640.0" x2="175" y2="3648.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3656.0" x2="175" y2="3664.0"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="3656.0"><title>2021-08-19 FB 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="3656.0"><title>2021-08-19 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3672.0" x2="175" y2="3680.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3688.0" x2="175" y2="3696.0"/>
-<rect fill="#eeeeee" x="175" y="3687.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="3687.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3704.0" x2="175" y2="3712.0"/>
-<rect fill="#eeeeee" x="175" y="3703.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="450px" x="175" y="3704.0"><title>2021-08-22  60.0 BI 03:00:00: Mountain </title></rect>
+<rect fill="#eeeeee" x="175" y="3703.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="450" x="175" y="3704.0"><title>2021-08-22  60.0 BI 03:00:00 Mountain:  Mountain</title></rect>
 </g><g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="3716" x2="1250" y2="3716"/>
-<text x="0" y="3716" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-08-23 .. 2021-08-29)</tspan></text>
+<text x="0" y="3716" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-08-23 .. 2021-08-29) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="3720.0" x2="175" y2="3728.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3736.0" x2="175" y2="3744.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="3736.0"><title>2021-08-24  30.0 BI 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3736.0"><title>2021-08-24  30.0 BI 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3752.0" x2="175" y2="3760.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3768.0" x2="175" y2="3776.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="3768.0"><title>2021-08-26   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="3768.0"><title>2021-08-26 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="3768.0"><title>2021-08-26   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="3768.0"><title>2021-08-26 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3784.0" x2="175" y2="3792.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3800.0" x2="175" y2="3808.0"/>
-<rect fill="#eeeeee" x="175" y="3799.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="3799.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3816.0" x2="175" y2="3824.0"/>
-<rect fill="#eeeeee" x="175" y="3815.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="3816.0"><title>2021-08-29  40.0 BI 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="3815.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="3816.0"><title>2021-08-29  40.0 BI 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="3828" x2="1250" y2="3828"/>
-<text x="0" y="3828" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-08-30 .. 2021-09-05)</tspan></text>
+<text x="0" y="3828" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-08-30 .. 2021-09-05) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="3832.0" x2="175" y2="3840.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3848.0" x2="175" y2="3856.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="3848.0"><title>2021-08-31  30.0 BI 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3848.0"><title>2021-08-31  30.0 BI 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3864.0" x2="175" y2="3872.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3880.0" x2="175" y2="3888.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="3880.0"><title>2021-09-02   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="3880.0"><title>2021-09-02 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="3880.0"><title>2021-09-02   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="3880.0"><title>2021-09-02 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3896.0" x2="175" y2="3904.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3912.0" x2="175" y2="3920.0"/>
-<rect fill="#eeeeee" x="175" y="3911.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="3911.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3928.0" x2="175" y2="3936.0"/>
-<rect fill="#eeeeee" x="175" y="3927.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="3928.0"><title>2021-09-05  40.0 BI 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="3927.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="3928.0"><title>2021-09-05  40.0 BI 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="3940" x2="1250" y2="3940"/>
-<text x="0" y="3940" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-09-06 .. 2021-09-12)</tspan></text>
+<text x="0" y="3940" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-09-06 .. 2021-09-12) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="3944.0" x2="175" y2="3952.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3960.0" x2="175" y2="3968.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="3960.0"><title>2021-09-07  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3960.0"><title>2021-09-07  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3976.0" x2="175" y2="3984.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3992.0" x2="175" y2="4000.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="3992.0"><title>2021-09-09   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="3992.0"><title>2021-09-09   3.5 RR 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4008.0" x2="175" y2="4016.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4024.0" x2="175" y2="4032.0"/>
-<rect fill="#eeeeee" x="175" y="4023.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="4023.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4040.0" x2="175" y2="4048.0"/>
-<rect fill="#eeeeee" x="175" y="4039.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="4040.0"><title>2021-09-12  30.0 BR 01:15:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="4039.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="4040.0"><title>2021-09-12  30.0 BR 01:15:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="4052" x2="1250" y2="4052"/>
-<text x="0" y="4052" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-09-13 .. 2021-09-19)</tspan></text>
+<text x="0" y="4052" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-09-13 .. 2021-09-19) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="4056.0" x2="175" y2="4064.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4072.0" x2="175" y2="4080.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="4072.0"><title>2021-09-14  30.0 BI 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="4072.0"><title>2021-09-14  30.0 BI 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4088.0" x2="175" y2="4096.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4104.0" x2="175" y2="4112.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="4104.0"><title>2021-09-16   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="4104.0"><title>2021-09-16 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="4104.0"><title>2021-09-16   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="4104.0"><title>2021-09-16 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4120.0" x2="175" y2="4128.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4136.0" x2="175" y2="4144.0"/>
-<rect fill="#eeeeee" x="175" y="4135.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="4135.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4152.0" x2="175" y2="4160.0"/>
-<rect fill="#eeeeee" x="175" y="4151.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="4152.0"><title>2021-09-19  40.0 BI 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="4151.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="4152.0"><title>2021-09-19  40.0 BI 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="4164" x2="1250" y2="4164"/>
-<text x="0" y="4164" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-09-20 .. 2021-09-26)</tspan></text>
+<text x="0" y="4164" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Bicycle Speed</tspan><tspan x="10" dy="1.5em">(2021-09-20 .. 2021-09-26) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="4168.0" x2="175" y2="4176.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4184.0" x2="175" y2="4192.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="4184.0"><title>2021-09-21  30.0 BI 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="4184.0"><title>2021-09-21  30.0 BI 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4200.0" x2="175" y2="4208.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4216.0" x2="175" y2="4224.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="4216.0"><title>2021-09-23   3.5 RR 00:25:00: </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="4216.0"><title>2021-09-23 FB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="4216.0"><title>2021-09-23   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="4216.0"><title>2021-09-23 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4232.0" x2="175" y2="4240.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4248.0" x2="175" y2="4256.0"/>
-<rect fill="#eeeeee" x="175" y="4247.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="4247.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4264.0" x2="175" y2="4272.0"/>
-<rect fill="#eeeeee" x="175" y="4263.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="300px" x="175" y="4264.0"><title>2021-09-26  40.0 BI 02:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="4263.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="4264.0"><title>2021-09-26  40.0 BI 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="4276" x2="1250" y2="4276"/>
-<text x="0" y="4276" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-09-27 .. 2021-10-03)</tspan></text>
+<text x="0" y="4276" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-09-27 .. 2021-10-03) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="4280.0" x2="175" y2="4288.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4296.0" x2="175" y2="4304.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="4296.0"><title>2021-09-28  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="4296.0"><title>2021-09-28  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4312.0" x2="175" y2="4320.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4328.0" x2="175" y2="4336.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="4328.0"><title>2021-09-30   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="4328.0"><title>2021-09-30   3.5 RR 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4344.0" x2="175" y2="4352.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4360.0" x2="175" y2="4368.0"/>
-<rect fill="#eeeeee" x="175" y="4359.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="4359.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4376.0" x2="175" y2="4384.0"/>
-<rect fill="#eeeeee" x="175" y="4375.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="4376.0"><title>2021-10-03  30.0 BR 01:15:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="4375.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="4376.0"><title>2021-10-03  30.0 BR 01:15:00: </title></rect>
 </g></g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="4388" x2="1250" y2="4388"/>
-<text x="0" y="4388" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Highlight Bicycle Trime Trial</tspan><tspan x="10" dy="1.5em">(2021-10-04 .. 2021-10-10)</tspan></text>
+<text x="0" y="4388" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Highlight Bicycle Trime Trial</tspan><tspan x="10" dy="1.5em">(2021-10-04 .. 2021-10-10) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="4392.0" x2="175" y2="4400.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4408.0" x2="175" y2="4416.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="4408.0"><title>2021-10-05  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="4408.0"><title>2021-10-05  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4424.0" x2="175" y2="4432.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4440.0" x2="175" y2="4448.0"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="4440.0"><title>2021-10-07 FB 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="4440.0"><title>2021-10-07 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4456.0" x2="175" y2="4464.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4472.0" x2="175" y2="4480.0"/>
-<rect fill="#eeeeee" x="175" y="4471.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="4471.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4488.0" x2="175" y2="4496.0"/>
-<rect fill="#eeeeee" x="175" y="4487.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="100px" x="175" y="4488.0"><title>2021-10-10  20.0 BI 00:40:00: Trime Trial </title></rect>
+<rect fill="#eeeeee" x="175" y="4487.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="100" x="175" y="4488.0"><title>2021-10-10  20.0 BI 00:40:00 Trime Trial:  Trime Trial</title></rect>
 </g></g><g><g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="4500" x2="1250" y2="4500"/>
-<text x="0" y="4500" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-10-11 .. 2021-10-17)</tspan></text>
+<text x="0" y="4500" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-10-11 .. 2021-10-17) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="4504.0" x2="175" y2="4512.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4520.0" x2="175" y2="4528.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4536.0" x2="175" y2="4544.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="4536.0"><title>2021-10-13   3.5 RB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="4536.0"><title>2021-10-13   3.5 RB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4552.0" x2="175" y2="4560.0"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="4552.0"><title>2021-10-14 FB 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="4552.0"><title>2021-10-14 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4568.0" x2="175" y2="4576.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="375px" x="175" y="4568.0"><title>2021-10-15   3.5 RB 02:30:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="375" x="175" y="4568.0"><title>2021-10-15   3.5 RB 02:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4584.0" x2="175" y2="4592.0"/>
-<rect fill="#eeeeee" x="175" y="4583.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="4583.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4600.0" x2="175" y2="4608.0"/>
-<rect fill="#eeeeee" x="175" y="4599.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="213px" x="175" y="4600.0"><title>2021-10-17  30.0 BR 01:25:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="4599.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="213" x="175" y="4600.0"><title>2021-10-17  30.0 BR 01:25:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="4612" x2="1250" y2="4612"/>
-<text x="0" y="4612" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-10-18 .. 2021-10-24)</tspan></text>
+<text x="0" y="4612" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-10-18 .. 2021-10-24) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="4616.0" x2="175" y2="4624.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4632.0" x2="175" y2="4640.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4648.0" x2="175" y2="4656.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="4648.0"><title>2021-10-20   3.5 RB 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="4648.0"><title>2021-10-20   3.5 RB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4664.0" x2="175" y2="4672.0"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="4664.0"><title>2021-10-21 FB 00:25:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="4664.0"><title>2021-10-21 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4680.0" x2="175" y2="4688.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="375px" x="175" y="4680.0"><title>2021-10-22   3.5 RB 02:30:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="375" x="175" y="4680.0"><title>2021-10-22   3.5 RB 02:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4696.0" x2="175" y2="4704.0"/>
-<rect fill="#eeeeee" x="175" y="4695.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="4695.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4712.0" x2="175" y2="4720.0"/>
-<rect fill="#eeeeee" x="175" y="4711.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="213px" x="175" y="4712.0"><title>2021-10-24  30.0 BR 01:25:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="4711.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="213" x="175" y="4712.0"><title>2021-10-24  30.0 BR 01:25:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="4724" x2="1250" y2="4724"/>
-<text x="0" y="4724" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-10-25 .. 2021-10-31)</tspan></text>
+<text x="0" y="4724" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-10-25 .. 2021-10-31) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="4728.0" x2="175" y2="4736.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4744.0" x2="175" y2="4752.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="4744.0"><title>2021-10-26  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="4744.0"><title>2021-10-26  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4760.0" x2="175" y2="4768.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4776.0" x2="175" y2="4784.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="4776.0"><title>2021-10-28   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="4776.0"><title>2021-10-28   3.5 RR 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4792.0" x2="175" y2="4800.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4808.0" x2="175" y2="4816.0"/>
-<rect fill="#eeeeee" x="175" y="4807.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="4807.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4824.0" x2="175" y2="4832.0"/>
-<rect fill="#eeeeee" x="175" y="4823.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="4824.0"><title>2021-10-31  30.0 BR 01:15:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="4823.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="4824.0"><title>2021-10-31  30.0 BR 01:15:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="4836" x2="1250" y2="4836"/>
-<text x="0" y="4836" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-11-01 .. 2021-11-07)</tspan></text>
+<text x="0" y="4836" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-11-01 .. 2021-11-07) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="4840.0" x2="175" y2="4848.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4856.0" x2="175" y2="4864.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4872.0" x2="175" y2="4880.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="75px" x="175" y="4872.0"><title>2021-11-03   4.2 RB 00:30:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="4872.0"><title>2021-11-03   4.2 RB 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4888.0" x2="175" y2="4896.0"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="75px" x="175" y="4888.0"><title>2021-11-04 FB 00:30:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="4888.0"><title>2021-11-04 FB 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4904.0" x2="175" y2="4912.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="450px" x="175" y="4904.0"><title>2021-11-05   4.2 RB 03:00:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="450" x="175" y="4904.0"><title>2021-11-05   4.2 RB 03:00:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="4920.0" x2="175" y2="4928.0"/>
-<rect fill="#eeeeee" x="175" y="4919.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="4919.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4936.0" x2="175" y2="4944.0"/>
-<rect fill="#eeeeee" x="175" y="4935.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="250px" x="175" y="4936.0"><title>2021-11-07  35.0 BR 01:40:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="4935.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="250" x="175" y="4936.0"><title>2021-11-07  35.0 BR 01:40:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="4948" x2="1250" y2="4948"/>
-<text x="0" y="4948" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-11-08 .. 2021-11-14)</tspan></text>
+<text x="0" y="4948" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-11-08 .. 2021-11-14) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="4952.0" x2="175" y2="4960.0"/>
-<rect fill="#ffaaaa" x="175" y="4951.0" height="10px" width="900px"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4968.0" x2="175" y2="4976.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="4984.0" x2="175" y2="4992.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="75px" x="175" y="4984.0"><title>2021-11-10   4.2 RB 00:30:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="4984.0"><title>2021-11-10   4.2 RB 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="5000.0" x2="175" y2="5008.0"/>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="75px" x="175" y="5000.0"><title>2021-11-11 FB 00:30:00: </title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="5000.0"><title>2021-11-11 FB 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="5016.0" x2="175" y2="5024.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="450px" x="175" y="5016.0"><title>2021-11-12   4.2 RB 03:00:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="450" x="175" y="5016.0"><title>2021-11-12   4.2 RB 03:00:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="5032.0" x2="175" y2="5040.0"/>
-<rect fill="#eeeeee" x="175" y="5031.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="5031.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5048.0" x2="175" y2="5056.0"/>
-<rect fill="#eeeeee" x="175" y="5047.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="250px" x="175" y="5048.0"><title>2021-11-14  35.0 BR 01:40:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="5047.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="250" x="175" y="5048.0"><title>2021-11-14  35.0 BR 01:40:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="5060" x2="1250" y2="5060"/>
-<text x="0" y="5060" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-11-15 .. 2021-11-21)</tspan></text>
+<text x="0" y="5060" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-11-15 .. 2021-11-21) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="5064.0" x2="175" y2="5072.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5080.0" x2="175" y2="5088.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="5080.0"><title>2021-11-16  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="5080.0"><title>2021-11-16  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="5096.0" x2="175" y2="5104.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5112.0" x2="175" y2="5120.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="5112.0"><title>2021-11-18   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="5112.0"><title>2021-11-18   3.5 RR 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="5128.0" x2="175" y2="5136.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5144.0" x2="175" y2="5152.0"/>
-<rect fill="#eeeeee" x="175" y="5143.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="5143.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5160.0" x2="175" y2="5168.0"/>
-<rect fill="#eeeeee" x="175" y="5159.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="5160.0"><title>2021-11-21  30.0 BR 01:15:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="5159.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="5160.0"><title>2021-11-21  30.0 BR 01:15:00: </title></rect>
 </g></g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="5172" x2="1250" y2="5172"/>
-<text x="0" y="5172" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Highlight Running Distance</tspan><tspan x="10" dy="1.5em">(2021-11-22 .. 2021-11-28)</tspan></text>
+<text x="0" y="5172" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Highlight Running Distance</tspan><tspan x="10" dy="1.5em">(2021-11-22 .. 2021-11-28) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="5176.0" x2="175" y2="5184.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5192.0" x2="175" y2="5200.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5208.0" x2="175" y2="5216.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5224.0" x2="175" y2="5232.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5240.0" x2="175" y2="5248.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5256.0" x2="175" y2="5264.0"/>
-<rect fill="#eeeeee" x="175" y="5255.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="5255.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5272.0" x2="175" y2="5280.0"/>
-<rect fill="#eeeeee" x="175" y="5271.0" height="10px" width="900px"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="150px" x="175" y="5272.0"><title>2021-11-28  10.0 RB 01:00:00: Running min. 10 km </title></rect>
+<rect fill="#eeeeee" x="175" y="5271.0" height="10" width="900"/>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="150" x="175" y="5272.0"><title>2021-11-28  10.0 RB 01:00:00 Running min. 10 km:  Running min. 10 km</title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="5284" x2="1250" y2="5284"/>
-<text x="0" y="5284" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Highlight Running Distance</tspan><tspan x="10" dy="1.5em">(2021-11-29 .. 2021-12-12)</tspan></text>
+<text x="0" y="5284" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Highlight Running Distance</tspan><tspan x="10" dy="1.5em">(2021-11-29 .. 2021-12-12) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="5288.0" x2="175" y2="5296.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5304.0" x2="175" y2="5312.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5320.0" x2="175" y2="5328.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5336.0" x2="175" y2="5344.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5352.0" x2="175" y2="5360.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5368.0" x2="175" y2="5376.0"/>
-<rect fill="#eeeeee" x="175" y="5367.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="5367.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5384.0" x2="175" y2="5392.0"/>
-<rect fill="#eeeeee" x="175" y="5383.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="5383.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5400.0" x2="175" y2="5408.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5416.0" x2="175" y2="5424.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5432.0" x2="175" y2="5440.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5448.0" x2="175" y2="5456.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5464.0" x2="175" y2="5472.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5480.0" x2="175" y2="5488.0"/>
-<rect fill="#eeeeee" x="175" y="5479.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="5479.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5496.0" x2="175" y2="5504.0"/>
-<rect fill="#eeeeee" x="175" y="5495.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="5495.0" height="10" width="900"/>
 </g><g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="5508" x2="1250" y2="5508"/>
-<text x="0" y="5508" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-12-13 .. 2021-12-19)</tspan></text>
+<text x="0" y="5508" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-12-13 .. 2021-12-19) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="5512.0" x2="175" y2="5520.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5528.0" x2="175" y2="5536.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="213px" x="175" y="5528.0"><title>2021-12-14  30.0 BR 01:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="213" x="175" y="5528.0"><title>2021-12-14  30.0 BR 01:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="5544.0" x2="175" y2="5552.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5560.0" x2="175" y2="5568.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="5560.0"><title>2021-12-16   5.0 BI 00:25:00: Test 3 x 1000m speed run </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="5560.0"><title>2021-12-16 FB 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="5560.0"><title>2021-12-16   5.0 BI 00:25:00 Test 3 x 1000m speed run:  Test 3 x 1000m speed run</title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="5560.0"><title>2021-12-16 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="5576.0" x2="175" y2="5584.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5592.0" x2="175" y2="5600.0"/>
-<rect fill="#eeeeee" x="175" y="5591.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="5591.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5608.0" x2="175" y2="5616.0"/>
-<rect fill="#eeeeee" x="175" y="5607.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="375px" x="175" y="5608.0"><title>2021-12-19   5.0 BI 02:30:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="5607.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="375" x="175" y="5608.0"><title>2021-12-19   5.0 BI 02:30:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="5620" x2="1250" y2="5620"/>
-<text x="0" y="5620" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-12-20 .. 2021-12-26)</tspan></text>
+<text x="0" y="5620" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-12-20 .. 2021-12-26) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="5624.0" x2="175" y2="5632.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5640.0" x2="175" y2="5648.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="213px" x="175" y="5640.0"><title>2021-12-21  30.0 BR 01:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="213" x="175" y="5640.0"><title>2021-12-21  30.0 BR 01:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="5656.0" x2="175" y2="5664.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5672.0" x2="175" y2="5680.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="5672.0"><title>2021-12-23   5.0 BI 00:25:00: Test 3 x 1000m speed run </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="5672.0"><title>2021-12-23 FB 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="5672.0"><title>2021-12-23   5.0 BI 00:25:00 Test 3 x 1000m speed run:  Test 3 x 1000m speed run</title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="5672.0"><title>2021-12-23 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="5688.0" x2="175" y2="5696.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5704.0" x2="175" y2="5712.0"/>
-<rect fill="#eeeeee" x="175" y="5703.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="5703.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5720.0" x2="175" y2="5728.0"/>
-<rect fill="#eeeeee" x="175" y="5719.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="375px" x="175" y="5720.0"><title>2021-12-26   5.0 BI 02:30:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="5719.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="375" x="175" y="5720.0"><title>2021-12-26   5.0 BI 02:30:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="5732" x2="1250" y2="5732"/>
-<text x="0" y="5732" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-12-27 .. 2022-01-02)</tspan></text>
+<text x="0" y="5732" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-12-27 .. 2022-01-02) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="5736.0" x2="175" y2="5744.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5752.0" x2="175" y2="5760.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="5752.0"><title>2021-12-28  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="5752.0"><title>2021-12-28  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="5768.0" x2="175" y2="5776.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5784.0" x2="175" y2="5792.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="5784.0"><title>2021-12-30   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="5784.0"><title>2021-12-30   3.5 RR 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="5800.0" x2="175" y2="5808.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5816.0" x2="175" y2="5824.0"/>
-<rect fill="#eeeeee" x="175" y="5815.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="5815.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5832.0" x2="175" y2="5840.0"/>
-<rect fill="#eeeeee" x="175" y="5831.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="5832.0"><title>2022-01-02  30.0 BR 01:15:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="5831.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="5832.0"><title>2022-01-02  30.0 BR 01:15:00: </title></rect>
 </g></g><g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="5844" x2="1250" y2="5844"/>
-<text x="0" y="5844" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2022-01-03 .. 2022-01-09)</tspan></text>
+<text x="0" y="5844" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2022-01-03 .. 2022-01-09) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="5848.0" x2="175" y2="5856.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5864.0" x2="175" y2="5872.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="213px" x="175" y="5864.0"><title>2022-01-04  30.0 BR 01:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="213" x="175" y="5864.0"><title>2022-01-04  30.0 BR 01:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="5880.0" x2="175" y2="5888.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5896.0" x2="175" y2="5904.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="5896.0"><title>2022-01-06   5.0 BI 00:25:00: Test 3 x 1000m speed run </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="5896.0"><title>2022-01-06 FB 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="5896.0"><title>2022-01-06   5.0 BI 00:25:00 Test 3 x 1000m speed run:  Test 3 x 1000m speed run</title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="5896.0"><title>2022-01-06 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="5912.0" x2="175" y2="5920.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5928.0" x2="175" y2="5936.0"/>
-<rect fill="#eeeeee" x="175" y="5927.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="5927.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5944.0" x2="175" y2="5952.0"/>
-<rect fill="#eeeeee" x="175" y="5943.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="375px" x="175" y="5944.0"><title>2022-01-09   5.0 BI 02:30:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="5943.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="375" x="175" y="5944.0"><title>2022-01-09   5.0 BI 02:30:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="5956" x2="1250" y2="5956"/>
-<text x="0" y="5956" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2022-01-10 .. 2022-01-16)</tspan></text>
+<text x="0" y="5956" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2022-01-10 .. 2022-01-16) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="5960.0" x2="175" y2="5968.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="5976.0" x2="175" y2="5984.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="213px" x="175" y="5976.0"><title>2022-01-11  30.0 BR 01:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="213" x="175" y="5976.0"><title>2022-01-11  30.0 BR 01:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="5992.0" x2="175" y2="6000.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="6008.0" x2="175" y2="6016.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="6008.0"><title>2022-01-13   5.0 BI 00:25:00: Test 3 x 1000m speed run </title></rect>
-<rect  fill="#aaaaff" height="8px" stroke="black" stroke-width=".5" width="63px" x="237.5" y="6008.0"><title>2022-01-13 FB 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="6008.0"><title>2022-01-13   5.0 BI 00:25:00 Test 3 x 1000m speed run:  Test 3 x 1000m speed run</title></rect>
+<rect  fill="#aaaaff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="6008.0"><title>2022-01-13 FB 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="6024.0" x2="175" y2="6032.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="6040.0" x2="175" y2="6048.0"/>
-<rect fill="#eeeeee" x="175" y="6039.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="6039.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="6056.0" x2="175" y2="6064.0"/>
-<rect fill="#eeeeee" x="175" y="6055.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="375px" x="175" y="6056.0"><title>2022-01-16   5.0 BI 02:30:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="6055.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="375" x="175" y="6056.0"><title>2022-01-16   5.0 BI 02:30:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="6068" x2="1250" y2="6068"/>
-<text x="0" y="6068" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2022-01-17 .. 2022-01-23)</tspan></text>
+<text x="0" y="6068" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2022-01-17 .. 2022-01-23) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="6072.0" x2="175" y2="6080.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="6088.0" x2="175" y2="6096.0"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="6088.0"><title>2022-01-18  30.0 BR 01:15:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="6088.0"><title>2022-01-18  30.0 BR 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="6104.0" x2="175" y2="6112.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="6120.0" x2="175" y2="6128.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="63px" x="175" y="6120.0"><title>2022-01-20   3.5 RR 00:25:00: </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="6120.0"><title>2022-01-20   3.5 RR 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="6136.0" x2="175" y2="6144.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="6152.0" x2="175" y2="6160.0"/>
-<rect fill="#eeeeee" x="175" y="6151.0" height="10px" width="900px"/>
+<rect fill="#eeeeee" x="175" y="6151.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="6168.0" x2="175" y2="6176.0"/>
-<rect fill="#eeeeee" x="175" y="6167.0" height="10px" width="900px"/>
-<rect  fill="#ffdddd" height="8px" stroke="black" stroke-width=".5" width="188px" x="175" y="6168.0"><title>2022-01-23  30.0 BR 01:15:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="6167.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="6168.0"><title>2022-01-23  30.0 BR 01:15:00: </title></rect>
 </g></g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="6180" x2="1250" y2="6180"/>
-<text x="0" y="6180" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Highlight Running Competition</tspan><tspan x="10" dy="1.5em">(2022-01-24 .. 2022-01-24)</tspan></text>
+<text x="0" y="6180" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Highlight Running Competition</tspan><tspan x="10" dy="1.5em">(2022-01-24 .. 2022-01-24) </tspan></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="6184.0" x2="175" y2="6192.0"/>
-<rect  fill="#ddffdd" height="8px" stroke="black" stroke-width=".5" width="88px" x="175" y="6184.0"><title>2022-01-24   6.5 RC 00:35:00: High Mountain Uphill Run </title></rect>
+<rect  fill="#ddffdd" height="8" stroke="black" stroke-width=".5" width="88" x="175" y="6184.0"><title>2022-01-24   6.5 RC 00:35:00 High Mountain Uphill Run:  High Mountain Uphill Run</title></rect>
 </g></g></g></svg>

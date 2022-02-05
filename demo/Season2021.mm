@@ -70,7 +70,7 @@
 <font BOLD="false" NAME="Monospaced" SIZE="12"/><node BACKGROUND_COLOR="#ffffaa" TEXT="Nutrition ABC"/>
 <node TEXT="2021-02-02   3.5 RB 00:25:00" BACKGROUND_COLOR="#ddffdd"><node TEXT="7:08 min/mi 8 mi/h "/></node>
 <node TEXT="2021-02-04   3.5 RB 00:25:00" BACKGROUND_COLOR="#ddffdd"><node TEXT="7:08 min/mi 8 mi/h "/></node>
-<node TEXT="2021-02-05 FB 00:30:00" BACKGROUND_COLOR="#aaaaff"><node BACKGROUND_COLOR="#ffffaa" TEXT="Maximum"/>
+<node TEXT="2021-02-05 FB 00:30:00 Maximum" BACKGROUND_COLOR="#aaaaff"><node BACKGROUND_COLOR="#ffffaa" TEXT="Maximum"/>
 </node>
 <node TEXT="2021-02-06 FB 00:30:00" BACKGROUND_COLOR="#aaaaff"></node>
 <node TEXT="2021-02-07  30.0 BB 02:00:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="4:00 min/mi 15 mi/h "/></node>
@@ -79,7 +79,7 @@
 <font BOLD="false" NAME="Monospaced" SIZE="12"/><node BACKGROUND_COLOR="#ffffaa" TEXT="Nutrition ABC"/>
 <node TEXT="2021-02-09   3.5 RB 00:25:00" BACKGROUND_COLOR="#ddffdd"><node TEXT="7:08 min/mi 8 mi/h "/></node>
 <node TEXT="2021-02-11   3.5 RB 00:25:00" BACKGROUND_COLOR="#ddffdd"><node TEXT="7:08 min/mi 8 mi/h "/></node>
-<node TEXT="2021-02-12 FB 00:30:00" BACKGROUND_COLOR="#aaaaff"><node BACKGROUND_COLOR="#ffffaa" TEXT="Maximum"/>
+<node TEXT="2021-02-12 FB 00:30:00 Maximum" BACKGROUND_COLOR="#aaaaff"><node BACKGROUND_COLOR="#ffffaa" TEXT="Maximum"/>
 </node>
 <node TEXT="2021-02-13 FB 00:30:00" BACKGROUND_COLOR="#aaaaff"></node>
 <node TEXT="2021-02-14  30.0 BB 02:00:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="4:00 min/mi 15 mi/h "/></node>
@@ -240,7 +240,7 @@
 <node FOLDED="true" TEXT="Highlight Bicycle Mountain&#xa;(2021-08-16 .. 2021-08-22)&#xa;   1 x BI     60 mi     3 h&#xa;   1 x BR     30 mi     1 h&#xa;   1 x FB               0 h&#xa;   5 h     in 7 Days =  4.7 h/Week&#xa;">
 <font BOLD="false" NAME="Monospaced" SIZE="12"/><node TEXT="2021-08-17  30.0 BR 01:15:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="2:30 min/mi 24 mi/h "/></node>
 <node TEXT="2021-08-19 FB 00:25:00" BACKGROUND_COLOR="#aaaaff"></node>
-<node TEXT="2021-08-22  60.0 BI 03:00:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="3:00 min/mi 20 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Mountain"/>
+<node TEXT="2021-08-22  60.0 BI 03:00:00 Mountain" BACKGROUND_COLOR="#ffdddd"><node TEXT="3:00 min/mi 20 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Mountain"/>
 </node>
 </node>
 <node FOLDED="false" TEXT="Buildup Bicycle Speed&#xa; (2021-08-23 .. 2021-10-03)&#xa;   8 x BI    280 mi    13 h&#xa;   4 x BR    120 mi     5 h&#xa;   4 x FB               2 h&#xa;   6 x RR     21 mi     2 h&#xa;  22 h     in 42 Days =  3.7 h/Week&#xa;">
@@ -285,7 +285,7 @@
 <node FOLDED="true" TEXT="Highlight Bicycle Trime Trial&#xa;(2021-10-04 .. 2021-10-10)&#xa;   1 x BI     20 mi     1 h&#xa;   1 x BR     30 mi     1 h&#xa;   1 x FB               0 h&#xa;   2 h     in 7 Days =  2.3 h/Week&#xa;">
 <font BOLD="false" NAME="Monospaced" SIZE="12"/><node TEXT="2021-10-05  30.0 BR 01:15:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="2:30 min/mi 24 mi/h "/></node>
 <node TEXT="2021-10-07 FB 00:25:00" BACKGROUND_COLOR="#aaaaff"></node>
-<node TEXT="2021-10-10  20.0 BI 00:40:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="2:00 min/mi 30 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Trime Trial"/>
+<node TEXT="2021-10-10  20.0 BI 00:40:00 Trime Trial" BACKGROUND_COLOR="#ffdddd"><node TEXT="2:00 min/mi 30 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Trime Trial"/>
 </node>
 </node>
 </node>
@@ -331,7 +331,7 @@
 </node>
 </node>
 <node FOLDED="true" TEXT="Highlight Running Distance&#xa;(2021-11-22 .. 2021-11-28)&#xa;   1 x RB     10 mi     1 h&#xa;   1 h     in 7 Days =  1.0 h/Week&#xa;">
-<font BOLD="false" NAME="Monospaced" SIZE="12"/><node TEXT="2021-11-28  10.0 RB 01:00:00" BACKGROUND_COLOR="#ddffdd"><node TEXT="6:00 min/mi 10 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Running min. 10 km"/>
+<font BOLD="false" NAME="Monospaced" SIZE="12"/><node TEXT="2021-11-28  10.0 RB 01:00:00 Running min. 10 km" BACKGROUND_COLOR="#ddffdd"><node TEXT="6:00 min/mi 10 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Running min. 10 km"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#ffaaaa" TEXT="Highlight Running Distance&#xa;(2021-11-29 .. 2021-12-12)&#xa;">
@@ -340,7 +340,7 @@
 <font BOLD="true" NAME="Monospaced" SIZE="12"/><node FOLDED="true" TEXT="Focus Running&#xa;(2021-12-13 .. 2021-12-19)&#xa;   2 x BI     10 mi     3 h&#xa;   1 x BR     30 mi     1 h&#xa;   1 x FB               0 h&#xa;   5 h     in 7 Days =  4.8 h/Week&#xa;">
 <font BOLD="false" NAME="Monospaced" SIZE="12"/><node BACKGROUND_COLOR="#ffffaa" TEXT="Test 1000m speed run"/>
 <node TEXT="2021-12-14  30.0 BR 01:25:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="2:50 min/mi 21 mi/h "/></node>
-<node TEXT="2021-12-16   5.0 BI 00:25:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="5:00 min/mi 12 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Test 3 x 1000m speed run"/>
+<node TEXT="2021-12-16   5.0 BI 00:25:00 Test 3 x 1000m speed run" BACKGROUND_COLOR="#ffdddd"><node TEXT="5:00 min/mi 12 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Test 3 x 1000m speed run"/>
 </node>
 <node TEXT="2021-12-16 FB 00:25:00" BACKGROUND_COLOR="#aaaaff"></node>
 <node TEXT="2021-12-19   5.0 BI 02:30:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="30:00 min/mi 2 mi/h "/></node>
@@ -348,7 +348,7 @@
 <node FOLDED="true" TEXT="Focus Running&#xa;(2021-12-20 .. 2021-12-26)&#xa;   2 x BI     10 mi     3 h&#xa;   1 x BR     30 mi     1 h&#xa;   1 x FB               0 h&#xa;   5 h     in 7 Days =  4.8 h/Week&#xa;">
 <font BOLD="false" NAME="Monospaced" SIZE="12"/><node BACKGROUND_COLOR="#ffffaa" TEXT="Test 1000m speed run"/>
 <node TEXT="2021-12-21  30.0 BR 01:25:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="2:50 min/mi 21 mi/h "/></node>
-<node TEXT="2021-12-23   5.0 BI 00:25:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="5:00 min/mi 12 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Test 3 x 1000m speed run"/>
+<node TEXT="2021-12-23   5.0 BI 00:25:00 Test 3 x 1000m speed run" BACKGROUND_COLOR="#ffdddd"><node TEXT="5:00 min/mi 12 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Test 3 x 1000m speed run"/>
 </node>
 <node TEXT="2021-12-23 FB 00:25:00" BACKGROUND_COLOR="#aaaaff"></node>
 <node TEXT="2021-12-26   5.0 BI 02:30:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="30:00 min/mi 2 mi/h "/></node>
@@ -363,7 +363,7 @@
 <font BOLD="true" NAME="Monospaced" SIZE="12"/><node FOLDED="true" TEXT="Focus Running&#xa;(2022-01-03 .. 2022-01-09)&#xa;   2 x BI     10 mi     3 h&#xa;   1 x BR     30 mi     1 h&#xa;   1 x FB               0 h&#xa;   5 h     in 7 Days =  4.8 h/Week&#xa;">
 <font BOLD="false" NAME="Monospaced" SIZE="12"/><node BACKGROUND_COLOR="#ffffaa" TEXT="Test 1000m speed run"/>
 <node TEXT="2022-01-04  30.0 BR 01:25:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="2:50 min/mi 21 mi/h "/></node>
-<node TEXT="2022-01-06   5.0 BI 00:25:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="5:00 min/mi 12 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Test 3 x 1000m speed run"/>
+<node TEXT="2022-01-06   5.0 BI 00:25:00 Test 3 x 1000m speed run" BACKGROUND_COLOR="#ffdddd"><node TEXT="5:00 min/mi 12 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Test 3 x 1000m speed run"/>
 </node>
 <node TEXT="2022-01-06 FB 00:25:00" BACKGROUND_COLOR="#aaaaff"></node>
 <node TEXT="2022-01-09   5.0 BI 02:30:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="30:00 min/mi 2 mi/h "/></node>
@@ -371,7 +371,7 @@
 <node FOLDED="true" TEXT="Focus Running&#xa;(2022-01-10 .. 2022-01-16)&#xa;   2 x BI     10 mi     3 h&#xa;   1 x BR     30 mi     1 h&#xa;   1 x FB               0 h&#xa;   5 h     in 7 Days =  4.8 h/Week&#xa;">
 <font BOLD="false" NAME="Monospaced" SIZE="12"/><node BACKGROUND_COLOR="#ffffaa" TEXT="Test 1000m speed run"/>
 <node TEXT="2022-01-11  30.0 BR 01:25:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="2:50 min/mi 21 mi/h "/></node>
-<node TEXT="2022-01-13   5.0 BI 00:25:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="5:00 min/mi 12 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Test 3 x 1000m speed run"/>
+<node TEXT="2022-01-13   5.0 BI 00:25:00 Test 3 x 1000m speed run" BACKGROUND_COLOR="#ffdddd"><node TEXT="5:00 min/mi 12 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Test 3 x 1000m speed run"/>
 </node>
 <node TEXT="2022-01-13 FB 00:25:00" BACKGROUND_COLOR="#aaaaff"></node>
 <node TEXT="2022-01-16   5.0 BI 02:30:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="30:00 min/mi 2 mi/h "/></node>
@@ -383,7 +383,7 @@
 </node>
 </node>
 <node FOLDED="true" TEXT="Highlight Running Competition&#xa;(2022-01-24 .. 2022-01-24)&#xa;   1 x RC      6 mi     1 h&#xa;   1 h     in 1 Days =  4.1 h/Week&#xa;">
-<font BOLD="false" NAME="Monospaced" SIZE="12"/><node TEXT="2022-01-24   6.5 RC 00:35:00" BACKGROUND_COLOR="#ddffdd"><node TEXT="5:23 min/mi 11 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="High Mountain Uphill Run"/>
+<font BOLD="false" NAME="Monospaced" SIZE="12"/><node TEXT="2022-01-24   6.5 RC 00:35:00 High Mountain Uphill Run" BACKGROUND_COLOR="#ddffdd"><node TEXT="5:23 min/mi 11 mi/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="High Mountain Uphill Run"/>
 </node>
 </node>
 </node>

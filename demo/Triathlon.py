@@ -172,7 +172,7 @@ f = open('TriathlonPlan.mm', 'w')
 f.write(s.toFreeMind())
 f.close()
 
-f = open('TriathlonPlan.ics', 'w')
+f = open('TriathlonPlan.ics', 'wb')
 f.write(s.toVCalendar())
 f.close()
 

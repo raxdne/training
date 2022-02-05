@@ -173,24 +173,51 @@ class description:
             self.listDescription.append(objArg)
 
 
-    def __listDescriptionToPlain__(self,listArg=None):
+    def __listDescriptionToString__(self,listArg=None):
 
         """ returns a CSV string of nested self.listDescription """
 
         strResult = ''
 
         if listArg == None:
-            strResult += self.__listDescriptionToPlain__(self.listDescription)
+            strResult += self.__listDescriptionToString__(self.listDescription)
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
-            strResult += ' {}'.format(listArg[0]) + self.__listDescriptionToPlain__(listArg[1])
+            strResult += ' {}'.format(listArg[0]) + self.__listDescriptionToString__(listArg[1])
         elif type(listArg) is list and len(listArg) > 0:
             for c in listArg:
                 if type(c) is str:
-                    strResult += c + ' '
+                    strResult += ' ' + c
                 elif type(c) is list:
-                    strResult += self.__listDescriptionToPlain__(c)
+                    strResult += self.__listDescriptionToString__(c)
                 else:
                     print('fail: ',c, file=sys.stderr)
+
+        return strResult
+
+
+    def __listDescriptionToHtml__(self,listArg=None):
+
+        """ returns a HTML string of nested self.listDescription """
+
+        #strResult = '<div>'
+        strResult = ''
+
+        if listArg == None:
+            strResult += self.__listDescriptionToHtml__(self.listDescription)
+        elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
+            # list item + childs
+            strResult += '<li>' + listArg[0] + '</li>\n<ul>' + self.__listDescriptionToHtml__(listArg[1]) + '</ul>\n'
+        elif type(listArg) is list and len(listArg) > 0:
+            # list items
+            for c in listArg:
+                if type(c) is str:
+                    strResult += '<li>' + c + '</li>\n'
+                elif type(c) is list:
+                    strResult += self.__listDescriptionToHtml__(c)
+                else:
+                    print('fail: ',c, file=sys.stderr)
+
+        #strResult += '</div>'
 
         return strResult
 
@@ -438,7 +465,7 @@ class unit(description):
         else:
             strResult = '{date} {dist:5.1f} {type} {duration}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
 
-        #strResult += self.__listDescriptionToPlain__()
+        strResult += self.__listDescriptionToString__()
 
         return strResult
 
@@ -454,7 +481,7 @@ class unit(description):
         else:
             strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
 
-        strResult += ';' + self.__listDescriptionToPlain__()
+        strResult += ';' + self.__listDescriptionToString__()
 
         return strResult
 
@@ -466,7 +493,7 @@ class unit(description):
         strResult = ''
 
         if self.duration == None or self.duration.total_seconds() < 60:
-            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + diagram_bar_height / 2, y + diagram_bar_height, self.__listDescriptionToPlain__(), self.toString())
+            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + diagram_bar_height / 2, y + diagram_bar_height, self.__listDescriptionToString__(), self.toString())
         else:
             strResult += '<rect '
 
@@ -484,7 +511,7 @@ class unit(description):
             strResult += ' height="{}" stroke="black" stroke-width=".5" width="{:.0f}" x="{}" y="{}"'.format(diagram_bar_height, bar_width, x, y)
             strResult += '>'
 
-            strResult += '<title>{}: {}</title>'.format(self.toString(), self.__listDescriptionToPlain__())
+            strResult += '<title>{}: {}</title>'.format(self.toString(), self.__listDescriptionToString__())
 
             strResult += '</rect>\n'
 
@@ -522,11 +549,11 @@ class unit(description):
         strResult = 'BEGIN:VEVENT\n'
 
         if self.type == None:
-            strResult += "SUMMARY:{description}\n".format(description = self.__listDescriptionToPlain__())
+            strResult += "SUMMARY:{description}\n".format(description = self.__listDescriptionToString__())
         else:
             strResult += "SUMMARY:{type} {time}\n".format(type=self.type, time=self.getDurationStr())
             if self.hasDescription():
-                strResult += 'DESCRIPTION:{}\n'.format(self.__listDescriptionToPlain__())
+                strResult += 'DESCRIPTION:{}\n'.format(self.__listDescriptionToString__())
 
         if self.clock == None or self.duration == None:
             strResult += self.date.strftime("DTSTART;%Y%m%d\nDTEND;%Y%m%d\n")
@@ -570,11 +597,11 @@ class unit(description):
         event = Event()
 
         if self.type == None:
-            event.add('summary', self.__listDescriptionToPlain__())
+            event.add('summary', self.__listDescriptionToString__())
         else:
             event.add('summary', "{} {}".format(self.type, self.getDurationStr()))
             if self.hasDescription():
-                event.add('description', self.__listDescriptionToPlain__())
+                event.add('description', self.__listDescriptionToString__())
 
         if self.clock == None or self.duration == None:
             event.add('dtstart', self.date)
@@ -877,6 +904,35 @@ class cycle(title,description):
         for v in self.child:
             for u in v:
                 strResult += u.toString() + '\n'
+
+        return strResult
+
+
+    def toHtml(self):
+
+        """  """
+        
+        strResult = '<section class="cycle"'
+
+        if self.color != None:
+            strResult += ' style="background-color: {}"'.format(self.color)
+
+        strResult += '><div class="header">' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '</div>\n'
+
+        strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
+        
+        for v in self.child:
+            for u in v:
+                strResult += '<p class="unit"'
+                if u.type != None and len(u.type) > 0 and u.type[0] in colors:
+                    strResult += ' style="background-color: ' + colors[u.type[0]] + '"'
+
+                strResult += '>' + u.toString() + '</p>\n'
+
+        #strResult += '<svg baseProfile="full" height="200" version="1.1" width="800" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">' + self.toSVG(200,0) + '</svg>'
+
+        strResult += '</section>'
+
         return strResult
 
 
@@ -888,6 +944,7 @@ class cycle(title,description):
         for v in self.child:
             for u in v:
                 strResult += u.toCSV() + '\n'
+
         return strResult
 
 
@@ -900,7 +957,7 @@ class cycle(title,description):
         strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+diagram_width,y)
 
         if self.color != None:
-            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,0,y,(diagram_bar_height * 2)*len(self.child),x+diagram_width)
+            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((diagram_bar_height * 2)*len(self.child))-2,x+diagram_width-4)
 
         strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ')
 
@@ -957,7 +1014,7 @@ class cycle(title,description):
             color = self.color
             
         strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, diagram_bar_height*2, (l.days + 1) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToPlain__())
+        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToString__())
         strResult += '</rect>'
 
         # TODO: make training.diagram_height configurable
@@ -980,7 +1037,7 @@ class cycle(title,description):
             color = 'red'
             
         strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, diagram_height - h - 10, h, (l.days + 1) * 2 - 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToPlain__() + ' ' + str(h) + ' min/d' )
+        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToString__() + ' ' + str(h) + ' min/d' )
         strResult += '</rect>'
 
         #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i,y,self.getTitleStr())
@@ -1334,8 +1391,64 @@ class period(title,description):
         """  """
 
         strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
+
+        strResult += self.__listDescriptionToString__()
+
         for c in self.child:
             strResult += c.toString() + '\n'
+            
+        return strResult
+
+
+    def toPlain(self):
+
+        return self.toString() + '\n'
+
+
+    def toHtml(self):
+
+        """  """
+
+        strResult = '<section class="period">'
+
+        strResult += '<div class="header">' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '</div>\n'
+
+        strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
+        
+        strResult += '<pre>' + self.report() + '</pre>'
+        
+        #strResult += '<svg baseProfile="full" height="600" version="1.1" width="1000" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">' + self.toSVG(200,0) + '</svg>'
+
+        for c in self.child:
+            strResult += c.toHtml() + '\n'
+            
+        strResult += '</section>\n'
+
+        return strResult
+
+
+    def toHtmlFile(self):
+
+        """ returns html/body + content """
+
+        strResult = '<!doctype html public "-//IETF//DTD HTML 4.0//EN">'
+
+        strResult += "<html>"
+
+        strResult += "<head>"
+
+        strResult += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
+        
+        strResult += "<title></title>"
+
+        strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\n</style>\n"
+
+        strResult += "</head>"
+
+        strResult += "<body>" + self.toHtml() + "</body>"
+
+        strResult += "</html>"
+
         return strResult
 
 
@@ -1346,6 +1459,7 @@ class period(title,description):
         strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
         for c in self.child:
             strResult += c.toCSV() + '\n'
+
         return strResult
 
 
@@ -1367,6 +1481,7 @@ class period(title,description):
         for c in self.child:
             strResult += c.toXML()
         strResult += '</node>\n'
+
         return strResult
 
 
@@ -1377,6 +1492,7 @@ class period(title,description):
         strResult = '<map>\n'
         strResult += self.toXML()
         strResult += '</map>\n'
+
         return strResult
 
 
@@ -1423,6 +1539,7 @@ class period(title,description):
         strResult += self.toSVG()
         #strResult += '</g>'
         strResult += '</svg>\n'
+
         return strResult
 
 
@@ -1436,7 +1553,7 @@ class period(title,description):
         strResult = '<g>'
 
         strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format('#aaaaff', x_i, y, diagram_bar_height*2, (l.days + 1) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToPlain__())
+        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToString__())
         strResult += '</rect>'
         strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 10,self.getTitleStr())
 
@@ -1499,6 +1616,7 @@ class period(title,description):
         strResult += self.toSVGGantt(d_0)
         strResult += '</g>'
         strResult += '</svg>\n'
+
         return strResult
 
 
