@@ -25,7 +25,7 @@ def parse_args(args=None):
         help='File to output data into (defaults to stdout)',
     )
     parser.add_argument(
-        '-t', '--type', choices=('readable', 'json', 'mm', 'csv', 'xml', 'ics', 'svg', 'sqlite'), default='readable',
+        '-t', '--type', choices=('readable', 'json', 'mm', 'csv', 'html', 'xml', 'ics', 'svg', 'sqlite'), default='readable',
         help='File type to output. (DEFAULT: %(default)s)',
     )
     parser.add_argument(
@@ -62,6 +62,8 @@ def main(args=None):
             pass
         elif options.type == "csv":
             print(s.toCSV(), file=options.output)
+        elif options.type == "html":
+            print(s.toHtmlFile(), file=options.output)
         elif options.type == "ics":
             print(s.toVCalendar(), file=options.output)
         elif options.type == "svg":

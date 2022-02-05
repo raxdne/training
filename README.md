@@ -3,7 +3,7 @@
 
 ## AUTHOR and HOMEPAGE
 
-Copyright (C) 2021 by Alexander Tenbusch <https://github.com/raxdne/training>
+Copyright (C) 2021,2022 by Alexander Tenbusch <https://github.com/raxdne/training>
 
 ## DESCRIPTION
 
@@ -21,17 +21,20 @@ Main features
    - Training Period
 1) output of text-based formats
    - plain
+   - HTML
    - Freemind XML
    - vCalendar
    - SVG
 
-![Demo](https://github.com/raxdne/training/blob/main/demo/Freemind.png)
+![Demo Mindmap](https://github.com/raxdne/training/blob/main/demo/Freemind.png)
 
 ![Demo](https://github.com/raxdne/training/blob/main/demo/Diagram.png)
+
+![Edit in Inkscape](https://github.com/raxdne/training/blob/main/demo/Inkscape.png)
 
 ## Installation
 
 using `pip`
 
-	python3 -m pip install -e git+https://github.com/raxdne/training.git@v1.14#egg=training
+	python3 -m pip install -e git+https://github.com/raxdne/training.git@v1.15#egg=training
 

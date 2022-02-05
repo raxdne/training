@@ -35,7 +35,7 @@ from datetime import (
 
 from suntime import Sun
 
-from icalendar import Calendar, Event
+from icalendar import Calendar, Event, Alarm
 
 #
 # Module Variables
@@ -173,24 +173,51 @@ class description:
             self.listDescription.append(objArg)
 
 
-    def __listDescriptionToPlain__(self,listArg=None):
+    def __listDescriptionToString__(self,listArg=None):
 
         """ returns a CSV string of nested self.listDescription """
 
         strResult = ''
 
         if listArg == None:
-            strResult += self.__listDescriptionToPlain__(self.listDescription)
+            strResult += self.__listDescriptionToString__(self.listDescription)
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
-            strResult += ' {}'.format(listArg[0]) + self.__listDescriptionToPlain__(listArg[1])
+            strResult += ' {}'.format(listArg[0]) + self.__listDescriptionToString__(listArg[1])
         elif type(listArg) is list and len(listArg) > 0:
             for c in listArg:
                 if type(c) is str:
-                    strResult += c + ' '
+                    strResult += ' ' + c
                 elif type(c) is list:
-                    strResult += self.__listDescriptionToPlain__(c)
+                    strResult += self.__listDescriptionToString__(c)
                 else:
                     print('fail: ',c, file=sys.stderr)
+
+        return strResult
+
+
+    def __listDescriptionToHtml__(self,listArg=None):
+
+        """ returns a HTML string of nested self.listDescription """
+
+        #strResult = '<div>'
+        strResult = ''
+
+        if listArg == None:
+            strResult += self.__listDescriptionToHtml__(self.listDescription)
+        elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
+            # list item + childs
+            strResult += '<li>' + listArg[0] + '</li>\n<ul>' + self.__listDescriptionToHtml__(listArg[1]) + '</ul>\n'
+        elif type(listArg) is list and len(listArg) > 0:
+            # list items
+            for c in listArg:
+                if type(c) is str:
+                    strResult += '<li>' + c + '</li>\n'
+                elif type(c) is list:
+                    strResult += self.__listDescriptionToHtml__(c)
+                else:
+                    print('fail: ',c, file=sys.stderr)
+
+        #strResult += '</div>'
 
         return strResult
 
@@ -353,7 +380,7 @@ class unit(description):
 
         """  """
 
-        if floatScale > 0.1 and (patternType == None or re.match(patternType,self.type)):
+        if floatScale > 0.1 and (patternType == None or self.type == None or re.match(patternType,self.type)):
 
             if self.dist != None:
                 if self.dist < 15.0:
@@ -369,6 +396,8 @@ class unit(description):
                 else:
                     # round duration to 5:00 min
                     self.duration = timedelta(seconds=(round(s * floatScale / 300.0) * 300.0))
+
+        return self
 
 
     def dup(self):
@@ -436,7 +465,7 @@ class unit(description):
         else:
             strResult = '{date} {dist:5.1f} {type} {duration}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
 
-        #strResult += self.__listDescriptionToPlain__()
+        strResult += self.__listDescriptionToString__()
 
         return strResult
 
@@ -452,7 +481,7 @@ class unit(description):
         else:
             strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
 
-        strResult += ';' + self.__listDescriptionToPlain__()
+        strResult += ';' + self.__listDescriptionToString__()
 
         return strResult
 
@@ -464,7 +493,7 @@ class unit(description):
         strResult = ''
 
         if self.duration == None or self.duration.total_seconds() < 60:
-            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + diagram_bar_height / 2, y + diagram_bar_height, self.__listDescriptionToPlain__(), self.toString())
+            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + diagram_bar_height / 2, y + diagram_bar_height, self.__listDescriptionToString__(), self.toString())
         else:
             strResult += '<rect '
 
@@ -482,7 +511,7 @@ class unit(description):
             strResult += ' height="{}" stroke="black" stroke-width=".5" width="{:.0f}" x="{}" y="{}"'.format(diagram_bar_height, bar_width, x, y)
             strResult += '>'
 
-            strResult += '<title>{}: {}</title>'.format(self.toString(), self.__listDescriptionToPlain__())
+            strResult += '<title>{}: {}</title>'.format(self.toString(), self.__listDescriptionToString__())
 
             strResult += '</rect>\n'
 
@@ -520,11 +549,11 @@ class unit(description):
         strResult = 'BEGIN:VEVENT\n'
 
         if self.type == None:
-            strResult += "SUMMARY:{description}\n".format(description = self.__listDescriptionToPlain__())
+            strResult += "SUMMARY:{description}\n".format(description = self.__listDescriptionToString__())
         else:
             strResult += "SUMMARY:{type} {time}\n".format(type=self.type, time=self.getDurationStr())
             if self.hasDescription():
-                strResult += 'DESCRIPTION:{}\n'.format(self.__listDescriptionToPlain__())
+                strResult += 'DESCRIPTION:{}\n'.format(self.__listDescriptionToString__())
 
         if self.clock == None or self.duration == None:
             strResult += self.date.strftime("DTSTART;%Y%m%d\nDTEND;%Y%m%d\n")
@@ -568,11 +597,11 @@ class unit(description):
         event = Event()
 
         if self.type == None:
-            event.add('summary', self.__listDescriptionToPlain__())
+            event.add('summary', self.__listDescriptionToString__())
         else:
             event.add('summary', "{} {}".format(self.type, self.getDurationStr()))
             if self.hasDescription():
-                event.add('description', self.__listDescriptionToPlain__())
+                event.add('description', self.__listDescriptionToString__())
 
         if self.clock == None or self.duration == None:
             event.add('dtstart', self.date)
@@ -603,7 +632,12 @@ class unit(description):
             event.add('dtstart', t0)
             event.add('dtend', t1)
 
-        # TODO: add reminder
+            # TODO: add reminder
+            alarm = Alarm()
+            alarm.add('action', 'none')
+            alarm.add('trigger', t0 - timedelta(minutes=15))
+            event.add_component(alarm)
+        
         event.add('dtstamp', datetime.now().astimezone(None))
         cal.add_component(event)
 
@@ -638,6 +672,8 @@ class cycle(title,description):
         self.dateBegin = date.today()
         self.dateEnd = date.today()
 
+        self.color = None
+
 
     def resetDistances(self):
 
@@ -654,6 +690,14 @@ class cycle(title,description):
 
         for v in self.child:
             del v[0:]
+
+
+    def setColor(self,strColor):
+
+        """  """
+
+        if strColor != None and len(strColor) > 0:
+            self.color = strColor
 
 
     def getLength(self):
@@ -676,7 +720,7 @@ class cycle(title,description):
         return objResult
 
 
-    def insertByDate(self,objUnit):
+    def insertByDate(self,objUnit,flagReplace=False):
 
         """  """
 
@@ -686,7 +730,11 @@ class cycle(title,description):
             delta = objUnit.date - self.dateBegin
             if delta.days > -1 and objUnit.date <= self.dateEnd:
                 objResult = objUnit.dup()
-                self.child[delta.days].append(objResult)
+                if flagReplace:
+                    # delete exisiting
+                    self.child[delta.days] = [objResult]
+                else:
+                    self.child[delta.days].append(objResult)
 
         return objResult
 
@@ -723,6 +771,19 @@ class cycle(title,description):
         return intResult
 
 
+    def getDurationOfUnits(self):
+
+        """ in minutes """
+
+        intResult = 0
+        for v in self.child:
+            for u in v:
+                if u.type != None and len(u.type) > 0 and u.duration != None and u.duration.total_seconds() > 59:
+                    intResult += u.duration.total_seconds()
+
+        return intResult / 60
+
+
     def getTypeOfUnits(self,arrArg=None):
 
         """  """
@@ -749,6 +810,8 @@ class cycle(title,description):
             for u in v:
                 u.scale(floatScale,patternType)
 
+        return self
+
 
     def schedule(self, intYear, intMonth, intDay):
 
@@ -764,6 +827,8 @@ class cycle(title,description):
         self.dateBegin = date(intYear, intMonth, intDay)
         self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
 
+        return self
+    
 
     def stat(self, arrArg):
 
@@ -839,6 +904,35 @@ class cycle(title,description):
         for v in self.child:
             for u in v:
                 strResult += u.toString() + '\n'
+
+        return strResult
+
+
+    def toHtml(self):
+
+        """  """
+        
+        strResult = '<section class="cycle"'
+
+        if self.color != None:
+            strResult += ' style="background-color: {}"'.format(self.color)
+
+        strResult += '><div class="header">' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '</div>\n'
+
+        strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
+        
+        for v in self.child:
+            for u in v:
+                strResult += '<p class="unit"'
+                if u.type != None and len(u.type) > 0 and u.type[0] in colors:
+                    strResult += ' style="background-color: ' + colors[u.type[0]] + '"'
+
+                strResult += '>' + u.toString() + '</p>\n'
+
+        #strResult += '<svg baseProfile="full" height="200" version="1.1" width="800" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">' + self.toSVG(200,0) + '</svg>'
+
+        strResult += '</section>'
+
         return strResult
 
 
@@ -850,6 +944,7 @@ class cycle(title,description):
         for v in self.child:
             for u in v:
                 strResult += u.toCSV() + '\n'
+
         return strResult
 
 
@@ -861,7 +956,10 @@ class cycle(title,description):
 
         strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+diagram_width,y)
 
-        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
+        if self.color != None:
+            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((diagram_bar_height * 2)*len(self.child))-2,x+diagram_width-4)
+
+        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ')
 
         if len(self.child) < 1:
             pass
@@ -910,8 +1008,36 @@ class cycle(title,description):
         l = self.dateEnd - self.dateBegin
         x_i = (self.dateBegin - dateBase).days * 2
 
-        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format('#ffaaaa', x_i, y, diagram_bar_height*2, (l.days + 1) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + self.__listDescriptionToPlain__())
+        if self.color == None:
+            color = '#ffaaaa'
+        else:
+            color = self.color
+            
+        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, diagram_bar_height*2, (l.days + 1) * 2)
+        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToString__())
+        strResult += '</rect>'
+
+        # TODO: make training.diagram_height configurable
+        diagram_height = 40 * (diagram_bar_height * 2) + 100
+
+        h = round(self.getDurationOfUnits() / (l.days + 1))
+
+        if self.color != None:
+            scolor = 'red'
+            color = self.color
+        elif h > 20:
+            scolor = 'green'
+            color = '#aaffaa'
+        elif h > 4:
+            scolor = 'red'
+            color = '#ffaaaa'
+        else:
+            h = 2
+            scolor = 'red'
+            color = 'red'
+            
+        strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, diagram_height - h - 10, h, (l.days + 1) * 2 - 2)
+        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToString__() + ' ' + str(h) + ' min/d' )
         strResult += '</rect>'
 
         #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i,y,self.getTitleStr())
@@ -926,7 +1052,9 @@ class cycle(title,description):
 
         strResult = '<node'
 
-        if self.getNumberOfUnits() < 1:
+        if self.color != None:
+            strResult += ' BACKGROUND_COLOR="{}"'.format(self.color)
+        elif self.getNumberOfUnits() < 1:
             strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')
         else:
             strResult += ' FOLDED="{}"'.format('true')
@@ -1003,6 +1131,8 @@ class period(title,description):
         self.dateBegin = date.today()
         self.dateEnd = date.today()
 
+        return self
+
 
     def resetDistances(self):
 
@@ -1011,6 +1141,8 @@ class period(title,description):
         for c in self.child:
             c.resetDistances()
 
+        return self
+
 
     def resetUnits(self):
 
@@ -1018,6 +1150,8 @@ class period(title,description):
 
         for c in self.child:
             c.resetUnits()
+
+        return self
 
 
     def appendChildDescription(self,objArg):
@@ -1058,8 +1192,10 @@ class period(title,description):
         c = objChild.dup()
         self.child.append(c)
 
+        return self
 
-    def insertByDate(self,objUnit):
+    
+    def insertByDate(self,objUnit,flagReplace=False):
 
         """  """
 
@@ -1076,9 +1212,9 @@ class period(title,description):
                     objResult = c.insertByDate(objUnit)
                     if objResult != None:
                         self.append(c)
-            else:        
+            else:
                 for c in self.child:
-                    objResult = c.insertByDate(objUnit)
+                    objResult = c.insertByDate(objUnit,flagReplace)
                     if objResult != None:
                         break
 
@@ -1113,6 +1249,8 @@ class period(title,description):
         for c in self.child:
             c.scale(floatScale,patternType)
 
+        return self
+
 
     def schedule(self, intYear, intMonth, intDay):
 
@@ -1126,6 +1264,8 @@ class period(title,description):
 
         self.dateBegin = date(intYear, intMonth, intDay)
         self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
+
+        return self
 
 
     def report(self, arrArg=None):
@@ -1251,8 +1391,64 @@ class period(title,description):
         """  """
 
         strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
+
+        strResult += self.__listDescriptionToString__()
+
         for c in self.child:
             strResult += c.toString() + '\n'
+            
+        return strResult
+
+
+    def toPlain(self):
+
+        return self.toString() + '\n'
+
+
+    def toHtml(self):
+
+        """  """
+
+        strResult = '<section class="period">'
+
+        strResult += '<div class="header">' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '</div>\n'
+
+        strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
+        
+        strResult += '<pre>' + self.report() + '</pre>'
+        
+        #strResult += '<svg baseProfile="full" height="600" version="1.1" width="1000" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">' + self.toSVG(200,0) + '</svg>'
+
+        for c in self.child:
+            strResult += c.toHtml() + '\n'
+            
+        strResult += '</section>\n'
+
+        return strResult
+
+
+    def toHtmlFile(self):
+
+        """ returns html/body + content """
+
+        strResult = '<!doctype html public "-//IETF//DTD HTML 4.0//EN">'
+
+        strResult += "<html>"
+
+        strResult += "<head>"
+
+        strResult += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
+        
+        strResult += "<title></title>"
+
+        strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\n</style>\n"
+
+        strResult += "</head>"
+
+        strResult += "<body>" + self.toHtml() + "</body>"
+
+        strResult += "</html>"
+
         return strResult
 
 
@@ -1263,6 +1459,7 @@ class period(title,description):
         strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
         for c in self.child:
             strResult += c.toCSV() + '\n'
+
         return strResult
 
 
@@ -1284,6 +1481,7 @@ class period(title,description):
         for c in self.child:
             strResult += c.toXML()
         strResult += '</node>\n'
+
         return strResult
 
 
@@ -1294,6 +1492,7 @@ class period(title,description):
         strResult = '<map>\n'
         strResult += self.toXML()
         strResult += '</map>\n'
+
         return strResult
 
 
@@ -1340,6 +1539,7 @@ class period(title,description):
         strResult += self.toSVG()
         #strResult += '</g>'
         strResult += '</svg>\n'
+
         return strResult
 
 
@@ -1353,7 +1553,7 @@ class period(title,description):
         strResult = '<g>'
 
         strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format('#aaaaff', x_i, y, diagram_bar_height*2, (l.days + 1) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + self.__listDescriptionToPlain__())
+        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToString__())
         strResult += '</rect>'
         strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 10,self.getTitleStr())
 
@@ -1377,7 +1577,7 @@ class period(title,description):
         d_0 = self.child[0].dateBegin
         d_1 = self.child[len(self.child) - 1].dateEnd
 
-        diagram_height = 30 * (diagram_bar_height * 2) + 100
+        diagram_height = 40 * (diagram_bar_height * 2) + 100
         diagram_width = ((d_1 - d_0).days) * 2 + 100
         
         strResult = '<svg baseProfile="full" height="{}" version="1.1" width="{}" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, diagram_width)
@@ -1388,21 +1588,35 @@ class period(title,description):
 
         strResult += '<g>'
 
-        # for i in range(1,13):
-        #     d_i = date(d_0.year,i,1)
-        #     w = ((d_i - d_0).days + 1) * 2
-        #     strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 20, w, diagram_height)
-        # d_i = date(2022,1,1)
-        # w = ((d_i - d_0).days + 1) * 2
-        # strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 20, w, diagram_height)
+        m = round((d_1 - d_0).total_seconds() / (30 * 24 * 60 * 60))
+        for i in range(0,m+1):
+            d_i = date(d_0.year+round(i//12),i%12+1,1)
+            w = ((d_i - d_0).days + 1) * 2
+            if i % 12:
+                color = 'black'
+            else:
+                color = 'red'
+                
+            strResult += '<line stroke-dasharray="8" stroke="{}" stroke-width="1" opacity="0.25" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(color,w, 0, w, diagram_height)
+            strResult += '<title>{}</title>\n'.format(d_i.isoformat())
+            strResult += '</line>'
+            strResult += '<g transform="translate({},{})">'.format(w+8, diagram_height - 105)
+            strResult += '<g transform="rotate(-45)">'
+            strResult += '<text x="{}" y="{}">{}</text>\n'.format(0, 0, d_i.isoformat())
+            strResult += '</g>'
+            strResult += '</g>'
 
         w = ((date.today() - d_0).days + 1) * 2
         strResult += '<line stroke="red" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 0, w, diagram_height)
         strResult += '</g>'
 
+        for i in [0,30,45,60,90]:
+            strResult += '<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0, diagram_height - 10 - i, diagram_width, diagram_height - 10 - i)
+            
         strResult += self.toSVGGantt(d_0)
         strResult += '</g>'
         strResult += '</svg>\n'
+
         return strResult
 
 
@@ -1426,12 +1640,12 @@ class period(title,description):
 
         """  """
 
-        event = Event()
-        event.add('summary', 'Period: {}'.format(self.getTitleStr()))
-        event.add('dtstart', self.dateBegin)
-        event.add('dtend', self.dateEnd + timedelta(days=1))
-        event.add('dtstamp', datetime.now().astimezone(None))
-        cal.add_component(event)
+        #event = Event()
+        #event.add('summary', 'Period: {}'.format(self.getTitleStr()))
+        #event.add('dtstart', self.dateBegin)
+        #event.add('dtend', self.dateEnd + timedelta(days=1))
+        #event.add('dtstamp', datetime.now().astimezone(None))
+        #cal.add_component(event)
 
         for c in self.child:
             c.to_ical(cal)
@@ -1468,6 +1682,40 @@ def CalendarYearPeriod(intYear):
         s = cycle(str(intYear),366)
     except ValueError:
         s = cycle(str(intYear),365)
+
+    s.schedule(intYear,1,1)
+
+    return s
+
+
+def CalendarSeasonPeriod(intYear):
+
+    """ returns a plain calendar year containing seasons periods """
+
+    s = period(str(intYear))
+
+    # begin of year
+    d_0 = date(intYear,1,1)
+
+    # begin of spring
+    d_1 = date(intYear,3,21)
+    s.append(cycle('Winter ' + str(intYear), round((d_1 - d_0).total_seconds() / (24 * 60 * 60))))
+
+    # begin of summer
+    d_2 = date(intYear,6,21)
+    s.append(cycle('Spring ' + str(intYear), round((d_2 - d_1).total_seconds() / (24 * 60 * 60))))
+
+    # begin of autumn
+    d_3 = date(intYear,9,21)
+    s.append(cycle('Summer ' + str(intYear), round((d_3 - d_2).total_seconds() / (24 * 60 * 60))))
+    
+    # begin of winter
+    d_4 = date(intYear,12,21)
+    s.append(cycle('Autumn ' + str(intYear), round((d_4 - d_3).total_seconds() / (24 * 60 * 60))))
+    
+    # begin of next year
+    d_5 = date(intYear+1,1,1)
+    s.append(cycle('Winter ' + str(intYear+1), round((d_5 - d_4).total_seconds() / (24 * 60 * 60))))
 
     s.schedule(intYear,1,1)
 

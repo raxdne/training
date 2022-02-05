@@ -216,7 +216,7 @@ f = open('SimplePlan.mm', 'w')
 f.write(s.toFreeMind())
 f.close()
 
-f = open('SimplePlan.ics', 'w')
+f = open('SimplePlan.ics', 'wb')
 f.write(s.toVCalendar())
 f.close()
 
