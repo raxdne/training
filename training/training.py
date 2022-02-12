@@ -684,12 +684,24 @@ class cycle(title,description):
                 u.setDistStr(None)
 
 
-    def resetUnits(self):
+    def resetUnits(self,patternType=None):
 
         """  """
 
-        for v in self.child:
-            del v[0:]
+        if patternType == None:
+            for v in self.child:
+                del v[0:]
+        else:
+            for v in self.child:
+                # due to modification of the array iterator is not usable
+                i = 0
+                j = len(v)
+                while i < j:
+                    if v[i].type != None and re.match(patternType,v[i].type):
+                        v.pop(i)
+                        j -= 1
+                    else:
+                        i += 1
 
 
     def setColor(self,strColor):
@@ -1144,12 +1156,12 @@ class period(title,description):
         return self
 
 
-    def resetUnits(self):
+    def resetUnits(self,patternType=None):
 
         """  """
 
         for c in self.child:
-            c.resetUnits()
+            c.resetUnits(patternType)
 
         return self
 
@@ -1673,7 +1685,7 @@ class period(title,description):
 #
 #
 
-def CalendarYearPeriod(intYear):
+def CalendarYearPeriod(intYear,strArg=None):
 
     """ returns a plain calendar year period """
 
@@ -1683,12 +1695,15 @@ def CalendarYearPeriod(intYear):
     except ValueError:
         s = cycle(str(intYear),365)
 
+    if strArg != None and len(strArg) > 0:
+        s.setTitleStr(strArg)
+
     s.schedule(intYear,1,1)
 
     return s
 
 
-def CalendarSeasonPeriod(intYear):
+def CalendarSeasonPeriod(intYear,strArg=None):
 
     """ returns a plain calendar year containing seasons periods """
 
@@ -1717,12 +1732,15 @@ def CalendarSeasonPeriod(intYear):
     d_5 = date(intYear+1,1,1)
     s.append(cycle('Winter ' + str(intYear+1), round((d_5 - d_4).total_seconds() / (24 * 60 * 60))))
 
+    if strArg != None and len(strArg) > 0:
+        s.setTitleStr(strArg)
+
     s.schedule(intYear,1,1)
 
     return s
 
 
-def CalendarWeekPeriod(intYear):
+def CalendarWeekPeriod(intYear,strArg=None):
 
     """ returns a calendar year containing week periods """
 
@@ -1741,12 +1759,15 @@ def CalendarWeekPeriod(intYear):
         # skip to previous monday
         d -= timedelta(days=(d.isoweekday() - 1))
 
+    if strArg != None and len(strArg) > 0:
+        s.setTitleStr(strArg)
+
     s.schedule(d.year,d.month,d.day)
 
     return s
 
 
-def CalendarMonthPeriod(intYear):
+def CalendarMonthPeriod(intYear,strArg=None):
 
     """ returns a calendar year containing month periods """
 
@@ -1760,6 +1781,9 @@ def CalendarMonthPeriod(intYear):
 
         c = cycle(str(intYear) + '.' + str(m),d.days)
         s.append(c)
+
+    if strArg != None and len(strArg) > 0:
+        s.setTitleStr(strArg)
 
     s.schedule(intYear,1,1)
 
