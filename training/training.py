@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021 by Alexander Tenbusch
+# Copyright (C) 2021,2022 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -275,6 +275,18 @@ class unit(description):
         self.clock = None
         self.setDescription()
 
+        return self
+
+
+    def appendDescription(self,objArg):
+
+        """  """
+
+        if objArg != None and len(objArg) > 0:
+            super().appendDescription(objArg)
+
+        return self
+
 
     def setTypeStr(self,strArg):
 
@@ -284,6 +296,7 @@ class unit(description):
             pass
         else:
             self.type = strArg.replace(' ','')[0:max_length_type]
+
         return True
 
 
@@ -294,7 +307,7 @@ class unit(description):
         if strArg == None or strArg == '':
             self.dist = None
         else:
-            self.dist = float(strArg)
+            self.dist = float(strArg.replace(',','.'))
             if self.dist < 0.001:
                 self.dist = None
 
@@ -306,7 +319,7 @@ class unit(description):
         """  """
 
         if strArg == None or strArg == '':
-            self.duration = timedelta(0)
+            self.duration = None
         else:
             entry = strArg.split(':')
             if len(entry) == 1:
@@ -319,13 +332,13 @@ class unit(description):
                     if len(entry) == 2:
                         self.duration = timedelta(hours=float(entry[0]))
                     else:
-                        self.duration = timedelta(0)
+                        self.duration = None
             elif len(entry) == 2:
                 self.duration = timedelta(minutes=int(entry[0]), seconds=int(entry[1]))
             elif len(entry) == 3:
                 self.duration = timedelta(hours=int(entry[0]), minutes=int(entry[1]), seconds=int(entry[2]))
             else:
-                self.duration = timedelta(0)
+                self.duration = None
 
         return True
 
@@ -334,18 +347,27 @@ class unit(description):
 
         """  """
 
-        if self.duration == None:
-            return "0:00:00"
-        else:
+        strResult = ''
+        
+        if self.duration != None:
             seconds = self.duration.total_seconds()
-            return time(hour = int(seconds // 3600), minute = int((seconds % 3600) // 60), second = int(seconds % 60)).strftime("%H:%M:%S")
+            strResult = time(hour = int(seconds // 3600), minute = int((seconds % 3600) // 60), second = int(seconds % 60)).strftime("%H:%M:%S")
+
+        return strResult
 
 
     def setDate(self,objArg):
 
         """  """
 
-        self.date = objArg
+        if type(objArg) == date:
+            self.date = objArg
+        elif type(objArg) == time:
+            self.clock = objArg
+        else:
+            print('ignoring: ',type(objArg), file=sys.stderr)
+            
+        return self
 
 
     def setDateStr(self,strArg):
@@ -361,17 +383,28 @@ class unit(description):
                 self.setDateStr(m.group(1))
                 self.setDateStr(m.group(2))
             else:
-                m = re.match(r"([0-9]{4})-*([0-9]{2})-*([0-9]{2})",strArg)
+                m = re.match(r"([0-9]{2})\.([0-9]{2})\.([0-9]{4})",strArg)
                 if m != None:
-                    #print("date: ",m.group(0), file=sys.stderr)
-                    self.date = date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+                    try:
+                        self.setDate(date(int(m.group(3)), int(m.group(2)), int(m.group(1))))
+                    except ValueError:
+                        #print("date: ",m.group(0), file=sys.stderr)
+                        return False
                 else:
-                    m = re.match(r"([0-2][0-9]:[0-5]{2})",strArg)
+                    m = re.match(r"([0-9]{4})-*([0-9]{2})-*([0-9]{2})",strArg)
                     if m != None:
-                        #print("time: ",m.group(1), file=sys.stderr)
-                        self.clock = time.fromisoformat("{}:00".format(m.group(1)))
+                        try:
+                            self.setDate(date(int(m.group(1)), int(m.group(2)), int(m.group(3))))
+                        except ValueError:
+                            #print("date: ",m.group(0), file=sys.stderr)
+                            return False
                     else:
-                        print('ignoring: ',strArg, file=sys.stderr)
+                        m = re.match(r"([0-2][0-9]:[0-5]{2})",strArg)
+                        if m != None:
+                            #print("time: ",m.group(1), file=sys.stderr)
+                            self.setDate(time.fromisoformat("{}:00".format(m.group(1))))
+                        else:
+                            print('ignoring: ',strArg, file=sys.stderr)
 
         return True
 
@@ -464,8 +497,6 @@ class unit(description):
             strResult = '{date} {dist:5.1f} {type} {duration}'.format(date='', dist=self.dist, type=self.type, duration=self.getDurationStr())
         else:
             strResult = '{date} {dist:5.1f} {type} {duration}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
-
-        strResult += self.__listDescriptionToString__()
 
         return strResult
 
@@ -674,6 +705,18 @@ class cycle(title,description):
 
         self.color = None
 
+        return self
+
+
+    def appendDescription(self,objArg):
+
+        """  """
+
+        if objArg != None and len(objArg) > 0:
+            super().appendDescription(objArg)
+
+        return self
+
 
     def resetDistances(self):
 
@@ -682,6 +725,8 @@ class cycle(title,description):
         for v in self.child:
             for u in v:
                 u.setDistStr(None)
+
+        return self
 
 
     def resetUnits(self,patternType=None):
@@ -703,6 +748,8 @@ class cycle(title,description):
                     else:
                         i += 1
 
+        return self
+
 
     def setColor(self,strColor):
 
@@ -710,6 +757,8 @@ class cycle(title,description):
 
         if strColor != None and len(strColor) > 0:
             self.color = strColor
+
+        return self
 
 
     def getLength(self):
@@ -865,7 +914,7 @@ class cycle(title,description):
 
         for v in self.child:
             for u in v:
-                if u.type != None and len(u.type) > 0:
+                if u.type != None and len(u.type) > 0 and u.duration != None:
                     if u.type in arrArg:
                         if u.dist != None:
                             if arrArg[u.type][0] == None:
@@ -939,7 +988,7 @@ class cycle(title,description):
                 if u.type != None and len(u.type) > 0 and u.type[0] in colors:
                     strResult += ' style="background-color: ' + colors[u.type[0]] + '"'
 
-                strResult += '>' + u.toString() + '</p>\n'
+                strResult += '>' + u.toString() + ' ' + u.__listDescriptionToString__() + '</p>\n'
 
         #strResult += '<svg baseProfile="full" height="200" version="1.1" width="800" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">' + self.toSVG(200,0) + '</svg>'
 
@@ -971,7 +1020,7 @@ class cycle(title,description):
         if self.color != None:
             strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((diagram_bar_height * 2)*len(self.child))-2,x+diagram_width-4)
 
-        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ')
+        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ', self.__listDescriptionToString__())
 
         if len(self.child) < 1:
             pass
@@ -994,7 +1043,7 @@ class cycle(title,description):
 
                 for u in v:
                     # all units first
-                    if u.type != None:
+                    if u.type != None and u.duration != None:
                         strResult += u.toSVG(x_i,y)
                         x_i += u.duration.total_seconds() / 3600 * 25 * diagram_scale_dist
 
@@ -1146,6 +1195,16 @@ class period(title,description):
         return self
 
 
+    def appendDescription(self,objArg):
+
+        """  """
+
+        if objArg != None and len(objArg) > 0:
+            super().appendDescription(objArg)
+
+        return self
+
+
     def resetDistances(self):
 
         """  """
@@ -1238,6 +1297,8 @@ class period(title,description):
         """  """
 
         self.periodInt = intArg
+
+        return self
 
 
     def getPeriod(self):
@@ -1338,7 +1399,7 @@ class period(title,description):
         return strResult
 
 
-    def parseFile(self,listFilename):
+    def parseFile(self,listFilename,fUpdater=None):
 
         """  """
 
@@ -1359,7 +1420,7 @@ class period(title,description):
             for l in content:
                 if l == None or l == '':
                     pass
-                elif t.parse(l) and t.date != None:
+                elif ((fUpdater != None and t.parse(fUpdater(l))) or t.parse(l)) and t.date != None:
                     if d0 == None or t.date < d0:
                         d0 = t.date
                     if d1 == None or t.date > d1:
@@ -1389,6 +1450,8 @@ class period(title,description):
         for t in a:
             #print(t.toString())
             self.insertByDate(t)
+
+        return self
 
 
     def dup(self):
