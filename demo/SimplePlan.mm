@@ -327,7 +327,7 @@
 </node>
 </node>
 <node FOLDED="true" TEXT="Highlight Running Distance&#xa;(2021-12-27 .. 2022-01-02)&#xa;   1 x Running    10 km     1 h&#xa;   1 h     in 7 Days =  1.0 h/Week&#xa;">
-<font BOLD="false" NAME="Monospaced" SIZE="12"/><node TEXT="2022-01-02  10.0 Running 01:00:00 Running min. 10 km" BACKGROUND_COLOR="#ffdddd"><node TEXT="6:00 min/km 10 km/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Running min. 10 km"/>
+<font BOLD="false" NAME="Monospaced" SIZE="12"/><node TEXT="2022-01-02  10.0 Running 01:00:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="6:00 min/km 10 km/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Running min. 10 km"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#ffaaaa" TEXT="Highlight Running Distance&#xa;(2022-01-03 .. 2022-01-16)&#xa;">
@@ -375,7 +375,7 @@
 </node>
 </node>
 <node FOLDED="true" TEXT="Highlight Running Distance&#xa;(2022-02-28 .. 2022-03-06)&#xa;   1 x Running    10 km     1 h&#xa;   1 h     in 7 Days =  1.0 h/Week&#xa;">
-<font BOLD="false" NAME="Monospaced" SIZE="12"/><node TEXT="2022-03-06  10.0 Running 01:00:00 Running min. 10 km" BACKGROUND_COLOR="#ffdddd"><node TEXT="6:00 min/km 10 km/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Running min. 10 km"/>
+<font BOLD="false" NAME="Monospaced" SIZE="12"/><node TEXT="2022-03-06  10.0 Running 01:00:00" BACKGROUND_COLOR="#ffdddd"><node TEXT="6:00 min/km 10 km/h "/><node BACKGROUND_COLOR="#ffffaa" TEXT="Running min. 10 km"/>
 </node>
 </node>
 </node>

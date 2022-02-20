@@ -40,7 +40,7 @@
 </g></g><line stroke-dasharray="8" stroke="black" stroke-width="1" opacity="0.25" x1="788" y1="0" x2="788" y2="740">
 <title>2022-02-01</title>
 </line><g transform="translate(796,635)"><g transform="rotate(-45)"><text x="0" y="0">2022-02-01</text>
-</g></g><line stroke="red" stroke-width=".5" x1="796" y1="0" x2="796" y2="740"/>
+</g></g><line stroke="red" stroke-width=".5" x1="826" y1="0" x2="826" y2="740"/>
 </g><line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="0" y1="730" x2="870" y2="730"/>
 <line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="0" y1="700" x2="870" y2="700"/>
 <line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="0" y1="685" x2="870" y2="685"/>
