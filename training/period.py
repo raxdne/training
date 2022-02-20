@@ -207,7 +207,8 @@ class Period(Title,Description):
         if self.dateBegin == None:
             try:
                 d = date(intYear, intMonth, intDay)
-            except:
+            except ValueError as e:
+                print('error: ' + str(e), file=sys.stderr)
                 return None
 
             for c in self.child:
@@ -216,6 +217,8 @@ class Period(Title,Description):
 
             self.dateBegin = date(intYear, intMonth, intDay)
             self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
+        else:
+            print('error: cannot set date again', file=sys.stderr)
 
         return self
 
@@ -537,7 +540,7 @@ class Period(Title,Description):
         diagram_height = 40 * (config.diagram_bar_height * 2) + 100
         try:
             diagram_width = ((d_1 - d_0).days) * 2 + 100
-        except:
+        except ValueError:
             return ''
 
         strResult = '<svg baseProfile="full" height="{}" version="1.1" width="{}" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, diagram_width)

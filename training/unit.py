@@ -171,16 +171,16 @@ class Unit(Description):
                 if m != None:
                     try:
                         self.setDate(date(int(m.group(3)), int(m.group(2)), int(m.group(1))))
-                    except ValueError:
-                        #print("date: ",m.group(0), file=sys.stderr)
+                    except ValueError as e:
+                        print('error: ' + str(e), file=sys.stderr)
                         return False
                 else:
                     m = re.match(r"([0-9]{4})-*([0-9]{2})-*([0-9]{2})",strArg)
                     if m != None:
                         try:
                             self.setDate(date(int(m.group(1)), int(m.group(2)), int(m.group(3))))
-                        except ValueError:
-                            #print("date: ",m.group(0), file=sys.stderr)
+                        except ValueError as e:
+                            print('error: ' + str(e), file=sys.stderr)
                             return False
                     else:
                         m = re.match(r"([0-2][0-9]:[0-5]{2})",strArg)
