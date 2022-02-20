@@ -1,0 +1,183 @@
+<svg baseProfile="full" height="740" version="1.1" width="546" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink"><style type="text/css">svg { font-family: Arial; font-size: 8pt; }</style><g transform="translate(10,10)"><g><line stroke-dasharray="8" stroke="red" stroke-width="1" opacity="0.25" x1="-116" y1="0" x2="-116" y2="740">
+<title>2022-01-01</title>
+</line><g transform="translate(-108,635)"><g transform="rotate(-45)"><text x="0" y="0">2022-01-01</text>
+</g></g><line stroke-dasharray="8" stroke="black" stroke-width="1" opacity="0.25" x1="-54" y1="0" x2="-54" y2="740">
+<title>2022-02-01</title>
+</line><g transform="translate(-46,635)"><g transform="rotate(-45)"><text x="0" y="0">2022-02-01</text>
+</g></g><line stroke-dasharray="8" stroke="black" stroke-width="1" opacity="0.25" x1="2" y1="0" x2="2" y2="740">
+<title>2022-03-01</title>
+</line><g transform="translate(10,635)"><g transform="rotate(-45)"><text x="0" y="0">2022-03-01</text>
+</g></g><line stroke-dasharray="8" stroke="black" stroke-width="1" opacity="0.25" x1="64" y1="0" x2="64" y2="740">
+<title>2022-04-01</title>
+</line><g transform="translate(72,635)"><g transform="rotate(-45)"><text x="0" y="0">2022-04-01</text>
+</g></g><line stroke-dasharray="8" stroke="black" stroke-width="1" opacity="0.25" x1="124" y1="0" x2="124" y2="740">
+<title>2022-05-01</title>
+</line><g transform="translate(132,635)"><g transform="rotate(-45)"><text x="0" y="0">2022-05-01</text>
+</g></g><line stroke-dasharray="8" stroke="black" stroke-width="1" opacity="0.25" x1="186" y1="0" x2="186" y2="740">
+<title>2022-06-01</title>
+</line><g transform="translate(194,635)"><g transform="rotate(-45)"><text x="0" y="0">2022-06-01</text>
+</g></g><line stroke-dasharray="8" stroke="black" stroke-width="1" opacity="0.25" x1="246" y1="0" x2="246" y2="740">
+<title>2022-07-01</title>
+</line><g transform="translate(254,635)"><g transform="rotate(-45)"><text x="0" y="0">2022-07-01</text>
+</g></g><line stroke-dasharray="8" stroke="black" stroke-width="1" opacity="0.25" x1="308" y1="0" x2="308" y2="740">
+<title>2022-08-01</title>
+</line><g transform="translate(316,635)"><g transform="rotate(-45)"><text x="0" y="0">2022-08-01</text>
+</g></g><line stroke="red" stroke-width=".5" x1="-16" y1="0" x2="-16" y2="740"/>
+</g><line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="0" y1="730" x2="546" y2="730"/>
+<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="0" y1="700" x2="546" y2="700"/>
+<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="0" y1="685" x2="546" y2="685"/>
+<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="0" y1="670" x2="546" y2="670"/>
+<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="0" y1="640" x2="546" y2="640"/>
+<g><rect fill="#aaaaff" opacity=".75" x="0" y="0" height="16" width="448" rx="2">
+<title>Season Triathlon Basics (2022-03-01 .. 2022-10-10)  Targets Same volume like last season defined Highlights Cycling Run Rules Regeneration Differenciation Type Intensity Distance</title>
+</rect><text x="2" y="10">Season Triathlon Basics</text>
+<g><rect fill="#aaaaff" opacity=".75" x="0" y="24" height="16" width="84" rx="2">
+<title>General Basics (2022-03-01 .. 2022-04-11)  Regeneration</title>
+</rect><text x="2" y="34">General Basics</text>
+<g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="0" y="48" height="16" width="14" rx="2">
+<title>General Endurance (2022-03-01 .. 2022-03-07) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="1" y="702" height="28" width="12">
+<title>General Endurance (2022-03-01 .. 2022-03-07)  28 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="14" y="72" height="16" width="14" rx="2">
+<title>General Endurance (2022-03-08 .. 2022-03-14) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="15" y="702" height="28" width="12">
+<title>General Endurance (2022-03-08 .. 2022-03-14)  28 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="28" y="96" height="16" width="14" rx="2">
+<title>General Regeneration (2022-03-15 .. 2022-03-21) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="29" y="705" height="25" width="12">
+<title>General Regeneration (2022-03-15 .. 2022-03-21)  25 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="42" y="120" height="16" width="14" rx="2">
+<title>General Endurance (2022-03-22 .. 2022-03-28) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="43" y="702" height="28" width="12">
+<title>General Endurance (2022-03-22 .. 2022-03-28)  28 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="56" y="144" height="16" width="14" rx="2">
+<title>General Endurance (2022-03-29 .. 2022-04-04) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="57" y="702" height="28" width="12">
+<title>General Endurance (2022-03-29 .. 2022-04-04)  28 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="70" y="168" height="16" width="14" rx="2">
+<title>General Regeneration (2022-04-05 .. 2022-04-11) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="71" y="705" height="25" width="12">
+<title>General Regeneration (2022-04-05 .. 2022-04-11)  25 min/d</title>
+</rect></g><line stroke-dasharray="4" stroke="black" stroke-width=".5" x1="84" y1="24" x2="84" y2="192"/>
+</g><g><rect fill="#aaaaff" opacity=".75" x="84" y="48" height="16" width="84" rx="2">
+<title>Basics Endurance Swimming (2022-04-12 .. 2022-05-23) </title>
+</rect><text x="86" y="58">Basics Endurance Swimming</text>
+<g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="84" y="72" height="16" width="14" rx="2">
+<title>Focus Swimming (2022-04-12 .. 2022-04-18) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="85" y="695" height="35" width="12">
+<title>Focus Swimming (2022-04-12 .. 2022-04-18)  35 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="98" y="96" height="16" width="14" rx="2">
+<title>Focus Swimming (2022-04-19 .. 2022-04-25)  Test 5km Time trial</title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="99" y="695" height="35" width="12">
+<title>Focus Swimming (2022-04-19 .. 2022-04-25)  Test 5km Time trial 35 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="112" y="120" height="16" width="14" rx="2">
+<title>General Regeneration (2022-04-26 .. 2022-05-02) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="113" y="705" height="25" width="12">
+<title>General Regeneration (2022-04-26 .. 2022-05-02)  25 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="126" y="144" height="16" width="14" rx="2">
+<title>Focus Swimming (2022-05-03 .. 2022-05-09) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="127" y="695" height="35" width="12">
+<title>Focus Swimming (2022-05-03 .. 2022-05-09)  35 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="140" y="168" height="16" width="14" rx="2">
+<title>Focus Swimming (2022-05-10 .. 2022-05-16) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="141" y="688" height="42" width="12">
+<title>Focus Swimming (2022-05-10 .. 2022-05-16)  42 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="154" y="192" height="16" width="14" rx="2">
+<title>General Regeneration (2022-05-17 .. 2022-05-23) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="155" y="705" height="25" width="12">
+<title>General Regeneration (2022-05-17 .. 2022-05-23)  25 min/d</title>
+</rect></g><line stroke-dasharray="4" stroke="black" stroke-width=".5" x1="168" y1="48" x2="168" y2="216"/>
+</g><g><rect fill="#aaaaff" opacity=".75" x="168" y="72" height="16" width="98" rx="2">
+<title>Basics Endurance Cycling (2022-05-24 .. 2022-07-11)  Weight, Metabolism, Nutrition 1000 km, switch to Racing bike</title>
+</rect><text x="170" y="82">Basics Endurance Cycling</text>
+<g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="168" y="96" height="16" width="14" rx="2">
+<title>Focus Cycling (2022-05-24 .. 2022-05-30) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="169" y="695" height="35" width="12">
+<title>Focus Cycling (2022-05-24 .. 2022-05-30)  35 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="182" y="120" height="16" width="14" rx="2">
+<title>Focus Cycling (2022-05-31 .. 2022-06-06)  Test 5km Time trial</title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="183" y="695" height="35" width="12">
+<title>Focus Cycling (2022-05-31 .. 2022-06-06)  Test 5km Time trial 35 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="196" y="144" height="16" width="14" rx="2">
+<title>General Regeneration (2022-06-07 .. 2022-06-13) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="197" y="705" height="25" width="12">
+<title>General Regeneration (2022-06-07 .. 2022-06-13)  25 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="210" y="168" height="16" width="14" rx="2">
+<title>Focus Cycling (2022-06-14 .. 2022-06-20) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="211" y="695" height="35" width="12">
+<title>Focus Cycling (2022-06-14 .. 2022-06-20)  35 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="224" y="192" height="16" width="14" rx="2">
+<title>Focus Cycling (2022-06-21 .. 2022-06-27) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="225" y="688" height="42" width="12">
+<title>Focus Cycling (2022-06-21 .. 2022-06-27)  42 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="238" y="216" height="16" width="14" rx="2">
+<title>Focus Cycling (2022-06-28 .. 2022-07-04) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="239" y="688" height="42" width="12">
+<title>Focus Cycling (2022-06-28 .. 2022-07-04)  42 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="252" y="240" height="16" width="14" rx="2">
+<title>General Regeneration (2022-07-05 .. 2022-07-11) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="253" y="705" height="25" width="12">
+<title>General Regeneration (2022-07-05 .. 2022-07-11)  25 min/d</title>
+</rect></g><line stroke-dasharray="4" stroke="black" stroke-width=".5" x1="266" y1="72" x2="266" y2="264"/>
+</g><g><rect fill="#aaaaff" opacity=".75" x="266" y="96" height="16" width="84" rx="2">
+<title>Specific Basics Running (2022-07-12 .. 2022-08-22)  Change of Focus</title>
+</rect><text x="268" y="106">Specific Basics Running</text>
+<g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="266" y="120" height="16" width="14" rx="2">
+<title>Focus Running (2022-07-12 .. 2022-07-18) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="267" y="689" height="41" width="12">
+<title>Focus Running (2022-07-12 .. 2022-07-18)  41 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="280" y="144" height="16" width="14" rx="2">
+<title>Focus Running (2022-07-19 .. 2022-07-25)  Test 1000m speed run</title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="281" y="689" height="41" width="12">
+<title>Focus Running (2022-07-19 .. 2022-07-25)  Test 1000m speed run 41 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="294" y="168" height="16" width="14" rx="2">
+<title>General Regeneration (2022-07-26 .. 2022-08-01) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="295" y="705" height="25" width="12">
+<title>General Regeneration (2022-07-26 .. 2022-08-01)  25 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="308" y="192" height="16" width="14" rx="2">
+<title>Focus Running (2022-08-02 .. 2022-08-08) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="309" y="681" height="49" width="12">
+<title>Focus Running (2022-08-02 .. 2022-08-08)  49 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="322" y="216" height="16" width="14" rx="2">
+<title>Focus Running (2022-08-09 .. 2022-08-15)  Test 1000m speed run</title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="323" y="681" height="49" width="12">
+<title>Focus Running (2022-08-09 .. 2022-08-15)  Test 1000m speed run 49 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="336" y="240" height="16" width="14" rx="2">
+<title>General Regeneration (2022-08-16 .. 2022-08-22) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="337" y="705" height="25" width="12">
+<title>General Regeneration (2022-08-16 .. 2022-08-22)  25 min/d</title>
+</rect></g><line stroke-dasharray="4" stroke="black" stroke-width=".5" x1="350" y1="96" x2="350" y2="264"/>
+</g><g><rect fill="#aaaaff" opacity=".75" x="350" y="120" height="16" width="84" rx="2">
+<title>Basics Endurance Combination: Swimming + Cycling + Running (2022-08-23 .. 2022-10-03) </title>
+</rect><text x="352" y="130">Basics Endurance Combination: Swimming + Cycling + Running</text>
+<g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="350" y="144" height="16" width="14" rx="2">
+<title>Focus Swimming (2022-08-23 .. 2022-08-29) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="351" y="695" height="35" width="12">
+<title>Focus Swimming (2022-08-23 .. 2022-08-29)  35 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="364" y="168" height="16" width="14" rx="2">
+<title>Focus Swimming (2022-08-30 .. 2022-09-05)  Test 5km Time trial</title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="365" y="695" height="35" width="12">
+<title>Focus Swimming (2022-08-30 .. 2022-09-05)  Test 5km Time trial 35 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="378" y="192" height="16" width="14" rx="2">
+<title>General Regeneration (2022-09-06 .. 2022-09-12) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="379" y="705" height="25" width="12">
+<title>General Regeneration (2022-09-06 .. 2022-09-12)  25 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="392" y="216" height="16" width="14" rx="2">
+<title>Focus Swimming (2022-09-13 .. 2022-09-19) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="393" y="695" height="35" width="12">
+<title>Focus Swimming (2022-09-13 .. 2022-09-19)  35 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="406" y="240" height="16" width="14" rx="2">
+<title>Focus Swimming (2022-09-20 .. 2022-09-26) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="407" y="688" height="42" width="12">
+<title>Focus Swimming (2022-09-20 .. 2022-09-26)  42 min/d</title>
+</rect></g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="420" y="264" height="16" width="14" rx="2">
+<title>General Regeneration (2022-09-27 .. 2022-10-03) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="421" y="705" height="25" width="12">
+<title>General Regeneration (2022-09-27 .. 2022-10-03)  25 min/d</title>
+</rect></g><line stroke-dasharray="4" stroke="black" stroke-width=".5" x1="434" y1="120" x2="434" y2="288"/>
+</g><g><rect opacity=".75" stroke="red" stroke-width=".5" fill="#ffaaaa" x="434" y="144" height="16" width="14" rx="2">
+<title>Highlight Triathlon Olympic Distance (2022-10-04 .. 2022-10-10) </title>
+</rect><rect opacity=".75" stroke="green" stroke-width=".5" fill="#aaffaa" x="435" y="694" height="36" width="12">
+<title>Highlight Triathlon Olympic Distance (2022-10-04 .. 2022-10-10)  36 min/d</title>
+</rect></g><line stroke-dasharray="4" stroke="black" stroke-width=".5" x1="448" y1="0" x2="448" y2="168"/>
+</g></g></svg>
