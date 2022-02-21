@@ -31,7 +31,7 @@ from suntime import Sun
 
 from icalendar import Calendar, Event, Alarm
 
-import training as config
+import config
 
 from description import Description
 
@@ -153,7 +153,7 @@ class Period(Title,Description):
                 delta = objUnit.date - self.dateBegin
                 if delta.days > -1 and objUnit.date <= self.dateEnd:
                     l = self.dateEnd - self.dateBegin
-                    c = cycle(self.getTitleStr(), l.days + 1)
+                    c = Cycle(self.getTitleStr(), l.days + 1)
                     c.schedule(self.dateBegin.year,self.dateBegin.month,self.dateBegin.day)
                     objResult = c.insertByDate(objUnit)
                     if objResult != None:
@@ -291,7 +291,7 @@ class Period(Title,Description):
         a = []
         d0 = None
         d1 = None
-        t = unit()
+        t = Unit()
 
         for filename in listFilename:
             print("* ",filename, file=sys.stderr)
@@ -308,7 +308,7 @@ class Period(Title,Description):
                     if d1 == None or t.date > d1:
                         d1 = t.date
                     a.append(t)
-                    t = unit()
+                    t = Unit()
                 else:
                     print('error: ' + l, file=sys.stderr)
 
@@ -321,13 +321,13 @@ class Period(Title,Description):
             pass
         elif delta.days < 365:
             for y in range(d0.year,d1.year+1):
-                self.append(CalendarWeekPeriod(y))
+                self.append(Period('').CalendarWeekPeriod(y))
         elif delta.days < 3 * 365:
             for y in range(d0.year,d1.year+1):
-                self.append(CalendarMonthPeriod(y))
+                self.append(Period('').CalendarMonthPeriod(y))
         else:
             for y in range(d0.year,d1.year+1):
-                self.append(CalendarYearPeriod(y))
+                self.append(Period('').CalendarYearPeriod(y))
 
         for t in a:
             #print(t.toString())
@@ -732,7 +732,7 @@ class Period(Title,Description):
 if __name__ == "__main__":
     
     print('Module Test:\n')
-    
+
     # p = Period('General Basics')
     # p.appendDescription('Regeneration')
 

@@ -29,13 +29,13 @@ from datetime import timedelta, date, datetime, time
 
 from icalendar import Calendar, Event, Alarm
 
+import config
+
 from description import Description
 
 from title import Title
 
 from unit import Unit
-
-import training as config
 
 #
 #

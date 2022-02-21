@@ -7,7 +7,7 @@ import argparse
 import glob
 import datetime
 
-import training as config
+import config
 
 from unit import Unit
 
@@ -51,7 +51,7 @@ def main(args=None):
 
     s = Period('Report ' + datetime.date.today().isoformat())
     s.parseFile(options.infile)
-    config.max_length_type = 1
+    #config.max_length_type = 1
     #config.unit_distance = 'mi'
     
     try:

@@ -25,10 +25,9 @@ from datetime import timedelta, date, datetime, time, timezone
 
 from icalendar import Calendar, Event, Alarm
 
+import config
+
 from description import Description
-
-import training as config
-
 
 #
 #

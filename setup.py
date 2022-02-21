@@ -1,11 +1,11 @@
 #
-# Copyright (C) 2021 by Alexander Tenbusch
+# Copyright (C) 2021,2022 by Alexander Tenbusch
 #
 
 from distutils.core import setup
 
 setup(name='training',
-      version='1.15',
+      version='2.0',
       description='simple Data Management for Physical Training',
       author='Alexander Tenbusch',
       author_email='raxdne@web.de',
