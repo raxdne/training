@@ -159,8 +159,6 @@ class Cycle(Title,Description):
                     self.day[delta.days] = [objResult]
                 else:
                     self.day[delta.days].append(objResult)
-            else:
-                print('ignoring: invalid unit "{}"'.format(objUnit.toString()), file=sys.stderr)
 
         return objResult
 

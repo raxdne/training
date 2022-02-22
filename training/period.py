@@ -368,7 +368,10 @@ class Period(Title,Description):
 
         strResult = '<section class="period">'
 
-        strResult += '<div class="header">' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '</div>\n'
+        strResult += '<div class="header">' + self.getTitleStr()
+        if self.dateBegin != None and self.dateEnd != None:
+            strResult += ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')'
+        strResult += '</div>\n'
 
         strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
         
@@ -413,7 +416,11 @@ class Period(Title,Description):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
+        strResult = '\n* ' + self.getTitleStr()
+        if self.dateBegin != None and self.dateEnd != None:
+            strResult += ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')'
+        strResult += '\n'
+
         for c in self.child:
             strResult += c.toCSV() + '\n'
 
@@ -430,7 +437,11 @@ class Period(Title,Description):
         else:
             strResult += ' FOLDED="{}"'.format('false')
 
-        strResult += ' TEXT="' + self.getTitleStr() + '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+        strResult += ' TEXT="' + self.getTitleStr()
+        if self.dateBegin != None and self.dateEnd != None:
+            strResult += '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;')
+        strResult += '">\n'
+
         strResult += '<font BOLD="true" NAME="Monospaced" SIZE="12"/>'
 
         strResult += self.__listDescriptionToXML__()
