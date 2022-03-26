@@ -31,15 +31,12 @@ from suntime import Sun
 
 from icalendar import Calendar, Event, Alarm
 
-import config
-
-from description import Description
-
-from title import Title
-
-from unit import Unit
-
-from cycle import Cycle
+from training import config as config
+from training.description import Description
+from training.title import Title
+from training.unit import Unit
+from training.cycle import Cycle
+#from training.period import Period
 
 #
 #
@@ -200,25 +197,45 @@ class Period(Title,Description):
         return self
 
 
-    def schedule(self, intYear, intMonth, intDay):
+    def schedule(self, intYear=None, intMonth=None, intDay=None):
 
         """  """
 
         if self.dateBegin == None:
-            try:
-                d = date(intYear, intMonth, intDay)
-            except ValueError as e:
-                print('error: ' + str(e), file=sys.stderr)
-                return None
 
-            for c in self.child:
-                c.schedule(d.year, d.month, d.day)
-                d += timedelta(days=c.getPeriod())
+            if intYear == None and intMonth == None and intDay == None:
+                if len(self.child) == 1:
+                    print('info: set dates of period according to child', file=sys.stderr)
+                    self.dateBegin = self.child[0].dateBegin
+                    self.dateEnd = self.child[0].dateEnd
+                elif len(self.child) > 1:
+                    print('info: set dates of period according to childs', file=sys.stderr)
+                    self.dateBegin = self.child[0].dateBegin
+                    self.dateEnd = self.child[-1].dateEnd
+                else:
+                    print('error: cannot set dates according to childs', file=sys.stderr)
+                    return None
+            else:
+                try:
+                    if intMonth == None and intDay == None:
+                        d = date(intYear, 1, 1)
+                    elif intDay == None:
+                        d = date(intYear, intMonth, 1)
+                    else:
+                        d = date(intYear, intMonth, intDay)
+                except ValueError as e:
+                    print('error: ' + str(e), file=sys.stderr)
+                    return None
 
-            self.dateBegin = date(intYear, intMonth, intDay)
-            self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
+                e = d
+                for c in self.child:
+                    c.schedule(e.year, e.month, e.day)
+                    e += timedelta(days=c.getPeriod())
+
+                self.dateBegin = d
+                self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
         else:
-            print('error: cannot set date again', file=sys.stderr)
+            print('info: cannot set date again', file=sys.stderr)
 
         return self
 

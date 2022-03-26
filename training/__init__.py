@@ -17,15 +17,15 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
-import math
+#import math
 
-import copy
+#import copy
 
-from icalendar import Calendar, Event, Alarm
+#from icalendar import Calendar, Event, Alarm
 
-from datetime import timedelta, date, datetime, time, timezone
+#from datetime import timedelta, date, datetime, time, timezone
 
-import config
+#import config
 
-__all__ = ['config','description','title','unit','cycle','period']
+#__all__ = ['config','description','title','unit','cycle','period']
 

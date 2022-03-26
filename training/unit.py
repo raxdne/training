@@ -27,9 +27,12 @@ from datetime import timedelta, date, datetime, time, timezone
 
 from icalendar import Calendar, Event, Alarm
 
-import config
-
-from description import Description
+from training import config as config
+from training.description import Description
+from training.title import Title
+#from training.unit import Unit
+#from training.cycle import Cycle
+#from training.period import Period
 
 #
 #
