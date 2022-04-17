@@ -130,6 +130,19 @@ class Cycle(Title,Description):
         return len(self.day)
 
 
+    def combine(self,objUnit):
+
+        """  """
+
+        # find last unit
+        for i in range(len(self.day)-1,0,-1):
+            if len(self.day[i]) > 0:
+                objUnit.combined = True
+                return self.insert(i,objUnit)
+        
+        return None
+
+
     def insert(self,intIndex,objUnit):
 
         """  """
@@ -412,13 +425,15 @@ class Cycle(Title,Description):
 
                 for u in v:
                     # all units first
-                    if u.type != None and u.duration != None:
+                    if u.duration != None:
+                        if not u.combined and v.index(u) > 0:
+                            x_i += 2
                         strResult += u.toSVG(x_i,y)
                         x_i += u.duration.total_seconds() / 3600 * 25 * config.diagram_scale_dist
 
                 for u in v:
                     # all remarks after
-                    if u.type == None:
+                    if u.duration == None:
                         strResult += u.toSVG(x_i,y)
                         x_i += len(u.toString()) * config.font_size
 
@@ -498,6 +513,8 @@ class Cycle(Title,Description):
 
         strResult += self.__listDescriptionToXML__()
 
+        # TODO: handle node of combined units
+
         for v in self.day:
             for u in v:
                 strResult += u.toXML()
@@ -547,7 +564,7 @@ if __name__ == "__main__":
 
     c.insert(1,Unit('18:00;3.5;RB;25:00'))
     c.insert(3,Unit('18:00;3.5;RB;25:00'))
-    c.insert(4,Unit(';FB;25:00'))
+    c.combine(Unit(';FB;25:00'))
     c.insert(5,Unit(';FB;25:00'))
     c.insert(6,Unit('08:00;30;BB;02:00:00'))
     c.insert(8,Unit(';FB;25:00'))

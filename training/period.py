@@ -316,14 +316,20 @@ class Period(Title,Description):
                 content = f.read().splitlines()
             f.close()
 
+            d_i = None
             for l in content:
                 if l == None or l == '':
                     pass
-                elif ((fUpdater != None and t.parse(fUpdater(l))) or t.parse(l)) and t.date != None:
-                    if d0 == None or t.date < d0:
-                        d0 = t.date
-                    if d1 == None or t.date > d1:
-                        d1 = t.date
+                elif (fUpdater != None and t.parse(fUpdater(l))) or t.parse(l):
+                    if t.date != None:
+                        d_i = t.date
+                        if d0 == None or t.date < d0:
+                            d0 = t.date
+                        if d1 == None or t.date > d1:
+                            d1 = t.date
+                    else:
+                        t.date = d_i
+
                     a.append(t)
                     t = Unit()
                 else:

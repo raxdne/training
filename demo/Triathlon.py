@@ -132,8 +132,8 @@ def Highlight1():
     c = Cycle('Highlight Triathlon Olympic Distance')
 
     c.insert(6,Unit('1.5;Swimming;1:00:00'))
-    c.insert(6,Unit('40;Cycling;1:40:00'))
-    c.insert(6,Unit('10;Running;1:30:00'))
+    c.combine(Unit('40;Cycling;1:40:00'))
+    c.combine(Unit('10;Running;1:30:00'))
     
     return c
 

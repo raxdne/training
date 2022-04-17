@@ -61,6 +61,7 @@ class Unit(Description):
         self.duration = None
         self.date = None
         self.clock = None
+        self.combined = False
         self.setDescription()
 
         return self
@@ -164,13 +165,18 @@ class Unit(Description):
 
         if strArg == None or strArg == '':
             pass
+        elif strArg == '+':
+            # it's a combined unit (starts after its predecessor unit, same date)
+            self.combined = True
         else:
+            # canonical ISO Date+Time
             m = re.match(r"\s*([0-9]{4}-*[0-9]{2}-*[0-9]{2})[\sT]+([0-2][0-9]:[0-5]{2})\s*",strArg)
             if m != None:
                 #print("date + time: ",m.group(1), " ",m.group(2))
                 self.setDateStr(m.group(1))
                 self.setDateStr(m.group(2))
             else:
+                # german Date
                 m = re.match(r"([0-9]{2})\.([0-9]{2})\.([0-9]{4})",strArg)
                 if m != None:
                     try:
@@ -179,6 +185,7 @@ class Unit(Description):
                         print('error: ' + str(e), file=sys.stderr)
                         return False
                 else:
+                    # canonical ISO Date
                     m = re.match(r"([0-9]{4})-*([0-9]{2})-*([0-9]{2})",strArg)
                     if m != None:
                         try:
@@ -187,6 +194,7 @@ class Unit(Description):
                             print('error: ' + str(e), file=sys.stderr)
                             return False
                     else:
+                        # clock only
                         m = re.match(r"([0-2][0-9]:[0-5]{2})",strArg)
                         if m != None:
                             #print("time: ",m.group(1), file=sys.stderr)
@@ -421,6 +429,8 @@ class Unit(Description):
             event.add('summary', "{} {}".format(self.type, self.getDurationStr()))
             if self.hasDescription():
                 event.add('description', self.__listDescriptionToString__())
+
+        # TODO: handle start time of combined units to_ical(self,cal,predecessor_end)
 
         if self.clock == None or self.duration == None:
             event.add('dtstart', self.date)
