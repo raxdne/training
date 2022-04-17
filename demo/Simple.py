@@ -2,13 +2,10 @@
 #
 #
 
-from unit import Unit
-
-from cycle import Cycle
-
-from period import Period
-
-import training as config
+from training.unit import Unit
+from training.cycle import Cycle
+from training.period import Period
+import training.config as config
 
 
 def RegenerationGeneral():
@@ -202,7 +199,7 @@ def PlanSimple(strArg):
     return s
 
 
-print(config.getSettingsStr())
+#print(config.getSettingsStr())
 
 s = PlanSimple('Season Simple').schedule(2021,1,4)
 
@@ -221,7 +218,7 @@ f = open('SimplePlan.mm', 'w')
 f.write(s.toFreeMind())
 f.close()
 
-f = open('SimplePlan.ics', 'w')
+f = open('SimplePlan.ics', 'wb')
 f.write(s.toVCalendar())
 f.close()
 

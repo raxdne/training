@@ -2,13 +2,10 @@
 #
 #
 
-from unit import Unit
-
-from cycle import Cycle
-
-from period import Period
-
-import training as config
+from training.unit import Unit
+from training.cycle import Cycle
+from training.period import Period
+import training.config as config
 
 from suntime import Sun
 
