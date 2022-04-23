@@ -513,11 +513,31 @@ class Cycle(Title,Description):
 
         strResult += self.__listDescriptionToXML__()
 
-        # TODO: handle node of combined units
-
         for v in self.day:
-            for u in v:
-                strResult += u.toXML()
+            # number of unit this day
+            n = len(v)
+            i = 0
+            while i < n:
+
+                # count number of combined units
+                j = i+1
+                while j < n and v[j].combined:
+                    j += 1
+
+                if j > i+1:
+                    # combined units
+                    strResult += '<node TEXT="{}">\n'.format('Block')
+                    k = i
+                    while k < j:
+                        strResult += v[k].toXML()
+                        k += 1
+                    i = k
+                    strResult += '</node>\n'
+                else:
+                    # no combined units
+                    strResult += v[i].toXML()
+                    i += 1
+                        
         strResult += '</node>\n'
 
         return strResult
@@ -551,6 +571,8 @@ class Cycle(Title,Description):
         event.add('dtstamp', datetime.now().astimezone(None))
         cal.add_component(event)
 
+        # TODO: handle combined units (end = start), s. toXML()
+        
         for v in self.day:
             for u in v:
                 u.to_ical(cal)
