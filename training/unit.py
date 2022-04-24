@@ -149,9 +149,9 @@ class Unit(Description):
 
         """  """
 
-        if type(objArg) == date:
+        if type(objArg) is date:
             self.date = objArg
-        elif type(objArg) == time:
+        elif type(objArg) is time:
             self.clock = objArg
         else:
             print('ignoring: ',type(objArg), file=sys.stderr)
@@ -170,7 +170,7 @@ class Unit(Description):
             self.combined = True
         else:
             # canonical ISO Date+Time
-            m = re.match(r"\s*([0-9]{4}-*[0-9]{2}-*[0-9]{2})[\sT]+([0-2][0-9]:[0-5]{2})\s*",strArg)
+            m = re.match(r"\s*([0-9]{4}-*[0-9]{2}-*[0-9]{2})[\sT]+([0-2][0-9]:[0-5][0-9])\s*",strArg)
             if m != None:
                 #print("date + time: ",m.group(1), " ",m.group(2))
                 self.setDateStr(m.group(1))
@@ -195,7 +195,7 @@ class Unit(Description):
                             return False
                     else:
                         # clock only
-                        m = re.match(r"([0-2][0-9]:[0-5]{2})",strArg)
+                        m = re.match(r"([0-2][0-9]:[0-5][0-9])",strArg)
                         if m != None:
                             #print("time: ",m.group(1), file=sys.stderr)
                             self.setDate(time.fromisoformat("{}:00".format(m.group(1))))
@@ -363,56 +363,6 @@ class Unit(Description):
         strResult += self.__listDescriptionToXML__()
 
         strResult += '</node>\n'
-
-        return strResult
-
-
-    def toiCalString(self):
-
-        """  """
-
-        dateNow = datetime.now()
-
-        strResult = 'BEGIN:VEVENT\n'
-
-        if self.type == None:
-            strResult += "SUMMARY:{description}\n".format(description = self.__listDescriptionToString__())
-        else:
-            strResult += "SUMMARY:{type} {time}\n".format(type=self.type, time=self.getDurationStr())
-            if self.hasDescription():
-                strResult += 'DESCRIPTION:{}\n'.format(self.__listDescriptionToString__())
-
-        if self.clock == None or self.duration == None:
-            strResult += self.date.strftime("DTSTART;%Y%m%d\nDTEND;%Y%m%d\n")
-        else:
-            t0 = datetime.combine(self.date, self.clock).astimezone(tz=LOCAL)
-            t1 = t0 + self.duration
-
-            if sun != None:
-                # fix 't' according to sunrise/sunset
-                t_earliest = sun.get_local_sunrise_time(self.date) + timedelta(seconds=twilight)
-                t_latest = sun.get_local_sunset_time(self.date) - timedelta(seconds=twilight)
-
-                if t_earliest > t0:
-                    # shift start time after twilight
-                    t0 = t_earliest
-                    # adjust to 15min steps
-                    t0 -= timedelta(minutes=(t0.minute % 15))
-                    t1 = t0 + self.duration
-                elif t_latest < t1:
-                    # shift end time before twilight
-                    t0 = t_latest - self.duration
-                    t0 -= timedelta(minutes=(t0.minute % 15))
-                    t1 = t0 + self.duration
-
-            #print(self.date,' ',self.clock,' ',self.type,' ',t0,' ',t_latest,file=sys.stderr)
-
-            strResult += t0.strftime("DTSTART;%Y%m%dT%H%M%S\n")
-            strResult += t1.strftime("DTEND;%Y%m%dT%H%M%S\n")
-
-        strResult += dateNow.strftime("DTSTAMP;%Y%m%dT%H%M%S\n")
-
-        strResult += 'END:VEVENT\n'
 
         return strResult
 

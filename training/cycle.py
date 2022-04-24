@@ -514,7 +514,7 @@ class Cycle(Title,Description):
         strResult += self.__listDescriptionToXML__()
 
         for v in self.day:
-            # number of unit this day
+            # count units of this day
             n = len(v)
             i = 0
             while i < n:
@@ -539,23 +539,6 @@ class Cycle(Title,Description):
                     i += 1
                         
         strResult += '</node>\n'
-
-        return strResult
-
-
-    def toiCalString(self):
-
-        """  """
-
-        e = self.dateEnd + timedelta(days=1)
-
-        if self.getNumberOfUnits() < 1:
-            strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;{y:04}{m:02}{d:02}\nDTEND;{ye:04}{me:02}{de:02}\nDTSTAMP;{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.getTitleStr(), y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
-        else:
-            strResult = ''
-            for v in self.day:
-                for u in v:
-                    strResult += u.toiCalString()
 
         return strResult
 

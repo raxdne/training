@@ -617,22 +617,6 @@ class Period(Title,Description):
         return strResult
 
 
-    def toiCalString(self):
-
-        """  """
-
-        e = self.dateEnd + timedelta(days=1)
-
-        if len(self.child) < 1:
-            strResult = "BEGIN:VEVENT\nSUMMARY:Period {title}\nDTSTART;{y:04}{m:02}{d:02}\nDTEND;{ye:04}{me:02}{de:02}\nDTSTAMP;{y:04}{m:02}{d:02}\nEND:VEVENT\n".format(title=self.getTitleStr(), y=self.dateBegin.year, m=self.dateBegin.month, d=self.dateBegin.day, ye=e.year, me=e.month, de=e.day)
-        else:
-            strResult = ''
-            for c in self.child:
-                strResult += c.toiCalString()
-
-        return strResult
-
-
     def to_ical(self,cal):
 
         """  """
