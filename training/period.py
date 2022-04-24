@@ -144,11 +144,11 @@ class Period(Title,Description):
 
         objResult = None
 
-        if objUnit != None and objUnit.date != None:
+        if objUnit != None and objUnit.dt != None:
             if len(self.child) < 1:
                 # there is no child cycle yet
-                delta = objUnit.date - self.dateBegin
-                if delta.days > -1 and objUnit.date <= self.dateEnd:
+                delta = objUnit.dt.date() - self.dateBegin
+                if delta.days > -1 and objUnit.dt.date() <= self.dateEnd:
                     l = self.dateEnd - self.dateBegin
                     c = Cycle(self.getTitleStr(), l.days + 1)
                     c.schedule(self.dateBegin.year,self.dateBegin.month,self.dateBegin.day)
@@ -321,14 +321,14 @@ class Period(Title,Description):
                 if l == None or l == '':
                     pass
                 elif (fUpdater != None and t.parse(fUpdater(l))) or t.parse(l):
-                    if t.date != None:
-                        d_i = t.date
-                        if d0 == None or t.date < d0:
-                            d0 = t.date
-                        if d1 == None or t.date > d1:
-                            d1 = t.date
+                    if t.dt != None:
+                        d_i = t.dt
+                        if d0 == None or t.dt < d0:
+                            d0 = t.dt
+                        if d1 == None or t.dt > d1:
+                            d1 = t.dt
                     else:
-                        t.date = d_i
+                        t.dt = d_i
 
                     a.append(t)
                     t = Unit()

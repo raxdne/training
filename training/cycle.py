@@ -130,7 +130,7 @@ class Cycle(Title,Description):
         return len(self.day)
 
 
-    def combine(self,objUnit):
+    def combine(self,objUnit,intPause=0):
 
         """  """
 
@@ -138,6 +138,7 @@ class Cycle(Title,Description):
         for i in range(len(self.day)-1,0,-1):
             if len(self.day[i]) > 0:
                 objUnit.combined = True
+                objUnit.pause = timedelta(minutes=intPause)
                 return self.insert(i,objUnit)
         
         return None
@@ -162,9 +163,9 @@ class Cycle(Title,Description):
 
         objResult = None
 
-        if objUnit != None and objUnit.date != None:
-            delta = objUnit.date - self.dateBegin
-            if delta.days > -1 and objUnit.date <= self.dateEnd:
+        if objUnit != None and objUnit.dt != None:
+            delta = objUnit.dt.date() - self.dateBegin
+            if delta.days > -1 and objUnit.dt.date() <= self.dateEnd:
                 objResult = objUnit.dup()
                 if flagReplace:
                     # delete exisiting
@@ -260,10 +261,75 @@ class Cycle(Title,Description):
                 print('error: ' + str(e), file=sys.stderr)
                 return self
 
-            for v in self.day:
-                o = self.day.index(v)
-                for u in v:
-                    u.setDate(d + timedelta(days=o))
+            m = len(self.day)
+            h = 0
+            while h < m:
+
+                #print('day: ' + str(h), file=sys.stderr)
+                
+                if config.sun != None:
+                    # fix 't' according to sunrise/sunset
+                    t_earliest = config.sun.get_local_sunrise_time(d + timedelta(days=h)) + timedelta(seconds=config.twilight)
+                    t_latest   = config.sun.get_local_sunset_time(d + timedelta(days=h))  - timedelta(seconds=config.twilight)
+
+                # count units of this day
+                n = len(self.day[h])
+                i = 0
+                while i < n:
+
+                    #print('u: ' + str(i), file=sys.stderr)
+
+                    if self.day[h][i].clock == None:
+                        d_i = datetime.combine(d + timedelta(days=h),time(0)).astimezone(None)
+                        self.day[h][i].dt = d_i
+                    else:
+                        d_i = datetime.combine(d + timedelta(days=h), self.day[h][i].clock).astimezone(None)
+                        
+                        if config.sun != None:
+                            # fix 't' according to sunrise/sunset
+                            if t_earliest > d_i:
+                                #print('too early: ' + str(d_i.isoformat()), file=sys.stderr)
+                                # shift start time after twilight
+                                self.day[h][i].dt = t_earliest
+                                # adjust to 15min steps
+                                self.day[h][i].dt -= timedelta(minutes=(self.day[h][i].dt.minute % 15))
+                            elif t_latest < d_i + self.day[h][i].duration:
+                                #print('too late: ' + str(d_i.isoformat()), file=sys.stderr)
+                                # shift end time before twilight
+                                self.day[h][i].dt = t_latest - self.day[h][i].duration
+                                self.day[h][i].dt -= timedelta(minutes=(self.day[h][i].dt.minute % 15))
+                            else:
+                                # use defined time
+                                self.day[h][i].dt = d_i
+                        else:
+                            self.day[h][i].dt = d_i
+                            
+                        self.day[h][i].clock = None
+                        
+                    d_i += self.day[h][i].duration
+                            
+                    # count number of combined units
+                    j = i+1
+                    while j < n and self.day[h][j].combined:
+                        j += 1
+
+                    if j > i+1:
+                        # combined units
+                        print('{} combined units'.format(j-i), file=sys.stderr)
+
+                        k = i+1
+                        while k < j:
+                            d_i += self.day[h][k].pause
+                            self.day[h][k].dt = d_i
+                            d_i += self.day[h][k].duration
+                            k += 1
+                        i = k
+                        # TODO: fix start time of all combined units according to t_latest
+                    else:
+                        # no combined units
+                        i += 1
+
+                h += 1
 
             self.dateBegin = date(intYear, intMonth, intDay)
             self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
@@ -280,7 +346,7 @@ class Cycle(Title,Description):
                 if u.dist == None or u.type == None or len(u.type) < 1:
                     pass
                 else:
-                    arrArg[u.date.month - 1][u.type] += u.dist
+                    arrArg[u.dt.month - 1][u.type] += u.dist
 
 
     def report(self, arrArg=None):
@@ -428,6 +494,8 @@ class Cycle(Title,Description):
                     if u.duration != None:
                         if not u.combined and v.index(u) > 0:
                             x_i += 2
+                        elif u.combined and u.pause.total_seconds() > 0:
+                            x_i += u.pause.total_seconds() / 3600 * 25 * config.diagram_scale_dist
                         strResult += u.toSVG(x_i,y)
                         x_i += u.duration.total_seconds() / 3600 * 25 * config.diagram_scale_dist
 
@@ -529,6 +597,8 @@ class Cycle(Title,Description):
                     strResult += '<node TEXT="{}">\n'.format('Block')
                     k = i
                     while k < j:
+                        if v[k].pause.total_seconds() > 0:
+                            strResult += '<node TEXT="{}"/>\n'.format('Pause for ' + str(v[k].pause.total_seconds() / 60) + 'min')
                         strResult += v[k].toXML()
                         k += 1
                     i = k
@@ -554,8 +624,6 @@ class Cycle(Title,Description):
         event.add('dtstamp', datetime.now().astimezone(None))
         cal.add_component(event)
 
-        # TODO: handle combined units (end = start), s. toXML()
-        
         for v in self.day:
             for u in v:
                 u.to_ical(cal)

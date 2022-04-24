@@ -59,9 +59,10 @@ class Unit(Description):
         self.dist = None
         self.type = None
         self.duration = None
-        self.date = None
+        self.dt = None
         self.clock = None
         self.combined = False
+        self.pause = timedelta(minutes=0)
         self.setDescription()
 
         return self
@@ -145,20 +146,6 @@ class Unit(Description):
         return strResult
 
 
-    def setDate(self,objArg):
-
-        """  """
-
-        if type(objArg) is date:
-            self.date = objArg
-        elif type(objArg) is time:
-            self.clock = objArg
-        else:
-            print('ignoring: ',type(objArg), file=sys.stderr)
-            
-        return self
-
-
     def setDateStr(self,strArg):
 
         """  """
@@ -172,15 +159,17 @@ class Unit(Description):
             # canonical ISO Date+Time
             m = re.match(r"\s*([0-9]{4}-*[0-9]{2}-*[0-9]{2})[\sT]+([0-2][0-9]:[0-5][0-9])\s*",strArg)
             if m != None:
-                #print("date + time: ",m.group(1), " ",m.group(2))
-                self.setDateStr(m.group(1))
-                self.setDateStr(m.group(2))
+                try:
+                    self.dt = datetime.fromisoformat(strArg).astimezone(None)
+                except ValueError as e:
+                    print('error: ' + str(e), file=sys.stderr)
+                    return False
             else:
                 # german Date
                 m = re.match(r"([0-9]{2})\.([0-9]{2})\.([0-9]{4})",strArg)
                 if m != None:
                     try:
-                        self.setDate(date(int(m.group(3)), int(m.group(2)), int(m.group(1))))
+                        self.dt = datetime(int(m.group(3)), int(m.group(2)), int(m.group(1)),0,0,0).astimezone(None)
                     except ValueError as e:
                         print('error: ' + str(e), file=sys.stderr)
                         return False
@@ -189,7 +178,7 @@ class Unit(Description):
                     m = re.match(r"([0-9]{4})-*([0-9]{2})-*([0-9]{2})",strArg)
                     if m != None:
                         try:
-                            self.setDate(date(int(m.group(1)), int(m.group(2)), int(m.group(3))))
+                            self.dt = datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)),0,0,0).astimezone(None)
                         except ValueError as e:
                             print('error: ' + str(e), file=sys.stderr)
                             return False
@@ -198,7 +187,7 @@ class Unit(Description):
                         m = re.match(r"([0-2][0-9]:[0-5][0-9])",strArg)
                         if m != None:
                             #print("time: ",m.group(1), file=sys.stderr)
-                            self.setDate(time.fromisoformat("{}:00".format(m.group(1))))
+                            self.clock = time.fromisoformat("{}:00".format(m.group(1)))
                         else:
                             print('ignoring: ',strArg, file=sys.stderr)
 
@@ -283,16 +272,16 @@ class Unit(Description):
 
         """  """
 
-        if self.type == None and self.dist == None and self.date == None:
+        if self.type == None and self.dist == None and self.dt == None:
             strResult = 'EMPTY'
         elif self.type == None:
-            strResult = '{date} {duration}'.format(date=self.date.isoformat(), duration=self.getDurationStr())
+            strResult = '{date} {duration}'.format(date=self.dt.date().isoformat(), duration=self.getDurationStr())
         elif self.dist == None:
-            strResult = '{date} {type} {duration}'.format(date=self.date.isoformat(), type=self.type, duration=self.getDurationStr())
-        elif self.date == None:
+            strResult = '{date} {type} {duration}'.format(date=self.dt.date().isoformat(), type=self.type, duration=self.getDurationStr())
+        elif self.dt == None:
             strResult = '{date} {dist:5.1f} {type} {duration}'.format(date='', dist=self.dist, type=self.type, duration=self.getDurationStr())
         else:
-            strResult = '{date} {dist:5.1f} {type} {duration}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
+            strResult = '{date} {dist:5.1f} {type} {duration}'.format(date=self.dt.date().isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
 
         return strResult
 
@@ -302,11 +291,11 @@ class Unit(Description):
         """  """
 
         if self.type == None:
-            strResult = '{date};;;'.format(date=self.date.isoformat())
+            strResult = '{date};;;'.format(date=self.dt.isoformat())
         elif self.dist == None:
-            strResult = '{date};;{type};{duration}'.format(date=self.date.isoformat(), type=self.type, duration=self.getDurationStr())
+            strResult = '{date};;{type};{duration}'.format(date=self.dt.isoformat(), type=self.type, duration=self.getDurationStr())
         else:
-            strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.date.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
+            strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
 
         strResult += ';' + self.__listDescriptionToString__()
 
@@ -380,41 +369,17 @@ class Unit(Description):
             if self.hasDescription():
                 event.add('description', self.__listDescriptionToString__())
 
-        # TODO: handle start time of combined units to_ical(self,cal,predecessor_end)
-
-        if self.clock == None or self.duration == None:
-            event.add('dtstart', self.date)
-            event.add('dtend', self.date + timedelta(days=1))
+        if self.dt.time().hour == 0 or self.duration == None:
+            event.add('dtstart', self.dt.date())
+            event.add('dtend', self.dt.date() + timedelta(days=1))
         else:
-            t0 = datetime.combine(self.date, self.clock).astimezone(None)
-            t1 = t0 + self.duration
-
-            if config.sun != None:
-                # fix 't' according to sunrise/sunset
-                t_earliest = config.sun.get_local_sunrise_time(self.date) + timedelta(seconds=config.twilight)
-                t_latest = config.sun.get_local_sunset_time(self.date) - timedelta(seconds=config.twilight)
-
-                if t_earliest > t0:
-                    # shift start time after twilight
-                    t0 = t_earliest
-                    # adjust to 15min steps
-                    t0 -= timedelta(minutes=(t0.minute % 15))
-                    t1 = t0 + self.duration
-                elif t_latest < t1:
-                    # shift end time before twilight
-                    t0 = t_latest - self.duration
-                    t0 -= timedelta(minutes=(t0.minute % 15))
-                    t1 = t0 + self.duration
-
-            #print(self.date,' ',self.clock,' ',self.type,' ',t0,' ',t_latest,file=sys.stderr)
-
-            event.add('dtstart', t0)
-            event.add('dtend', t1)
+            event.add('dtstart', self.dt)
+            event.add('dtend', self.dt + self.duration)
 
             # TODO: add reminder
             alarm = Alarm()
             alarm.add('action', 'none')
-            alarm.add('trigger', t0 - timedelta(minutes=15))
+            alarm.add('trigger', self.dt - timedelta(minutes=15))
             event.add_component(alarm)
         
         event.add('dtstamp', datetime.now().astimezone(None))
