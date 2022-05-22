@@ -60,6 +60,7 @@ class Period(Title,Description):
 
         self.setPeriod(intArg)
 
+        self.color = None
         self.child = []
         self.dateBegin = None
         self.dateEnd = None
@@ -103,6 +104,16 @@ class Period(Title,Description):
 
         if len(self.child) > 0:
             self.child[len(self.child) - 1].appendDescription(objArg)
+
+
+    def setColor(self,strColor):
+
+        """  """
+
+        if strColor != None and len(strColor) > 0:
+            self.color = strColor
+
+        return self
 
 
     def getNumberOfUnits(self):
@@ -254,17 +265,16 @@ class Period(Title,Description):
         sum_h = 0.0
         for k in sorted(arrArg.keys()):
             if arrArg[k][0] == None or arrArg[k][0] < 0.01:
-                strResult += "{:4} x {:3} {:5}    {:5.0f} h\n".format(arrArg[k][1], k, ' ', round(arrArg[k][2] / 3600, 1))
+                strResult += "{:4} x {:3} {:5}    {:5.01f} h\n".format(arrArg[k][1], k, ' ', round(arrArg[k][2] / 3600, 1))
             else:
-                strResult += "{:4} x {:3} {:5.0f} {} {:5.0f} h\n".format(arrArg[k][1], k, arrArg[k][0], config.unit_distance, round(arrArg[k][2] / 3600, 1))        
+                strResult += "{:4} x {:3} {:5.0f} {} {:5.01f} h\n".format(arrArg[k][1], k, arrArg[k][0], config.unit_distance, round(arrArg[k][2] / 3600, 1))        
             sum_h += arrArg[k][2]
 
         sum_h /= 3600.0
         n = self.getNumberOfUnits()
         if n > 0:
             p = self.getPeriod()
-            #strResult += "{:4} Units in {} Days = {:4.01f} Units/Week\n".format(n, p, n/p * 7.0)
-            strResult += "{:4} h     in {} Days = {:4.01f} h/Week\n".format(round(sum_h), p, sum_h/p * 7.0)
+            strResult += "\n{} Units {:.2f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(n, round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
 
         return strResult
 
@@ -389,9 +399,12 @@ class Period(Title,Description):
 
         """  """
 
-        strResult = '<section class="period">'
+        strResult = '<section class="period"'
 
-        strResult += '<div class="header">' + self.getTitleStr()
+        if self.color != None:
+            strResult += ' style="background-color: {}"'.format(self.color)
+
+        strResult += '><div class="header">' + self.getTitleStr()
         if self.dateBegin != None and self.dateEnd != None:
             strResult += ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')'
         strResult += '</div>\n'
@@ -455,7 +468,9 @@ class Period(Title,Description):
         """  """
 
         strResult = '<node'
-        if self.getNumberOfUnits() < 1:
+        if self.color != None:
+           strResult += ' BACKGROUND_COLOR="{}"'.format(self.color)
+        elif self.getNumberOfUnits() < 1:
            strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')
         else:
             strResult += ' FOLDED="{}"'.format('false')
@@ -492,6 +507,9 @@ class Period(Title,Description):
         """  """
 
         strResult = '<g>'
+
+        if self.color != None and self.getPeriod() > 0:
+            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*self.getPeriod())-2,x+config.diagram_width-4)
 
         if len(self.child) < 1:
             strResult += '<text x="{}" y="{}" style="vertical-align:top"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
@@ -545,8 +563,13 @@ class Period(Title,Description):
             return '<text x="{}" y="{}">{}</text>\n'.format(0 + 2, y + 10,self.getTitleStr())
 
         strResult = '<g>'
+        
+        if self.color == None:
+            c = '#aaaaff'
+        else:
+            c = self.color
 
-        strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format('#aaaaff', x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
+        strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
         strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
         strResult += '</rect>'
         strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 10,self.getTitleStr())

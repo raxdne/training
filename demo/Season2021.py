@@ -30,6 +30,7 @@ def RegenerationGeneral():
 def BasicsGeneral():
     p = Period('General Basics')
     p.appendDescription('Regeneration')
+    p.setColor('#eeeeee')
 
     c = Cycle('General Endurance')
     c.insert(1,Unit('18:00;3.5;RB;25:00'))

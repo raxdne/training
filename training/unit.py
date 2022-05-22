@@ -160,7 +160,7 @@ class Unit(Description):
             m = re.match(r"\s*([0-9]{4}-*[0-9]{2}-*[0-9]{2})[\sT]+([0-2][0-9]:[0-5][0-9])\s*",strArg)
             if m != None:
                 try:
-                    self.dt = datetime.fromisoformat(strArg).astimezone(None)
+                    self.dt = datetime.fromisoformat(m.group(0)).astimezone(None)
                 except ValueError as e:
                     print('error: ' + str(e), file=sys.stderr)
                     return False
