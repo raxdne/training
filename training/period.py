@@ -25,6 +25,8 @@ import copy
 
 import re
 
+from statistics import mean
+
 from datetime import timedelta, date, datetime, time, timezone
 
 from suntime import Sun
@@ -264,12 +266,14 @@ class Period(Title,Description):
 
         sum_h = 0.0
         for k in sorted(arrArg.keys()):
-            if arrArg[k][0] == None or arrArg[k][0] < 0.01:
-                strResult += "{:4} x {:3} {:5}    {:5.01f} h\n".format(arrArg[k][1], k, ' ', round(arrArg[k][2] / 3600, 1))
+            if len(arrArg[k][0]) < 1:
+                strResult += "{:4} x {:3} {:7}    {:7.01f} h\n".format(len(arrArg[k][0]), k, ' ', round(sum(arrArg[k][1]) / 3600, 1))
+            elif len(arrArg[k][0]) < 3:
+                strResult += "{:4} x {:3} {:7.0f} {} {:7.01f} h\n".format(len(arrArg[k][0]), k, sum(arrArg[k][0]), config.unit_distance, round(sum(arrArg[k][1]) / 3600, 1))        
             else:
-                strResult += "{:4} x {:3} {:5.0f} {} {:5.01f} h\n".format(arrArg[k][1], k, arrArg[k][0], config.unit_distance, round(arrArg[k][2] / 3600, 1))        
-            sum_h += arrArg[k][2]
-
+                strResult += "{:4} x {:3} {:7.01f} {} {:7.01f} h {:5.01f} /{:5.01f} /{:5.01f}\n".format(len(arrArg[k][0]), k, sum(arrArg[k][0]), config.unit_distance, round(sum(arrArg[k][1]) / 3600, 2), min(arrArg[k][0]), mean(arrArg[k][0]), max(arrArg[k][0]))
+            sum_h += sum(arrArg[k][1])
+            
         sum_h /= 3600.0
         n = self.getNumberOfUnits()
         if n > 0:
