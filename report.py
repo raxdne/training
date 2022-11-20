@@ -1,15 +1,19 @@
 #!/usr/bin/python3
 
 """
- (setq python-shell-interpreter "/usr/bin/python3")
- (local-set-key [f3] (lambda () "" (interactive)(save-buffer)(python-shell-send-buffer)))
 """
 
 import argparse
 import glob
 import datetime
 
-from training import training
+import config
+
+from unit import Unit
+
+from cycle import Cycle
+
+from period import Period
 
 
 def parse_args(args=None):
@@ -45,10 +49,10 @@ def main(args=None):
 
     options = parse_args(args)
 
-    s = training.period('Report ' + datetime.date.today().isoformat())
+    s = Period('Report ' + datetime.date.today().isoformat())
     s.parseFile(options.infile)
-    training.max_length_type = 1
-    #training.unit_distance = 'mi'
+    #config.max_length_type = 1
+    #config.unit_distance = 'mi'
     
     try:
         if options.type == "xml":

@@ -1,32 +1,33 @@
+#
+#
+#
 
-from datetime import (
-    timedelta,
-    date,
-    datetime,
-    time
-)
+from datetime import timedelta, date, datetime, time, timezone
 
-from training import training
+from training.unit import Unit
+from training.cycle import Cycle
+from training.period import Period
+import training.config as config
 
 
 def RegenerationGeneral():
-    r = training.cycle('General Regeneration')
-    r.insert(1,training.unit('30;Cycling;1:15:00'))
-    r.insert(3,training.unit('3.5;Running;25:00'))
-    r.insert(6,training.unit('30;Cycling;1:15:00'))
+    r = Cycle('General Regeneration')
+    r.insert(1,Unit('30;Cycling;1:15:00'))
+    r.insert(3,Unit('3.5;Running;25:00'))
+    r.insert(6,Unit('30;Cycling;1:15:00'))
 
     return r
 
 
 def BasicsGeneral():
-    p = training.period('General Basics')
+    p = Period('General Basics')
     p.appendDescription('Regeneration')
 
-    c = training.cycle('General Endurance')
-    c.insert(1,training.unit('3.5;Running;25:00'))
-    c.insert(3,training.unit('3.5;Running;25:00'))
-    c.insert(5,training.unit(';Strength;25:00'))
-    c.insert(6,training.unit('30;Cycling;02:00:00'))
+    c = Cycle('General Endurance')
+    c.insert(1,Unit('3.5;Running;25:00'))
+    c.insert(3,Unit('3.5;Running;25:00'))
+    c.insert(5,Unit(';Strength;25:00'))
+    c.insert(6,Unit('30;Cycling;02:00:00'))
 
     p.append(c)
     p.append(c)
@@ -39,15 +40,15 @@ def BasicsGeneral():
 
 
 def BasicsCycling():
-    p = training.period('Basics Endurance Cycling')
+    p = Period('Basics Endurance Cycling')
     p.appendDescription('Weight, Metabolism, Nutrition')
     p.appendDescription('1000 km, switch to Racing bike')
     
-    c = training.cycle('Focus Cycling')
-    c.insert(1,training.unit('30;Cycling;1:15:00'))
-    c.insert(3,training.unit('3.5;Running;25:00'))
-    c.insert(3,training.unit(';Strength;25:00'))
-    c.insert(6,training.unit('40;Cycling;02:00:00'))
+    c = Cycle('Focus Cycling')
+    c.insert(1,Unit('30;Cycling;1:15:00'))
+    c.insert(3,Unit('3.5;Running;25:00'))
+    c.insert(3,Unit(';Strength;25:00'))
+    c.insert(6,Unit('40;Cycling;02:00:00'))
 
     p.append(c)
     p.append(c)
@@ -63,14 +64,14 @@ def BasicsCycling():
 
 
 def BasicsRunning():
-    p = training.period('Specific Basics Running')
+    p = Period('Specific Basics Running')
     p.appendDescription('Change of Focus')
 
-    c = training.cycle('Focus Running')
-    c.insert(2,training.unit('3.5;Running;25:00'))
-    c.insert(3,training.unit(';Strength;25:00'))
-    c.insert(4,training.unit('3.5;Running;02:30:00'))
-    c.insert(6,training.unit('30;Cycling;1:25:00'))
+    c = Cycle('Focus Running')
+    c.insert(2,Unit('3.5;Running;25:00'))
+    c.insert(3,Unit(';Strength;25:00'))
+    c.insert(4,Unit('3.5;Running;02:30:00'))
+    c.insert(6,Unit('30;Cycling;1:25:00'))
     
     p.append(c)
     p.append(c)
@@ -86,13 +87,13 @@ def BasicsRunning():
 
 
 def BasicsSwimming():
-    p = training.period('Basics Endurance Swimming')
+    p = Period('Basics Endurance Swimming')
     
-    c = training.cycle('Focus Swimming')
-    c.insert(1,training.unit('2;Swimming;1:15:00'))
-    c.insert(3,training.unit('3.5;Running;25:00'))
-    c.insert(3,training.unit(';Strength;25:00'))
-    c.insert(6,training.unit('3;Swimming;02:00:00'))
+    c = Cycle('Focus Swimming')
+    c.insert(1,Unit('2;Swimming;1:15:00'))
+    c.insert(3,Unit('3.5;Running;25:00'))
+    c.insert(3,Unit(';Strength;25:00'))
+    c.insert(6,Unit('3;Swimming;02:00:00'))
 
     p.append(c)
     p.append(c)
@@ -107,13 +108,13 @@ def BasicsSwimming():
 
 
 def BasicsCombination():
-    p = training.period('Basics Endurance Combination: Swimming + Cycling + Running')
+    p = Period('Basics Endurance Combination: Swimming + Cycling + Running')
     
-    c = training.cycle('Focus Swimming')
-    c.insert(1,training.unit('2;Swimming;1:15:00'))
-    c.insert(3,training.unit('3.5;Running;25:00'))
-    c.insert(3,training.unit(';Strength;25:00'))
-    c.insert(6,training.unit('3;Swimming;02:00:00'))
+    c = Cycle('Focus Swimming')
+    c.insert(1,Unit('2;Swimming;1:15:00'))
+    c.insert(3,Unit('3.5;Running;25:00'))
+    c.insert(3,Unit(';Strength;25:00'))
+    c.insert(6,Unit('3;Swimming;02:00:00'))
 
     p.append(c)
     p.append(c)
@@ -128,18 +129,18 @@ def BasicsCombination():
 
 
 def Highlight1():
-    c = training.cycle('Highlight Triathlon Olympic Distance')
+    c = Cycle('Highlight Triathlon Olympic Distance')
 
-    c.insert(6,training.unit('1.5;Swimming;1:00:00'))
-    c.insert(6,training.unit('40;Cycling;1:40:00'))
-    c.insert(6,training.unit('10;Running;1:30:00'))
+    c.insert(6,Unit('07:00;1.5;Swimming;1:00:00'))
+    c.combine(Unit('40;Cycling;1:40:00'),5)
+    c.combine(Unit('10;Running;1:30:00'),10)
     
     return c
 
 
 def PlanTriathlon(strArg):
 
-    s = training.period(strArg)
+    s = Period(strArg)
     s.appendDescription(['Targets', [['Same volume like last season'],['defined Highlights',['Cycling','Run']]]])
     s.appendDescription(['Rules',[['Regeneration'],['Differenciation',['Type','Intensity','Distance']]]])
 
@@ -150,8 +151,6 @@ def PlanTriathlon(strArg):
     s.append(BasicsCombination())
     s.append(Highlight1())
 
-    s.schedule(2021,3,1)
-
     #s.resetUnits()
     #s.parseFile('Training2021.csv')
 
@@ -159,10 +158,14 @@ def PlanTriathlon(strArg):
 
 
 
-s = PlanTriathlon('Season Triathlon Basics')
+s = PlanTriathlon('Season Triathlon Basics').schedule(date.today().year,3,1)
 
 #print(s.report())
 print(s.stat())
+
+f = open('TriathlonPlanGantt.svg', 'w')
+f.write(s.toSVGGanttChart())
+f.close()
 
 f = open('TriathlonPlan.svg', 'w')
 f.write(s.toSVGDiagram())

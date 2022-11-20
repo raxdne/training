@@ -17,15 +17,40 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
-#import math
+#
+#
+#
 
-#import copy
+class Title:
 
-#from icalendar import Calendar, Event, Alarm
+    """ abstract class to handle title """
 
-#from datetime import timedelta, date, datetime, time, timezone
+    def __init__(self,strArg=None):
 
-#import config
+        """ constructor """
 
-#__all__ = ['config','description','title','unit','cycle','period']
+        self.setTitleStr(strArg)
+
+
+    def setTitleStr(self,strArg):
+
+        """  """
+
+        self.strTitle = strArg
+
+
+    def hasTitle(self):
+
+        """  """
+
+        return self.strTitle != None and len(self.strTitle) > 0
+
+
+    def getTitleStr(self):
+
+        """  """
+
+        return self.strTitle
+
+
 

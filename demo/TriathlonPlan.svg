@@ -7,472 +7,472 @@
 <line stroke="black" stroke-width=".5" x1="925.0" y1="20" x2="925.0" y2="3684"/>
 <line stroke="black" stroke-width=".5" x1="1075.0" y1="20" x2="1075.0" y2="3684"/>
 <g><g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="20" x2="1250" y2="20"/>
-<text x="0" y="20" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-03-01 .. 2021-03-07) </tspan></text>
+<text x="0" y="20" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2022-03-01 .. 2022-03-07) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="24.0" x2="175" y2="32.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="40.0" x2="175" y2="48.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="40.0"><title>2021-03-02   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="40.0"><title>2022-03-02   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="56.0" x2="175" y2="64.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="72.0" x2="175" y2="80.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="72.0"><title>2021-03-04   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="72.0"><title>2022-03-04   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="88.0" x2="175" y2="96.0"/>
+<rect fill="#eeeeee" x="175" y="87.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="104.0" x2="175" y2="112.0"/>
 <rect fill="#eeeeee" x="175" y="103.0" height="10" width="900"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="104.0"><title>2021-03-06 Strength 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="104.0"><title>2022-03-06 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="120.0" x2="175" y2="128.0"/>
-<rect fill="#eeeeee" x="175" y="119.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="300" x="175" y="120.0"><title>2021-03-07  30.0 Cycling 02:00:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="300" x="175" y="120.0"><title>2022-03-07  30.0 Cycling 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="132" x2="1250" y2="132"/>
-<text x="0" y="132" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-03-08 .. 2021-03-14) </tspan></text>
+<text x="0" y="132" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2022-03-08 .. 2022-03-14) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="136.0" x2="175" y2="144.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="152.0" x2="175" y2="160.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="152.0"><title>2021-03-09   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="152.0"><title>2022-03-09   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="168.0" x2="175" y2="176.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="184.0" x2="175" y2="192.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="184.0"><title>2021-03-11   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="184.0"><title>2022-03-11   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="200.0" x2="175" y2="208.0"/>
+<rect fill="#eeeeee" x="175" y="199.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="216.0" x2="175" y2="224.0"/>
 <rect fill="#eeeeee" x="175" y="215.0" height="10" width="900"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="216.0"><title>2021-03-13 Strength 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="216.0"><title>2022-03-13 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="232.0" x2="175" y2="240.0"/>
-<rect fill="#eeeeee" x="175" y="231.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="300" x="175" y="232.0"><title>2021-03-14  30.0 Cycling 02:00:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="300" x="175" y="232.0"><title>2022-03-14  30.0 Cycling 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="244" x2="1250" y2="244"/>
-<text x="0" y="244" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-03-15 .. 2021-03-21) </tspan></text>
+<text x="0" y="244" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2022-03-15 .. 2022-03-21) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="248.0" x2="175" y2="256.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="264.0" x2="175" y2="272.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="264.0"><title>2021-03-16  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="264.0"><title>2022-03-16  30.0 Cycling 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="280.0" x2="175" y2="288.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="296.0" x2="175" y2="304.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="296.0"><title>2021-03-18   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="296.0"><title>2022-03-18   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="312.0" x2="175" y2="320.0"/>
+<rect fill="#eeeeee" x="175" y="311.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="328.0" x2="175" y2="336.0"/>
 <rect fill="#eeeeee" x="175" y="327.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="344.0" x2="175" y2="352.0"/>
-<rect fill="#eeeeee" x="175" y="343.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="344.0"><title>2021-03-21  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="344.0"><title>2022-03-21  30.0 Cycling 01:15:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="356" x2="1250" y2="356"/>
-<text x="0" y="356" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-03-22 .. 2021-03-28) </tspan></text>
+<text x="0" y="356" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2022-03-22 .. 2022-03-28) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="360.0" x2="175" y2="368.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="376.0" x2="175" y2="384.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="376.0"><title>2021-03-23   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="376.0"><title>2022-03-23   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="392.0" x2="175" y2="400.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="408.0" x2="175" y2="416.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="408.0"><title>2021-03-25   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="408.0"><title>2022-03-25   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="424.0" x2="175" y2="432.0"/>
+<rect fill="#eeeeee" x="175" y="423.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="440.0" x2="175" y2="448.0"/>
 <rect fill="#eeeeee" x="175" y="439.0" height="10" width="900"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="440.0"><title>2021-03-27 Strength 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="440.0"><title>2022-03-27 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="456.0" x2="175" y2="464.0"/>
-<rect fill="#eeeeee" x="175" y="455.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="300" x="175" y="456.0"><title>2021-03-28  30.0 Cycling 02:00:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="300" x="175" y="456.0"><title>2022-03-28  30.0 Cycling 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="468" x2="1250" y2="468"/>
-<text x="0" y="468" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2021-03-29 .. 2021-04-04) </tspan></text>
+<text x="0" y="468" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Endurance</tspan><tspan x="10" dy="1.5em">(2022-03-29 .. 2022-04-04) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="472.0" x2="175" y2="480.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="488.0" x2="175" y2="496.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="488.0"><title>2021-03-30   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="488.0"><title>2022-03-30   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="504.0" x2="175" y2="512.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="520.0" x2="175" y2="528.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="520.0"><title>2021-04-01   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="520.0"><title>2022-04-01   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="536.0" x2="175" y2="544.0"/>
+<rect fill="#eeeeee" x="175" y="535.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="552.0" x2="175" y2="560.0"/>
 <rect fill="#eeeeee" x="175" y="551.0" height="10" width="900"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="552.0"><title>2021-04-03 Strength 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="552.0"><title>2022-04-03 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="568.0" x2="175" y2="576.0"/>
-<rect fill="#eeeeee" x="175" y="567.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="300" x="175" y="568.0"><title>2021-04-04  30.0 Cycling 02:00:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="300" x="175" y="568.0"><title>2022-04-04  30.0 Cycling 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="580" x2="1250" y2="580"/>
-<text x="0" y="580" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-04-05 .. 2021-04-11) </tspan></text>
+<text x="0" y="580" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2022-04-05 .. 2022-04-11) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="584.0" x2="175" y2="592.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="600.0" x2="175" y2="608.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="600.0"><title>2021-04-06  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="600.0"><title>2022-04-06  30.0 Cycling 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="616.0" x2="175" y2="624.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="632.0" x2="175" y2="640.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="632.0"><title>2021-04-08   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="632.0"><title>2022-04-08   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="648.0" x2="175" y2="656.0"/>
+<rect fill="#eeeeee" x="175" y="647.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="664.0" x2="175" y2="672.0"/>
 <rect fill="#eeeeee" x="175" y="663.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="680.0" x2="175" y2="688.0"/>
-<rect fill="#eeeeee" x="175" y="679.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="680.0"><title>2021-04-11  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="680.0"><title>2022-04-11  30.0 Cycling 01:15:00: </title></rect>
 </g></g><g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="692" x2="1250" y2="692"/>
-<text x="0" y="692" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2021-04-12 .. 2021-04-18) </tspan></text>
+<text x="0" y="692" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2022-04-12 .. 2022-04-18) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="696.0" x2="175" y2="704.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="712.0" x2="175" y2="720.0"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="712.0"><title>2021-04-13   2.0 Swimming 01:15:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="712.0"><title>2022-04-13   2.0 Swimming 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="728.0" x2="175" y2="736.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="744.0" x2="175" y2="752.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="744.0"><title>2021-04-15   3.5 Running 00:25:00: </title></rect>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="744.0"><title>2021-04-15 Strength 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="744.0"><title>2022-04-15   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="744.0"><title>2022-04-15 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="760.0" x2="175" y2="768.0"/>
+<rect fill="#eeeeee" x="175" y="759.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="776.0" x2="175" y2="784.0"/>
 <rect fill="#eeeeee" x="175" y="775.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="792.0" x2="175" y2="800.0"/>
-<rect fill="#eeeeee" x="175" y="791.0" height="10" width="900"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="792.0"><title>2021-04-18   3.0 Swimming 02:00:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="792.0"><title>2022-04-18   3.0 Swimming 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="804" x2="1250" y2="804"/>
-<text x="0" y="804" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2021-04-19 .. 2021-04-25) </tspan></text>
+<text x="0" y="804" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2022-04-19 .. 2022-04-25) </tspan><title> Test 5km Time trial</title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="808.0" x2="175" y2="816.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="824.0" x2="175" y2="832.0"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="824.0"><title>2021-04-20   2.0 Swimming 01:15:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="824.0"><title>2022-04-20   2.0 Swimming 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="840.0" x2="175" y2="848.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="856.0" x2="175" y2="864.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="856.0"><title>2021-04-22   3.5 Running 00:25:00: </title></rect>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="856.0"><title>2021-04-22 Strength 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="856.0"><title>2022-04-22   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="856.0"><title>2022-04-22 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="872.0" x2="175" y2="880.0"/>
+<rect fill="#eeeeee" x="175" y="871.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="888.0" x2="175" y2="896.0"/>
 <rect fill="#eeeeee" x="175" y="887.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="904.0" x2="175" y2="912.0"/>
-<rect fill="#eeeeee" x="175" y="903.0" height="10" width="900"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="904.0"><title>2021-04-25   3.0 Swimming 02:00:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="904.0"><title>2022-04-25   3.0 Swimming 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="916" x2="1250" y2="916"/>
-<text x="0" y="916" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-04-26 .. 2021-05-02) </tspan></text>
+<text x="0" y="916" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2022-04-26 .. 2022-05-02) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="920.0" x2="175" y2="928.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="936.0" x2="175" y2="944.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="936.0"><title>2021-04-27  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="936.0"><title>2022-04-27  30.0 Cycling 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="952.0" x2="175" y2="960.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="968.0" x2="175" y2="976.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="968.0"><title>2021-04-29   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="968.0"><title>2022-04-29   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="984.0" x2="175" y2="992.0"/>
+<rect fill="#eeeeee" x="175" y="983.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1000.0" x2="175" y2="1008.0"/>
 <rect fill="#eeeeee" x="175" y="999.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1016.0" x2="175" y2="1024.0"/>
-<rect fill="#eeeeee" x="175" y="1015.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1016.0"><title>2021-05-02  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1016.0"><title>2022-05-02  30.0 Cycling 01:15:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1028" x2="1250" y2="1028"/>
-<text x="0" y="1028" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2021-05-03 .. 2021-05-09) </tspan></text>
+<text x="0" y="1028" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2022-05-03 .. 2022-05-09) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1032.0" x2="175" y2="1040.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1048.0" x2="175" y2="1056.0"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1048.0"><title>2021-05-04   2.0 Swimming 01:15:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1048.0"><title>2022-05-04   2.0 Swimming 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1064.0" x2="175" y2="1072.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1080.0" x2="175" y2="1088.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1080.0"><title>2021-05-06   3.5 Running 00:25:00: </title></rect>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="1080.0"><title>2021-05-06 Strength 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1080.0"><title>2022-05-06   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="1080.0"><title>2022-05-06 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1096.0" x2="175" y2="1104.0"/>
+<rect fill="#eeeeee" x="175" y="1095.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1112.0" x2="175" y2="1120.0"/>
 <rect fill="#eeeeee" x="175" y="1111.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1128.0" x2="175" y2="1136.0"/>
-<rect fill="#eeeeee" x="175" y="1127.0" height="10" width="900"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="1128.0"><title>2021-05-09   3.0 Swimming 02:00:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="1128.0"><title>2022-05-09   3.0 Swimming 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1140" x2="1250" y2="1140"/>
-<text x="0" y="1140" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2021-05-10 .. 2021-05-16) </tspan></text>
+<text x="0" y="1140" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2022-05-10 .. 2022-05-16) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1144.0" x2="175" y2="1152.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1160.0" x2="175" y2="1168.0"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="225" x="175" y="1160.0"><title>2021-05-11   2.4 Swimming 01:30:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="225" x="175" y="1160.0"><title>2022-05-11   2.4 Swimming 01:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1176.0" x2="175" y2="1184.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1192.0" x2="175" y2="1200.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="1192.0"><title>2021-05-13   4.2 Running 00:30:00: </title></rect>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="75" x="250.0" y="1192.0"><title>2021-05-13 Strength 00:30:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="1192.0"><title>2022-05-13   4.2 Running 00:30:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="75" x="250.0" y="1192.0"><title>2022-05-13 Strength 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1208.0" x2="175" y2="1216.0"/>
+<rect fill="#eeeeee" x="175" y="1207.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1224.0" x2="175" y2="1232.0"/>
 <rect fill="#eeeeee" x="175" y="1223.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1240.0" x2="175" y2="1248.0"/>
-<rect fill="#eeeeee" x="175" y="1239.0" height="10" width="900"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="362" x="175" y="1240.0"><title>2021-05-16   3.6 Swimming 02:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="362" x="175" y="1240.0"><title>2022-05-16   3.6 Swimming 02:25:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1252" x2="1250" y2="1252"/>
-<text x="0" y="1252" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-05-17 .. 2021-05-23) </tspan></text>
+<text x="0" y="1252" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2022-05-17 .. 2022-05-23) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1256.0" x2="175" y2="1264.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1272.0" x2="175" y2="1280.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1272.0"><title>2021-05-18  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1272.0"><title>2022-05-18  30.0 Cycling 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1288.0" x2="175" y2="1296.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1304.0" x2="175" y2="1312.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1304.0"><title>2021-05-20   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1304.0"><title>2022-05-20   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1320.0" x2="175" y2="1328.0"/>
+<rect fill="#eeeeee" x="175" y="1319.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1336.0" x2="175" y2="1344.0"/>
 <rect fill="#eeeeee" x="175" y="1335.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1352.0" x2="175" y2="1360.0"/>
-<rect fill="#eeeeee" x="175" y="1351.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1352.0"><title>2021-05-23  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1352.0"><title>2022-05-23  30.0 Cycling 01:15:00: </title></rect>
 </g></g><g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1364" x2="1250" y2="1364"/>
-<text x="0" y="1364" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Cycling</tspan><tspan x="10" dy="1.5em">(2021-05-24 .. 2021-05-30) </tspan></text>
+<text x="0" y="1364" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Cycling</tspan><tspan x="10" dy="1.5em">(2022-05-24 .. 2022-05-30) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1368.0" x2="175" y2="1376.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1384.0" x2="175" y2="1392.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1384.0"><title>2021-05-25  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1384.0"><title>2022-05-25  30.0 Cycling 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1400.0" x2="175" y2="1408.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1416.0" x2="175" y2="1424.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1416.0"><title>2021-05-27   3.5 Running 00:25:00: </title></rect>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="1416.0"><title>2021-05-27 Strength 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1416.0"><title>2022-05-27   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="1416.0"><title>2022-05-27 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1432.0" x2="175" y2="1440.0"/>
+<rect fill="#eeeeee" x="175" y="1431.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1448.0" x2="175" y2="1456.0"/>
 <rect fill="#eeeeee" x="175" y="1447.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1464.0" x2="175" y2="1472.0"/>
-<rect fill="#eeeeee" x="175" y="1463.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="300" x="175" y="1464.0"><title>2021-05-30  40.0 Cycling 02:00:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="300" x="175" y="1464.0"><title>2022-05-30  40.0 Cycling 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1476" x2="1250" y2="1476"/>
-<text x="0" y="1476" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Cycling</tspan><tspan x="10" dy="1.5em">(2021-05-31 .. 2021-06-06) </tspan></text>
+<text x="0" y="1476" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Cycling</tspan><tspan x="10" dy="1.5em">(2022-05-31 .. 2022-06-06) </tspan><title> Test 5km Time trial</title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1480.0" x2="175" y2="1488.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1496.0" x2="175" y2="1504.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1496.0"><title>2021-06-01  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1496.0"><title>2022-06-01  30.0 Cycling 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1512.0" x2="175" y2="1520.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1528.0" x2="175" y2="1536.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1528.0"><title>2021-06-03   3.5 Running 00:25:00: </title></rect>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="1528.0"><title>2021-06-03 Strength 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1528.0"><title>2022-06-03   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="1528.0"><title>2022-06-03 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1544.0" x2="175" y2="1552.0"/>
+<rect fill="#eeeeee" x="175" y="1543.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1560.0" x2="175" y2="1568.0"/>
 <rect fill="#eeeeee" x="175" y="1559.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1576.0" x2="175" y2="1584.0"/>
-<rect fill="#eeeeee" x="175" y="1575.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="300" x="175" y="1576.0"><title>2021-06-06  40.0 Cycling 02:00:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="300" x="175" y="1576.0"><title>2022-06-06  40.0 Cycling 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1588" x2="1250" y2="1588"/>
-<text x="0" y="1588" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-06-07 .. 2021-06-13) </tspan></text>
+<text x="0" y="1588" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2022-06-07 .. 2022-06-13) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1592.0" x2="175" y2="1600.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1608.0" x2="175" y2="1616.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1608.0"><title>2021-06-08  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1608.0"><title>2022-06-08  30.0 Cycling 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1624.0" x2="175" y2="1632.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1640.0" x2="175" y2="1648.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1640.0"><title>2021-06-10   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1640.0"><title>2022-06-10   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1656.0" x2="175" y2="1664.0"/>
+<rect fill="#eeeeee" x="175" y="1655.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1672.0" x2="175" y2="1680.0"/>
 <rect fill="#eeeeee" x="175" y="1671.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1688.0" x2="175" y2="1696.0"/>
-<rect fill="#eeeeee" x="175" y="1687.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1688.0"><title>2021-06-13  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1688.0"><title>2022-06-13  30.0 Cycling 01:15:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1700" x2="1250" y2="1700"/>
-<text x="0" y="1700" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Cycling</tspan><tspan x="10" dy="1.5em">(2021-06-14 .. 2021-06-20) </tspan></text>
+<text x="0" y="1700" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Cycling</tspan><tspan x="10" dy="1.5em">(2022-06-14 .. 2022-06-20) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1704.0" x2="175" y2="1712.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1720.0" x2="175" y2="1728.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1720.0"><title>2021-06-15  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="1720.0"><title>2022-06-15  30.0 Cycling 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1736.0" x2="175" y2="1744.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1752.0" x2="175" y2="1760.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1752.0"><title>2021-06-17   3.5 Running 00:25:00: </title></rect>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="1752.0"><title>2021-06-17 Strength 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="1752.0"><title>2022-06-17   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="1752.0"><title>2022-06-17 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1768.0" x2="175" y2="1776.0"/>
+<rect fill="#eeeeee" x="175" y="1767.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1784.0" x2="175" y2="1792.0"/>
 <rect fill="#eeeeee" x="175" y="1783.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1800.0" x2="175" y2="1808.0"/>
-<rect fill="#eeeeee" x="175" y="1799.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="300" x="175" y="1800.0"><title>2021-06-20  40.0 Cycling 02:00:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="300" x="175" y="1800.0"><title>2022-06-20  40.0 Cycling 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1812" x2="1250" y2="1812"/>
-<text x="0" y="1812" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Cycling</tspan><tspan x="10" dy="1.5em">(2021-06-21 .. 2021-06-27) </tspan></text>
+<text x="0" y="1812" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Cycling</tspan><tspan x="10" dy="1.5em">(2022-06-21 .. 2022-06-27) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1816.0" x2="175" y2="1824.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1832.0" x2="175" y2="1840.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="225" x="175" y="1832.0"><title>2021-06-22  35.0 Cycling 01:30:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="225" x="175" y="1832.0"><title>2022-06-22  35.0 Cycling 01:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1848.0" x2="175" y2="1856.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1864.0" x2="175" y2="1872.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="1864.0"><title>2021-06-24   4.2 Running 00:30:00: </title></rect>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="75" x="250.0" y="1864.0"><title>2021-06-24 Strength 00:30:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="1864.0"><title>2022-06-24   4.2 Running 00:30:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="75" x="250.0" y="1864.0"><title>2022-06-24 Strength 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1880.0" x2="175" y2="1888.0"/>
+<rect fill="#eeeeee" x="175" y="1879.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1896.0" x2="175" y2="1904.0"/>
 <rect fill="#eeeeee" x="175" y="1895.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1912.0" x2="175" y2="1920.0"/>
-<rect fill="#eeeeee" x="175" y="1911.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="362" x="175" y="1912.0"><title>2021-06-27  50.0 Cycling 02:25:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="362" x="175" y="1912.0"><title>2022-06-27  50.0 Cycling 02:25:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="1924" x2="1250" y2="1924"/>
-<text x="0" y="1924" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Cycling</tspan><tspan x="10" dy="1.5em">(2021-06-28 .. 2021-07-04) </tspan></text>
+<text x="0" y="1924" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Cycling</tspan><tspan x="10" dy="1.5em">(2022-06-28 .. 2022-07-04) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="1928.0" x2="175" y2="1936.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1944.0" x2="175" y2="1952.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="225" x="175" y="1944.0"><title>2021-06-29  35.0 Cycling 01:30:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="225" x="175" y="1944.0"><title>2022-06-29  35.0 Cycling 01:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1960.0" x2="175" y2="1968.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="1976.0" x2="175" y2="1984.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="1976.0"><title>2021-07-01   4.2 Running 00:30:00: </title></rect>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="75" x="250.0" y="1976.0"><title>2021-07-01 Strength 00:30:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="1976.0"><title>2022-07-01   4.2 Running 00:30:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="75" x="250.0" y="1976.0"><title>2022-07-01 Strength 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="1992.0" x2="175" y2="2000.0"/>
+<rect fill="#eeeeee" x="175" y="1991.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2008.0" x2="175" y2="2016.0"/>
 <rect fill="#eeeeee" x="175" y="2007.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2024.0" x2="175" y2="2032.0"/>
-<rect fill="#eeeeee" x="175" y="2023.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="362" x="175" y="2024.0"><title>2021-07-04  50.0 Cycling 02:25:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="362" x="175" y="2024.0"><title>2022-07-04  50.0 Cycling 02:25:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2036" x2="1250" y2="2036"/>
-<text x="0" y="2036" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-07-05 .. 2021-07-11) </tspan></text>
+<text x="0" y="2036" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2022-07-05 .. 2022-07-11) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2040.0" x2="175" y2="2048.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2056.0" x2="175" y2="2064.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2056.0"><title>2021-07-06  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2056.0"><title>2022-07-06  30.0 Cycling 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2072.0" x2="175" y2="2080.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2088.0" x2="175" y2="2096.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2088.0"><title>2021-07-08   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2088.0"><title>2022-07-08   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2104.0" x2="175" y2="2112.0"/>
+<rect fill="#eeeeee" x="175" y="2103.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2120.0" x2="175" y2="2128.0"/>
 <rect fill="#eeeeee" x="175" y="2119.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2136.0" x2="175" y2="2144.0"/>
-<rect fill="#eeeeee" x="175" y="2135.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2136.0"><title>2021-07-11  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2136.0"><title>2022-07-11  30.0 Cycling 01:15:00: </title></rect>
 </g></g><g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2148" x2="1250" y2="2148"/>
-<text x="0" y="2148" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-07-12 .. 2021-07-18) </tspan></text>
+<text x="0" y="2148" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2022-07-12 .. 2022-07-18) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2152.0" x2="175" y2="2160.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2168.0" x2="175" y2="2176.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2184.0" x2="175" y2="2192.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2184.0"><title>2021-07-14   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2184.0"><title>2022-07-14   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2200.0" x2="175" y2="2208.0"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2200.0"><title>2021-07-15 Strength 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2200.0"><title>2022-07-15 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2216.0" x2="175" y2="2224.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="375" x="175" y="2216.0"><title>2021-07-16   3.5 Running 02:30:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="2215.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="375" x="175" y="2216.0"><title>2022-07-16   3.5 Running 02:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2232.0" x2="175" y2="2240.0"/>
 <rect fill="#eeeeee" x="175" y="2231.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2248.0" x2="175" y2="2256.0"/>
-<rect fill="#eeeeee" x="175" y="2247.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="213" x="175" y="2248.0"><title>2021-07-18  30.0 Cycling 01:25:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="213" x="175" y="2248.0"><title>2022-07-18  30.0 Cycling 01:25:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2260" x2="1250" y2="2260"/>
-<text x="0" y="2260" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-07-19 .. 2021-07-25) </tspan></text>
+<text x="0" y="2260" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2022-07-19 .. 2022-07-25) </tspan><title> Test 1000m speed run</title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2264.0" x2="175" y2="2272.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2280.0" x2="175" y2="2288.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2296.0" x2="175" y2="2304.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2296.0"><title>2021-07-21   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2296.0"><title>2022-07-21   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2312.0" x2="175" y2="2320.0"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2312.0"><title>2021-07-22 Strength 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2312.0"><title>2022-07-22 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2328.0" x2="175" y2="2336.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="375" x="175" y="2328.0"><title>2021-07-23   3.5 Running 02:30:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="2327.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="375" x="175" y="2328.0"><title>2022-07-23   3.5 Running 02:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2344.0" x2="175" y2="2352.0"/>
 <rect fill="#eeeeee" x="175" y="2343.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2360.0" x2="175" y2="2368.0"/>
-<rect fill="#eeeeee" x="175" y="2359.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="213" x="175" y="2360.0"><title>2021-07-25  30.0 Cycling 01:25:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="213" x="175" y="2360.0"><title>2022-07-25  30.0 Cycling 01:25:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2372" x2="1250" y2="2372"/>
-<text x="0" y="2372" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-07-26 .. 2021-08-01) </tspan></text>
+<text x="0" y="2372" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2022-07-26 .. 2022-08-01) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2376.0" x2="175" y2="2384.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2392.0" x2="175" y2="2400.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2392.0"><title>2021-07-27  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2392.0"><title>2022-07-27  30.0 Cycling 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2408.0" x2="175" y2="2416.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2424.0" x2="175" y2="2432.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2424.0"><title>2021-07-29   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2424.0"><title>2022-07-29   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2440.0" x2="175" y2="2448.0"/>
+<rect fill="#eeeeee" x="175" y="2439.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2456.0" x2="175" y2="2464.0"/>
 <rect fill="#eeeeee" x="175" y="2455.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2472.0" x2="175" y2="2480.0"/>
-<rect fill="#eeeeee" x="175" y="2471.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2472.0"><title>2021-08-01  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2472.0"><title>2022-08-01  30.0 Cycling 01:15:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2484" x2="1250" y2="2484"/>
-<text x="0" y="2484" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-08-02 .. 2021-08-08) </tspan></text>
+<text x="0" y="2484" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2022-08-02 .. 2022-08-08) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2488.0" x2="175" y2="2496.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2504.0" x2="175" y2="2512.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2520.0" x2="175" y2="2528.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="2520.0"><title>2021-08-04   4.2 Running 00:30:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="2520.0"><title>2022-08-04   4.2 Running 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2536.0" x2="175" y2="2544.0"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="2536.0"><title>2021-08-05 Strength 00:30:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="2536.0"><title>2022-08-05 Strength 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2552.0" x2="175" y2="2560.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="450" x="175" y="2552.0"><title>2021-08-06   4.2 Running 03:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="2551.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="450" x="175" y="2552.0"><title>2022-08-06   4.2 Running 03:00:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2568.0" x2="175" y2="2576.0"/>
 <rect fill="#eeeeee" x="175" y="2567.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2584.0" x2="175" y2="2592.0"/>
-<rect fill="#eeeeee" x="175" y="2583.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="250" x="175" y="2584.0"><title>2021-08-08  35.0 Cycling 01:40:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="250" x="175" y="2584.0"><title>2022-08-08  35.0 Cycling 01:40:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2596" x2="1250" y2="2596"/>
-<text x="0" y="2596" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2021-08-09 .. 2021-08-15) </tspan></text>
+<text x="0" y="2596" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Running</tspan><tspan x="10" dy="1.5em">(2022-08-09 .. 2022-08-15) </tspan><title> Test 1000m speed run</title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2600.0" x2="175" y2="2608.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2616.0" x2="175" y2="2624.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2632.0" x2="175" y2="2640.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="2632.0"><title>2021-08-11   4.2 Running 00:30:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="2632.0"><title>2022-08-11   4.2 Running 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2648.0" x2="175" y2="2656.0"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="2648.0"><title>2021-08-12 Strength 00:30:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="2648.0"><title>2022-08-12 Strength 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2664.0" x2="175" y2="2672.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="450" x="175" y="2664.0"><title>2021-08-13   4.2 Running 03:00:00: </title></rect>
+<rect fill="#eeeeee" x="175" y="2663.0" height="10" width="900"/>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="450" x="175" y="2664.0"><title>2022-08-13   4.2 Running 03:00:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2680.0" x2="175" y2="2688.0"/>
 <rect fill="#eeeeee" x="175" y="2679.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2696.0" x2="175" y2="2704.0"/>
-<rect fill="#eeeeee" x="175" y="2695.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="250" x="175" y="2696.0"><title>2021-08-15  35.0 Cycling 01:40:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="250" x="175" y="2696.0"><title>2022-08-15  35.0 Cycling 01:40:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2708" x2="1250" y2="2708"/>
-<text x="0" y="2708" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-08-16 .. 2021-08-22) </tspan></text>
+<text x="0" y="2708" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2022-08-16 .. 2022-08-22) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2712.0" x2="175" y2="2720.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2728.0" x2="175" y2="2736.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2728.0"><title>2021-08-17  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2728.0"><title>2022-08-17  30.0 Cycling 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2744.0" x2="175" y2="2752.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2760.0" x2="175" y2="2768.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2760.0"><title>2021-08-19   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2760.0"><title>2022-08-19   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2776.0" x2="175" y2="2784.0"/>
+<rect fill="#eeeeee" x="175" y="2775.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2792.0" x2="175" y2="2800.0"/>
 <rect fill="#eeeeee" x="175" y="2791.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2808.0" x2="175" y2="2816.0"/>
-<rect fill="#eeeeee" x="175" y="2807.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2808.0"><title>2021-08-22  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2808.0"><title>2022-08-22  30.0 Cycling 01:15:00: </title></rect>
 </g></g><g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2820" x2="1250" y2="2820"/>
-<text x="0" y="2820" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2021-08-23 .. 2021-08-29) </tspan></text>
+<text x="0" y="2820" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2022-08-23 .. 2022-08-29) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2824.0" x2="175" y2="2832.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2840.0" x2="175" y2="2848.0"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2840.0"><title>2021-08-24   2.0 Swimming 01:15:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2840.0"><title>2022-08-24   2.0 Swimming 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2856.0" x2="175" y2="2864.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2872.0" x2="175" y2="2880.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2872.0"><title>2021-08-26   3.5 Running 00:25:00: </title></rect>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="2872.0"><title>2021-08-26 Strength 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2872.0"><title>2022-08-26   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="2872.0"><title>2022-08-26 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2888.0" x2="175" y2="2896.0"/>
+<rect fill="#eeeeee" x="175" y="2887.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2904.0" x2="175" y2="2912.0"/>
 <rect fill="#eeeeee" x="175" y="2903.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2920.0" x2="175" y2="2928.0"/>
-<rect fill="#eeeeee" x="175" y="2919.0" height="10" width="900"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="2920.0"><title>2021-08-29   3.0 Swimming 02:00:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="2920.0"><title>2022-08-29   3.0 Swimming 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="2932" x2="1250" y2="2932"/>
-<text x="0" y="2932" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2021-08-30 .. 2021-09-05) </tspan></text>
+<text x="0" y="2932" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2022-08-30 .. 2022-09-05) </tspan><title> Test 5km Time trial</title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="2936.0" x2="175" y2="2944.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2952.0" x2="175" y2="2960.0"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2952.0"><title>2021-08-31   2.0 Swimming 01:15:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="2952.0"><title>2022-08-31   2.0 Swimming 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="2968.0" x2="175" y2="2976.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="2984.0" x2="175" y2="2992.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2984.0"><title>2021-09-02   3.5 Running 00:25:00: </title></rect>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="2984.0"><title>2021-09-02 Strength 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="2984.0"><title>2022-09-02   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="2984.0"><title>2022-09-02 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3000.0" x2="175" y2="3008.0"/>
+<rect fill="#eeeeee" x="175" y="2999.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3016.0" x2="175" y2="3024.0"/>
 <rect fill="#eeeeee" x="175" y="3015.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3032.0" x2="175" y2="3040.0"/>
-<rect fill="#eeeeee" x="175" y="3031.0" height="10" width="900"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="3032.0"><title>2021-09-05   3.0 Swimming 02:00:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="3032.0"><title>2022-09-05   3.0 Swimming 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="3044" x2="1250" y2="3044"/>
-<text x="0" y="3044" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-09-06 .. 2021-09-12) </tspan></text>
+<text x="0" y="3044" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2022-09-06 .. 2022-09-12) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="3048.0" x2="175" y2="3056.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3064.0" x2="175" y2="3072.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3064.0"><title>2021-09-07  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3064.0"><title>2022-09-07  30.0 Cycling 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3080.0" x2="175" y2="3088.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3096.0" x2="175" y2="3104.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="3096.0"><title>2021-09-09   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="3096.0"><title>2022-09-09   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3112.0" x2="175" y2="3120.0"/>
+<rect fill="#eeeeee" x="175" y="3111.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3128.0" x2="175" y2="3136.0"/>
 <rect fill="#eeeeee" x="175" y="3127.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3144.0" x2="175" y2="3152.0"/>
-<rect fill="#eeeeee" x="175" y="3143.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3144.0"><title>2021-09-12  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3144.0"><title>2022-09-12  30.0 Cycling 01:15:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="3156" x2="1250" y2="3156"/>
-<text x="0" y="3156" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2021-09-13 .. 2021-09-19) </tspan></text>
+<text x="0" y="3156" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2022-09-13 .. 2022-09-19) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="3160.0" x2="175" y2="3168.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3176.0" x2="175" y2="3184.0"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3176.0"><title>2021-09-14   2.0 Swimming 01:15:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3176.0"><title>2022-09-14   2.0 Swimming 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3192.0" x2="175" y2="3200.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3208.0" x2="175" y2="3216.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="3208.0"><title>2021-09-16   3.5 Running 00:25:00: </title></rect>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="3208.0"><title>2021-09-16 Strength 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="3208.0"><title>2022-09-16   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="63" x="237.5" y="3208.0"><title>2022-09-16 Strength 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3224.0" x2="175" y2="3232.0"/>
+<rect fill="#eeeeee" x="175" y="3223.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3240.0" x2="175" y2="3248.0"/>
 <rect fill="#eeeeee" x="175" y="3239.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3256.0" x2="175" y2="3264.0"/>
-<rect fill="#eeeeee" x="175" y="3255.0" height="10" width="900"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="3256.0"><title>2021-09-19   3.0 Swimming 02:00:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="300" x="175" y="3256.0"><title>2022-09-19   3.0 Swimming 02:00:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="3268" x2="1250" y2="3268"/>
-<text x="0" y="3268" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2021-09-20 .. 2021-09-26) </tspan></text>
+<text x="0" y="3268" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Focus Swimming</tspan><tspan x="10" dy="1.5em">(2022-09-20 .. 2022-09-26) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="3272.0" x2="175" y2="3280.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3288.0" x2="175" y2="3296.0"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="225" x="175" y="3288.0"><title>2021-09-21   2.4 Swimming 01:30:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="225" x="175" y="3288.0"><title>2022-09-21   2.4 Swimming 01:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3304.0" x2="175" y2="3312.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3320.0" x2="175" y2="3328.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="3320.0"><title>2021-09-23   4.2 Running 00:30:00: </title></rect>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="75" x="250.0" y="3320.0"><title>2021-09-23 Strength 00:30:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="75" x="175" y="3320.0"><title>2022-09-23   4.2 Running 00:30:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="75" x="250.0" y="3320.0"><title>2022-09-23 Strength 00:30:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3336.0" x2="175" y2="3344.0"/>
+<rect fill="#eeeeee" x="175" y="3335.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3352.0" x2="175" y2="3360.0"/>
 <rect fill="#eeeeee" x="175" y="3351.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3368.0" x2="175" y2="3376.0"/>
-<rect fill="#eeeeee" x="175" y="3367.0" height="10" width="900"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="362" x="175" y="3368.0"><title>2021-09-26   3.6 Swimming 02:25:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="362" x="175" y="3368.0"><title>2022-09-26   3.6 Swimming 02:25:00: </title></rect>
 </g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="3380" x2="1250" y2="3380"/>
-<text x="0" y="3380" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2021-09-27 .. 2021-10-03) </tspan></text>
+<text x="0" y="3380" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">General Regeneration</tspan><tspan x="10" dy="1.5em">(2022-09-27 .. 2022-10-03) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="3384.0" x2="175" y2="3392.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3400.0" x2="175" y2="3408.0"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3400.0"><title>2021-09-28  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3400.0"><title>2022-09-28  30.0 Cycling 01:15:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3416.0" x2="175" y2="3424.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3432.0" x2="175" y2="3440.0"/>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="3432.0"><title>2021-09-30   3.5 Running 00:25:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="63" x="175" y="3432.0"><title>2022-09-30   3.5 Running 00:25:00: </title></rect>
 <line stroke="black" stroke-width=".5" x1="175" y1="3448.0" x2="175" y2="3456.0"/>
+<rect fill="#eeeeee" x="175" y="3447.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3464.0" x2="175" y2="3472.0"/>
 <rect fill="#eeeeee" x="175" y="3463.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3480.0" x2="175" y2="3488.0"/>
-<rect fill="#eeeeee" x="175" y="3479.0" height="10" width="900"/>
-<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3480.0"><title>2021-10-03  30.0 Cycling 01:15:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="188" x="175" y="3480.0"><title>2022-10-03  30.0 Cycling 01:15:00: </title></rect>
 </g></g><g><line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="0" y1="3492" x2="1250" y2="3492"/>
-<text x="0" y="3492" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Highlight Triathlon Olympic Distance</tspan><tspan x="10" dy="1.5em">(2021-10-04 .. 2021-10-10) </tspan></text>
+<text x="0" y="3492" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">Highlight Triathlon Olympic Distance</tspan><tspan x="10" dy="1.5em">(2022-10-04 .. 2022-10-10) </tspan><title></title></text>
 <line stroke="black" stroke-width=".5" x1="175" y1="3496.0" x2="175" y2="3504.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3512.0" x2="175" y2="3520.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3528.0" x2="175" y2="3536.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3544.0" x2="175" y2="3552.0"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3560.0" x2="175" y2="3568.0"/>
+<rect fill="#eeeeee" x="175" y="3559.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3576.0" x2="175" y2="3584.0"/>
 <rect fill="#eeeeee" x="175" y="3575.0" height="10" width="900"/>
 <line stroke="black" stroke-width=".5" x1="175" y1="3592.0" x2="175" y2="3600.0"/>
-<rect fill="#eeeeee" x="175" y="3591.0" height="10" width="900"/>
-<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="150" x="175" y="3592.0"><title>2021-10-10   1.5 Swimming 01:00:00: </title></rect>
-<rect  height="8" stroke="black" stroke-width=".5" width="250" x="325.0" y="3592.0"><title>2021-10-10  40.0 Cycling 01:40:00: </title></rect>
-<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="225" x="575.0" y="3592.0"><title>2021-10-10  10.0 Running 01:30:00: </title></rect>
+<rect  fill="#ddddff" height="8" stroke="black" stroke-width=".5" width="150" x="175" y="3592.0"><title>2022-10-10   1.5 Swimming 01:00:00: </title></rect>
+<rect  height="8" stroke="black" stroke-width=".5" width="250" x="325.0" y="3592.0"><title>2022-10-10  40.0 Cycling 01:40:00: </title></rect>
+<rect  fill="#ffdddd" height="8" stroke="black" stroke-width=".5" width="225" x="575.0" y="3592.0"><title>2022-10-10  10.0 Running 01:30:00: </title></rect>
 </g></g></svg>
