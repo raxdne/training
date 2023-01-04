@@ -192,7 +192,10 @@ class Cycle(Title,Description):
 
         """  """
 
-        return len(self.day)
+        if self.dateBegin != None and date.today() >= self.dateBegin and self.dateEnd != None and date.today() <= self.dateEnd:
+            return (date.today() - self.dateBegin).days + 1
+        else:
+            return len(self.day)
 
 
     def getNumberOfUnits(self):
@@ -360,16 +363,20 @@ class Cycle(Title,Description):
 
         strResult = ''
 
+        sum_h = 0.0
         for v in self.day:
             for u in v:
                 if u.type != None and len(u.type) > 0 and u.duration != None:
+                    if u.type not in arrArg:
+                        arrArg[u.type] = [[],[]]
                     if u.dist != None:
-                        if u.type not in arrArg:
-                            arrArg[u.type] = [[],[]]
                         arrArg[u.type][0].append(u.dist)
-                        arrArg[u.type][1].append(u.duration.total_seconds())
+                    else:
+                        arrArg[u.type][0].append(0)
+                    arrArg[u.type][1].append(u.duration.total_seconds())
+                    sum_h += u.duration.total_seconds()
+        sum_h /= 3600.0
 
-        sum_h = 0.0
         for k in sorted(arrArg.keys()):
             if len(arrArg[k][0]) < 1:
                 strResult += "{:4} x {:3} {:7}    {:7.01f} h\n".format(len(arrArg[k][0]), k, ' ', round(sum(arrArg[k][1]) / 3600, 2))
@@ -377,9 +384,7 @@ class Cycle(Title,Description):
                 strResult += "{:4} x {:3} {:7.01f} {} {:7.01f} h\n".format(len(arrArg[k][0]), k, sum(arrArg[k][0]), config.unit_distance, round(sum(arrArg[k][1]) / 3600, 2))
             else:
                 strResult += "{:4} x {:3} {:7.01f} {} {:7.01f} h {:5.01f} /{:5.01f} /{:5.01f}\n".format(len(arrArg[k][0]), k, sum(arrArg[k][0]), config.unit_distance, round(sum(arrArg[k][1]) / 3600, 2), min(arrArg[k][0]), mean(arrArg[k][0]), max(arrArg[k][0]))
-            sum_h += sum(arrArg[k][1])
 
-        sum_h /= 3600.0
         n = self.getNumberOfUnits()
         if n > 0:
             p = self.getPeriod()

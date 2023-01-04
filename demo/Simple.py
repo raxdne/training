@@ -22,10 +22,10 @@ def BasicsGeneral():
     p.appendDescription('Regeneration')
 
     c = Cycle('General Endurance')
-    c.insert(1,Unit('3.5;Running;25:00'))
-    c.insert(3,Unit('3.5;Running;25:00'))
+    c.insert(1,Unit(';Running;25:00'))
+    c.insert(3,Unit(';Running;25:00'))
     c.insert(5,Unit(';Strength;25:00'))
-    c.insert(6,Unit('30;Bicycle;02:00:00'))
+    c.insert(6,Unit(';Bicycle;02:00:00'))
 
     p.append(c)
     p.append(c)
@@ -201,7 +201,7 @@ def PlanSimple(strArg):
 
 #print(config.getSettingsStr())
 
-s = PlanSimple('Season Simple').schedule(2021,1,4)
+s = PlanSimple('Season Simple').schedule(2023,1,1)
 
 #print(s.report())
 print(s.stat())
@@ -228,5 +228,9 @@ f.close()
 
 f = open('SimplePlan.csv', 'w')
 f.write(s.toCSV())
+f.close()
+
+f = open('SimplePlan.html', 'w')
+f.write(s.toHtmlFile())
 f.close()
 

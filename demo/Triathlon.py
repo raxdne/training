@@ -187,3 +187,7 @@ f = open('TriathlonPlan.csv', 'w')
 f.write(s.toCSV())
 f.close()
 
+f = open('TriathlonPlan.html', 'w')
+f.write(s.toHtmlFile())
+f.close()
+
