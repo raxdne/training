@@ -192,6 +192,13 @@ class Cycle(Title,Description):
 
         """  """
 
+        return len(self.day)
+
+
+    def getPeriodDone(self):
+
+        """  """
+
         if self.dateBegin != None and date.today() >= self.dateBegin and self.dateEnd != None and date.today() <= self.dateEnd:
             return (date.today() - self.dateBegin).days + 1
         else:
@@ -206,8 +213,6 @@ class Cycle(Title,Description):
         for v in self.day:
             for u in v:
                 if u.type != None and len(u.type) > 0:
-                    intResult += 1
-                elif u.duration != None and u.duration.total_seconds() > 59:
                     intResult += 1
 
         return intResult
@@ -311,7 +316,8 @@ class Cycle(Title,Description):
                             
                         self.day[h][i].clock = None
                         
-                    d_i += self.day[h][i].duration
+                    if self.day[h][i].duration != None:
+                        d_i += self.day[h][i].duration
                             
                     # count number of combined units
                     j = i+1
@@ -387,7 +393,7 @@ class Cycle(Title,Description):
 
         n = self.getNumberOfUnits()
         if n > 0:
-            p = self.getPeriod()
+            p = self.getPeriodDone()
             strResult += "\n{} Units {:.2f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(n, round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
 
         return strResult

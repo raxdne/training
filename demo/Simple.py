@@ -22,10 +22,10 @@ def BasicsGeneral():
     p.appendDescription('Regeneration')
 
     c = Cycle('General Endurance')
-    c.insert(1,Unit(';Running;25:00'))
-    c.insert(3,Unit(';Running;25:00'))
-    c.insert(5,Unit(';Strength;25:00'))
-    c.insert(6,Unit(';Bicycle;02:00:00'))
+    c.insert(1,Unit('Running'))
+    c.insert(3,Unit('Running'))
+    c.insert(5,Unit('Strength'))
+    c.insert(6,Unit('Bicycle'))
 
     p.append(c)
     p.append(c)

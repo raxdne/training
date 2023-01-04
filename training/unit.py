@@ -229,16 +229,27 @@ class Unit(Description):
 
         """  """
 
+        self.reset()
+        
         if objArg == None or len(objArg) < 1:
             return False
         elif type(objArg) is str:
             entry = objArg.split(';')
             # TODO: test elements of entry
-            if len(entry) == 3:
+            if len(entry) == 1:
+                # type only
+                entry.insert(0,'')
+                entry.insert(0,'')
+                entry.append('')
+            elif len(entry) == 2:
+                # type + time only
+                entry.insert(0,'')
+                entry.append('')
+            elif len(entry) == 3:
+                # dist + type + time
                 entry.insert(0,'')
             return self.parse(entry)
         elif type(objArg) is list and len(objArg) > 3:
-            self.reset()
             if self.setDistStr(objArg[1]) and self.setTypeStr(objArg[2]) and self.setDurationStr(objArg[3]):
                 self.setDateStr(objArg[0])
                 self.appendDescription(objArg[4:])
@@ -276,6 +287,8 @@ class Unit(Description):
             strResult = 'EMPTY'
         elif self.type == None:
             strResult = '{date} {duration}'.format(date=self.dt.date().isoformat(), duration=self.getDurationStr())
+        elif self.dist == None and self.dt == None:
+            strResult = '{date} {type}'.format(date=self.dt.date().isoformat(), duration=self.getDurationStr())
         elif self.dist == None:
             strResult = '{date} {type} {duration}'.format(date=self.dt.date().isoformat(), type=self.type, duration=self.getDurationStr())
         elif self.dt == None:
