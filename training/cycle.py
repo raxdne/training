@@ -520,7 +520,7 @@ class Cycle(Title,Description):
         """  """
     
         try:
-            l = self.dateEnd - self.dateBegin
+            l = self.getPeriodDone()
             x_i = (self.dateBegin - dateBase).days * 2
         except ValueError as e:
             print('error: ' + str(e), file=sys.stderr)
@@ -533,14 +533,14 @@ class Cycle(Title,Description):
         else:
             color = self.color
             
-        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
+        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, l * 2)
         strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToString__())
         strResult += '</rect>'
 
         # TODO: make config.diagram_height configurable
         config.diagram_height = 40 * (config.diagram_bar_height * 2) + 100
 
-        h = round(self.getDurationOfUnits() / (l.days + 1))
+        h = round(self.getDurationOfUnits() / l)
 
         if self.color != None:
             scolor = 'red'
@@ -556,7 +556,7 @@ class Cycle(Title,Description):
             scolor = 'red'
             color = 'red'
             
-        strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, config.diagram_height - h - 10, h, (l.days + 1) * 2 - 2)
+        strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, config.diagram_height - h - 10, h, l * 2 - 2)
         strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
         strResult += '</rect>'
 
