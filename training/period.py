@@ -332,7 +332,7 @@ class Period(Title,Description):
 
             d_i = None
             for l in content:
-                if l == None or l == '':
+                if l == None or l == '' or re.match(r"^sep",l) or re.match(r"^\*",l):
                     pass
                 elif (fUpdater != None and t.parse(fUpdater(l))) or t.parse(l):
                     if t.dt != None:

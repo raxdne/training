@@ -29,7 +29,7 @@ from icalendar import Calendar, Event, Alarm
 
 from training import config as config
 from training.description import Description
-from training.title import Title
+#from training.title import Title
 #from training.unit import Unit
 #from training.cycle import Cycle
 #from training.period import Period
