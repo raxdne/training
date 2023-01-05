@@ -36,7 +36,9 @@ def BasicsGeneral():
     p.append(c)
     p.append(RegenerationGeneral())
     p.append(c)
+    c.shift(3,4)
     p.append(c)
+    c.swap(4,6)
     p.append(c)
     p.append(RegenerationGeneral())
     

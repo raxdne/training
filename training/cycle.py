@@ -146,17 +146,49 @@ class Cycle(Title,Description):
         return None
 
 
-    def insert(self,intIndex,objUnit):
+    def shift(self,intIndexA,intIndexB,flagReplace=False):
+
+        """  """
+
+        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.day) and intIndexB < len(self.day) and intIndexA != intIndexB:
+            if flagReplace:
+                # override exisiting
+                self.day[intIndexB] = self.day[intIndexA]
+            else:
+                self.day[intIndexB] += self.day[intIndexA]
+
+            self.day[intIndexA] = []
+
+        return self
+
+
+    def swap(self,intIndexA,intIndexB):
+
+        """  """
+
+        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.day) and intIndexB < len(self.day) and intIndexA != intIndexB:
+            t = self.day[intIndexB]
+            self.day[intIndexB] = self.day[intIndexA]
+            self.day[intIndexA] = t
+
+        return self
+
+
+    def insert(self,intIndex,objUnit,flagReplace=False):
 
         """  """
 
         objResult = None
 
-        if objUnit != None:
+        if objUnit != None and intIndex > -1 and intIndex < len(self.day):
             objResult = objUnit.dup()
-            self.day[intIndex].append(objResult)
+            if flagReplace:
+                # override exisiting
+                self.day[intIndex] = [objResult]
+            else:
+                self.day[intIndex].append(objResult)
 
-        return objResult
+        return self
 
 
     def insertByDate(self,objUnit,flagReplace=False):
@@ -170,12 +202,12 @@ class Cycle(Title,Description):
             if delta.days > -1 and objUnit.dt.date() <= self.dateEnd:
                 objResult = objUnit.dup()
                 if flagReplace:
-                    # delete exisiting
+                    # override exisiting
                     self.day[delta.days] = [objResult]
                 else:
                     self.day[delta.days].append(objResult)
 
-        return objResult
+        return self
 
 
     def insertDescriptionStr(self,intIndex,strArg):
