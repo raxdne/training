@@ -93,28 +93,6 @@ class Cycle(Title,Description):
         return self
 
 
-    def resetUnits(self,patternType=None):
-
-        """  """
-
-        if patternType == None:
-            for v in self.day:
-                del v[0:]
-        else:
-            for v in self.day:
-                # due to modification of the array iterator is not usable
-                i = 0
-                j = len(v)
-                while i < j:
-                    if v[i].type != None and re.match(patternType,v[i].type):
-                        v.pop(i)
-                        j -= 1
-                    else:
-                        i += 1
-
-        return self
-
-
     def setColor(self,strColor):
 
         """  """
@@ -146,13 +124,36 @@ class Cycle(Title,Description):
         return None
 
 
-    def remove(self,intIndexA):
+    def remove(self,intIndexA=-1,patternType=None):
 
         """  """
 
         if intIndexA > -1 and intIndexA < len(self.day):
-            self.day[intIndexA] = []
-
+            if patternType != None:
+                # delete only matching elements in list of indexed day
+                dayNew = []
+                for u in self.day[intIndexA]:
+                    if u.type == None or re.match(patternType,u.type):
+                        # to be ignored
+                        pass
+                    else:
+                        dayNew.append(u.dup())
+                self.day[intIndexA] = copy.deepcopy(dayNew)
+            else:
+                # delete whole list of indexed day
+                self.day[intIndexA] = []
+        elif patternType != None:
+            # whole cycle using pattern
+            daysNew = []
+            for i in range(0,len(self.day)):
+                daysNew.append([])
+                for u in self.day[i]:
+                    if u.type == None or re.match(patternType,u.type):
+                        pass
+                    else:
+                        daysNew[i].append(u)
+            self.day = daysNew
+            
         return self
 
 
@@ -208,7 +209,7 @@ class Cycle(Title,Description):
             else:
                 self.day[intIndex].append(objResult)
 
-        return self
+        return objResult
 
 
     def insertByDate(self,objUnit,flagReplace=False):
@@ -227,7 +228,7 @@ class Cycle(Title,Description):
                 else:
                     self.day[delta.days].append(objResult)
 
-        return self
+        return objResult
 
 
     def insertDescriptionStr(self,intIndex,strArg):

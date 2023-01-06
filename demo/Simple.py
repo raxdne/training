@@ -27,9 +27,10 @@ def BasicsGeneral():
     c.insert(1,Unit(';Running;45min'))
     c.copy(1,3)
     c.insert(5,Unit(';Strength;30min'))
-    c.insert(6,Unit(';Bicycle:1h'))
+    c.insert(6,Unit(';Bicycle;1h'))
 
     p.append(c)
+    #c.remove(intIndexA=-1,patternType=r'^[R]')
     p.append(c)
     p.append(c)
     p.append(RegenerationGeneral())
@@ -197,6 +198,8 @@ def PlanSimple(strArg):
 #print(config.getSettingsStr())
 
 s = PlanSimple('Season Simple').schedule(date.today().year,1,1)
+
+s.remove(patternType=r'^[^B]')
 
 #print(s.report())
 print(s.stat())

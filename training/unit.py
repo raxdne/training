@@ -284,7 +284,7 @@ class Unit(Description):
         """  """
 
         if self.type == None and self.dist == None and self.dt == None:
-            strResult = 'EMPTY'
+            strResult = ''
         elif self.type == None:
             strResult = '{date} {duration}'.format(date=self.dt.date().isoformat(), duration=self.getDurationStr())
         elif self.dist == None and self.dt == None:
@@ -303,14 +303,17 @@ class Unit(Description):
 
         """  """
 
-        if self.type == None:
-            strResult = '{date};;;'.format(date=self.dt.isoformat())
-        elif self.dist == None:
-            strResult = '{date};;{type};{duration}'.format(date=self.dt.isoformat(), type=self.type, duration=self.getDurationStr())
+        if self.dt == None:
+            strResult = ''
         else:
-            strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
+            if self.type == None:
+                strResult = '{date};;;'.format(date=self.dt.isoformat())
+            elif self.dist == None:
+                strResult = '{date};;{type};{duration}'.format(date=self.dt.isoformat(), type=self.type, duration=self.getDurationStr())
+            else:
+                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
 
-        strResult += ';' + self.__listDescriptionToString__()
+            strResult += ';' + self.__listDescriptionToString__()
 
         return strResult
 
@@ -382,7 +385,9 @@ class Unit(Description):
             if self.hasDescription():
                 event.add('description', self.__listDescriptionToString__())
 
-        if self.dt.time().hour == 0 or self.duration == None:
+        if self.dt == None:
+            pass
+        elif self.dt.time().hour == 0 or self.duration == None:
             event.add('dtstart', self.dt.date())
             event.add('dtend', self.dt.date() + timedelta(days=1))
         else:

@@ -90,16 +90,6 @@ class Period(Title,Description):
         return self
 
 
-    def resetUnits(self,patternType=None):
-
-        """  """
-
-        for c in self.child:
-            c.resetUnits(patternType)
-
-        return self
-
-
     def appendChildDescription(self,objArg):
 
         """  """
@@ -206,6 +196,16 @@ class Period(Title,Description):
 
         for c in self.child:
             c.scale(floatScale,patternType)
+
+        return self
+
+
+    def remove(self,patternType=None):
+
+        """  """
+
+        for c in self.child:
+            c.remove(patternType=patternType)
 
         return self
 
