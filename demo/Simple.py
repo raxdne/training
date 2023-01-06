@@ -2,6 +2,8 @@
 #
 #
 
+from datetime import date
+
 from training.unit import Unit
 from training.cycle import Cycle
 from training.period import Period
@@ -22,10 +24,10 @@ def BasicsGeneral():
     p.appendDescription('Regeneration')
 
     c = Cycle('General Endurance')
-    c.insert(1,Unit('Running'))
-    c.insert(3,Unit('Running'))
-    c.insert(5,Unit('Strength'))
-    c.insert(6,Unit('Bicycle'))
+    c.insert(1,Unit(';Running;45min'))
+    c.copy(1,3)
+    c.insert(5,Unit(';Strength;30min'))
+    c.insert(6,Unit(';Bicycle:1h'))
 
     p.append(c)
     p.append(c)
@@ -36,11 +38,6 @@ def BasicsGeneral():
     p.append(c)
     p.append(RegenerationGeneral())
     p.append(c)
-    c.shift(3,4)
-    p.append(c)
-    c.swap(4,6)
-    p.append(c)
-    p.append(RegenerationGeneral())
     
     return p
 
@@ -62,10 +59,6 @@ def BasicsBicycle():
     p.appendChildDescription('Test 5km Time trial')
     p.append(RegenerationGeneral())
     p.append(c)
-    c.scale(1.2)
-    p.append(c)
-    p.append(c)
-    p.append(RegenerationGeneral())
     c.scale(1.2)
     p.append(c)
     p.append(c)
@@ -196,14 +189,14 @@ def PlanSimple(strArg):
     s.append(RunningSimple())
 
     #s.resetUnits()
-    #s.parseFile('Training2021.csv')
+    #s.parseFile('Training{}.csv'.format(date.today().year))
 
     return s
 
 
 #print(config.getSettingsStr())
 
-s = PlanSimple('Season Simple').schedule(2023,1,1)
+s = PlanSimple('Season Simple').schedule(date.today().year,1,1)
 
 #print(s.report())
 print(s.stat())

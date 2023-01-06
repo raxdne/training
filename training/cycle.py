@@ -146,18 +146,38 @@ class Cycle(Title,Description):
         return None
 
 
+    def remove(self,intIndexA):
+
+        """  """
+
+        if intIndexA > -1 and intIndexA < len(self.day):
+            self.day[intIndexA] = []
+
+        return self
+
+
     def shift(self,intIndexA,intIndexB,flagReplace=False):
 
         """  """
 
         if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.day) and intIndexB < len(self.day) and intIndexA != intIndexB:
+            self.copy(intIndexA,intIndexB,flagReplace)
+            self.remove(intIndexA)
+
+        return self
+
+
+    def copy(self,intIndexA,intIndexB,flagReplace=False):
+
+        """  """
+
+        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.day) and intIndexB < len(self.day) and intIndexA != intIndexB:
+            objCopy = copy.deepcopy(self.day[intIndexA])
             if flagReplace:
                 # override exisiting
-                self.day[intIndexB] = self.day[intIndexA]
+                self.day[intIndexB] = objCopy
             else:
-                self.day[intIndexB] += self.day[intIndexA]
-
-            self.day[intIndexA] = []
+                self.day[intIndexB] += objCopy
 
         return self
 
@@ -219,7 +239,9 @@ class Cycle(Title,Description):
         elif len(self.day) > intIndex and len(self.day[intIndex]) > 0:
             self.day[intIndex][len(self.day[intIndex]) - 1].appendDescription(strArg)
 
+        return self
 
+    
     def getPeriod(self):
 
         """  """
@@ -565,7 +587,7 @@ class Cycle(Title,Description):
         else:
             color = self.color
             
-        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, l * 2)
+        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, self.getPeriod() * 2)
         strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToString__())
         strResult += '</rect>'
 
