@@ -50,6 +50,7 @@ class Unit(Description):
             self.reset()
         else:
             self.parse(strArg)
+            #print('New Unit: ' + strArg + ' -> {} {} {} {} {}'.format(self.dt, self.dist, self.type, self.duration, self.__listDescriptionToString__()), file=sys.stderr)
 
 
     def reset(self):
@@ -97,8 +98,11 @@ class Unit(Description):
         if strArg == None or strArg == '':
             self.dist = None
         else:
-            self.dist = float(strArg.replace(',','.'))
-            if self.dist < 0.001:
+            try:
+                self.dist = float(strArg.replace(',','.'))
+                if self.dist < 0.001:
+                    self.dist = None
+            except ValueError:
                 self.dist = None
 
         return True

@@ -124,13 +124,13 @@ class Description:
         if listArg == None:
             strResult += self.__listDescriptionToXML__(self.listDescription)
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
-            strResult += '<node TEXT="{}">\n'.format(listArg[0]) + self.__listDescriptionToXML__(listArg[1]) + '</node>\n'
+            strResult += '<node FOLDED="{}" TEXT="{}">\n'.format('true',listArg[0]) + self.__listDescriptionToXML__(listArg[1]) + '</node>\n'
         elif type(listArg) is list and len(listArg) > 0:
             for c in listArg:
                 if len(c) < 1:
                     pass
                 elif type(c) is str and len(c) > 0:
-                    strResult += '<node BACKGROUND_COLOR="{}" TEXT="{}"/>\n'.format('#ffffaa',c)
+                    strResult += '<node TEXT="{}"/>\n'.format(c)
                 elif type(c) is list:
                     strResult += self.__listDescriptionToXML__(c)
                 else:
