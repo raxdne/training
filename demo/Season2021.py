@@ -2,7 +2,10 @@
 #
 #
 
+from training.note import Note
 from training.unit import Unit
+from training.pause import Pause
+from training.combination import Combination
 from training.cycle import Cycle
 from training.period import Period
 import training.config as config
@@ -33,10 +36,14 @@ def BasicsGeneral():
     p.setColor('#eeeeee')
 
     c = Cycle('General Endurance')
-    c.insert(1,Unit('18:00;3.5;RB;25:00'))
-    c.insert(3,Unit('18:00;3.5;RB;25:00'))
-    f = c.insert(4,Unit(';FB;25:00'))
-    c.insert(5,Unit(';FB;25:00'))
+
+    c.insert([1,5],Combination([Unit('18:00;3.5;RB;25:00'),
+                                Pause(10,'Stretching'),
+                                Unit(';FB;25:00'),
+                                Pause(2*60,'Rest'),
+                                Unit(';FB;25:00')]))
+             
+    c.insert(3,Unit(';FB;25:00'))
     c.insert(6,Unit('08:00;30;BB;02:00:00'))
 
     p.append(c)
@@ -46,11 +53,12 @@ def BasicsGeneral():
     p.append(RegenerationGeneral())
 
     c.appendDescription('Nutrition ABC')
-    f.appendDescription('Maximum')
+    #f.appendDescription('Maximum')
     
     p.append(c)
+    p.append(Note(['XYZ',['111','222']]))
     p.append(c)
-    f.setDescription()
+    #f.setDescription()
     p.append(c)
     p.append(RegenerationGeneral())
     

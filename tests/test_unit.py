@@ -17,52 +17,22 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
-#
-#
-#
+import sys
 
-class Title:
+from datetime import timedelta, date, datetime, time, timezone
 
-    """ abstract class to handle title """
+from training.unit import Unit
 
-    def __init__(self,strArg=None):
-
-        """ constructor """
-
-        self.setTitleStr(strArg)
-
-
-    def __str__(self):
-
-        """  """
-
-        return self.strTitle
-
-
-    def setTitleStr(self,strArg):
-
-        """  """
-
-        if strArg == None:
-            self.strTitle = '-'
-        else:
-            self.strTitle = strArg
-
-        return self
-
+print('Module Test:\n')
     
-    def hasTitle(self):
+t = Unit('2020-03-03T17:00:00+1:00;10;RG;20min')
+print(t)
 
-        """  """
+t.setDate(date(2025, 1, 7))
+t.setClock(time(0))
+#t.setColor('#ffaaaa')
+print(t.toHtml())
 
-        return self.strTitle != None and len(self.strTitle) > 0
-
-
-    def getTitleStr(self):
-
-        """  """
-
-        return self.strTitle
-        #return str(self)
-
+t = Unit('08:00;10;RG;20min')
+print(t)
 

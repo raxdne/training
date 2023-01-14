@@ -17,52 +17,31 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
-#
-#
-#
+from datetime import timedelta, date, datetime, time, timezone
 
-class Title:
+from training.pause import Pause
 
-    """ abstract class to handle title """
-
-    def __init__(self,strArg=None):
-
-        """ constructor """
-
-        self.setTitleStr(strArg)
-
-
-    def __str__(self):
-
-        """  """
-
-        return self.strTitle
-
-
-    def setTitleStr(self,strArg):
-
-        """  """
-
-        if strArg == None:
-            self.strTitle = '-'
-        else:
-            self.strTitle = strArg
-
-        return self
-
+print('Module Test:\n')
     
-    def hasTitle(self):
+t = Pause(15)
+print(repr(t))
+print(t)
 
-        """  """
+t1 = t.dup()
+print(t1)
 
-        return self.strTitle != None and len(self.strTitle) > 0
+t = Pause()
+t.setDuration(3)
+print(t)
 
+t.setClock(time(8,15,0))
+t.setDate(date(2025,1,1))
+t.setDescription('YYY')
+print(t)
 
-    def getTitleStr(self):
+t.setDuration('30min')
+t.setDescription(['AAA',['BBB','CCC'],['DDD','EEE']])
+print(t)
 
-        """  """
-
-        return self.strTitle
-        #return str(self)
-
-
+t.setDuration('3:30:00')
+print(t)

@@ -34,9 +34,10 @@ from icalendar import Calendar, Event, Alarm
 from training import config as config
 from training.description import Description
 from training.title import Title
+from training.note import Note
 from training.unit import Unit
-#from training.cycle import Cycle
-#from training.period import Period
+from training.pause import Pause
+from training.combination import Combination
 
 #
 #
@@ -49,6 +50,18 @@ class Cycle(Title,Description):
         """ constructor """
 
         self.reset(strArg,intArg)
+
+
+    def __str__(self):
+
+        """  """
+
+        strResult = '\n** ' + super().getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
+        for v in self.day:
+            for u in v:
+                strResult += str(u) + '\n'
+
+        return strResult
 
 
     def reset(self,strArg=None,intArg=7):
@@ -88,17 +101,8 @@ class Cycle(Title,Description):
 
         for v in self.day:
             for u in v:
-                u.setDistStr(None)
-
-        return self
-
-
-    def setColor(self,strColor):
-
-        """  """
-
-        if strColor != None and len(strColor) > 0:
-            self.color = strColor
+                if type(u) == Unit or type(u) == Combination:
+                    u.setDistStr(None)
 
         return self
 
@@ -148,7 +152,7 @@ class Cycle(Title,Description):
             for i in range(0,len(self.day)):
                 daysNew.append([])
                 for u in self.day[i]:
-                    if u.type == None or re.match(patternType,u.type):
+                    if type(u) == Unit and (u.type == None or re.match(patternType,u.type)):
                         pass
                     else:
                         daysNew[i].append(u)
@@ -195,14 +199,24 @@ class Cycle(Title,Description):
         return self
 
 
-    def insert(self,intIndex,objUnit,flagReplace=False):
+    def insert(self,intIndex,objArg,flagReplace=False):
 
         """  """
 
         objResult = None
 
-        if objUnit != None and intIndex > -1 and intIndex < len(self.day):
-            objResult = objUnit.dup()
+        if objArg == None:
+            pass
+        elif type(intIndex) == list:
+            for i in intIndex:
+                self.insert(i,objArg,flagReplace)
+            return []
+        elif type(objArg) == list:
+            for u in objArg:
+                self.insert(intIndex,u,flagReplace)
+            return []
+        elif intIndex > -1 and intIndex < len(self.day):
+            objResult = objArg.dup()
             if flagReplace:
                 # override exisiting
                 self.day[intIndex] = [objResult]
@@ -212,16 +226,16 @@ class Cycle(Title,Description):
         return objResult
 
 
-    def insertByDate(self,objUnit,flagReplace=False):
+    def insertByDate(self,objArg,flagReplace=False):
 
         """  """
 
         objResult = None
 
-        if objUnit != None and objUnit.dt != None:
-            delta = objUnit.dt.date() - self.dateBegin
-            if delta.days > -1 and objUnit.dt.date() <= self.dateEnd:
-                objResult = objUnit.dup()
+        if objArg != None and objArg.dt != None:
+            delta = objArg.dt.date() - self.dateBegin
+            if delta.days > -1 and objArg.dt.date() <= self.dateEnd:
+                objResult = objArg.dup()
                 if flagReplace:
                     # override exisiting
                     self.day[delta.days] = [objResult]
@@ -267,7 +281,7 @@ class Cycle(Title,Description):
         intResult = 0
         for v in self.day:
             for u in v:
-                if u.type != None and len(u.type) > 0:
+                if type(u) == Unit and u.type != None and len(u.type) > 0:
                     intResult += 1
 
         return intResult
@@ -280,7 +294,7 @@ class Cycle(Title,Description):
         intResult = 0
         for v in self.day:
             for u in v:
-                if u.type != None and len(u.type) > 0 and u.duration != None and u.duration.total_seconds() > 59:
+                if type(u) == Unit and u.type != None and len(u.type) > 0 and u.duration != None and u.duration.total_seconds() > 59:
                     intResult += u.duration.total_seconds()
 
         return intResult / 60
@@ -295,7 +309,7 @@ class Cycle(Title,Description):
 
         for v in self.day:
             for u in v:
-                if u.type != None and len(u.type) > 0:
+                if type(u) == Unit and u.type != None and len(u.type) > 0:
                     if u.type in arrArg:
                         pass
                     else:
@@ -310,7 +324,8 @@ class Cycle(Title,Description):
 
         for v in self.day:
             for u in v:
-                u.scale(floatScale,patternType)
+                if type(u) == Unit:
+                    u.scale(floatScale,patternType)
 
         return self
 
@@ -320,12 +335,21 @@ class Cycle(Title,Description):
         """  """
 
         if self.dateBegin == None:
+
             try:
-                d = date(intYear, intMonth, intDay)
+                dt = date(intYear, intMonth, intDay)
             except ValueError as e:
                 print('error: ' + str(e), file=sys.stderr)
                 return self
 
+            d_i = datetime.combine(dt,time(0)).astimezone(None)
+            
+            for d in self.day:
+                for t in d:
+                    t.setDate(d_i)
+                d_i += timedelta(days=1)
+
+            """
             m = len(self.day)
             h = 0
             while h < m:
@@ -344,7 +368,9 @@ class Cycle(Title,Description):
 
                     #print('u: ' + str(i), file=sys.stderr)
 
-                    if self.day[h][i].clock == None:
+                    if type(self.day[h][i]) == Combination:
+                        pass
+                    elif self.day[h][i].clock == None:
                         d_i = datetime.combine(d + timedelta(days=h),time(0)).astimezone(None)
                         self.day[h][i].dt = d_i
                     else:
@@ -370,33 +396,39 @@ class Cycle(Title,Description):
                             self.day[h][i].dt = d_i
                             
                         self.day[h][i].clock = None
-                        
-                    if self.day[h][i].duration != None:
-                        d_i += self.day[h][i].duration
-                            
-                    # count number of combined units
-                    j = i+1
-                    while j < n and self.day[h][j].combined:
-                        j += 1
 
-                    if j > i+1:
-                        # combined units
-                        print('{} combined units'.format(j-i), file=sys.stderr)
+                    if type(self.day[h][i]) == Combination:
+                        i += 1
+                    elif type(self.day[h][i]) == Unit:
+                        if self.day[h][i].duration != None:
+                            d_i += self.day[h][i].duration
 
-                        k = i+1
-                        while k < j:
-                            d_i += self.day[h][k].pause
-                            self.day[h][k].dt = d_i
-                            d_i += self.day[h][k].duration
-                            k += 1
-                        i = k
-                        # TODO: fix start time of all combined units according to t_latest
+                        # count number of combined units
+                        j = i+1
+                        while j < n and self.day[h][j].combined:
+                            j += 1
+
+                        if j > i+1:
+                            # combined units
+                            print('{} combined units'.format(j-i), file=sys.stderr)
+
+                            k = i+1
+                            while k < j:
+                                d_i += self.day[h][k].pause
+                                self.day[h][k].dt = d_i
+                                d_i += self.day[h][k].duration
+                                k += 1
+                            i = k
+                            # TODO: fix start time of all combined units according to t_latest
+                        else:
+                            # no combined units
+                            i += 1
                     else:
-                        # no combined units
                         i += 1
 
                 h += 1
-
+            """
+            
             self.dateBegin = date(intYear, intMonth, intDay)
             self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
 
@@ -409,7 +441,7 @@ class Cycle(Title,Description):
 
         for v in self.day:
             for u in v:
-                if u.dist == None or u.type == None or len(u.type) < 1:
+                if type(u) != Unit or u.dist == None or u.type == None or len(u.type) < 1:
                     pass
                 else:
                     arrArg[u.dt.month - 1][u.type] += u.dist
@@ -427,7 +459,7 @@ class Cycle(Title,Description):
         sum_h = 0.0
         for v in self.day:
             for u in v:
-                if u.type != None and len(u.type) > 0 and u.duration != None:
+                if type(u) == Unit and u.type != None and len(u.type) > 0 and u.duration != None:
                     if u.type not in arrArg:
                         arrArg[u.type] = [[],[]]
                     if u.dist != None:
@@ -465,19 +497,14 @@ class Cycle(Title,Description):
 
         """  """
 
-        strResult = '\n** ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
-        for v in self.day:
-            for u in v:
-                strResult += u.toString() + '\n'
-
-        return strResult
+        return str(self)
 
 
     def toHtml(self):
 
         """  """
         
-        strResult = '<section class="cycle"'
+        strResult = '<section class="{}"'.format(__name__)
 
         if self.color != None:
             strResult += ' style="background-color: {}"'.format(self.color)
@@ -485,17 +512,11 @@ class Cycle(Title,Description):
         strResult += '><div class="header">' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '</div>\n'
 
         strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
-        
+
         for v in self.day:
             for u in v:
-                strResult += '<p class="unit"'
-                if u.type != None and len(u.type) > 0 and u.type[0] in config.colors:
-                    strResult += ' style="background-color: ' + config.colors[u.type[0]] + '"'
-
-                strResult += '>' + u.toString() + ' ' + u.__listDescriptionToString__() + '</p>\n'
-
-        #strResult += '<svg baseProfile="full" height="200" version="1.1" width="800" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">' + self.toSVG(200,0) + '</svg>'
-
+                strResult += u.toHtml()
+            
         strResult += '<pre>' + self.report() + '</pre>'
         
         strResult += '</section>'
@@ -510,7 +531,8 @@ class Cycle(Title,Description):
         strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
         for v in self.day:
             for u in v:
-                strResult += u.toCSV() + '\n'
+                if type(u) == Unit:
+                    strResult += u.toCSV() + '\n'
 
         return strResult
 
@@ -546,22 +568,8 @@ class Cycle(Title,Description):
                 d += timedelta(days=1)
 
                 x_i = x
-
                 for u in v:
-                    # all units first
-                    if u.duration != None:
-                        if not u.combined and v.index(u) > 0:
-                            x_i += 2
-                        elif u.combined and u.pause.total_seconds() > 0:
-                            x_i += u.pause.total_seconds() / 3600 * 25 * config.diagram_scale_dist
-                        strResult += u.toSVG(x_i,y)
-                        x_i += u.duration.total_seconds() / 3600 * 25 * config.diagram_scale_dist
-
-                for u in v:
-                    # all remarks after
-                    if u.duration == None:
-                        strResult += u.toSVG(x_i,y)
-                        x_i += len(u.toString()) * config.font_size
+                    strResult += u.toSVG(x_i,y)
 
                 y += config.diagram_bar_height * 2
 
@@ -686,26 +694,3 @@ class Cycle(Title,Description):
             for u in v:
                 u.to_ical(cal)
 
-
-if __name__ == "__main__":
-    
-    print('Module Test:\n')
-    
-    c = Cycle('C1',2*7)
-
-    c.insert(1,Unit('18:00;3.5;RB;25:00'))
-    c.insert(3,Unit('18:00;3.5;RB;25:00'))
-    c.combine(Unit(';FB;25:00'))
-    c.insert(5,Unit(';FB;25:00'))
-    c.insert(6,Unit('08:00;30;BB;02:00:00'))
-    c.insert(8,Unit(';FB;25:00'))
-    c.insert(10,Unit(';FB;25:00'))
-    c.insert(13,Unit('08:00;30;BB;02:00:00'))
-
-    c.schedule(2022,3,1)
-    c.schedule(2023,3,1)
-    c.insertByDate(Unit('2022-03-03T8:00:00+2;100;RG;5h'), True)
-
-    print(c.toString())
-
-    print(c.toSVG(0,0))

@@ -28,17 +28,13 @@ from datetime import timedelta, date, datetime, time, timezone
 from icalendar import Calendar, Event, Alarm
 
 from training import config as config
-from training.description import Description
-#from training.title import Title
-#from training.unit import Unit
-#from training.cycle import Cycle
-#from training.period import Period
+from training.note import Note
 
 #
 #
 #
 
-class Unit(Description):
+class Unit(Note):
 
     """ class for training units """
 
@@ -46,35 +42,48 @@ class Unit(Description):
 
         """ constructor """
 
+        super().__init__()
+        
         if strArg == None:
             self.reset()
         else:
             self.parse(strArg)
-            #print('New Unit: ' + strArg + ' -> {} {} {} {} {}'.format(self.dt, self.dist, self.type, self.duration, self.__listDescriptionToString__()), file=sys.stderr)
+
+
+    def __str__(self):
+
+        """  """
+
+        if self.type == None and self.dist == None and self.dt == None:
+            strResult = '-'
+        elif self.type == None:
+            strResult = '5 {} {}'.format(self.dt.isoformat(), self.getDurationStr())
+        elif self.dist == None and self.dt == None:
+            strResult = '4 {} {---}'
+        elif self.dist == None:
+            strResult = '3 {} {} {}'.format(self.dt.isoformat(), self.type, self.getDurationStr())
+        elif self.dt == None:
+            if self.clock == None:
+                strResult = '2 {} {:5.1f} {} {}'.format('', self.dist, self.type, self.getDurationStr())
+            else:
+                strResult = '2b {} {:5.1f} {} {}'.format(self.clock.isoformat(), self.dist, self.type, self.getDurationStr())
+        else:
+            strResult = '1 {} {:5.1f} {} {}'.format(self.dt.isoformat(), self.dist, self.type, self.getDurationStr())
+
+        return strResult
 
 
     def reset(self):
 
         """  """
 
+        super().reset()
+        
         self.dist = None
         self.type = None
         self.duration = None
-        self.dt = None
-        self.clock = None
         self.combined = False
         self.pause = timedelta(minutes=0)
-        self.setDescription()
-
-        return self
-
-
-    def appendDescription(self,objArg):
-
-        """  """
-
-        if objArg != None and len(objArg) > 0:
-            super().appendDescription(objArg)
 
         return self
 
@@ -148,54 +157,6 @@ class Unit(Description):
             strResult = time(hour = int(seconds // 3600), minute = int((seconds % 3600) // 60), second = int(seconds % 60)).strftime("%H:%M:%S")
 
         return strResult
-
-
-    def setDateStr(self,strArg):
-
-        """  """
-
-        if strArg == None or strArg == '':
-            pass
-        elif strArg == '+':
-            # it's a combined unit (starts after its predecessor unit, same date)
-            self.combined = True
-        else:
-            # canonical ISO Date+Time
-            m = re.match(r"\s*([0-9]{4}-*[0-9]{2}-*[0-9]{2})[\sT]+([0-2][0-9]:[0-5][0-9])\s*",strArg)
-            if m != None:
-                try:
-                    self.dt = datetime.fromisoformat(m.group(0)).astimezone(None)
-                except ValueError as e:
-                    print('error: ' + str(e), file=sys.stderr)
-                    return False
-            else:
-                # german Date
-                m = re.match(r"([0-9]{2})\.([0-9]{2})\.([0-9]{4})",strArg)
-                if m != None:
-                    try:
-                        self.dt = datetime(int(m.group(3)), int(m.group(2)), int(m.group(1)),0,0,0).astimezone(None)
-                    except ValueError as e:
-                        print('error: ' + str(e), file=sys.stderr)
-                        return False
-                else:
-                    # canonical ISO Date
-                    m = re.match(r"([0-9]{4})-*([0-9]{2})-*([0-9]{2})",strArg)
-                    if m != None:
-                        try:
-                            self.dt = datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)),0,0,0).astimezone(None)
-                        except ValueError as e:
-                            print('error: ' + str(e), file=sys.stderr)
-                            return False
-                    else:
-                        # clock only
-                        m = re.match(r"([0-2][0-9]:[0-5][0-9])",strArg)
-                        if m != None:
-                            #print("time: ",m.group(1), file=sys.stderr)
-                            self.clock = time.fromisoformat("{}:00".format(m.group(1)))
-                        else:
-                            print('ignoring: ',strArg, file=sys.stderr)
-
-        return True
 
 
     def scale(self,floatScale,patternType=None):
@@ -283,26 +244,6 @@ class Unit(Description):
         return strResult
 
 
-    def toString(self):
-
-        """  """
-
-        if self.type == None and self.dist == None and self.dt == None:
-            strResult = ''
-        elif self.type == None:
-            strResult = '{date} {duration}'.format(date=self.dt.date().isoformat(), duration=self.getDurationStr())
-        elif self.dist == None and self.dt == None:
-            strResult = '{date} {type}'.format(date=self.dt.date().isoformat(), duration=self.getDurationStr())
-        elif self.dist == None:
-            strResult = '{date} {type} {duration}'.format(date=self.dt.date().isoformat(), type=self.type, duration=self.getDurationStr())
-        elif self.dt == None:
-            strResult = '{date} {dist:5.1f} {type} {duration}'.format(date='', dist=self.dist, type=self.type, duration=self.getDurationStr())
-        else:
-            strResult = '{date} {dist:5.1f} {type} {duration}'.format(date=self.dt.date().isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
-
-        return strResult
-
-
     def toCSV(self):
 
         """  """
@@ -319,6 +260,25 @@ class Unit(Description):
 
             strResult += ';' + self.__listDescriptionToString__()
 
+        return strResult
+
+
+    def toHtml(self):
+
+        """  """
+
+        strResult = '<p'
+        if self.type == None or len(self.type) < 1:
+            strResult += ' style="background-color: {}"'.format('#cccccc')
+        elif self.type[0] in config.colors:
+            strResult += ' style="background-color: {}"'.format(config.colors[self.type[0]])
+        elif self.color != None:
+            strResult += ' style="background-color: {}"'.format(self.color)
+        strResult += '>'
+
+        strResult += str(self)
+        strResult += '</p>'
+        
         return strResult
 
 
@@ -406,16 +366,4 @@ class Unit(Description):
         
         event.add('dtstamp', datetime.now().astimezone(None))
         cal.add_component(event)
-
-
-
-if __name__ == "__main__":
-    
-    print('Module Test:\n')
-    
-    #u = Unit('2020-13-33T27:00:00+1:00;10;RG;20min')
-
-    u = Unit('2020-03-03T17:00:00+1:00;10;RG;20min')
-
-    print(u.toString())
 

@@ -17,52 +17,28 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
-#
-#
-#
+import sys
 
-class Title:
+from datetime import timedelta, date, datetime, time, timezone
 
-    """ abstract class to handle title """
+from training.note import Note
 
-    def __init__(self,strArg=None):
+print('Module Test:\n')
 
-        """ constructor """
+t = Note()
+print(t)
 
-        self.setTitleStr(strArg)
+t = Note(['TEST','AAA'])
+t.setDateStr('2020-04-04')
+print(t)
 
+t1 = t.dup()
+print(t1)
 
-    def __str__(self):
+t.parse('TEST, TTT')
+t.setClock(time(8,15,0))
+t.setDate(date(2025,1,1))
+print(t)
 
-        """  """
-
-        return self.strTitle
-
-
-    def setTitleStr(self,strArg):
-
-        """  """
-
-        if strArg == None:
-            self.strTitle = '-'
-        else:
-            self.strTitle = strArg
-
-        return self
-
-    
-    def hasTitle(self):
-
-        """  """
-
-        return self.strTitle != None and len(self.strTitle) > 0
-
-
-    def getTitleStr(self):
-
-        """  """
-
-        return self.strTitle
-        #return str(self)
-
+#print(t.toXML())
 

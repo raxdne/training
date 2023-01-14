@@ -36,9 +36,9 @@ from icalendar import Calendar, Event, Alarm
 from training import config as config
 from training.description import Description
 from training.title import Title
+from training.note import Note
 from training.unit import Unit
 from training.cycle import Cycle
-#from training.period import Period
 
 #
 #
@@ -50,7 +50,23 @@ class Period(Title,Description):
 
         """ constructor """
 
+        super().__init__()
+        
         self.reset(strArg,intArg)
+
+
+    def __str__(self):
+
+        """  """
+
+        strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
+
+        strResult += self.__listDescriptionToString__()
+
+        for c in self.child:
+            strResult += c.toString() + '\n'
+            
+        return strResult
 
 
     def reset(self,strArg=None,intArg=None):
@@ -85,7 +101,8 @@ class Period(Title,Description):
         """  """
 
         for c in self.child:
-            c.resetDistances()
+            if type(c) == Cycle or type(c) == Period:
+                c.resetDistances()
 
         return self
 
@@ -98,23 +115,14 @@ class Period(Title,Description):
             self.child[len(self.child) - 1].appendDescription(objArg)
 
 
-    def setColor(self,strColor):
-
-        """  """
-
-        if strColor != None and len(strColor) > 0:
-            self.color = strColor
-
-        return self
-
-
     def getNumberOfUnits(self):
 
         """  """
 
         intResult = 0
         for c in self.child:
-            intResult += c.getNumberOfUnits()
+            if type(c) == Cycle or type(c) == Period:
+                intResult += c.getNumberOfUnits()
 
         return intResult
 
@@ -126,7 +134,8 @@ class Period(Title,Description):
         if arrArg == None:
             arrArg = []
         for c in self.child:
-            c.getTypeOfUnits(arrArg)
+            if type(c) == Cycle or type(c) == Period:
+                c.getTypeOfUnits(arrArg)
 
         return arrArg
 
@@ -160,9 +169,10 @@ class Period(Title,Description):
                         self.append(c)
             else:
                 for c in self.child:
-                    objResult = c.insertByDate(objUnit,flagReplace)
-                    if objResult != None:
-                        break
+                    if type(c) == Cycle or type(c) == Period:
+                        objResult = c.insertByDate(objUnit,flagReplace)
+                        if objResult != None:
+                            break
 
         return objResult
 
@@ -182,7 +192,8 @@ class Period(Title,Description):
 
         l = 0
         for c in self.child:
-            l += c.getPeriod()
+            if type(c) == Cycle or type(c) == Period:
+                l += c.getPeriod()
 
         if self.periodInt == None or l > self.periodInt:
             self.setPeriod(l)
@@ -195,7 +206,8 @@ class Period(Title,Description):
         """  """
 
         for c in self.child:
-            c.scale(floatScale,patternType)
+            if type(c) == Cycle or type(c) == Period:
+                c.scale(floatScale,patternType)
 
         return self
 
@@ -205,7 +217,8 @@ class Period(Title,Description):
         """  """
 
         for c in self.child:
-            c.remove(patternType=patternType)
+            if type(c) == Cycle or type(c) == Period:
+                c.remove(patternType=patternType)
 
         return self
 
@@ -242,8 +255,12 @@ class Period(Title,Description):
 
                 e = d
                 for c in self.child:
-                    c.schedule(e.year, e.month, e.day)
-                    e += timedelta(days=c.getPeriod())
+                    if type(c) == Cycle or type(c) == Period:
+                        c.schedule(e.year, e.month, e.day)
+                        e += timedelta(days=c.getPeriod())
+                    elif type(c) == Note:
+                        c.dt = e
+                        #print('type: ' + c.dt.isoformat(), file=sys.stderr)
 
                 self.dateBegin = d
                 self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
@@ -262,7 +279,8 @@ class Period(Title,Description):
         strResult = ''
 
         for c in self.child:
-            c.report(arrArg)
+            if type(c) == Cycle or type(c) == Period:
+                c.report(arrArg)
 
         sum_h = 0.0
         for k in sorted(arrArg.keys()):
@@ -299,7 +317,8 @@ class Period(Title,Description):
         strResult = self.getTitleStr() + '\n'
 
         for c in self.child:
-            c.stat(arrArg)
+            if type(c) == Cycle or type(c) == Period:
+                c.stat(arrArg)
 
         for u in t:
             strResult += "\t{}".format(u)
@@ -384,14 +403,7 @@ class Period(Title,Description):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
-
-        strResult += self.__listDescriptionToString__()
-
-        for c in self.child:
-            strResult += c.toString() + '\n'
-            
-        return strResult
+        return str(self)
 
 
     def toPlain(self):
@@ -403,7 +415,7 @@ class Period(Title,Description):
 
         """  """
 
-        strResult = '<section class="period"'
+        strResult = '<section class="{}"'.format(__name__)
 
         if self.color != None:
             strResult += ' style="background-color: {}"'.format(self.color)
@@ -523,10 +535,11 @@ class Period(Title,Description):
                 y += config.diagram_bar_height * 2
         else:
             for c in self.child:
-                #strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x+400,y)
-                #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x+400,y,c.getTitleStr())
-                strResult += c.toSVG(x,y)
-                y += c.getPeriod() * config.diagram_bar_height * 2
+                if type(c) == Cycle or type(c) == Period:
+                    #strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x+400,y)
+                    #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x+400,y,c.getTitleStr())
+                    strResult += c.toSVG(x,y)
+                    y += c.getPeriod() * config.diagram_bar_height * 2
 
         strResult += '</g>'
 
@@ -580,9 +593,10 @@ class Period(Title,Description):
 
         y_i = y + config.diagram_bar_height * 3
         for c in self.child:
-            strResult += c.toSVGGantt(dateBase,y_i)
-            #if type(c) is period:
-            y_i += config.diagram_bar_height * 3
+            if type(c) == Cycle or type(c) == Period:
+                strResult += c.toSVGGantt(dateBase,y_i)
+                #if type(c) is period:
+                y_i += config.diagram_bar_height * 3
 
         strResult += '<line stroke-dasharray="4" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x_i + (l.days + 1) * 2, y, x_i + (l.days + 1) * 2, y_i)
 
@@ -595,8 +609,14 @@ class Period(Title,Description):
 
         """ Gantt chart of periods and cycles """
 
-        d_0 = self.child[0].dateBegin
-        d_1 = self.child[len(self.child) - 1].dateEnd
+        d_0 = None
+        d_1 = None
+        for c in self.child:
+            if type(c) == Cycle or type(c) == Period:
+                if d_0 == None:
+                    d_0 = c.dateBegin
+                elif d_1 == None:
+                    d_1 = self.child[len(self.child) - 1].dateEnd
 
         diagram_height = 40 * (config.diagram_bar_height * 2) + 100
         try:
@@ -773,43 +793,3 @@ class Period(Title,Description):
 
         return self
 
-
-if __name__ == "__main__":
-    
-    print('Module Test:\n')
-
-    # p = Period('General Basics')
-    # p.appendDescription('Regeneration')
-
-    # c = Cycle('General Endurance')
-    # c.insert(1,Unit('18:00;3.5;RB;25:00'))
-    # c.insert(3,Unit('18:00;3.5;RB;25:00'))
-    # f = c.insert(4,Unit(';FB;25:00'))
-    # c.insert(5,Unit(';FB;25:00'))
-    # c.insert(6,Unit('08:00;30;BB;02:00:00'))
-
-    # p.append(c)
-    # p.append(c)
-    # c.scale(1.2,r"FB")
-    # p.append(c)
-
-    # c.appendDescription('Nutrition ABC')
-    # f.appendDescription('Maximum')
-    
-    # p.append(c)
-    # p.append(c)
-    # f.setDescription()
-    # p.append(c)
-
-    # p.schedule(2022,3,4)
-
-    #print(p.toSVGGanttChart())
-    
-    #p = Period('Plan').CalendarWeekPeriod(2022)
-    #p = Period('Plan').CalendarYearPeriod(2023)
-    p = Period('Plan').CalendarMonthPeriod(2025)
-    #p = Period('Plan').CalendarSeasonPeriod(2025)
-    p.insertByDate(Unit('2025-03-03T8:00:00+2;100;RG;5h'))
-    
-    print(p.toString())
-    

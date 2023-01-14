@@ -17,52 +17,21 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
-#
-#
-#
+from training.description import Description
 
-class Title:
+print('Module Test:\n')
 
-    """ abstract class to handle title """
+d = Description(['ABC','DEF'])
+print(repr(d))
+print(d)
 
-    def __init__(self,strArg=None):
+d.appendDescription(['WWW',['YYY','ZZZ']])
 
-        """ constructor """
+print(d.__listDescriptionToString__())
 
-        self.setTitleStr(strArg)
+print(d.__listDescriptionToHtml__())
 
+print(d.__listDescriptionToXML__())
 
-    def __str__(self):
-
-        """  """
-
-        return self.strTitle
-
-
-    def setTitleStr(self,strArg):
-
-        """  """
-
-        if strArg == None:
-            self.strTitle = '-'
-        else:
-            self.strTitle = strArg
-
-        return self
-
-    
-    def hasTitle(self):
-
-        """  """
-
-        return self.strTitle != None and len(self.strTitle) > 0
-
-
-    def getTitleStr(self):
-
-        """  """
-
-        return self.strTitle
-        #return str(self)
-
+print(d.hasDescription())
 

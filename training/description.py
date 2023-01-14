@@ -23,14 +23,24 @@
 
 class Description:
 
-    """ abstract class to handle description list """
+    """ abstract class to handle (nested) description list """
 
     def __init__(self,strArg=None):
 
         """ constructor """
+        
+        super().__init__()
+        
+        self.color = None
 
-        self.listDescription = []
         self.setDescription(strArg)
+
+
+    def __str__(self):
+
+        """ returns a string of nested self.listDescription """
+
+        return str(self.__listDescriptionToString__())
 
 
     def setDescription(self,objArg=None):
@@ -43,6 +53,8 @@ class Description:
             self.listDescription.append([objArg])
         elif type(objArg) is list:
             self.listDescription = [objArg]
+        else:
+            self.listDescription = []
 
 
     def hasDescription(self):
@@ -64,6 +76,18 @@ class Description:
             self.listDescription.append([objArg])
         elif type(objArg) is list:
             self.listDescription.append(objArg)
+
+
+    def setColor(self,strColor=None):
+
+        """  """
+
+        if strColor != None and len(strColor) > 0:
+            self.color = strColor
+        else:
+            self.color = None
+
+        return self
 
 
     def __listDescriptionToString__(self,listArg=None):
@@ -138,20 +162,4 @@ class Description:
 
         return strResult
 
-
-if __name__ == "__main__":
-
-    print('Module Test:\n')
-    
-    d = Description(['ABC','DEF'])
-
-    d.appendDescription(['WWW',['YYY','ZZZ']])
-
-    print(d.__listDescriptionToString__())
-
-    print(d.__listDescriptionToHtml__())
-
-    print(d.__listDescriptionToXML__())
-
-    print(d.hasDescription())
 
