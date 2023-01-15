@@ -201,6 +201,24 @@ class Unit(Note):
             return False
 
 
+    def stat(self, dictArg):
+
+        """  """
+
+        if dictArg == None:
+            print('error: ' + 'no dict', file=sys.stderr)
+        elif self.type != None and len(self.type) > 0:
+            if self.type not in dictArg:
+                dictArg[self.type] = [[],[]]
+                
+            if self.dist != None:
+                dictArg[self.type][0].append(self.dist)
+            else:
+                dictArg[self.type][0].append(0.0)
+                
+            dictArg[self.type][1].append(self.getDuration().total_seconds())
+
+
     def getSpeedStr(self):
 
         """  """

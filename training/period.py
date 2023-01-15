@@ -274,63 +274,40 @@ class Period(Title,Description):
         return self
 
 
-    def report(self, arrArg=None):
+    def stat(self, dictArg):
 
         """  """
 
-        if arrArg == None:
-            arrArg = {}
-        strResult = ''
-
         for c in self.child:
             if type(c) == Cycle or type(c) == Period:
-                c.report(arrArg)
+                c.stat(dictArg)
+
+
+    def report(self, dictArg=None):
+
+        """  """
+
+        if dictArg == None:
+            dictArg = {}
+            
+        self.stat(dictArg)
 
         sum_h = 0.0
-        for k in sorted(arrArg.keys()):
-            if len(arrArg[k][0]) < 1:
-                strResult += "{:4} x {:3} {:7}    {:7.01f} h\n".format(len(arrArg[k][0]), k, ' ', round(sum(arrArg[k][1]) / 3600, 1))
-            elif len(arrArg[k][0]) < 3:
-                strResult += "{:4} x {:3} {:7.0f} {} {:7.01f} h\n".format(len(arrArg[k][0]), k, sum(arrArg[k][0]), config.unit_distance, round(sum(arrArg[k][1]) / 3600, 1))        
+        strResult = ''
+        for k in sorted(dictArg.keys()):
+            if len(dictArg[k][0]) < 1:
+                strResult += "{:4} x {:3} {:7}    {:7.01f} h\n".format(len(dictArg[k][0]), k, ' ', round(sum(dictArg[k][1]) / 3600, 1))
+            elif len(dictArg[k][0]) < 3:
+                strResult += "{:4} x {:3} {:7.0f} {} {:7.01f} h\n".format(len(dictArg[k][0]), k, sum(dictArg[k][0]), config.unit_distance, round(sum(dictArg[k][1]) / 3600, 1))        
             else:
-                strResult += "{:4} x {:3} {:7.01f} {} {:7.01f} h {:5.01f} /{:5.01f} /{:5.01f}\n".format(len(arrArg[k][0]), k, sum(arrArg[k][0]), config.unit_distance, round(sum(arrArg[k][1]) / 3600, 2), min(arrArg[k][0]), mean(arrArg[k][0]), max(arrArg[k][0]))
-            sum_h += sum(arrArg[k][1])
+                strResult += "{:4} x {:3} {:7.01f} {} {:7.01f} h {:5.01f} /{:5.01f} /{:5.01f}\n".format(len(dictArg[k][0]), k, sum(dictArg[k][0]), config.unit_distance, round(sum(dictArg[k][1]) / 3600, 2), min(dictArg[k][0]), mean(dictArg[k][0]), max(dictArg[k][0]))
+            sum_h += sum(dictArg[k][1])
             
         sum_h /= 3600.0
         n = self.getNumberOfUnits()
         if n > 0:
             p = len(self)
             strResult += "\n{} Units {:.2f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(n, round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
-
-        return strResult
-
-
-    def stat(self, arrArg=None):
-
-        """  """
-
-        t = sorted(self.getTypeOfUnits())
-        if arrArg == None:
-            arrArg = []
-            for m in range(12):
-                a = {}
-                for u in t:
-                    a[u] = 0.0
-                arrArg.append(a)
-
-        strResult = self.getTitleStr() + '\n'
-
-        for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
-                c.stat(arrArg)
-
-        for u in t:
-            strResult += "\t{}".format(u)
-
-        for m in range(12):
-            strResult += "\n{}".format(m+1)
-            for u in arrArg[m]:
-                strResult += "\t{:.0f}".format(arrArg[m][u])
 
         return strResult
 
@@ -506,6 +483,7 @@ class Period(Title,Description):
 
         for c in self.child:
             strResult += c.toXML()
+            
         strResult += '</node>\n'
 
         return strResult

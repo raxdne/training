@@ -329,7 +329,7 @@ def Plan2021(strArg):
 
     s.schedule(2021,1,4)
     
-    #s.resetUnits()
+    #s.resetDistances()
     #s.parseFile('Training2021.csv')
 
     return s
@@ -337,8 +337,7 @@ def Plan2021(strArg):
 
 s = Plan2021('Season 2021')
 
-#print(s.report())
-print(s.stat())
+print(s.report())
 
 f = open('Season2021Gantt.svg', 'w')
 f.write(s.toSVGGanttChart())

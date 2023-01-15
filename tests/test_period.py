@@ -50,14 +50,16 @@ t.append(c)
 
 t.schedule(2025,3,4)
 print(t)
-print(t.toHtml())
+print(t.report())
+#print(t.toHtml())
+#print(t.toXML())
 
 #print(t.toSVGGanttChart())
 
 #t = Period('Plan').CalendarWeekPeriod(2022)
 #t = Period('Plan').CalendarYearPeriod(2023)
-t = Period('Plan').CalendarMonthPeriod(2025)
+#t = Period('Plan').CalendarMonthPeriod(2025)
 #t = Period('Plan').CalendarSeasonPeriod(2025)
-t.insertByDate(Unit('2025-03-03T8:00:00+2;100;RG;5h'))
+#t.insertByDate(Unit('2025-03-03T8:00:00+2;100;RG;5h'))
 #print(t)
 

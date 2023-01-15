@@ -171,16 +171,16 @@ class Combination(Title,Description):
         return self
 
 
-    def stat(self, arrArg):
+    def stat(self, dictArg):
 
         """  """
 
-        for v in self.child:
-            for u in v:
-                if type(u) != Unit or u.dist == None or u.type == None or len(u.type) < 1:
-                    pass
-                else:
-                    arrArg[u.dt.month - 1][u.type] += u.dist
+        if dictArg == None:
+            print('error: ' + 'no dict', file=sys.stderr)
+        else:
+            for u in self.child:
+                if type(u) == Unit:
+                    u.stat(dictArg)
 
 
     def dup(self):

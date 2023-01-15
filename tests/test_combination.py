@@ -55,5 +55,9 @@ t1 = t.dup()
 t1.setDate(date(2023,4,1))
 print(t)
 print(t1.toHtml())
+#print(t1.toXML())
 
 #print(t.toSVG(0,0))
+
+d = {}
+t.stat(d)

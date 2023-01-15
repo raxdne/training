@@ -98,11 +98,9 @@ class Cycle(Title,Description):
 
         """  """
 
-        for v in self.day:
-            for u in v:
-                if type(u) == Unit or type(u) == Combination:
-                    u.setDistStr(None)
-
+        for i in range(len(self)):
+            self.day[i] = []
+            
         return self
 
 
@@ -252,7 +250,9 @@ class Cycle(Title,Description):
         intResult = 0
         for v in self.day:
             for u in v:
-                if type(u) == Unit and u.type != None and len(u.type) > 0:
+                if type(u) == Combination:
+                    intResult += u.getNumberOfUnits()
+                elif type(u) == Unit and u.type != None and len(u.type) > 0:
                     intResult += 1
 
         return intResult
@@ -263,24 +263,12 @@ class Cycle(Title,Description):
         """ return a timedelta """
 
         intResult = 0
-        for u in self.child:
-            if (type(u) == Unit or type(u) == Combination):
-                intResult += u.getDuration().total_seconds()
-
-        return timedelta(seconds=intResult)
-
-
-    def getDurationOfUnits(self):
-
-        """ in minutes """
-
-        intResult = 0
         for v in self.day:
             for u in v:
-                if type(u) == Unit and u.type != None and len(u.type) > 0 and u.duration != None and u.getDuration().total_seconds() > 59:
+                if (type(u) == Unit or type(u) == Combination):
                     intResult += u.getDuration().total_seconds()
 
-        return intResult / 60
+        return timedelta(seconds=intResult)
 
 
     def getTypeOfUnits(self,arrArg=None):
@@ -418,54 +406,46 @@ class Cycle(Title,Description):
         return self
     
 
-    def stat(self, arrArg):
+    def stat(self, dictArg):
 
         """  """
 
         for v in self.day:
             for u in v:
-                if type(u) != Unit or u.dist == None or u.type == None or len(u.type) < 1:
-                    pass
-                else:
-                    arrArg[u.dt.month - 1][u.type] += u.dist
+                if type(u) == Unit or type(u) == Combination:
+                    u.stat(dictArg)
 
 
-    def report(self, arrArg=None):
+    def report(self, dictArg=None):
 
         """  """
 
-        if arrArg == None:
-            arrArg = {}
+        if dictArg == None:
+            dictArg = {}
 
-        strResult = ''
+        self.stat(dictArg)
+        #print('info: ' + str(dictArg), file=sys.stderr)
 
         sum_h = 0.0
-        for v in self.day:
-            for u in v:
-                if type(u) == Unit and u.type != None and len(u.type) > 0 and u.duration != None:
-                    if u.type not in arrArg:
-                        arrArg[u.type] = [[],[]]
-                    if u.dist != None:
-                        arrArg[u.type][0].append(u.dist)
-                    else:
-                        arrArg[u.type][0].append(0)
-                    arrArg[u.type][1].append(u.getDuration().total_seconds())
-                    sum_h += u.getDuration().total_seconds()
-        sum_h /= 3600.0
-
-        for k in sorted(arrArg.keys()):
-            if len(arrArg[k][0]) < 1:
-                strResult += "{:4} x {:3} {:7}    {:7.01f} h\n".format(len(arrArg[k][0]), k, ' ', round(sum(arrArg[k][1]) / 3600, 2))
-            elif len(arrArg[k][0]) < 3:
-                strResult += "{:4} x {:3} {:7.01f} {} {:7.01f} h\n".format(len(arrArg[k][0]), k, sum(arrArg[k][0]), config.unit_distance, round(sum(arrArg[k][1]) / 3600, 2))
+        strResult = ''
+        for k in sorted(dictArg.keys()):
+            # all registered kinds of units
+            sum_k = sum(dictArg[k][1])
+            if len(dictArg[k][0]) < 1:
+                # no distances found
+                strResult += "{:4} x {:3} {:7}    {:7.01f} h\n".format(len(dictArg[k][0]), k, ' ', round(sum_k / 3600, 2))
+            elif len(dictArg[k][0]) < 3:
+                # no statistics required
+                strResult += "{:4} x {:3} {:7.01f} {} {:7.01f} h\n".format(len(dictArg[k][0]), k, sum(dictArg[k][0]), config.unit_distance, round(sum_k / 3600, 2))
             else:
-                strResult += "{:4} x {:3} {:7.01f} {} {:7.01f} h {:5.01f} /{:5.01f} /{:5.01f}\n".format(len(arrArg[k][0]), k, sum(arrArg[k][0]), config.unit_distance, round(sum(arrArg[k][1]) / 3600, 2), min(arrArg[k][0]), mean(arrArg[k][0]), max(arrArg[k][0]))
+                strResult += "{:4} x {:3} {:7.01f} {} {:7.01f} h {:5.01f} /{:5.01f} /{:5.01f}\n".format(len(dictArg[k][0]), k, sum(dictArg[k][0]), config.unit_distance, round(sum_k / 3600, 2), min(dictArg[k][0]), mean(dictArg[k][0]), max(dictArg[k][0]))
+            sum_h += sum_k / 3600
 
         n = self.getNumberOfUnits()
         if n > 0:
             p = self.getPeriodDone()
             strResult += "\n{} Units {:.2f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(n, round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
-
+        
         return strResult
 
 
@@ -553,7 +533,8 @@ class Cycle(Title,Description):
                 x_i = x
                 for u in v:
                     strResult += u.toSVG(x_i,y)
-                    x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist + 5
+                    if type(u) == Unit or type(u) == Combination:
+                        x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist + 5
 
                 y += config.diagram_bar_height * 2
 
@@ -587,7 +568,7 @@ class Cycle(Title,Description):
         # TODO: make config.diagram_height configurable
         config.diagram_height = 40 * (config.diagram_bar_height * 2) + 100
 
-        h = round(self.getDurationOfUnits() / l)
+        h = round(self.getDuration().total_seconds() / 60 / l)
 
         if self.color != None:
             scolor = 'red'
@@ -631,6 +612,10 @@ class Cycle(Title,Description):
 
         strResult += self.__listDescriptionToXML__()
 
+        for v in self.day:
+            for u in v:
+                strResult += u.toXML()
+            
         """
         for v in self.day:
             # count units of this day
