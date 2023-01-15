@@ -271,31 +271,13 @@ class Cycle(Title,Description):
         return timedelta(seconds=intResult)
 
 
-    def getTypeOfUnits(self,arrArg=None):
-
-        """  """
-
-        if arrArg == None:
-            arrArg = []
-
-        for v in self.day:
-            for u in v:
-                if type(u) == Unit and u.type != None and len(u.type) > 0:
-                    if u.type in arrArg:
-                        pass
-                    else:
-                        arrArg.append(u.type)
-
-        return arrArg
-
-
     def scale(self,floatScale,patternType=None):
 
         """  """
 
         for v in self.day:
             for u in v:
-                if type(u) == Unit:
+                if type(u) == Unit or type(u) == Combination:
                     u.scale(floatScale,patternType)
 
         return self
@@ -616,34 +598,6 @@ class Cycle(Title,Description):
             for u in v:
                 strResult += u.toXML()
             
-        """
-        for v in self.day:
-            # count units of this day
-            n = len(v)
-            i = 0
-            while i < n:
-
-                # count number of combined units
-                j = i+1
-                while j < n and v[j].combined:
-                    j += 1
-
-                if j > i+1:
-                    # combined units
-                    strResult += '<node TEXT="{}">\n'.format('Block')
-                    k = i
-                    while k < j:
-                        if v[k].pause.total_seconds() > 0:
-                            strResult += '<node TEXT="{}"/>\n'.format('Pause for ' + str(v[k].pause.total_seconds() / 60) + 'min')
-                        strResult += v[k].toXML()
-                        k += 1
-                    i = k
-                    strResult += '</node>\n'
-                else:
-                    # no combined units
-                    strResult += v[i].toXML()
-                    i += 1
-        """                
         strResult += '</node>\n'
 
         return strResult

@@ -146,19 +146,6 @@ class Period(Title,Description):
         return intResult
 
 
-    def getTypeOfUnits(self,arrArg=None):
-
-        """  """
-
-        if arrArg == None:
-            arrArg = []
-        for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
-                c.getTypeOfUnits(arrArg)
-
-        return arrArg
-
-
     def append(self,objChild):
 
         """  """

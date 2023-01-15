@@ -52,7 +52,7 @@ def BasicsGeneral():
 
     p.append(c)
     p.append(c)
-    c.scale(1.2,r"FB")
+    c.scale(1.2,r"^B")
     p.append(c)
     p.append(RegenerationGeneral())
 

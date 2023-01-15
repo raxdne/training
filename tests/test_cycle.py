@@ -50,6 +50,9 @@ t.schedule(2023,3,1)
 
 print(t)
 
+t.scale(2.0)
+print(t)
+
 #print(t.toHtml())
 #print(t.toSVG(0,0))
 #print(t.toXML())

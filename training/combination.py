@@ -141,32 +141,13 @@ class Combination(Title,Description):
         return timedelta(seconds=intResult)
 
 
-    def getTypeOfUnits(self,arrArg=None):
-
-        """  """
-
-        if arrArg == None:
-            arrArg = []
-
-        for v in self.child:
-            for u in v:
-                if type(u) == Unit and u.type != None and len(u.type) > 0:
-                    if u.type in arrArg:
-                        pass
-                    else:
-                        arrArg.append(u.type)
-
-        return arrArg
-
-
     def scale(self,floatScale,patternType=None):
 
         """  """
 
-        for v in self.child:
-            for u in v:
-                if type(u) == Unit:
-                    u.scale(floatScale,patternType)
+        for u in self.child:
+            if type(u) == Unit:
+                u.scale(floatScale,patternType)
 
         return self
 
