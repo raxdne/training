@@ -637,13 +637,6 @@ class Period(Title,Description):
 
         """  """
 
-        #event = Event()
-        #event.add('summary', 'Period: {}'.format(self.getTitleStr()))
-        #event.add('dtstart', self.dateBegin)
-        #event.add('dtend', self.dateEnd + timedelta(days=1))
-        #event.add('dtstamp', datetime.now().astimezone(None))
-        #cal.add_component(event)
-
         for c in self.child:
             c.to_ical(cal)
 
@@ -652,19 +645,11 @@ class Period(Title,Description):
 
         """  """
 
-        try:
-            cal = Calendar()
-            cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleStr()))
-            cal.add('version', '2.0')
-            self.to_ical(cal)
-            return cal.to_ical()
-        except NameError:
-            # TODO: remove all toiCalString() legacy code
-            strResult = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//{title}//  //\n".format(title=self.getTitleStr())
-            for c in self.child:
-                strResult += c.toiCalString()
-            strResult += "END:VCALENDAR"
-            return strResult
+        cal = Calendar()
+        cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleStr()))
+        cal.add('version', '2.0')
+        self.to_ical(cal)
+        return cal.to_ical()
 
 
     def CalendarYearPeriod(self,intYear,strArg=None):

@@ -345,7 +345,7 @@ class Unit(Note):
 
         if self.dt == None:
             pass
-        elif self.dt.time().hour == 0 or self.duration == None:
+        elif self.dt.hour == 0 or self.duration == None:
             event.add('dtstart', self.dt.date())
             event.add('dtend', self.dt.date() + timedelta(days=1))
         else:

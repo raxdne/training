@@ -226,23 +226,14 @@ class Note(Description):
 
         """  """
 
-        event = Event()
+        if self.dt != None:
+            event = Event()
 
-        event.add('summary', self.__listDescriptionToString__())
-
-        if self.dt == None:
-            pass
-        else:
+            event.add('summary', self.__listDescriptionToString__())
             event.add('dtstart', self.dt)
-            event.add('dtend', self.dt)
-
-            # TODO: add reminder
-            alarm = Alarm()
-            alarm.add('action', 'none')
-            alarm.add('trigger', self.dt - timedelta(minutes=15))
-            event.add_component(alarm)
+            event.add('dtend', self.dt + timedelta(days=1))
         
-        event.add('dtstamp', datetime.now().astimezone(None))
-        cal.add_component(event)
+            event.add('dtstamp', datetime.now().astimezone(None))
+            cal.add_component(event)
 
 

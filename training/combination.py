@@ -246,15 +246,7 @@ class Combination(Title,Description):
 
     def to_ical(self,cal):
 
-        """ 
-
-        event = Event()
-        event.add('summary', 'Combination: {}'.format(str(self)))
-        event.add('dtstart', self.dateBegin)
-        event.add('dtend', self.dateEnd + timedelta(days=1))
-        event.add('dtstamp', datetime.now().astimezone(None))
-        cal.add_component(event)
-        """
+        """  """
         
         for u in self.child:
             u.to_ical(cal)
