@@ -40,14 +40,15 @@ class Unit(Note):
 
     def __init__(self,strArg=None):
 
-        """ constructor """
+        """  """
 
         super().__init__()
         
-        if strArg == None:
-            self.reset()
-        else:
-            self.parse(strArg)
+        self.dist = None
+        self.type = None
+        self.duration = None
+
+        self.parse(strArg)
 
 
     def __str__(self):
@@ -57,35 +58,20 @@ class Unit(Note):
         if self.type == None and self.dist == None and self.dt == None:
             strResult = '-'
         elif self.type == None:
-            strResult = '5 {} {}'.format(self.dt.isoformat(), self.getDurationStr())
+            strResult = '{} {}'.format(self.dt.isoformat(), str(self.getDuration()))
         elif self.dist == None and self.dt == None:
-            strResult = '4 {} {---}'
+            strResult = '{} {---}'
         elif self.dist == None:
-            strResult = '3 {} {} {}'.format(self.dt.isoformat(), self.type, self.getDurationStr())
+            strResult = '{} {} {}'.format(self.dt.isoformat(), self.type, str(self.getDuration()))
         elif self.dt == None:
             if self.clock == None:
-                strResult = '2 {} {:5.1f} {} {}'.format('', self.dist, self.type, self.getDurationStr())
+                strResult = '{} {:5.1f} {} {}'.format('', self.dist, self.type, str(self.getDuration()))
             else:
-                strResult = '2b {} {:5.1f} {} {}'.format(self.clock.isoformat(), self.dist, self.type, self.getDurationStr())
+                strResult = '{} {:5.1f} {} {}'.format(self.clock.isoformat(), self.dist, self.type, str(self.getDuration()))
         else:
-            strResult = '1 {} {:5.1f} {} {}'.format(self.dt.isoformat(), self.dist, self.type, self.getDurationStr())
+            strResult = '{} {:5.1f} {} {}'.format(self.dt.isoformat(), self.dist, self.type, str(self.getDuration()))
 
         return strResult
-
-
-    def reset(self):
-
-        """  """
-
-        super().reset()
-        
-        self.dist = None
-        self.type = None
-        self.duration = None
-        self.combined = False
-        self.pause = timedelta(minutes=0)
-
-        return self
 
 
     def setTypeStr(self,strArg):
@@ -146,17 +132,14 @@ class Unit(Note):
         return True
 
 
-    def getDurationStr(self):
+    def getDuration(self):
 
         """  """
-
-        strResult = ''
         
-        if self.duration != None:
-            seconds = self.duration.total_seconds()
-            strResult = time(hour = int(seconds // 3600), minute = int((seconds % 3600) // 60), second = int(seconds % 60)).strftime("%H:%M:%S")
-
-        return strResult
+        if self.duration == None:
+            return timedelta(seconds=0)
+        else:
+            return self.duration
 
 
     def scale(self,floatScale,patternType=None):
@@ -173,7 +156,7 @@ class Unit(Note):
                     self.dist = round(self.dist * floatScale / 5.0) * 5.0
 
             if self.duration != None:
-                s = self.duration.total_seconds()
+                s = self.getDuration().total_seconds()
                 if s < 900.0:
                     self.duration *= floatScale
                 else:
@@ -183,18 +166,11 @@ class Unit(Note):
         return self
 
 
-    def dup(self):
-
-        """  """
-
-        return copy.deepcopy(self)
-
-
     def parse(self,objArg):
 
         """  """
 
-        self.reset()
+        #self.__init__()
         
         if objArg == None or len(objArg) < 1:
             return False
@@ -233,7 +209,7 @@ class Unit(Note):
         if self.dist == None or self.duration == None:
             pass
         else:
-            s = float(self.duration.total_seconds())
+            s = float(self.getDuration().total_seconds())
             if s < 1:
                 pass
             else:
@@ -254,9 +230,9 @@ class Unit(Note):
             if self.type == None:
                 strResult = '{date};;;'.format(date=self.dt.isoformat())
             elif self.dist == None:
-                strResult = '{date};;{type};{duration}'.format(date=self.dt.isoformat(), type=self.type, duration=self.getDurationStr())
+                strResult = '{date};;{type};{duration}'.format(date=self.dt.isoformat(), type=self.type, duration=str(self.getDuration()))
             else:
-                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
+                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.isoformat(), dist=self.dist, type=self.type, duration=str(self.getDuration()))
 
             strResult += ';' + self.__listDescriptionToString__()
 
@@ -288,7 +264,7 @@ class Unit(Note):
 
         strResult = ''
 
-        if self.duration == None or self.duration.total_seconds() < 60:
+        if self.duration == None or self.getDuration().total_seconds() < 60:
             strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.__listDescriptionToString__(), self.toString())
         else:
             strResult += '<rect '
@@ -300,7 +276,7 @@ class Unit(Note):
 
             if self.dist == None or True:
                 # "about 25 distance units per hour"
-                bar_width = self.duration.total_seconds() / 3600 * 25 * config.diagram_scale_dist
+                bar_width = self.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
             else:
                 bar_width = self.dist * config.diagram_scale_dist
 
@@ -345,7 +321,7 @@ class Unit(Note):
         if self.type == None:
             event.add('summary', self.__listDescriptionToString__())
         else:
-            event.add('summary', "{} {}".format(self.type, self.getDurationStr()))
+            event.add('summary', "{} {}".format(self.type, str(self.getDuration())))
             if self.hasDescription():
                 event.add('description', self.__listDescriptionToString__())
 

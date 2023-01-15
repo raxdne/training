@@ -40,16 +40,14 @@ class Note(Description):
 
     def __init__(self,strArg=None):
 
-        """ constructor """
+        """  """
 
         super().__init__()
         
         self.dt = None
         self.clock = None
-        
-        if strArg == None:
-            self.reset()
-        else:
+
+        if strArg != None and len(strArg) > 0:
             self.parse(strArg)
             #print('New Unit: ' + strArg + ' -> {} {} {} {} {}'.format(self.dt, self.dist, self.type, self.duration, self.__listDescriptionToString__()), file=sys.stderr)
 
@@ -65,18 +63,6 @@ class Note(Description):
         strResult += super().__str__()
 
         return strResult
-
-
-    def reset(self):
-
-        """  """
-
-        self.dt = None
-        self.clock = None
-        
-        super().setDescription()
-
-        return self
 
 
     def appendDescription(self,objArg):
@@ -122,7 +108,7 @@ class Note(Description):
             pass
         elif strArg == '+':
             # it's a combined unit (starts after its predecessor unit, same date)
-            self.combined = True
+            pass
         else:
             # canonical ISO Date+Time
             m = re.match(r"\s*([0-9]{4}-*[0-9]{2}-*[0-9]{2})[\sT]+([0-2][0-9]:[0-5][0-9])\s*",strArg)
@@ -173,7 +159,7 @@ class Note(Description):
 
         """  """
 
-        self.reset()
+        self.__init__()
         
         if objArg == None or len(objArg) < 1:
             return False

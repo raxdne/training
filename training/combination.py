@@ -42,17 +42,19 @@ from training.pause import Pause
 #
 #
 
-class Combination(Description):
+class Combination(Title,Description):
 
     def __init__(self,listArg=[]):
 
-        """ constructor """
+        """  """
 
-        super().__init__()
+        super(Title, self).__init__()
+        super(Description, self).__init__()
         
-        self.setColor()
-        
-        self.reset(listArg)
+        self.child = []
+
+        for c in listArg:
+            self.child.append(c.dup())
 
 
     def __str__(self):
@@ -67,18 +69,6 @@ class Combination(Description):
         strResult += '\n'
 
         return strResult
-
-
-    def reset(self,listArg=[]):
-
-        """  """
-
-        self.child = []
-
-        for c in listArg:
-            self.child.append(c.dup())
-
-        return self
 
 
     def appendDescription(self,objArg):
@@ -139,17 +129,16 @@ class Combination(Description):
         return intResult
 
 
-    def getDurationOfUnits(self):
+    def getDuration(self):
 
-        """ in minutes """
+        """ return a timedelta """
 
         intResult = 0
-        for v in self.child:
-            for u in v:
-                if type(u) == Unit and u.type != None and len(u.type) > 0 and u.duration != None and u.duration.total_seconds() > 59:
-                    intResult += u.duration.total_seconds()
+        for u in self.child:
+            if (type(u) == Unit or type(u) == Pause):
+                intResult += u.getDuration().total_seconds()
 
-        return intResult / 60
+        return timedelta(seconds=intResult)
 
 
     def getTypeOfUnits(self,arrArg=None):
@@ -224,7 +213,7 @@ class Combination(Description):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
+        strResult = '\n* ' + self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
         for v in self.child:
             for u in v:
                 if type(u) == Unit:
@@ -242,7 +231,7 @@ class Combination(Description):
         x_i = x
         for u in self.child:
             strResult += u.toSVG(x_i,y)
-            x_i += u.duration.total_seconds() / 3600 * 25 * config.diagram_scale_dist
+            x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
              
         strResult += '</g>'
 

@@ -27,7 +27,7 @@ class Title:
 
     def __init__(self,strArg=None):
 
-        """ constructor """
+        """  """
 
         self.setTitleStr(strArg)
 

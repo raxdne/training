@@ -48,31 +48,11 @@ class Period(Title,Description):
 
     def __init__(self,strArg=None,intArg=None):
 
-        """ constructor """
+        """  """
 
-        super().__init__()
+        super(Title, self).__init__()
+        super(Description, self).__init__()
         
-        self.reset(strArg,intArg)
-
-
-    def __str__(self):
-
-        """  """
-
-        strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
-
-        strResult += self.__listDescriptionToString__()
-
-        for c in self.child:
-            strResult += c.toString() + '\n'
-            
-        return strResult
-
-
-    def reset(self,strArg=None,intArg=None):
-
-        """  """
-
         self.setTitleStr(strArg)
         self.setDescription()
 
@@ -83,7 +63,34 @@ class Period(Title,Description):
         self.dateBegin = None
         self.dateEnd = None
 
-        return self
+
+    def __str__(self):
+
+        """  """
+
+        strResult = '\n* ' + self.getTitleStr() + ' (' + str(len(self)) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
+
+        strResult += self.__listDescriptionToString__()
+
+        for c in self.child:
+            strResult += c.toString() + '\n'
+            
+        return strResult
+
+
+    def __len__(self):
+
+        """  """
+
+        l = 0
+        for c in self.child:
+            if type(c) == Cycle or type(c) == Period:
+                l += len(c)
+
+        if self.periodInt == None or l > self.periodInt:
+            self.setPeriod(l)
+
+        return self.periodInt
 
 
     def appendDescription(self,objArg):
@@ -113,6 +120,18 @@ class Period(Title,Description):
 
         if len(self.child) > 0:
             self.child[len(self.child) - 1].appendDescription(objArg)
+
+
+    def getDuration(self):
+
+        """ return a timedelta """
+
+        intResult = 0
+        for u in self.child:
+            if type(u) == Cycle:
+                intResult += u.getDuration().total_seconds()
+
+        return timedelta(seconds=intResult)
 
 
     def getNumberOfUnits(self):
@@ -186,21 +205,6 @@ class Period(Title,Description):
         return self
 
 
-    def getPeriod(self):
-
-        """  """
-
-        l = 0
-        for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
-                l += c.getPeriod()
-
-        if self.periodInt == None or l > self.periodInt:
-            self.setPeriod(l)
-
-        return self.periodInt
-
-
     def scale(self,floatScale,patternType=None):
 
         """  """
@@ -257,13 +261,13 @@ class Period(Title,Description):
                 for c in self.child:
                     if type(c) == Cycle or type(c) == Period:
                         c.schedule(e.year, e.month, e.day)
-                        e += timedelta(days=c.getPeriod())
+                        e += timedelta(days=len(c))
                     elif type(c) == Note:
                         c.dt = e
                         #print('type: ' + c.dt.isoformat(), file=sys.stderr)
 
                 self.dateBegin = d
-                self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
+                self.dateEnd = self.dateBegin + timedelta(days=(len(self) - 1))
         else:
             print('info: cannot set date again', file=sys.stderr)
 
@@ -295,7 +299,7 @@ class Period(Title,Description):
         sum_h /= 3600.0
         n = self.getNumberOfUnits()
         if n > 0:
-            p = self.getPeriod()
+            p = len(self)
             strResult += "\n{} Units {:.2f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(n, round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
 
         return strResult
@@ -422,7 +426,7 @@ class Period(Title,Description):
 
         strResult += '><div class="header">' + self.getTitleStr()
         if self.dateBegin != None and self.dateEnd != None:
-            strResult += ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')'
+            strResult += ' (' + str(len(self)) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')'
         strResult += '</div>\n'
 
         strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
@@ -470,7 +474,7 @@ class Period(Title,Description):
 
         strResult = '\n* ' + self.getTitleStr()
         if self.dateBegin != None and self.dateEnd != None:
-            strResult += ' (' + str(self.getPeriod()) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')'
+            strResult += ' (' + str(len(self)) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')'
         strResult += '\n'
 
         for c in self.child:
@@ -524,13 +528,13 @@ class Period(Title,Description):
 
         strResult = '<g>'
 
-        if self.color != None and self.getPeriod() > 0:
-            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*self.getPeriod())-2,x+config.diagram_width-4)
+        if self.color != None and len(self) > 0:
+            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self))-2,x+config.diagram_width-4)
 
         if len(self.child) < 1:
             strResult += '<text x="{}" y="{}" style="vertical-align:top"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
             strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+config.diagram_width,y)
-            for d in range(0,self.getPeriod()):
+            for d in range(0,len(self)):
                 strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+config.diagram_bar_height)
                 y += config.diagram_bar_height * 2
         else:
@@ -539,7 +543,7 @@ class Period(Title,Description):
                     #strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x+400,y)
                     #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x+400,y,c.getTitleStr())
                     strResult += c.toSVG(x,y)
-                    y += c.getPeriod() * config.diagram_bar_height * 2
+                    y += len(c) * config.diagram_bar_height * 2
 
         strResult += '</g>'
 
@@ -550,7 +554,7 @@ class Period(Title,Description):
 
         """  """
 
-        diagram_height = self.getPeriod() * (config.diagram_bar_height * 2) + 100
+        diagram_height = len(self) * (config.diagram_bar_height * 2) + 100
         strResult = '<svg baseProfile="full" height="{}" version="1.1" width="{}" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, config.diagram_width)
 
         strResult += '<style type="text/css">svg { font-family: ' + config.font_family + '; font-size: ' + str(config.font_size) + 'pt; }</style>'

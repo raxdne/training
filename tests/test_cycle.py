@@ -35,7 +35,8 @@ c1 = c.dup()
 #c1.scale(2.0,r"^R")
 
 t.insert(1,Unit('18:00;3.5;RB;25:00'))
-t.insert(3,Unit('18:00;3.5;RB;25:00'))
+t.insert(3,[Unit('08:00;3.5;RB;25:00'),
+            Unit('18:00;3.5;RB;25:00')])
 t.insert([5,8],c1)
 t.insert(6,Unit('08:00;30;BB;02:00:00'))
 t.insert(8,Unit(';FB;25:00'))

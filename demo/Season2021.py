@@ -37,6 +37,8 @@ def BasicsGeneral():
 
     c = Cycle('General Endurance')
 
+    """    """
+    
     c.insert([1,5],Combination([Unit('18:00;3.5;RB;25:00'),
                                 Pause(10,'Stretching'),
                                 Unit(';FB;25:00'),
@@ -44,7 +46,9 @@ def BasicsGeneral():
                                 Unit(';FB;25:00')]))
              
     c.insert(3,Unit(';FB;25:00'))
-    c.insert(6,Unit('08:00;30;BB;02:00:00'))
+
+    c.insert(6,[Unit('08:00;30;BB;02:00:00'),
+                Unit('18:00;30;BB;02:00:00')])
 
     p.append(c)
     p.append(c)
@@ -182,8 +186,8 @@ def BuildupBicycleSpeed():
     p.appendChildDescription('Test 5km Trime Trial')
     p.append(RegenerationGeneral())
     p.append(c)
-    p.append(c)
-    p.appendChildDescription('Test 5km Trime Trial')
+    #p.append(c)
+    #p.appendChildDescription('Test 5km Trime Trial')
     p.append(RegenerationGeneral())
     
     return p
@@ -232,8 +236,8 @@ def BasicsRunning():
     p.append(RegenerationGeneral())
     c.scale(1.2)
     p.append(c)
-    p.append(c)
-    p.appendChildDescription('Test 1000m speed run')
+    #p.append(c)
+    #p.appendChildDescription('Test 1000m speed run')
     p.append(RegenerationGeneral())
 
     return p

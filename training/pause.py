@@ -41,11 +41,12 @@ class Pause(Note):
 
     def __init__(self,strArg=None,objArg=None):
 
-        """ constructor """
+        """  """
 
         super().__init__()
-        self.reset()
-        
+
+        self.setDuration()
+
         if strArg != None:
             self.setDuration(strArg)
             if objArg != None:
@@ -58,21 +59,10 @@ class Pause(Note):
 
         """  """
 
-        if self.duration.total_seconds() > 0:
-            return '{} {}min'.format(str(super().__str__()), int(self.duration.total_seconds() / 60))
+        if self.getDuration().total_seconds() > 0:
+            return '{} {}'.format(str(super().__str__()), str(self.getDuration()))
         else:
             return ''
-
-
-    def reset(self):
-
-        """  """
-
-        self.setDuration()
-        
-        super().setDescription()
-
-        return self
 
 
     def setDuration(self,intArg=None):
@@ -85,12 +75,15 @@ class Pause(Note):
             self.duration = Duration(intArg)
 
 
-    def dup(self):
+    def getDuration(self):
 
         """  """
-
-        return copy.deepcopy(self)
         
+        if self.duration == None:
+            return timedelta(seconds=0)
+        else:
+            return self.duration
+
 
     def toCSV(self):
 
@@ -102,9 +95,9 @@ class Pause(Note):
             if self.type == None:
                 strResult = '{date};;;'.format(date=self.dt.isoformat())
             elif self.dist == None:
-                strResult = '{date};;{type};{duration}'.format(date=self.dt.isoformat(), type=self.type, duration=self.getDurationStr())
+                strResult = '{date};;{type};{duration}'.format(date=self.dt.isoformat(), type=self.type, duration=str(self.getDuration()))
             else:
-                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.isoformat(), dist=self.dist, type=self.type, duration=self.getDurationStr())
+                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.isoformat(), dist=self.dist, type=self.type, duration=str(self.getDuration()))
 
             strResult += ';' + self.__listDescriptionToString__()
 
@@ -128,15 +121,15 @@ class Pause(Note):
 
         strResult = ''
 
-        if self.duration == None or self.duration.total_seconds() < 60:
+        if self.duration == None or self.getDuration().total_seconds() < 60:
             strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.__listDescriptionToString__(), self.toString())
         else:
             strResult += '<rect '
 
             # "about 25 distance units per hour"
-            bar_width = self.duration.total_seconds() / 3600 * 25 * config.diagram_scale_dist
+            bar_width = self.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
 
-            strResult += ' height="{}" stroke="black" stroke-width=".5" width="{:.0f}" x="{}" y="{}"'.format(config.diagram_bar_height, bar_width, x, y)
+            strResult += ' height="{}" opacity=".25" stroke="black" stroke-width=".5" width="{:.0f}" x="{}" y="{}"'.format(config.diagram_bar_height, bar_width, x, y)
             strResult += '>'
 
             strResult += '<title>{}</title>'.format(self)

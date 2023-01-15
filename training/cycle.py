@@ -47,31 +47,13 @@ class Cycle(Title,Description):
 
     def __init__(self,strArg=None,intArg=7):
 
-        """ constructor """
-
-        self.reset(strArg,intArg)
-
-
-    def __str__(self):
-
         """  """
 
-        strResult = '\n** ' + super().getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
-        for v in self.day:
-            for u in v:
-                strResult += str(u) + '\n'
-
-        return strResult
-
-
-    def reset(self,strArg=None,intArg=7):
-
-        """  """
-
+        super(Title, self).__init__()
+        super(Description, self).__init__()
+        
         self.setTitleStr(strArg)
         self.setDescription()
-
-        self.periodInt = intArg
 
         self.day = []
         for i in range(0,int(intArg)):
@@ -82,7 +64,24 @@ class Cycle(Title,Description):
 
         self.color = None
 
-        return self
+
+    def __len__(self):
+
+        """  """
+
+        return len(self.day)
+
+
+    def __str__(self):
+
+        """  """
+
+        strResult = '\n** ' + super().getTitleStr() + ' (' + str(len(self)) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
+        for v in self.day:
+            for u in v:
+                strResult += str(u) + '\n'
+
+        return strResult
 
 
     def appendDescription(self,objArg):
@@ -107,32 +106,11 @@ class Cycle(Title,Description):
         return self
 
 
-    def getLength(self):
-
-        """  """
-
-        return len(self.day)
-
-
-    def combine(self,objUnit,intPause=0):
-
-        """  """
-
-        # find last unit
-        for i in range(len(self.day)-1,0,-1):
-            if len(self.day[i]) > 0:
-                objUnit.combined = True
-                objUnit.pause = timedelta(minutes=intPause)
-                return self.insert(i,objUnit)
-        
-        return None
-
-
     def remove(self,intIndexA=-1,patternType=None):
 
         """  """
 
-        if intIndexA > -1 and intIndexA < len(self.day):
+        if intIndexA > -1 and intIndexA < len(self):
             if patternType != None:
                 # delete only matching elements in list of indexed day
                 dayNew = []
@@ -149,7 +127,7 @@ class Cycle(Title,Description):
         elif patternType != None:
             # whole cycle using pattern
             daysNew = []
-            for i in range(0,len(self.day)):
+            for i in range(0,len(self)):
                 daysNew.append([])
                 for u in self.day[i]:
                     if type(u) == Unit and (u.type == None or re.match(patternType,u.type)):
@@ -165,7 +143,7 @@ class Cycle(Title,Description):
 
         """  """
 
-        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.day) and intIndexB < len(self.day) and intIndexA != intIndexB:
+        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self) and intIndexB < len(self) and intIndexA != intIndexB:
             self.copy(intIndexA,intIndexB,flagReplace)
             self.remove(intIndexA)
 
@@ -176,7 +154,7 @@ class Cycle(Title,Description):
 
         """  """
 
-        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.day) and intIndexB < len(self.day) and intIndexA != intIndexB:
+        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self) and intIndexB < len(self) and intIndexA != intIndexB:
             objCopy = copy.deepcopy(self.day[intIndexA])
             if flagReplace:
                 # override exisiting
@@ -191,7 +169,7 @@ class Cycle(Title,Description):
 
         """  """
 
-        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.day) and intIndexB < len(self.day) and intIndexA != intIndexB:
+        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self) and intIndexB < len(self) and intIndexA != intIndexB:
             t = self.day[intIndexB]
             self.day[intIndexB] = self.day[intIndexA]
             self.day[intIndexA] = t
@@ -215,7 +193,7 @@ class Cycle(Title,Description):
             for u in objArg:
                 self.insert(intIndex,u,flagReplace)
             return []
-        elif intIndex > -1 and intIndex < len(self.day):
+        elif intIndex > -1 and intIndex < len(self):
             objResult = objArg.dup()
             if flagReplace:
                 # override exisiting
@@ -251,19 +229,12 @@ class Cycle(Title,Description):
 
         if strArg == None or strArg == '':
             pass
-        elif len(self.day) > intIndex and len(self.day[intIndex]) > 0:
+        elif len(self) > intIndex and len(self.day[intIndex]) > 0:
             self.day[intIndex][len(self.day[intIndex]) - 1].appendDescription(strArg)
 
         return self
 
     
-    def getPeriod(self):
-
-        """  """
-
-        return len(self.day)
-
-
     def getPeriodDone(self):
 
         """  """
@@ -271,7 +242,7 @@ class Cycle(Title,Description):
         if self.dateBegin != None and date.today() >= self.dateBegin and self.dateEnd != None and date.today() <= self.dateEnd:
             return (date.today() - self.dateBegin).days + 1
         else:
-            return len(self.day)
+            return len(self)
 
 
     def getNumberOfUnits(self):
@@ -287,6 +258,18 @@ class Cycle(Title,Description):
         return intResult
 
 
+    def getDuration(self):
+
+        """ return a timedelta """
+
+        intResult = 0
+        for u in self.child:
+            if (type(u) == Unit or type(u) == Combination):
+                intResult += u.getDuration().total_seconds()
+
+        return timedelta(seconds=intResult)
+
+
     def getDurationOfUnits(self):
 
         """ in minutes """
@@ -294,8 +277,8 @@ class Cycle(Title,Description):
         intResult = 0
         for v in self.day:
             for u in v:
-                if type(u) == Unit and u.type != None and len(u.type) > 0 and u.duration != None and u.duration.total_seconds() > 59:
-                    intResult += u.duration.total_seconds()
+                if type(u) == Unit and u.type != None and len(u.type) > 0 and u.duration != None and u.getDuration().total_seconds() > 59:
+                    intResult += u.getDuration().total_seconds()
 
         return intResult / 60
 
@@ -350,7 +333,7 @@ class Cycle(Title,Description):
                 d_i += timedelta(days=1)
 
             """
-            m = len(self.day)
+            m = len(self)
             h = 0
             while h < m:
 
@@ -430,7 +413,7 @@ class Cycle(Title,Description):
             """
             
             self.dateBegin = date(intYear, intMonth, intDay)
-            self.dateEnd = self.dateBegin + timedelta(days=(self.getPeriod() - 1))
+            self.dateEnd = self.dateBegin + timedelta(days=(len(self) - 1))
 
         return self
     
@@ -466,8 +449,8 @@ class Cycle(Title,Description):
                         arrArg[u.type][0].append(u.dist)
                     else:
                         arrArg[u.type][0].append(0)
-                    arrArg[u.type][1].append(u.duration.total_seconds())
-                    sum_h += u.duration.total_seconds()
+                    arrArg[u.type][1].append(u.getDuration().total_seconds())
+                    sum_h += u.getDuration().total_seconds()
         sum_h /= 3600.0
 
         for k in sorted(arrArg.keys()):
@@ -509,7 +492,7 @@ class Cycle(Title,Description):
         if self.color != None:
             strResult += ' style="background-color: {}"'.format(self.color)
 
-        strResult += '><div class="header">' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '</div>\n'
+        strResult += '><div class="header">' + self.getTitleStr() + ' (' + str(len(self)) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '</div>\n'
 
         strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
 
@@ -528,7 +511,7 @@ class Cycle(Title,Description):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleStr() + ' (' + str(self.getPeriod()) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
+        strResult = '\n* ' + self.getTitleStr() + ' (' + str(len(self)) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
         for v in self.day:
             for u in v:
                 if type(u) == Unit:
@@ -546,11 +529,11 @@ class Cycle(Title,Description):
         strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+config.diagram_width,y)
 
         if self.color != None:
-            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self.day))-2,x+config.diagram_width-4)
+            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self))-2,x+config.diagram_width-4)
 
         strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ', (self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report()))
 
-        if len(self.day) < 1:
+        if len(self) < 1:
             pass
         else:
             y += config.diagram_bar_height / 2
@@ -570,6 +553,7 @@ class Cycle(Title,Description):
                 x_i = x
                 for u in v:
                     strResult += u.toSVG(x_i,y)
+                    x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist + 5
 
                 y += config.diagram_bar_height * 2
 
@@ -596,7 +580,7 @@ class Cycle(Title,Description):
         else:
             color = self.color
             
-        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, self.getPeriod() * 2)
+        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, len(self) * 2)
         strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToString__())
         strResult += '</rect>'
 
@@ -647,6 +631,7 @@ class Cycle(Title,Description):
 
         strResult += self.__listDescriptionToXML__()
 
+        """
         for v in self.day:
             # count units of this day
             n = len(v)
@@ -673,7 +658,7 @@ class Cycle(Title,Description):
                     # no combined units
                     strResult += v[i].toXML()
                     i += 1
-                        
+        """                
         strResult += '</node>\n'
 
         return strResult

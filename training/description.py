@@ -27,11 +27,10 @@ class Description:
 
     def __init__(self,strArg=None):
 
-        """ constructor """
-        
-        super().__init__()
+        """  """
         
         self.color = None
+        self.listDescription = []
 
         self.setDescription(strArg)
 
