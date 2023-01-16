@@ -388,7 +388,7 @@ class Period(Title,Description):
         if self.color != None:
             strResult += ' style="background-color: {}"'.format(self.color)
 
-        strResult += '><div class="header">' + self.getTitleStr()
+        strResult += '><div class="header">' + self.getTitleXML()
         if self.dateBegin != None and self.dateEnd != None:
             strResult += ' (' + str(len(self)) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')'
         strResult += '</div>\n'
@@ -459,7 +459,7 @@ class Period(Title,Description):
         else:
             strResult += ' FOLDED="{}"'.format('false')
 
-        strResult += ' TEXT="' + self.getTitleStr()
+        strResult += ' TEXT="' + self.getTitleXML()
         if self.dateBegin != None and self.dateEnd != None:
             strResult += '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;')
         strResult += '">\n'
@@ -480,7 +480,7 @@ class Period(Title,Description):
 
         """  """
 
-        strResult = '<map>\n'
+        strResult = '<?xml version="1.0" encoding="UTF-8"?><map>\n'
         strResult += self.toXML()
         strResult += '</map>\n'
 
@@ -497,7 +497,7 @@ class Period(Title,Description):
             strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self))-2,x+config.diagram_width-4)
 
         if len(self.child) < 1:
-            strResult += '<text x="{}" y="{}" style="vertical-align:top"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
+            strResult += '<text x="{}" y="{}" style="vertical-align:top"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleXML(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
             strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+config.diagram_width,y)
             for d in range(0,len(self)):
                 strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+config.diagram_bar_height)
@@ -506,7 +506,7 @@ class Period(Title,Description):
             for c in self.child:
                 if type(c) == Cycle or type(c) == Period:
                     #strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x+400,y)
-                    #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x+400,y,c.getTitleStr())
+                    #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x+400,y,c.getTitleXML())
                     strResult += c.toSVG(x,y)
                     y += len(c) * config.diagram_bar_height * 2
 
@@ -546,7 +546,7 @@ class Period(Title,Description):
             l = self.dateEnd - self.dateBegin
             x_i = (self.dateBegin - dateBase).days * 2
         except TypeError:
-            return '<text x="{}" y="{}">{}</text>\n'.format(0 + 2, y + 10,self.getTitleStr())
+            return '<text x="{}" y="{}">{}</text>\n'.format(0 + 2, y + 10,self.getTitleXML())
 
         strResult = '<g>'
         
@@ -556,9 +556,9 @@ class Period(Title,Description):
             c = self.color
 
         strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
         strResult += '</rect>'
-        strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 10,self.getTitleStr())
+        strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 10,self.getTitleXML())
 
         y_i = y + config.diagram_bar_height * 3
         for c in self.child:

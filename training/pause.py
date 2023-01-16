@@ -60,7 +60,7 @@ class Pause(Note):
         """  """
 
         if self.getDuration().total_seconds() > 0:
-            return '{} {}'.format(str(super().__str__()), str(self.getDuration()))
+            return '{} {} Pause'.format(str(super().__str__()), str(self.getDuration()))
         else:
             return ''
 

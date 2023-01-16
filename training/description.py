@@ -127,7 +127,7 @@ class Description:
             # list items
             for c in listArg:
                 if type(c) is str:
-                    strResult += '<li>' + c + '</li>\n'
+                    strResult += '<li>' + c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;") + '</li>\n'
                 elif type(c) is list:
                     strResult += self.__listDescriptionToHtml__(c)
                 else:
@@ -153,7 +153,7 @@ class Description:
                 if len(c) < 1:
                     pass
                 elif type(c) is str and len(c) > 0:
-                    strResult += '<node TEXT="{}"/>\n'.format(c)
+                    strResult += '<node TEXT="{}"/>\n'.format(c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
                 elif type(c) is list:
                     strResult += self.__listDescriptionToXML__(c)
                 else:

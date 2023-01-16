@@ -66,3 +66,11 @@ class Title:
         #return str(self)
 
 
+    def getTitleXML(self):
+
+        """  """
+
+        return self.strTitle.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+

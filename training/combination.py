@@ -100,11 +100,6 @@ class Combination(Title,Description):
         return True
 
 
-    def setDistStr(self,strArg):
-
-        """  """
-
-
     def resetDistances(self):
 
         """  """

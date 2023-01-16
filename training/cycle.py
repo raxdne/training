@@ -454,7 +454,7 @@ class Cycle(Title,Description):
         if self.color != None:
             strResult += ' style="background-color: {}"'.format(self.color)
 
-        strResult += '><div class="header">' + self.getTitleStr() + ' (' + str(len(self)) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '</div>\n'
+        strResult += '><div class="header">' + self.getTitleXML() + ' (' + str(len(self)) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '</div>\n'
 
         strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
 
@@ -493,7 +493,7 @@ class Cycle(Title,Description):
         if self.color != None:
             strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self))-2,x+config.diagram_width-4)
 
-        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleStr(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ', (self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report()))
+        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleXML(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ', (self.getTitleXML() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report()))
 
         if len(self) < 1:
             pass
@@ -544,7 +544,7 @@ class Cycle(Title,Description):
             color = self.color
             
         strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, len(self) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToString__())
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToString__())
         strResult += '</rect>'
 
         # TODO: make config.diagram_height configurable
@@ -567,10 +567,10 @@ class Cycle(Title,Description):
             color = 'red'
             
         strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, config.diagram_height - h - 10, h, l * 2 - 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
         strResult += '</rect>'
 
-        #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i,y,self.getTitleStr())
+        #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i,y,self.getTitleXML())
         strResult += '</g>'
 
         return strResult
@@ -589,7 +589,7 @@ class Cycle(Title,Description):
         else:
             strResult += ' FOLDED="{}"'.format('true')
 
-        strResult += ' TEXT="' + self.getTitleStr() + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+        strResult += ' TEXT="' + self.getTitleXML() + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
         strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
 
         strResult += self.__listDescriptionToXML__()
