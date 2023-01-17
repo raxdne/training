@@ -225,7 +225,16 @@ class Note(Description):
 
         """  """
 
-        strResult = self.__listDescriptionToFreemind__()
+        strResult = '<node'
+
+        if self.dt != None:
+            strResult += ' TEXT="' + self.dt.isoformat() + '"'
+            
+        strResult += '>'
+
+        strResult += self.__listDescriptionToFreemind__()
+
+        strResult += '</node>\n'
 
         return strResult
 
