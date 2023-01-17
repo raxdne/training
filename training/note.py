@@ -213,11 +213,11 @@ class Note(Description):
         return strResult
 
 
-    def toXML(self):
+    def toFreemind(self):
 
         """  """
 
-        strResult = self.__listDescriptionToXML__()
+        strResult = self.__listDescriptionToFreemind__()
 
         return strResult
 

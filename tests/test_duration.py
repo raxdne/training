@@ -21,8 +21,8 @@ import copy
 
 from training.duration import Duration
 
-print('Module Test:\n')
-    
+print('Module Test: ' + __file__ + '\n')
+
 t = Duration(10)
 print(repr(t))
 print(t)

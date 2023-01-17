@@ -23,7 +23,7 @@ from datetime import timedelta, date, datetime, time, timezone
 
 from training.note import Note
 
-print('Module Test:\n')
+print('Module Test: ' + __file__ + '\n')
 
 t = Note()
 print(t)

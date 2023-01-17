@@ -24,7 +24,7 @@ from training.unit import Unit
 from training.cycle import Cycle
 from training.period import Period
 
-print('Module Test:\n')
+print('Module Test: ' + __file__ + '\n')
 
 t = Period('General Basics')
 t.appendDescription('Regeneration')

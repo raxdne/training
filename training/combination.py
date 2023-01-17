@@ -214,7 +214,7 @@ class Combination(Title,Description):
         return strResult
 
 
-    def toXML(self):
+    def toFreemind(self):
 
         """  """
 
@@ -229,10 +229,10 @@ class Combination(Title,Description):
 
         strResult += ' TEXT="' + self.child[0].dt.isoformat() + '">\n'
 
-        strResult += self.__listDescriptionToXML__()
+        strResult += self.__listDescriptionToFreemind__()
 
         for u in self.child:
-            strResult += u.toXML()
+            strResult += u.toFreemind()
                         
         strResult += '</node>\n'
 

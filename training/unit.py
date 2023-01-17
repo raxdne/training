@@ -283,7 +283,7 @@ class Unit(Note):
         strResult = ''
 
         if self.duration == None or self.getDuration().total_seconds() < 60:
-            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.__listDescriptionToString__(), self.toString())
+            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.__listDescriptionToSVG__(), str(self))
         else:
             strResult += '<rect '
 
@@ -301,14 +301,14 @@ class Unit(Note):
             strResult += ' height="{}" stroke="black" stroke-width=".5" width="{:.0f}" x="{}" y="{}"'.format(config.diagram_bar_height, bar_width, x, y)
             strResult += '>'
 
-            strResult += '<title>{}: {}</title>'.format(self.toString(), self.__listDescriptionToString__())
+            strResult += '<title>{}: {}</title>'.format(str(self), self.__listDescriptionToString__())
 
             strResult += '</rect>\n'
 
         return strResult
 
 
-    def toXML(self):
+    def toFreemind(self):
 
         """  """
 
@@ -323,7 +323,7 @@ class Unit(Note):
         if self.dist != None:
             strResult += '<node TEXT="' + self.getSpeedStr() + '"/>'
 
-        strResult += self.__listDescriptionToXML__()
+        strResult += self.__listDescriptionToFreemind__()
 
         strResult += '</node>\n'
 

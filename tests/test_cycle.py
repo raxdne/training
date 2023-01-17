@@ -23,8 +23,8 @@ from training.pause import Pause
 from training.combination import Combination
 from training.cycle import Cycle
 
-print('Module Test:\n')
-    
+print('Module Test: ' + __file__ + '\n')
+
 t = Cycle('C1',2*7)
 
 c = Combination([Unit('18:00;3.5;RB;25:00'),

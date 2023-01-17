@@ -21,8 +21,8 @@ from datetime import timedelta, date, datetime, time, timezone
 
 from training.pause import Pause
 
-print('Module Test:\n')
-    
+print('Module Test: ' + __file__ + '\n')
+
 t = Pause(15)
 print(repr(t))
 print(t)

@@ -111,6 +111,15 @@ class Description:
         return strResult
 
 
+    def __listDescriptionToSVG__(self,listArg=None):
+
+        """ returns a XML/SVG string of nested self.listDescription """
+
+        strResult = self.__listDescriptionToString__().replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
+
+        return strResult
+
+
     def __listDescriptionToHtml__(self,listArg=None):
 
         """ returns a HTML string of nested self.listDescription """
@@ -138,16 +147,16 @@ class Description:
         return strResult
 
 
-    def __listDescriptionToXML__(self,listArg=None):
+    def __listDescriptionToFreemind__(self,listArg=None):
 
         """ returns a Freemind XML string of nested self.listDescription """
 
         strResult = ''
 
         if listArg == None:
-            strResult += self.__listDescriptionToXML__(self.listDescription)
+            strResult += self.__listDescriptionToFreemind__(self.listDescription)
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
-            strResult += '<node FOLDED="{}" TEXT="{}">\n'.format('true',listArg[0]) + self.__listDescriptionToXML__(listArg[1]) + '</node>\n'
+            strResult += '<node FOLDED="{}" TEXT="{}">\n'.format('true',listArg[0]) + self.__listDescriptionToFreemind__(listArg[1]) + '</node>\n'
         elif type(listArg) is list and len(listArg) > 0:
             for c in listArg:
                 if len(c) < 1:
@@ -155,10 +164,17 @@ class Description:
                 elif type(c) is str and len(c) > 0:
                     strResult += '<node TEXT="{}"/>\n'.format(c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
                 elif type(c) is list:
-                    strResult += self.__listDescriptionToXML__(c)
+                    strResult += self.__listDescriptionToFreemind__(c)
                 else:
                     print('fail: ',c, file=sys.stderr)
 
         return strResult
+
+
+    def __listDescriptionToXML__(self):
+
+        """  """
+
+        return self.__listDescriptionToString__().replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
 
 

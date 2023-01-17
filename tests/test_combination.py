@@ -39,7 +39,7 @@ from training.unit import Unit
 from training.pause import Pause
 from training.combination import Combination
 
-print('Module Test:\n')
+print('Module Test: ' + __file__ + '\n')
 
 t = Combination([Unit('08:00;3.5;RB;25:00'),
                  Pause('20min'),

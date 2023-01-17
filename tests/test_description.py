@@ -19,7 +19,7 @@
 
 from training.description import Description
 
-print('Module Test:\n')
+print('Module Test: ' + __file__ + '\n')
 
 d = Description(['ABC','DEF'])
 print(repr(d))
@@ -32,6 +32,8 @@ print(d.__listDescriptionToString__())
 print(d.__listDescriptionToHtml__())
 
 print(d.__listDescriptionToXML__())
+
+print(d.__listDescriptionToFreemind__())
 
 print(d.hasDescription())
 

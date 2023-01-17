@@ -23,8 +23,8 @@ from datetime import timedelta, date, datetime, time, timezone
 
 from training.unit import Unit
 
-print('Module Test:\n')
-    
+print('Module Test: ' + __file__ + '\n')
+
 t = Unit('2020-03-03T17:00:00+1:00;10;RG;20min')
 print(t)
 

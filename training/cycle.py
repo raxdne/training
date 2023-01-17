@@ -576,7 +576,7 @@ class Cycle(Title,Description):
         return strResult
 
 
-    def toXML(self):
+    def toFreemind(self):
 
         """  """
 
@@ -592,11 +592,11 @@ class Cycle(Title,Description):
         strResult += ' TEXT="' + self.getTitleXML() + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
         strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
 
-        strResult += self.__listDescriptionToXML__()
+        strResult += self.__listDescriptionToFreemind__()
 
         for v in self.day:
             for u in v:
-                strResult += u.toXML()
+                strResult += u.toFreemind()
             
         strResult += '</node>\n'
 

@@ -139,7 +139,7 @@ class Pause(Note):
         return strResult
 
 
-    def toXML(self):
+    def toFreemind(self):
 
         """  """
 

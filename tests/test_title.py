@@ -19,6 +19,8 @@
 
 from training.title import Title
 
+print('Module Test: ' + __file__ + '\n')
+
 #
 #
 #

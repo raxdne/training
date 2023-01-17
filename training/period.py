@@ -447,7 +447,7 @@ class Period(Title,Description):
         return strResult
 
 
-    def toXML(self):
+    def toFreemind(self):
 
         """  """
 
@@ -466,10 +466,10 @@ class Period(Title,Description):
 
         strResult += '<font BOLD="true" NAME="Monospaced" SIZE="12"/>'
 
-        strResult += self.__listDescriptionToXML__()
+        strResult += self.__listDescriptionToFreemind__()
 
         for c in self.child:
-            strResult += c.toXML()
+            strResult += c.toFreemind()
             
         strResult += '</node>\n'
 
@@ -481,7 +481,7 @@ class Period(Title,Description):
         """  """
 
         strResult = '<?xml version="1.0" encoding="UTF-8"?><map>\n'
-        strResult += self.toXML()
+        strResult += self.toFreemind()
         strResult += '</map>\n'
 
         return strResult
@@ -556,7 +556,7 @@ class Period(Title,Description):
             c = self.color
 
         strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')\n\n' + self.__listDescriptionToSVG__() + '\n\n' + self.report())
         strResult += '</rect>'
         strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 10,self.getTitleXML())
 
