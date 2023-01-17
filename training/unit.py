@@ -314,7 +314,7 @@ class Unit(Note):
 
         strResult = '<node'
 
-        strResult += ' TEXT="' + self.toString() + '"'
+        strResult += ' TEXT="' + str(self) + '"'
 
         if self.type != None and len(self.type) > 0 and self.type[0] in config.colors:
             strResult += ' BACKGROUND_COLOR="{}"'.format(config.colors[self.type[0]])

@@ -47,8 +47,8 @@ def BasicsGeneral():
              
     c.insert(3,Unit(';FB;25:00'))
 
-    c.insert(6,[Unit('08:00;30;BB;02:00:00'),
-                Unit('18:00;30;BB;02:00:00')])
+    c.insert(6,[Unit('08:00;30;BB;01:00:00'),
+                Unit('18:00;30;BB;01:00:00')])
 
     p.append(c)
     p.append(c)

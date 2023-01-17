@@ -73,7 +73,7 @@ class Period(Title,Description):
         strResult += self.__listDescriptionToString__()
 
         for c in self.child:
-            strResult += c.toString() + '\n'
+            strResult += str(c) + '\n'
             
         return strResult
 
@@ -310,6 +310,7 @@ class Period(Title,Description):
         d0 = None
         d1 = None
         t = Unit()
+        n = Note()
 
         for filename in listFilename:
             print("* ",filename, file=sys.stderr)
@@ -321,6 +322,18 @@ class Period(Title,Description):
             for l in content:
                 if l == None or l == '' or re.match(r"^sep",l) or re.match(r"^\*",l):
                     pass
+                elif n.parse(l):
+                    if n.dt != None:
+                        d_i = n.dt
+                        if d0 == None or n.dt < d0:
+                            d0 = t.dt
+                        if d1 == None or n.dt > d1:
+                            d1 = t.dt
+                    else:
+                        n.dt = d_i
+
+                    a.append(n)
+                    n = Note()
                 elif (fUpdater != None and t.parse(fUpdater(l))) or t.parse(l):
                     if t.dt != None:
                         d_i = t.dt
@@ -354,7 +367,6 @@ class Period(Title,Description):
                 self.append(Period('').CalendarYearPeriod(y))
 
         for t in a:
-            #print(t.toString())
             self.insertByDate(t)
 
         return self
@@ -372,11 +384,6 @@ class Period(Title,Description):
         """  """
 
         return str(self)
-
-
-    def toPlain(self):
-
-        return self.toString() + '\n'
 
 
     def toHtml(self):

@@ -159,18 +159,30 @@ class Note(Description):
 
         """  """
 
-        self.__init__()
+        #self.__init__()
         
         if objArg == None or len(objArg) < 1:
             return False
         elif type(objArg) is str:
-            #entry = objArg.split(';')
-            #return self.parse(entry)
-            self.appendDescription(objArg)
-            return True
-        elif type(objArg) is list and len(objArg) > 0:
-            self.appendDescription(objArg)
-            return True
+            entry = objArg.split(';')
+            #print('Note {}'.format(str(entry)), file=sys.stderr)
+            if len(entry) == 1:
+                self.appendDescription(objArg)
+                return True
+            elif len(entry) == 2:
+                self.setDateStr(objArg[0])
+                self.appendDescription(objArg[1:])
+                return True
+            else:
+                return self.parse(entry)
+        elif type(objArg) is list and len(objArg) > 3:
+            if len(objArg[0]) > 0 and len(objArg[1]) == 0 and len(objArg[2]) == 0 and  len(objArg[3]) == 0 and (len(objArg[4]) > 0 or len(objArg[5]) > 0):
+                self.setDateStr(objArg[0])
+                self.appendDescription(objArg[4:])
+                #print('Note {}'.format(str(self)), file=sys.stderr)
+                return True
+            else:
+                return False
         else:
             return False
 
@@ -186,11 +198,7 @@ class Note(Description):
 
         """  """
 
-        strResult = '<p>'
-        if self.dt != None:
-            strResult += self.dt.isoformat() + ' '
-        strResult += self.__listDescriptionToString__()
-        strResult += '</p>'
+        strResult = '<p>' + str(self) + '</p>'
         
         return strResult
 
@@ -208,7 +216,7 @@ class Note(Description):
 
         """  """
 
-        strResult = '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.__listDescriptionToString__(), self.toString())
+        strResult = '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.__listDescriptionToString__(), str(self))
 
         return strResult
 
