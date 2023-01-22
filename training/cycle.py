@@ -31,6 +31,8 @@ from datetime import timedelta, date, datetime, time
 
 from icalendar import Calendar, Event, Alarm
 
+from suntime import Sun
+
 from training import config as config
 from training.description import Description
 from training.title import Title
@@ -76,7 +78,7 @@ class Cycle(Title,Description):
 
         """  """
 
-        strResult = '\n** ' + super().getTitleStr() + ' (' + str(len(self)) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
+        strResult = '\n** ' + super().getTitleStr() + ' (' + str(len(self)) + ', ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '\n\n'
         for v in self.day:
             for u in v:
                 strResult += str(u) + '\n'
@@ -181,8 +183,8 @@ class Cycle(Title,Description):
 
         objResult = None
 
-        if objArg == None:
-            pass
+        if objArg == None or (type(objArg) != Unit and type(objArg) != Combination and type(objArg) != Note):
+            print('error: ' + str(objArg), file=sys.stderr)
         elif type(intIndex) == list:
             for i in intIndex:
                 self.insert(i,objArg,flagReplace)
@@ -208,7 +210,9 @@ class Cycle(Title,Description):
 
         objResult = None
 
-        if objArg != None and objArg.dt != None:
+        if objArg == None or (type(objArg) != Unit and type(objArg) != Combination and type(objArg) != Note):
+            print('error: ' + str(objArg), file=sys.stderr)
+        elif objArg.dt != None:
             delta = objArg.dt.date() - self.dateBegin
             if delta.days > -1 and objArg.dt.date() <= self.dateEnd:
                 objResult = objArg.dup()
@@ -290,99 +294,30 @@ class Cycle(Title,Description):
         if self.dateBegin == None:
 
             try:
-                dt = date(intYear, intMonth, intDay)
+                self.dateBegin = date(intYear, intMonth, intDay)
             except ValueError as e:
                 print('error: ' + str(e), file=sys.stderr)
                 return self
 
-            d_i = datetime.combine(dt,time(0)).astimezone(None)
+            if config.sun != None:
+                print('sunrise/sunset: ' + str(config.twilight), file=sys.stderr)
+
+            dt_earliest = None
+            dt_latest   = None
+            dt_i = datetime.combine(self.dateBegin,time(0)).astimezone(None)
             
             for d in self.day:
-                for t in d:
-                    t.setDate(d_i)
-                d_i += timedelta(days=1)
 
-            """
-            m = len(self)
-            h = 0
-            while h < m:
-
-                #print('day: ' + str(h), file=sys.stderr)
-                
                 if config.sun != None:
                     # fix 't' according to sunrise/sunset
-                    t_earliest = config.sun.get_local_sunrise_time(d + timedelta(days=h)) + timedelta(seconds=config.twilight)
-                    t_latest   = config.sun.get_local_sunset_time(d + timedelta(days=h))  - timedelta(seconds=config.twilight)
+                    dt_earliest = config.sun.get_local_sunrise_time(dt_i) + timedelta(seconds=config.twilight)
+                    dt_latest   = config.sun.get_local_sunset_time(dt_i)  - timedelta(seconds=config.twilight)
 
-                # count units of this day
-                n = len(self.day[h])
-                i = 0
-                while i < n:
+                for t in d:
+                    t.setDate(dt_i,dt_earliest,dt_latest)
+                    
+                dt_i += timedelta(days=1)
 
-                    #print('u: ' + str(i), file=sys.stderr)
-
-                    if type(self.day[h][i]) == Combination:
-                        pass
-                    elif self.day[h][i].clock == None:
-                        d_i = datetime.combine(d + timedelta(days=h),time(0)).astimezone(None)
-                        self.day[h][i].dt = d_i
-                    else:
-                        d_i = datetime.combine(d + timedelta(days=h), self.day[h][i].clock).astimezone(None)
-                        
-                        if config.sun != None:
-                            # fix 't' according to sunrise/sunset
-                            if t_earliest > d_i:
-                                #print('too early: ' + str(d_i.isoformat()), file=sys.stderr)
-                                # shift start time after twilight
-                                self.day[h][i].dt = t_earliest
-                                # adjust to 15min steps
-                                self.day[h][i].dt -= timedelta(minutes=(self.day[h][i].dt.minute % 15))
-                            elif t_latest < d_i + self.day[h][i].duration:
-                                #print('too late: ' + str(d_i.isoformat()), file=sys.stderr)
-                                # shift end time before twilight
-                                self.day[h][i].dt = t_latest - self.day[h][i].duration
-                                self.day[h][i].dt -= timedelta(minutes=(self.day[h][i].dt.minute % 15))
-                            else:
-                                # use defined time
-                                self.day[h][i].dt = d_i
-                        else:
-                            self.day[h][i].dt = d_i
-                            
-                        self.day[h][i].clock = None
-
-                    if type(self.day[h][i]) == Combination:
-                        i += 1
-                    elif type(self.day[h][i]) == Unit:
-                        if self.day[h][i].duration != None:
-                            d_i += self.day[h][i].duration
-
-                        # count number of combined units
-                        j = i+1
-                        while j < n and self.day[h][j].combined:
-                            j += 1
-
-                        if j > i+1:
-                            # combined units
-                            print('{} combined units'.format(j-i), file=sys.stderr)
-
-                            k = i+1
-                            while k < j:
-                                d_i += self.day[h][k].pause
-                                self.day[h][k].dt = d_i
-                                d_i += self.day[h][k].duration
-                                k += 1
-                            i = k
-                            # TODO: fix start time of all combined units according to t_latest
-                        else:
-                            # no combined units
-                            i += 1
-                    else:
-                        i += 1
-
-                h += 1
-            """
-            
-            self.dateBegin = date(intYear, intMonth, intDay)
             self.dateEnd = self.dateBegin + timedelta(days=(len(self) - 1))
 
         return self
@@ -454,7 +389,7 @@ class Cycle(Title,Description):
         if self.color != None:
             strResult += ' style="background-color: {}"'.format(self.color)
 
-        strResult += '><div class="header">' + self.getTitleXML() + ' (' + str(len(self)) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '</div>\n'
+        strResult += '><div class="header">' + self.getTitleXML() + ' (' + str(len(self)) + ', ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '</div>\n'
 
         strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
 
@@ -473,7 +408,7 @@ class Cycle(Title,Description):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleStr() + ' (' + str(len(self)) + ', ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
+        strResult = '\n* ' + self.getTitleStr() + ' (' + str(len(self)) + ', ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '\n'
         for v in self.day:
             for u in v:
                 if type(u) == Unit:
@@ -493,7 +428,7 @@ class Cycle(Title,Description):
         if self.color != None:
             strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self))-2,x+config.diagram_width-4)
 
-        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleXML(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ', (self.getTitleXML() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report()))
+        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleXML(), '(' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ') ', (self.getTitleXML() + ' (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report()))
 
         if len(self) < 1:
             pass
@@ -544,7 +479,7 @@ class Cycle(Title,Description):
             color = self.color
             
         strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, len(self) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ') ' + self.__listDescriptionToString__())
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ') ' + self.__listDescriptionToString__())
         strResult += '</rect>'
 
         # TODO: make config.diagram_height configurable
@@ -567,7 +502,7 @@ class Cycle(Title,Description):
             color = 'red'
             
         strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, config.diagram_height - h - 10, h, l * 2 - 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
         strResult += '</rect>'
 
         #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i,y,self.getTitleXML())
@@ -589,7 +524,7 @@ class Cycle(Title,Description):
         else:
             strResult += ' FOLDED="{}"'.format('true')
 
-        strResult += ' TEXT="' + self.getTitleXML() + '&#xa;(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+        strResult += ' TEXT="' + self.getTitleXML() + '&#xa;(' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
         strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
 
         strResult += self.__listDescriptionToFreemind__()

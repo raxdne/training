@@ -39,22 +39,31 @@ from training.unit import Unit
 from training.pause import Pause
 from training.combination import Combination
 
+from suntime import Sun
+
 print('Module Test: ' + __file__ + '\n')
 
-t = Combination([Unit('08:00;3.5;RB;25:00'),
+# location Berlin/Germany
+config.sun = Sun(52.5,13.5)
+config.twilight = 1800
+
+t = Combination([Unit('18:00;3.5;RB;25:00'),
                  Pause('20min'),
                  Unit('13:00;3.5;RB;25:00'),
                  Note('AAAA'),
                  Unit(';3.5;RB;25:00')])
-t.appendDescription('Running Blocks')
+#t.appendDescription('Running Blocks')
+#print(t.getDuration())
 
-t.setDate(date(2023,3,1))
+t.setDate(datetime(2023, 1, 7).astimezone(None))
+#t.setDate(date(2023,3,1))
 print(t)
 
-t1 = t.dup()
-t1.setDate(date(2023,4,1))
-t1.scale(2.0)
-print(t1)
+#t1 = t.dup()
+#t1.setDate(date(2023,4,1))
+#t1.setDate(datetime(2025, 1, 7, 22, 0).astimezone(None),datetime(2025, 1, 7, 8, 11).astimezone(None),datetime(2025, 1, 7, 16, 47).astimezone(None))
+#t1.scale(2.0)
+#print(t1)
 #print(t1.toHtml())
 #print(t1.toXML())
 

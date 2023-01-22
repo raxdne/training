@@ -68,7 +68,7 @@ class Period(Title,Description):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleStr() + ' (' + str(len(self)) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n\n'
+        strResult = '\n* ' + self.getTitleStr() + ' (' + str(len(self)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '\n\n'
 
         strResult += self.__listDescriptionToString__()
 
@@ -146,12 +146,14 @@ class Period(Title,Description):
         return intResult
 
 
-    def append(self,objChild):
+    def append(self,objArg):
 
         """  """
 
-        c = objChild.dup()
-        self.child.append(c)
+        if objArg == None or (type(objArg) != Cycle and type(objArg) != Period):
+            print('error: ' + str(objArg), file=sys.stderr)
+        else:
+            self.child.append(objArg.dup())
 
         return self
 
@@ -349,7 +351,7 @@ class Period(Title,Description):
                 else:
                     print('error: ' + l, file=sys.stderr)
 
-        print('Report {} .. {}'.format(d0.isoformat(),d1.isoformat()), file=sys.stderr)
+        print('Report {} .. {}'.format(d0.strftime("%Y-%m-%d"),d1.strftime("%Y-%m-%d")), file=sys.stderr)
 
         delta = d1 - d0
 
@@ -397,7 +399,7 @@ class Period(Title,Description):
 
         strResult += '><div class="header">' + self.getTitleXML()
         if self.dateBegin != None and self.dateEnd != None:
-            strResult += ' (' + str(len(self)) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')'
+            strResult += ' (' + str(len(self)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
         strResult += '</div>\n'
 
         strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
@@ -445,7 +447,7 @@ class Period(Title,Description):
 
         strResult = '\n* ' + self.getTitleStr()
         if self.dateBegin != None and self.dateEnd != None:
-            strResult += ' (' + str(len(self)) + ' ' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')'
+            strResult += ' (' + str(len(self)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
         strResult += '\n'
 
         for c in self.child:
@@ -468,7 +470,7 @@ class Period(Title,Description):
 
         strResult += ' TEXT="' + self.getTitleXML()
         if self.dateBegin != None and self.dateEnd != None:
-            strResult += '&#xa; (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')&#xa;' + self.report().replace('\n','&#xa;')
+            strResult += '&#xa; (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')&#xa;' + self.report().replace('\n','&#xa;')
         strResult += '">\n'
 
         strResult += '<font BOLD="true" NAME="Monospaced" SIZE="12"/>'
@@ -504,7 +506,7 @@ class Period(Title,Description):
             strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self))-2,x+config.diagram_width-4)
 
         if len(self.child) < 1:
-            strResult += '<text x="{}" y="{}" style="vertical-align:top"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleXML(), '(' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')')
+            strResult += '<text x="{}" y="{}" style="vertical-align:top"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleXML(), '(' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')')
             strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+config.diagram_width,y)
             for d in range(0,len(self)):
                 strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+config.diagram_bar_height)
@@ -563,7 +565,7 @@ class Period(Title,Description):
             c = self.color
 
         strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')\n\n' + self.__listDescriptionToSVG__() + '\n\n' + self.report())
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')\n\n' + self.__listDescriptionToSVG__() + '\n\n' + self.report())
         strResult += '</rect>'
         strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 10,self.getTitleXML())
 
@@ -618,11 +620,11 @@ class Period(Title,Description):
                 color = 'red'
                 
             strResult += '<line stroke-dasharray="8" stroke="{}" stroke-width="1" opacity="0.25" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(color,w, 0, w, diagram_height)
-            strResult += '<title>{}</title>\n'.format(d_i.isoformat())
+            strResult += '<title>{}</title>\n'.format(d_i.strftime("%Y-%m-%d"))
             strResult += '</line>'
             strResult += '<g transform="translate({},{})">'.format(w+8, diagram_height - 105)
             strResult += '<g transform="rotate(-45)">'
-            strResult += '<text x="{}" y="{}">{}</text>\n'.format(0, 0, d_i.isoformat())
+            strResult += '<text x="{}" y="{}">{}</text>\n'.format(0, 0, d_i.strftime("%Y-%m-%d"))
             strResult += '</g>'
             strResult += '</g>'
 

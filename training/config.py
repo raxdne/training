@@ -66,19 +66,3 @@ def getSettingsStr():
     return strResult
 
 
-if __name__ == "__main__":
-    
-    print('Module Test:\n')
-    
-    #print(config.getSettingsStr())
-    print(config.diagram_scale_dist)
-    config.diagram_scale_dist = 12
-    print(config.diagram_scale_dist)
-    config.max_length_type = 3
-    print(config.max_length_type)
-else:
-    #config = Config()
-
-    #print(config.getSettingsStr())
-
-    pass

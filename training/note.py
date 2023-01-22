@@ -45,7 +45,7 @@ class Note(Description):
         super().__init__()
         
         self.dt = None
-        self.clock = None
+        self.tPlan = None
 
         if strArg != None and len(strArg) > 0:
             self.parse(strArg)
@@ -58,7 +58,7 @@ class Note(Description):
 
         strResult = ''
         if self.dt != None:
-            strResult += self.dt.isoformat()
+            strResult += self.dt.strftime("%Y-%m-%d")
             
         strResult += super().__str__()
 
@@ -74,30 +74,33 @@ class Note(Description):
         return self
 
 
-    def setClock(self,timeArg):
+    def setClock(self,timeArg=None):
 
         """  """
 
-        if timeArg == None:
-            pass
-        else:
-            self.clock = timeArg
+        self.tPlan = timeArg
 
         return True
 
 
-    def setDate(self,dateArg):
+    def setDate(self,dtArg=None,dt_0=None,dt_1=None):
 
         """  """
 
-        if dateArg == None:
-            pass
-        elif self.clock == None:
-            self.dt = datetime.combine(dateArg,time(0)).astimezone(None)
+        if dtArg == None:
+            self.dt = None
+        elif type(dtArg) == date:
+            if self.tPlan == None:
+                return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
+            else:
+                return self.setDate(datetime.combine(dtArg,self.tPlan).astimezone(None),dt_0,dt_1)
+        elif type(dtArg) == datetime:
+            self.dt = dtArg
+            return self.dt
         else:
-            self.dt = datetime.combine(dateArg,self.clock).astimezone(None)
+            print('error: ' + str(dtArg), file=sys.stderr)
 
-        return True
+        return None
 
 
     def setDateStr(self,strArg):
@@ -137,11 +140,11 @@ class Note(Description):
                             print('error: ' + str(e), file=sys.stderr)
                             return False
                     else:
-                        # clock only
+                        # plan time only
                         m = re.match(r"([0-2][0-9]:[0-5][0-9])",strArg)
                         if m != None:
                             #print("time: ",m.group(1), file=sys.stderr)
-                            self.clock = time.fromisoformat("{}:00".format(m.group(1)))
+                            self.tPlan = time.fromisoformat("{}:00".format(m.group(1)))
                         else:
                             print('ignoring: ',strArg, file=sys.stderr)
 
@@ -228,7 +231,7 @@ class Note(Description):
         strResult = '<node'
 
         if self.dt != None:
-            strResult += ' TEXT="' + self.dt.isoformat() + '"'
+            strResult += ' TEXT="' + self.dt.strftime("%Y-%m-%d") + '"'
             
         strResult += '>'
 
@@ -247,8 +250,8 @@ class Note(Description):
             event = Event()
 
             event.add('summary', self.__listDescriptionToString__())
-            event.add('dtstart', self.dt)
-            event.add('dtend', self.dt + timedelta(days=1))
+            event.add('dtstart', self.dt.date())
+            event.add('dtend', self.dt.date() + timedelta(days=1))
         
             event.add('dtstamp', datetime.now().astimezone(None))
             cal.add_component(event)

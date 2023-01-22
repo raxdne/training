@@ -65,6 +65,22 @@ class Pause(Note):
             return ''
 
 
+    def setDate(self,dtArg=None,dt_0=None,dt_1=None):
+
+        """  """
+
+        if dtArg == None:
+            self.dt = None
+        elif type(dtArg) == date or dtArg.time() == time(0):
+            print(__name__ + ': requires a complete datetime ' + str(self), file=sys.stderr)
+        else:
+            # fully defined dtArg
+            self.dt = dtArg
+            return self.dt + self.duration
+
+        return None
+
+
     def setDuration(self,intArg=None):
 
         """  """

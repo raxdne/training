@@ -58,20 +58,69 @@ class Unit(Note):
         if self.type == None and self.dist == None and self.dt == None:
             strResult = '-'
         elif self.type == None:
-            strResult = '{} {}'.format(self.dt.isoformat(), str(self.getDuration()))
+            strResult = '{} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), str(self.getDuration()))
         elif self.dist == None and self.dt == None:
             strResult = '{} {---}'
         elif self.dist == None:
-            strResult = '{} {} {}'.format(self.dt.isoformat(), self.type, str(self.getDuration()))
+            strResult = '{} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.type, str(self.getDuration()))
         elif self.dt == None:
-            if self.clock == None:
+            if self.tPlan == None:
                 strResult = '{} {:5.1f} {} {}'.format('', self.dist, self.type, str(self.getDuration()))
             else:
-                strResult = '{} {:5.1f} {} {}'.format(self.clock.isoformat(), self.dist, self.type, str(self.getDuration()))
+                strResult = '{} {:5.1f} {} {}'.format(self.tPlan.strftime("%Y-%m-%d %H:%M:%S"), self.dist, self.type, str(self.getDuration()))
         else:
-            strResult = '{} {:5.1f} {} {}'.format(self.dt.isoformat(), self.dist, self.type, str(self.getDuration()))
+            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.dist, self.type, str(self.getDuration()))
 
         return strResult
+
+
+    def setDate(self,dtArg=None,dt_0=None,dt_1=None):
+
+        """ fix 'dt' according to sunrise/sunset """
+
+        #print(__name__ + ': ' + str(self), file=sys.stderr)
+
+        if dtArg == None:
+            self.dt = None
+            return self.dt
+        elif type(dtArg) == date:
+            if self.tPlan == None:
+                return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
+            else:
+                return self.setDate(datetime.combine(dtArg,self.tPlan).astimezone(None),dt_0,dt_1)
+        elif type(dtArg) == datetime:
+
+            #if dtArg.time().hour < 1 and dtArg.time().minute < 1 and dtArg.time().second < 1 and self.tPlan != None:
+            if dtArg.time() == time(0) and self.tPlan != None:
+                # no time defined in dtArg but a default value
+                self.dt = datetime.combine(date(dtArg.year,dtArg.month,dtArg.day),self.tPlan).astimezone(None)
+            else:
+                # fully defined dtArg
+                self.dt = dtArg
+
+            if dtArg.time() == time(0):
+                # nothing to correct
+                print('no time: ' + str(dtArg), file=sys.stderr)
+                pass
+            elif dt_0 != None and dt_0 > self.dt:
+                print('too early: ' + str(self.dt.isoformat()), file=sys.stderr)
+                # shift start time after twilight
+                self.dt = dt_0
+                # adjust to 15min steps
+                self.dt -= timedelta(minutes=(self.dt.minute % 15))
+            elif dt_1 != None and dt_1 < self.dt + self.duration:
+                print('too late: ' + str(self.dt.isoformat()), file=sys.stderr)
+                # shift end time before twilight
+                self.dt = dt_1 - self.duration
+                self.dt -= timedelta(minutes=(self.dt.minute % 15))
+
+            #print('setDate(' + dtArg.isoformat() + ' '  + dt_0.isoformat() + ' ' + dt_1.isoformat() + ') = ' + self.dt.isoformat() , file=sys.stderr)
+
+            #print(__name__ + ': ' + str(self), file=sys.stderr)
+            return self.dt + self.duration
+        else:
+            print('error: ' + str(dtArg), file=sys.stderr)
+            return None
 
 
     def setTypeStr(self,strArg):
@@ -246,11 +295,11 @@ class Unit(Note):
             strResult = ''
         else:
             if self.type == None:
-                strResult = '{date};;;'.format(date=self.dt.isoformat())
+                strResult = '{date};;;'.format(date=self.dt.strftime("%Y-%m-%d"))
             elif self.dist == None:
-                strResult = '{date};;{type};{duration}'.format(date=self.dt.isoformat(), type=self.type, duration=str(self.getDuration()))
+                strResult = '{date};;{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), type=self.type, duration=str(self.getDuration()))
             else:
-                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.isoformat(), dist=self.dist, type=self.type, duration=str(self.getDuration()))
+                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=str(self.getDuration()))
 
             strResult += ';' + self.__listDescriptionToString__()
 
@@ -344,8 +393,10 @@ class Unit(Note):
                 event.add('description', self.__listDescriptionToString__())
 
         if self.dt == None:
+            print('error: ' + str(self), file=sys.stderr)
             pass
-        elif self.dt.hour == 0 or self.duration == None:
+        elif self.dt.time() == time(0) or self.duration == None:
+            # no time defined
             event.add('dtstart', self.dt.date())
             event.add('dtend', self.dt.date() + timedelta(days=1))
         else:

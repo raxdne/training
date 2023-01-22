@@ -22,6 +22,13 @@ from training.unit import Unit
 from training.pause import Pause
 from training.combination import Combination
 from training.cycle import Cycle
+import training.config as config
+
+from suntime import Sun
+
+# location Berlin/Germany
+config.sun = Sun(52.5,13.5)
+config.twilight = 1800
 
 print('Module Test: ' + __file__ + '\n')
 
@@ -34,24 +41,24 @@ c.appendDescription('Running Blocks')
 c1 = c.dup()
 #c1.scale(2.0,r"^R")
 
-t.insert(1,Unit('18:00;3.5;RB;25:00'))
-t.insert(3,[Unit('08:00;3.5;RB;25:00'),
-            Unit('18:00;3.5;RB;25:00')])
-t.insert([5,8],c1)
-t.insert(6,Unit('08:00;30;BB;02:00:00'))
-t.insert(8,Unit(';FB;25:00'))
-t.insert(10,Unit(';FB;25:00'))
-t.insert(13,Unit('08:00;30;BB;02:00:00'))
+#t.insert(1,Unit('18:00;3.5;RB;25:00'))
+#t.insert(3,[Unit('08:00;3.5;RB;25:00'),
+#            Unit('18:00;3.5;RB;25:00')])
+t.insert([5,8],c)
+#t.insert(6,Unit('06:00;30;BB;02:00:00'))
+#t.insert(8,Unit(';FB;25:00'))
+#t.insert(10,Unit(';FB;25:00'))
+#t.insert(13,Unit('08:00;30;BB;02:00:00'))
 
-t.schedule(2023,3,1)
+t.schedule(2023,1,1)
 
 #t.insertByDate(Unit('2023-03-03T8:00:00+2;100;RG;5h'), True)
 #t.resetDistances()
 
 print(t)
 
-t.scale(2.0)
-print(t)
+#t.scale(2.0)
+#print(t)
 
 #print(t.toHtml())
 #print(t.toSVG(0,0))

@@ -53,16 +53,18 @@ class Combination(Title,Description):
         
         self.child = []
 
-        for c in listArg:
-            self.child.append(c.dup())
+        for objArg in listArg:
+            if objArg == None or (type(objArg) != Unit and type(objArg) != Pause and type(objArg) != Note):
+                print('error: ' + str(objArg), file=sys.stderr)
+            else:
+                self.child.append(objArg.dup())
 
 
     def __str__(self):
 
         """  """
 
-        strResult = 'Combination: '
-        strResult += super().__listDescriptionToString__() + '\n'
+        strResult = 'Combination: {} {}\n'.format(self.getDuration(), super().__listDescriptionToString__())
 
         for u in self.child:
             strResult += '\t' + str(u) + '\n'
@@ -80,24 +82,58 @@ class Combination(Title,Description):
         return self
 
 
-    def setDate(self,dateArg):
+    def setDate(self,dtArg=None,dt_0=None,dt_1=None):
 
-        """  """
+        """ fix 'dt' according to sunrise/sunset """
 
-        if dateArg != None:
-            
-            dt = dateArg
+        #print(__name__ + ': ' + str(self), file=sys.stderr)
+
+        if dtArg == None:
+            return None
+        elif type(dtArg) == date:
+            return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
+        else:
+            i = 0
+            dt = dtArg
             for u in self.child:
+                if type(u) == Note:
+                    u.setDate(dt)
+                elif type(u) == Unit:
 
-                if u.clock != None:
-                    dt = datetime.combine(date(dateArg.year,dateArg.month,dateArg.day),u.clock)
+                    if i == 0:
+                        # initial unit
+                        #if dtArg.time().hour < 1 and dtArg.time().minute < 1 and dtArg.time().second < 1:
+                        if dtArg.time() == time(0):
+                            # no usable time in dtArg
+                            if u.tPlan == None:
+                                # no default time planned
+                                #pass
+                                dt = dt_0
+                            else:
+                                dt = datetime.combine(dtArg.date(),u.tPlan).astimezone(None)
+                        else:
+                            # dtArg contains a usable time already
+                            pass
+                                
+                        if dt_0 != None and dt < dt_0:
+                            dt = dt_0
+                            dt += timedelta(minutes=(dt.minute % 15))
+                        elif dt_1 != None and (dt + self.getDuration()) > dt_1:
+                            dt = dt_1 - self.getDuration()
+                            dt -= timedelta(minutes=(dt.minute % 15))
 
-                u.dt = dt
-
-                if type(u) == Unit or type(u) == Pause:
-                    dt += u.duration
-            
-        return True
+                        print(__name__ + ': set start to ' + str(dt), file=sys.stderr)
+                        
+                    dt = u.setDate(dt)
+                    i += 1
+                elif type(u) == Pause:
+                    if i == 0:
+                        print(__name__ + ': ignoring initial' + str(self), file=sys.stderr)
+                    else:
+                        dt = u.setDate(dt)
+                        i += 1
+                
+        return dt
 
 
     def resetDistances(self):
@@ -189,7 +225,7 @@ class Combination(Title,Description):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleStr() + ' (' + self.dateBegin.isoformat() + ' .. ' + self.dateEnd.isoformat() + ')' + '\n'
+        strResult = '\n* ' + self.getTitleStr() + ' (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '\n'
         for v in self.child:
             for u in v:
                 if type(u) == Unit:
@@ -227,7 +263,7 @@ class Combination(Title,Description):
         else:
             strResult += ' FOLDED="{}"'.format('true')
 
-        strResult += ' TEXT="' + self.child[0].dt.isoformat() + '">\n'
+        strResult += ' TEXT="' + self.child[0].dt.strftime("%Y-%m-%d") + '">\n'
 
         strResult += self.__listDescriptionToFreemind__()
 

@@ -36,8 +36,10 @@ t1 = t.dup()
 print(t1)
 
 t.parse('TEST, TTT')
-t.setClock(time(8,15,0))
-t.setDate(date(2025,1,1))
+t.setDate(datetime(2025, 1, 7, 22, 0).astimezone(None))
+#t.setClock(time(8,15,0))
+#t.setDate(date(2025,1,1))
+#t.setDate(True)
 print(t)
 
 #print(t.toXML())

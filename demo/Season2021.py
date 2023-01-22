@@ -42,7 +42,7 @@ def BasicsGeneral():
     c.insert([1,5],Combination([Unit('18:00;3.5;RB;25:00'),
                                 Pause(10,'Stretching'),
                                 Unit(';FB;25:00'),
-                                Pause(2*60,'Rest'),
+                                Pause(10,'Stretching'),
                                 Unit(';FB;25:00')]))
              
     c.insert(3,Unit(';FB;25:00'))
@@ -327,7 +327,7 @@ def Plan2021(strArg):
     #s.append(RegenerationGeneral())
     s.append(Running2021())
 
-    s.schedule(2021,1,4)
+    s.schedule(2023,1,4)
     
     #s.resetDistances()
     #s.parseFile('Training2021.csv')

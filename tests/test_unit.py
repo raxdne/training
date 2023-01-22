@@ -25,17 +25,25 @@ from training.unit import Unit
 
 print('Module Test: ' + __file__ + '\n')
 
-t = Unit('2020-03-03T17:00:00+1:00;10;RG;20min')
+#t = Unit('2020-03-03T17:00:00+1:00;10;RG;20min')
+t = Unit(';10;RG;20min')
 print(t)
 
+#t.setClock()
+#print(t)
 t.setDate(date(2025, 1, 7))
-t.setClock(time(0))
+#t.setDate(datetime(2025, 1, 7).astimezone(None))
+#t.setDate(datetime(2025, 1, 7, 22, 0).astimezone(None))
+#t.setDate(datetime(2025, 1, 7).astimezone(None),datetime(2025, 1, 7, 8, 0).astimezone(None),datetime(2025, 1, 7, 20, 0).astimezone(None))
+#t.setDate(datetime(2025, 1, 7, 2, 0).astimezone(None),datetime(2025, 1, 7, 8, 0).astimezone(None),datetime(2025, 1, 7, 20, 0).astimezone(None))
+#t.setDate(datetime(2025, 1, 7, 22, 0).astimezone(None),datetime(2025, 1, 7, 8, 0).astimezone(None),datetime(2025, 1, 7, 20, 0).astimezone(None))
+#t.setClock(time(0))
 #t.setColor('#ffaaaa')
 #print(t.toHtml())
 #print(t.toXML())
 
-t = Unit('08:00;10;RG;20min')
+#t = Unit('08:00;10;RG;20min')
 print(t)
 
-d = {}
-t.stat(d)
+#d = {}
+#t.stat(d)
