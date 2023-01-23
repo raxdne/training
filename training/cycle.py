@@ -177,29 +177,29 @@ class Cycle(Title,Description):
         return self
 
 
-    def insert(self,intIndex,objArg,flagReplace=False):
+    def insert(self,objIndex,objArg,flagReplace=False):
 
         """  """
 
         objResult = None
 
-        if objArg == None or (type(objArg) != Unit and type(objArg) != Combination and type(objArg) != Note):
+        if objArg == None:
             print('error: ' + str(objArg), file=sys.stderr)
-        elif type(intIndex) == list:
-            for i in intIndex:
+        elif type(objIndex) == list and len(objIndex) > 0:
+            for i in objIndex:
                 self.insert(i,objArg,flagReplace)
             return []
-        elif type(objArg) == list:
+        elif type(objArg) == list and len(objArg) > 0:
             for u in objArg:
-                self.insert(intIndex,u,flagReplace)
+                self.insert(objIndex,u,flagReplace)
             return []
-        elif intIndex > -1 and intIndex < len(self):
+        elif (type(objArg) == Unit or type(objArg) == Combination or type(objArg) == Note) and objIndex > -1 and objIndex < len(self):
             objResult = objArg.dup()
             if flagReplace:
                 # override exisiting
-                self.day[intIndex] = [objResult]
+                self.day[objIndex] = [objResult]
             else:
-                self.day[intIndex].append(objResult)
+                self.day[objIndex].append(objResult)
 
         return objResult
 
@@ -210,9 +210,9 @@ class Cycle(Title,Description):
 
         objResult = None
 
-        if objArg == None or (type(objArg) != Unit and type(objArg) != Combination and type(objArg) != Note):
+        if objArg == None or objArg.dt == None:
             print('error: ' + str(objArg), file=sys.stderr)
-        elif objArg.dt != None:
+        elif type(objArg) == Unit or type(objArg) == Combination or type(objArg) == Note:
             delta = objArg.dt.date() - self.dateBegin
             if delta.days > -1 and objArg.dt.date() <= self.dateEnd:
                 objResult = objArg.dup()

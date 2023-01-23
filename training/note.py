@@ -95,8 +95,11 @@ class Note(Description):
             else:
                 return self.setDate(datetime.combine(dtArg,self.tPlan).astimezone(None),dt_0,dt_1)
         elif type(dtArg) == datetime:
-            self.dt = dtArg
-            return self.dt
+            if self.tPlan != None and dtArg.time() == time(0):
+                return self.setDate(datetime.combine(dtArg.date(),self.tPlan).astimezone(None),dt_0,dt_1)
+            else:
+                self.dt = dtArg
+                return self.dt
         else:
             print('error: ' + str(dtArg), file=sys.stderr)
 
@@ -111,6 +114,12 @@ class Note(Description):
             pass
         elif strArg == '+':
             # it's a combined unit (starts after its predecessor unit, same date)
+            pass
+        elif strArg == 'sr':
+            # sunrise
+            pass
+        elif strArg == 'ss':
+            # sunset
             pass
         else:
             # canonical ISO Date+Time
@@ -173,8 +182,8 @@ class Note(Description):
                 self.appendDescription(objArg)
                 return True
             elif len(entry) == 2:
-                self.setDateStr(objArg[0])
-                self.appendDescription(objArg[1:])
+                self.setDateStr(entry[0])
+                self.appendDescription(entry[1:])
                 return True
             else:
                 return self.parse(entry)

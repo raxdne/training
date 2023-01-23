@@ -76,7 +76,7 @@ class Unit(Note):
 
     def setDate(self,dtArg=None,dt_0=None,dt_1=None):
 
-        """ fix 'dt' according to sunrise/sunset """
+        """ fix 'dt' according to sunrise dt_0 or sunset dt_1 """
 
         #print(__name__ + ': ' + str(self), file=sys.stderr)
 
@@ -90,17 +90,16 @@ class Unit(Note):
                 return self.setDate(datetime.combine(dtArg,self.tPlan).astimezone(None),dt_0,dt_1)
         elif type(dtArg) == datetime:
 
-            #if dtArg.time().hour < 1 and dtArg.time().minute < 1 and dtArg.time().second < 1 and self.tPlan != None:
             if dtArg.time() == time(0) and self.tPlan != None:
                 # no time defined in dtArg but a default value
-                self.dt = datetime.combine(date(dtArg.year,dtArg.month,dtArg.day),self.tPlan).astimezone(None)
+                self.dt = datetime.combine(dtArg.date(),self.tPlan).astimezone(None)
             else:
                 # fully defined dtArg
                 self.dt = dtArg
 
-            if dtArg.time() == time(0):
+            if self.dt.time() == time(0):
                 # nothing to correct
-                print('no time: ' + str(dtArg), file=sys.stderr)
+                #print('no time: ' + str(dtArg), file=sys.stderr)
                 pass
             elif dt_0 != None and dt_0 > self.dt:
                 print('too early: ' + str(self.dt.isoformat()), file=sys.stderr)
@@ -218,8 +217,6 @@ class Unit(Note):
     def parse(self,objArg):
 
         """  """
-
-        #self.__init__()
         
         if objArg == None or len(objArg) < 1:
             return False
