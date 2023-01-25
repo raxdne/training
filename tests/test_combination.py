@@ -47,9 +47,9 @@ print('Module Test: ' + __file__ + '\n')
 config.sun = Sun(52.5,13.5)
 config.twilight = 1800
 
-t = Combination([Unit('18:00;3.5;RB;25:00'),
+t = Combination([Unit('sr;3.5;RB;25:00'),
                  Pause('20min'),
-                 Unit('13:00;3.5;RB;25:00'),
+                 Unit(';3.5;RB;25:00'),
                  Note('AAAA'),
                  Unit(';3.5;RB;25:00')])
 #t.appendDescription('Running Blocks')

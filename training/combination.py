@@ -96,32 +96,30 @@ class Combination(Title,Description):
             i = 0
             dt = dtArg
             for u in self.child:
+                
                 if type(u) == Note:
                     u.setDate(dt)
                 elif type(u) == Unit:
 
                     if i == 0:
                         # initial unit
-                        #if dtArg.time().hour < 1 and dtArg.time().minute < 1 and dtArg.time().second < 1:
-                        if dtArg.time() == time(0):
-                            # no usable time in dtArg
-                            if u.tPlan == None:
-                                # no default time planned
-                                #pass
-                                dt = dt_0
-                            else:
-                                dt = datetime.combine(dtArg.date(),u.tPlan).astimezone(None)
-                        else:
-                            # dtArg contains a usable time already
+                        if u.tPlan == None:
+                            #dt = dt_0
                             pass
-                                
-                        if dt_0 != None and dt < dt_0:
+                        elif type(u.tPlan) == str and u.tPlan == 'sunrise' and dt_0 != None:
+                            # shift start time after twilight
                             dt = dt_0
                             dt += timedelta(minutes=(dt.minute % 15))
-                        elif dt_1 != None and (dt + self.getDuration()) > dt_1:
+                        elif type(u.tPlan) == str and u.tPlan == 'sunset' and dt_1 != None:
+                            # shift end time before twilight
                             dt = dt_1 - self.getDuration()
                             dt -= timedelta(minutes=(dt.minute % 15))
-
+                        elif type(u.tPlan) == time:
+                            dt = datetime.combine(dtArg.date(),u.tPlan).astimezone(None)
+                        else:
+                            #dt = datetime.combine(dtArg.date(),u.tPlan).astimezone(None)
+                            dt = dtArg
+                                
                         print(__name__ + ': set start to ' + str(dt), file=sys.stderr)
                         
                     dt = u.setDate(dt)

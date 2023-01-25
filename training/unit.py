@@ -78,49 +78,34 @@ class Unit(Note):
 
         """ fix 'dt' according to sunrise dt_0 or sunset dt_1 """
 
-        #print(__name__ + ': ' + str(self), file=sys.stderr)
+        #print('setDate(' + dtArg.isoformat() + ' '  + dt_0.isoformat() + ' ' + dt_1.isoformat() + ') = ' + self.dt.isoformat() , file=sys.stderr)
 
         if dtArg == None:
+            
             self.dt = None
             return self.dt
-        elif type(dtArg) == date:
+        
+        else:
+
             if self.tPlan == None:
-                return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
-            else:
-                return self.setDate(datetime.combine(dtArg,self.tPlan).astimezone(None),dt_0,dt_1)
-        elif type(dtArg) == datetime:
-
-            if dtArg.time() == time(0) and self.tPlan != None:
-                # no time defined in dtArg but a default value
-                self.dt = datetime.combine(dtArg.date(),self.tPlan).astimezone(None)
-            else:
-                # fully defined dtArg
-                self.dt = dtArg
-
-            if self.dt.time() == time(0):
-                # nothing to correct
-                #print('no time: ' + str(dtArg), file=sys.stderr)
-                pass
-            elif dt_0 != None and dt_0 > self.dt:
-                print('too early: ' + str(self.dt.isoformat()), file=sys.stderr)
+                self.dt = datetime.combine(dtArg.date(),time(0)).astimezone(None)
+            elif type(self.tPlan) == str and self.tPlan == 'sunrise' and dt_0 != None:
                 # shift start time after twilight
                 self.dt = dt_0
                 # adjust to 15min steps
                 self.dt -= timedelta(minutes=(self.dt.minute % 15))
-            elif dt_1 != None and dt_1 < self.dt + self.duration:
-                print('too late: ' + str(self.dt.isoformat()), file=sys.stderr)
+            elif type(self.tPlan) == str and self.tPlan == 'sunset' and dt_1 != None:
                 # shift end time before twilight
                 self.dt = dt_1 - self.duration
                 self.dt -= timedelta(minutes=(self.dt.minute % 15))
-
-            #print('setDate(' + dtArg.isoformat() + ' '  + dt_0.isoformat() + ' ' + dt_1.isoformat() + ') = ' + self.dt.isoformat() , file=sys.stderr)
-
-            #print(__name__ + ': ' + str(self), file=sys.stderr)
+            elif type(self.tPlan) == time:
+                self.dt = datetime.combine(dtArg.date(),self.tPlan).astimezone(None)
+            else:
+                #self.dt = datetime.combine(dtArg.date(),time(0)).astimezone(None)
+                self.dt = dtArg
+                
             return self.dt + self.duration
-        else:
-            print('error: ' + str(dtArg), file=sys.stderr)
-            return None
-
+        
 
     def setTypeStr(self,strArg):
 

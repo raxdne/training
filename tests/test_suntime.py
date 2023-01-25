@@ -40,8 +40,8 @@ t = Period('Suntime')
 c = Cycle('Sun',365)
 
 for d in range(0,len(c)):
-    c.insert(d,[Unit('01:00;5;Running;30min;Sunrise'),
-                Unit('23:00;5;Running;30min;Sunset')])
+    c.insert(d,[Unit('sr;5;Running;30min;Sunrise'),
+                Unit('ss;5;Running;30min;Sunset')])
 
 t.append(c)
 t.schedule(2023,1,1)

@@ -116,11 +116,9 @@ class Note(Description):
             # it's a combined unit (starts after its predecessor unit, same date)
             pass
         elif strArg == 'sr':
-            # sunrise
-            pass
+            self.tPlan = 'sunrise'
         elif strArg == 'ss':
-            # sunset
-            pass
+            self.tPlan = 'sunset'
         else:
             # canonical ISO Date+Time
             m = re.match(r"\s*([0-9]{4}-*[0-9]{2}-*[0-9]{2})[\sT]+([0-2][0-9]:[0-5][0-9])\s*",strArg)
