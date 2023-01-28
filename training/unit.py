@@ -58,18 +58,19 @@ class Unit(Note):
         if self.type == None and self.dist == None and self.dt == None:
             strResult = '-'
         elif self.type == None:
-            strResult = '{} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), str(self.getDuration()))
-        elif self.dist == None and self.dt == None:
-            strResult = '{} {---}'
-        elif self.dist == None:
-            strResult = '{} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.type, str(self.getDuration()))
-        elif self.dt == None:
-            if self.tPlan == None:
-                strResult = '{} {:5.1f} {} {}'.format('', self.dist, self.type, str(self.getDuration()))
+            if self.dt == None or self.dt.time() == time(0):
+                strResult = '{} {}'.format(self.dt.strftime("A %Y-%m-%d"), str(self.getDuration()))
             else:
-                strResult = '{} {:5.1f} {} {}'.format(self.tPlan.strftime("%Y-%m-%d %H:%M:%S"), self.dist, self.type, str(self.getDuration()))
+                strResult = '{} {}'.format(self.dt.strftime("Y %Y-%m-%d %H:%M:%S"), str(self.getDuration()))
+        elif self.dist == None:
+            if self.dt == None or self.dt.time() == time(0):
+                strResult = '{} {} {}'.format(self.dt.strftime("D %Y-%m-%d"), self.type, str(self.getDuration()))
+            else:
+                strResult = '{} {} {}'.format(self.dt.strftime("Z %Y-%m-%d %H:%M:%S"), self.type, str(self.getDuration()))
+        elif self.dt == None or self.dt.time() == time(0):
+            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("B %Y-%m-%d"), self.dist, self.type, str(self.getDuration()))
         else:
-            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.dist, self.type, str(self.getDuration()))
+            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("C %Y-%m-%d %H:%M:%S"), self.dist, self.type, str(self.getDuration()))
 
         return strResult
 
@@ -85,6 +86,10 @@ class Unit(Note):
             self.dt = None
             return self.dt
         
+        elif type(dtArg) == date:
+            
+            return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
+
         else:
 
             if self.tPlan == None:
@@ -301,7 +306,7 @@ class Unit(Note):
             strResult += ' style="background-color: {}"'.format(self.color)
         strResult += '>'
 
-        strResult += str(self)
+        strResult += str(self) + ' ' + self.__listDescriptionToString__()
         strResult += '</p>'
         
         return strResult
@@ -339,7 +344,7 @@ class Unit(Note):
         return strResult
 
 
-    def toFreemind(self):
+    def toFreemindNode(self):
 
         """  """
 

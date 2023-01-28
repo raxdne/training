@@ -225,6 +225,24 @@ class Cycle(Title,Description):
         return objResult
 
 
+    def getCycleByDate(self,objDate=None):
+
+        """  """
+
+        if objDate == None:
+            return self.getCycleByDate(datetime.now())
+        elif type(objDate) == str:
+            return self.getCycleByDate(datetime.fromisoformat(objDate))
+        elif type(objDate) == date:
+            return self.getCycleByDate(datetime.combine(objDate,time(0)))
+        elif type(objDate) == datetime:
+            for v in self.day:
+                if self.dateBegin <= objDate.date() and objDate.date() <= self.dateEnd:
+                    return self
+
+        return None
+
+
     def insertDescriptionStr(self,intIndex,strArg):
 
         """  """
@@ -299,8 +317,8 @@ class Cycle(Title,Description):
                 print('error: ' + str(e), file=sys.stderr)
                 return self
 
-            if config.sun != None:
-                print('sunrise/sunset: ' + str(config.twilight), file=sys.stderr)
+            #if config.sun != None:
+            #    print('sunrise/sunset: ' + str(config.twilight), file=sys.stderr)
 
             dt_earliest = None
             dt_latest   = None
@@ -404,6 +422,31 @@ class Cycle(Title,Description):
         return strResult
 
 
+    def toHtmlFile(self):
+
+        """ returns html/body + content """
+
+        strResult = '<!doctype html public "-//IETF//DTD HTML 4.0//EN">'
+
+        strResult += "<html>"
+
+        strResult += "<head>"
+
+        strResult += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
+        
+        strResult += "<title></title>"
+
+        strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\npre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}</style>\n"
+
+        strResult += "</head>"
+
+        strResult += "<body>" + self.toHtml() + "</body>"
+
+        strResult += "</html>"
+
+        return strResult
+
+
     def toCSV(self):
 
         """  """
@@ -417,7 +460,7 @@ class Cycle(Title,Description):
         return strResult
 
 
-    def toSVG(self,x,y):
+    def toSVG(self, x = config.diagram_offset, y=20):
 
         """  """
 
@@ -456,6 +499,29 @@ class Cycle(Title,Description):
                 y += config.diagram_bar_height * 2
 
         strResult += '</g>'
+
+        return strResult
+
+
+    def toSVGDiagram(self):
+
+        """  """
+
+        diagram_height = len(self) * (config.diagram_bar_height * 2) + 100
+        strResult = '<svg baseProfile="full" height="{}" version="1.1" width="{}" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, config.diagram_width)
+
+        strResult += '<style type="text/css">svg { font-family: ' + config.font_family + '; font-size: ' + str(config.font_size) + 'pt; }</style>'
+
+        #strResult += '<g transform="rotate(90)">'
+        #'<text x="210" y="110">Period 2.2021</text>
+
+        for i in [3600/4,3600/2,3600,2*3600,3*3600,4*3600,5*3600,6*3600]:
+            w = i / 3600 * 25 * config.diagram_scale_dist
+            strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( config.diagram_offset + w, 20, config.diagram_offset + w, diagram_height)
+
+        strResult += self.toSVG()
+        #strResult += '</g>'
+        strResult += '</svg>\n'
 
         return strResult
 
@@ -511,7 +577,60 @@ class Cycle(Title,Description):
         return strResult
 
 
-    def toFreemind(self):
+    def toSVGGanttChart(self):
+
+        """ Gantt chart of this cycle """
+
+        d_0 = self.dateBegin
+        d_1 = self.dateEnd
+
+        diagram_height = 40 * (config.diagram_bar_height * 2) + 100
+        try:
+            diagram_width = ((d_1 - d_0).days) * 2 + 100
+        except ValueError:
+            return ''
+
+        strResult = '<svg baseProfile="full" height="{}" version="1.1" width="{}" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, diagram_width)
+
+        strResult += '<style type="text/css">svg { font-family: ' + config.font_family + '; font-size: ' + str(config.font_size) + 'pt; }</style>'
+
+        strResult += '<g transform="translate(10,10)">'
+
+        strResult += '<g>'
+
+        m = round((d_1 - d_0).total_seconds() / (30 * 24 * 60 * 60))
+        for i in range(0,m+1):
+            d_i = date(d_0.year+round(i//12),i%12+1,1)
+            w = ((d_i - d_0).days + 1) * 2
+            if i % 12:
+                color = 'black'
+            else:
+                color = 'red'
+                
+            strResult += '<line stroke-dasharray="8" stroke="{}" stroke-width="1" opacity="0.25" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(color,w, 0, w, diagram_height)
+            strResult += '<title>{}</title>\n'.format(d_i.strftime("%Y-%m-%d"))
+            strResult += '</line>'
+            strResult += '<g transform="translate({},{})">'.format(w+8, diagram_height - 105)
+            strResult += '<g transform="rotate(-45)">'
+            strResult += '<text x="{}" y="{}">{}</text>\n'.format(0, 0, d_i.strftime("%Y-%m-%d"))
+            strResult += '</g>'
+            strResult += '</g>'
+
+        w = ((date.today() - d_0).days + 1) * 2
+        strResult += '<line stroke="red" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 0, w, diagram_height)
+        strResult += '</g>'
+
+        for i in [0,30,45,60,90]:
+            strResult += '<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0, diagram_height - 10 - i, diagram_width, diagram_height - 10 - i)
+            
+        strResult += self.toSVGGantt(d_0)
+        strResult += '</g>'
+        strResult += '</svg>\n'
+
+        return strResult
+
+
+    def toFreemindNode(self):
 
         """  """
 
@@ -531,9 +650,20 @@ class Cycle(Title,Description):
 
         for v in self.day:
             for u in v:
-                strResult += u.toFreemind()
+                strResult += u.toFreemindNode()
             
         strResult += '</node>\n'
+
+        return strResult
+
+
+    def toFreeMind(self):
+
+        """  """
+
+        strResult = '<?xml version="1.0" encoding="UTF-8"?><map>\n'
+        strResult += self.toFreemindNode()
+        strResult += '</map>\n'
 
         return strResult
 
@@ -552,4 +682,16 @@ class Cycle(Title,Description):
         for v in self.day:
             for u in v:
                 u.to_ical(cal)
+
+
+    def toVCalendar(self):
+
+        """  """
+
+        cal = Calendar()
+        cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleStr()))
+        cal.add('version', '2.0')
+        self.to_ical(cal)
+        return cal.to_ical()
+
 

@@ -56,11 +56,14 @@ class Note(Description):
 
         """  """
 
-        strResult = ''
-        if self.dt != None:
-            strResult += self.dt.strftime("%Y-%m-%d")
+        if self.dt == None:
+            strResult = ''
+        elif self.dt.time() == time(0):
+            strResult = self.dt.strftime("%Y-%m-%d")
+        else:
+            strResult = self.dt.strftime("%Y-%m-%d %H:%M:%S")
             
-        strResult += super().__str__()
+        strResult += ' ' + super().__str__()
 
         return strResult
 
@@ -231,7 +234,7 @@ class Note(Description):
         return strResult
 
 
-    def toFreemind(self):
+    def toFreemindNode(self):
 
         """  """
 

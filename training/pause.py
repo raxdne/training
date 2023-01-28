@@ -155,7 +155,7 @@ class Pause(Note):
         return strResult
 
 
-    def toFreemind(self):
+    def toFreemindNode(self):
 
         """  """
 

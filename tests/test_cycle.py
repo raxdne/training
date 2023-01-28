@@ -55,13 +55,16 @@ t.schedule(2023,1,1)
 #t.insertByDate(Unit('2023-03-03T8:00:00+2;100;RG;5h'), True)
 #t.resetDistances()
 
-print(t)
+#print(t)
 
 #t.scale(2.0)
 #print(t)
 
 #print(t.toHtml())
-#print(t.toSVG(0,0))
+#print(t.toSVG())
+#print(t.toSVGDiagram())
+#print(t.toSVGGanttChart())
+print(t.toFreeMind())
 #print(t.toXML())
 
-print(t.report())
+#print(t.report())

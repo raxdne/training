@@ -120,7 +120,7 @@ class Combination(Title,Description):
                             #dt = datetime.combine(dtArg.date(),u.tPlan).astimezone(None)
                             dt = dtArg
                                 
-                        print(__name__ + ': set start to ' + str(dt), file=sys.stderr)
+                        #print(__name__ + ': set start to ' + str(dt), file=sys.stderr)
                         
                     dt = u.setDate(dt)
                     i += 1
@@ -248,7 +248,7 @@ class Combination(Title,Description):
         return strResult
 
 
-    def toFreemind(self):
+    def toFreemindNode(self):
 
         """  """
 
@@ -266,7 +266,7 @@ class Combination(Title,Description):
         strResult += self.__listDescriptionToFreemind__()
 
         for u in self.child:
-            strResult += u.toFreemind()
+            strResult += u.toFreemindNode()
                         
         strResult += '</node>\n'
 

@@ -185,6 +185,52 @@ class Period(Title,Description):
         return objResult
 
 
+    def getCycleByDate(self,objDate=None):
+
+        """  """
+
+        if objDate == None:
+            return self.getCycleByDate(datetime.now())
+        elif type(objDate) == str:
+            return self.getCycleByDate(datetime.fromisoformat(objDate))
+        elif type(objDate) == date:
+            return self.getCycleByDate(datetime.combine(objDate,time(0)))
+        elif type(objDate) == datetime:
+
+            for c in self.child:
+                if type(c) == Period:
+                    if c.dateBegin <= objDate.date() and objDate.date() <= c.dateEnd:
+                        return c.getCycleByDate(objDate)
+                elif type(c) == Cycle:
+                    r = c.getCycleByDate(objDate)
+                    if r != None:
+                        return r
+
+        return None
+
+
+    def getPeriodByDate(self,objDate=None):
+
+        """  """
+
+        if objDate == None:
+            return self.getPeriodByDate(datetime.now())
+        elif type(objDate) == str:
+            return self.getPeriodByDate(datetime.fromisoformat(objDate))
+        elif type(objDate) == date:
+            return self.getPeriodByDate(datetime.combine(objDate,time(0)))
+        elif type(objDate) == datetime:
+            
+            for c in self.child:
+                if type(c) == Period:
+                    if c.dateBegin <= objDate.date() and objDate.date() <= c.dateEnd:
+                        return c.getPeriodByDate(objDate)
+                elif type(c) == Cycle and c.getCycleByDate(objDate) != None:
+                    return self
+
+        return None
+
+
     def setPeriod(self, intArg):
 
         """  """
@@ -456,7 +502,7 @@ class Period(Title,Description):
         return strResult
 
 
-    def toFreemind(self):
+    def toFreemindNode(self):
 
         """  """
 
@@ -478,7 +524,7 @@ class Period(Title,Description):
         strResult += self.__listDescriptionToFreemind__()
 
         for c in self.child:
-            strResult += c.toFreemind()
+            strResult += c.toFreemindNode()
             
         strResult += '</node>\n'
 
@@ -489,8 +535,8 @@ class Period(Title,Description):
 
         """  """
 
-        strResult = '<?xml version="1.0" encoding="UTF-8"?><map>\n'
-        strResult += self.toFreemind()
+        strResult = '<?xml version="1.0" encoding="UTF-8"?>\n<map>\n'
+        strResult += self.toFreemindNode()
         strResult += '</map>\n'
 
         return strResult
@@ -753,6 +799,26 @@ class Period(Title,Description):
             self.setTitleStr(strArg)
 
         self.schedule(intYear,1,1)
+
+        return self
+
+
+    def CalendarLastWeeksPeriod(self,intWeek=26,strArg=None):
+
+        """ returns a last weeks as periods """
+
+        dt_0 = datetime.now()
+        dt_i = dt_0 + timedelta(days=(7 - dt_0.weekday())) - timedelta(weeks=intWeek)
+        dt_1 = dt_i
+        
+        for m in range(0,intWeek):
+            self.append(Cycle(dt_i.strftime("%Y-W%U")))
+            dt_i += timedelta(weeks=1)
+
+        if strArg != None and len(strArg) > 0:
+            self.setTitleStr(strArg)
+
+        self.schedule(dt_1.year,dt_1.month,dt_1.day)
 
         return self
 
