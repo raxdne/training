@@ -28,6 +28,7 @@ from datetime import timedelta, date, datetime, time, timezone
 from icalendar import Calendar, Event, Alarm
 
 from training import config as config
+from training.duration import Duration
 from training.note import Note
 
 #
@@ -46,7 +47,8 @@ class Unit(Note):
         
         self.dist = None
         self.type = None
-        self.duration = None
+
+        self.setDuration()
 
         self.parse(strArg)
 
@@ -59,18 +61,18 @@ class Unit(Note):
             strResult = '-'
         elif self.type == None:
             if self.dt == None or self.dt.time() == time(0):
-                strResult = '{} {}'.format(self.dt.strftime("A %Y-%m-%d"), str(self.getDuration()))
+                strResult = '{} {}'.format(self.dt.strftime("%Y-%m-%d"), str(self.getDuration()))
             else:
-                strResult = '{} {}'.format(self.dt.strftime("Y %Y-%m-%d %H:%M:%S"), str(self.getDuration()))
+                strResult = '{} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), str(self.getDuration()))
         elif self.dist == None:
             if self.dt == None or self.dt.time() == time(0):
-                strResult = '{} {} {}'.format(self.dt.strftime("D %Y-%m-%d"), self.type, str(self.getDuration()))
+                strResult = '{} {} {}'.format(self.dt.strftime("%Y-%m-%d"), self.type, str(self.getDuration()))
             else:
-                strResult = '{} {} {}'.format(self.dt.strftime("Z %Y-%m-%d %H:%M:%S"), self.type, str(self.getDuration()))
+                strResult = '{} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.type, str(self.getDuration()))
         elif self.dt == None or self.dt.time() == time(0):
-            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("B %Y-%m-%d"), self.dist, self.type, str(self.getDuration()))
+            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("%Y-%m-%d"), self.dist, self.type, str(self.getDuration()))
         else:
-            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("C %Y-%m-%d %H:%M:%S"), self.dist, self.type, str(self.getDuration()))
+            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.dist, self.type, str(self.getDuration()))
 
         return strResult
 
@@ -141,31 +143,14 @@ class Unit(Note):
         return True
 
 
-    def setDurationStr(self,strArg):
+    def setDuration(self,intArg=None):
 
         """  """
 
-        if strArg == None or strArg == '':
-            self.duration = None
+        if intArg == None:
+            self.duration = Duration(0)
         else:
-            entry = strArg.split(':')
-            if len(entry) == 1:
-                # nothing to split
-                entry = strArg.split('min')
-                if len(entry) == 2:
-                    self.duration = timedelta(minutes=float(entry[0]))
-                else:
-                    entry = strArg.split('h')
-                    if len(entry) == 2:
-                        self.duration = timedelta(hours=float(entry[0]))
-                    else:
-                        self.duration = None
-            elif len(entry) == 2:
-                self.duration = timedelta(minutes=int(entry[0]), seconds=int(entry[1]))
-            elif len(entry) == 3:
-                self.duration = timedelta(hours=int(entry[0]), minutes=int(entry[1]), seconds=int(entry[2]))
-            else:
-                self.duration = None
+            self.duration = Duration(intArg)
 
         return True
 
@@ -175,9 +160,9 @@ class Unit(Note):
         """  """
         
         if self.duration == None:
-            return timedelta(seconds=0)
-        else:
-            return self.duration
+            self.setDuration()
+
+        return self.duration
 
 
     def scale(self,floatScale,patternType=None):
@@ -194,12 +179,7 @@ class Unit(Note):
                     self.dist = round(self.dist * floatScale / 5.0) * 5.0
 
             if self.duration != None:
-                s = self.getDuration().total_seconds()
-                if s < 900.0:
-                    self.duration *= floatScale
-                else:
-                    # round duration to 5:00 min
-                    self.duration = timedelta(seconds=(round(s * floatScale / 300.0) * 300.0))
+                self.duration.scale(floatScale)
 
         return self
 
@@ -227,7 +207,7 @@ class Unit(Note):
                 entry.insert(0,'')
             return self.parse(entry)
         elif type(objArg) is list and len(objArg) > 3:
-            if self.setDistStr(objArg[1]) and self.setTypeStr(objArg[2]) and self.setDurationStr(objArg[3]):
+            if self.setDistStr(objArg[1]) and self.setTypeStr(objArg[2]) and self.setDuration(objArg[3]):
                 self.setDateStr(objArg[0])
                 self.appendDescription(objArg[4:])
                 return True

@@ -39,7 +39,7 @@ t = Duration('30min')
 print(repr(t))
 print(t)
 
-t = Duration('3h')
+t = Duration('3.5h')
 print(repr(t))
 print(t)
 

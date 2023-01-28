@@ -47,11 +47,11 @@ class Duration(timedelta):
                 else:
                     entry = strArg.split('h')
                     if len(entry) == 2:
-                        intMin = int(entry[0]) * 60
+                        intMin = int(float(entry[0]) * 60.0)
             elif len(entry) == 2:
                 intMin = int(entry[0]) + int(entry[1]) / 60.0
             elif len(entry) == 3:
-                intMin = int(entry[0]) * 60 + int(entry[1]) + int(entry[2]) / 60
+                intMin = int(float(entry[0]) * 60.0) + int(entry[1]) + int(entry[2]) / 60
             
         return super().__new__(cls,minutes=intMin)
 
@@ -77,4 +77,14 @@ class Duration(timedelta):
         return super().__new__(Duration,seconds=self.total_seconds())
 
 
+    def scale(self,floatScale):
+
+        """  """
+
+        s = self.total_seconds()
+        if s < 900.0:
+            self *= floatScale
+        else:
+            # round duration to 5:00 min
+            self = round(s * floatScale / 300.0) * 300.0
 

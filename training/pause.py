@@ -90,15 +90,17 @@ class Pause(Note):
         else:
             self.duration = Duration(intArg)
 
+        return True
+
 
     def getDuration(self):
 
         """  """
         
         if self.duration == None:
-            return timedelta(seconds=0)
-        else:
-            return self.duration
+            self.setDuration()
+
+        return self.duration
 
 
     def toCSV(self):
