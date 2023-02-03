@@ -43,3 +43,5 @@ t = Duration('3.5h')
 print(repr(t))
 print(t)
 
+print(t.scale(2))
+

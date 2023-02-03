@@ -83,8 +83,7 @@ class Duration(timedelta):
 
         s = self.total_seconds()
         if s < 900.0:
-            self *= floatScale
+            return super().__new__(Duration,seconds=s * floatScale)
         else:
             # round duration to 5:00 min
-            self = round(s * floatScale / 300.0) * 300.0
-
+            return super().__new__(Duration,seconds=(round(s * floatScale / 300.0) * 300.0))
