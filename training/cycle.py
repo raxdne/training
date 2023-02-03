@@ -78,7 +78,11 @@ class Cycle(Title,Description):
 
         """  """
 
-        strResult = '\n** ' + super().getTitleStr() + ' (' + str(len(self)) + ', ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '\n\n'
+        strResult = '\n** ' + super().getTitleStr()
+        if type(self.dateBegin) == date:
+            strResult += ' (' + str(len(self)) + ', ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+        strResult += '\n\n'
+
         for v in self.day:
             for u in v:
                 strResult += str(u) + '\n'
@@ -225,6 +229,38 @@ class Cycle(Title,Description):
         return objResult
 
 
+    def postpone(self,n=1):
+
+        """  """
+
+        if type(n) == int and n > 0 and len(self.day) > n:
+
+            d = self.day[:(len(self.day) - n)]
+            for i in range(0,n):
+                d.insert(0,[])
+
+            self.day = d
+            
+        return self
+
+
+    def stretch(self,n=2):
+
+        """  """
+
+        if type(n) == int and n > 0 and len(self.day) > n:
+
+            d = []
+            for i in range(0,len(self.day)):
+                d.append(self.day[i])
+                for j in range(0,n-1):
+                    d.append([])
+
+            self.day = d
+            
+        return self
+
+
     def getCycleByDate(self,objDate=None):
 
         """  """
@@ -309,34 +345,32 @@ class Cycle(Title,Description):
 
         """  """
 
-        if self.dateBegin == None:
+        try:
+            self.dateBegin = date(intYear, intMonth, intDay)
+        except ValueError as e:
+            print('error: ' + str(e), file=sys.stderr)
+            return self
 
-            try:
-                self.dateBegin = date(intYear, intMonth, intDay)
-            except ValueError as e:
-                print('error: ' + str(e), file=sys.stderr)
-                return self
+        #if config.sun != None:
+        #    print('sunrise/sunset: ' + str(config.twilight), file=sys.stderr)
 
-            #if config.sun != None:
-            #    print('sunrise/sunset: ' + str(config.twilight), file=sys.stderr)
+        dt_earliest = None
+        dt_latest   = None
+        dt_i = datetime.combine(self.dateBegin,time(0)).astimezone(None)
 
-            dt_earliest = None
-            dt_latest   = None
-            dt_i = datetime.combine(self.dateBegin,time(0)).astimezone(None)
-            
-            for d in self.day:
+        for d in self.day:
 
-                if config.sun != None:
-                    # fix 't' according to sunrise/sunset
-                    dt_earliest = config.sun.get_local_sunrise_time(dt_i) + timedelta(seconds=config.twilight)
-                    dt_latest   = config.sun.get_local_sunset_time(dt_i)  - timedelta(seconds=config.twilight)
+            if config.sun != None:
+                # fix 't' according to sunrise/sunset
+                dt_earliest = config.sun.get_local_sunrise_time(dt_i) + timedelta(seconds=config.twilight)
+                dt_latest   = config.sun.get_local_sunset_time(dt_i)  - timedelta(seconds=config.twilight)
 
-                for t in d:
-                    t.setDate(dt_i,dt_earliest,dt_latest)
-                    
-                dt_i += timedelta(days=1)
+            for t in d:
+                t.setDate(dt_i,dt_earliest,dt_latest)
 
-            self.dateEnd = self.dateBegin + timedelta(days=(len(self) - 1))
+            dt_i += timedelta(days=1)
+
+        self.dateEnd = self.dateBegin + timedelta(days=(len(self) - 1))
 
         return self
     

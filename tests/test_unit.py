@@ -26,8 +26,10 @@ from training.unit import Unit
 print('Module Test: ' + __file__ + '\n')
 
 #t = Unit('2020-03-03T17:00:00+1:00;10;RG;20min')
-t = Unit('10:00;10;RG;20min')
+t = Unit('10:00;10;R Basics;20min')
 t.setDate(date(2025, 1, 7))
+print(t)
+t.scale(2)
 print(t)
 
 #t.setClock()
@@ -43,7 +45,7 @@ print(t)
 #print(t.toXML())
 
 #t = Unit('08:00;10;RG;20min')
-print(t)
+#print(t)
 
 #d = {}
 #t.stat(d)

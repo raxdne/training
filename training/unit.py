@@ -65,11 +65,15 @@ class Unit(Note):
             else:
                 strResult = '{} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), str(self.getDuration()))
         elif self.dist == None:
-            if self.dt == None or self.dt.time() == time(0):
+            if self.dt == None:
+                strResult = '{} {}'.format(self.type, str(self.getDuration()))
+            elif self.dt.time() == time(0):
                 strResult = '{} {} {}'.format(self.dt.strftime("%Y-%m-%d"), self.type, str(self.getDuration()))
             else:
                 strResult = '{} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.type, str(self.getDuration()))
-        elif self.dt == None or self.dt.time() == time(0):
+        elif self.dt == None:
+            strResult = '{:5.1f} {} {}'.format(self.dist, self.type, str(self.getDuration()))
+        elif self.dt.time() == time(0):
             strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("%Y-%m-%d"), self.dist, self.type, str(self.getDuration()))
         else:
             strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.dist, self.type, str(self.getDuration()))
@@ -121,7 +125,7 @@ class Unit(Note):
         if strArg == None or strArg == '':
             pass
         else:
-            self.type = strArg.replace(' ','')[0:config.max_length_type]
+            self.type = strArg[0:config.max_length_type]
 
         return True
 
