@@ -134,7 +134,11 @@ class Cycle(Title,Description):
             for i in range(0,len(self)):
                 daysNew.append([])
                 for u in self.day[i]:
-                    if type(u) == Unit and (u.type == None or re.match(patternType,u.type)):
+                    if type(u) == Combination:
+                        c = u.remove(patternType)
+                        if c.getNumberOfUnits() > 0:
+                            daysNew[i].append(c)
+                    elif type(u) == Unit and (u.type == None or re.match(patternType,u.type)):
                         pass
                     else:
                         daysNew[i].append(u)
@@ -396,20 +400,40 @@ class Cycle(Title,Description):
         #print('info: ' + str(dictArg), file=sys.stderr)
 
         sum_h = 0.0
+        for k in sorted(dictArg.keys()):
+            sum_h += sum(dictArg[k][1])
+        sum_h /= 3600
+
         strResult = ''
         for k in sorted(dictArg.keys()):
             # all registered kinds of units
-            sum_k = sum(dictArg[k][1])
+            sum_k = sum(dictArg[k][1]) / 3600
+
             if len(dictArg[k][0]) < 1:
                 # no distances found
-                strResult += "{:4} x {:3} {:7}    {:7.01f} h\n".format(len(dictArg[k][0]), k, ' ', round(sum_k / 3600, 2))
+                strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7}    {:7.01f} h {:.02f}\n").format(len(dictArg[k][0]),
+                                                                                                           k,
+                                                                                                           ' ',
+                                                                                                           round(sum_k, 2),
+                                                                                                           round(sum_k / sum_h, 2))
             elif len(dictArg[k][0]) < 3:
                 # no statistics required
-                strResult += "{:4} x {:3} {:7.01f} {} {:7.01f} h\n".format(len(dictArg[k][0]), k, sum(dictArg[k][0]), config.unit_distance, round(sum_k / 3600, 2))
+                strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f}\n").format(len(dictArg[k][0]),
+                                                                                                               k,
+                                                                                                               sum(dictArg[k][0]),
+                                                                                                               config.unit_distance,
+                                                                                                               round(sum_k, 2),
+                                                                                                               round(sum_k / sum_h, 2))
             else:
-                strResult += "{:4} x {:3} {:7.01f} {} {:7.01f} h {:5.01f} /{:5.01f} /{:5.01f}\n".format(len(dictArg[k][0]), k, sum(dictArg[k][0]), config.unit_distance, round(sum_k / 3600, 2), min(dictArg[k][0]), mean(dictArg[k][0]), max(dictArg[k][0]))
-            sum_h += sum_k / 3600
-
+                strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f} {:5.01f} /{:5.01f} /{:5.01f}\n").format(len(dictArg[k][0]),
+                                                                                                                                            k,
+                                                                                                                                            sum(dictArg[k][0]),
+                                                                                                                                            config.unit_distance,
+                                                                                                                                            round(sum_k, 2),
+                                                                                                                                            round(sum_k / sum_h, 2),
+                                                                                                                                            min(dictArg[k][0]),
+                                                                                                                                            mean(dictArg[k][0]),
+                                                                                                                                            max(dictArg[k][0]))
         n = self.getNumberOfUnits()
         if n > 0:
             p = self.getPeriodDone()

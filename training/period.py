@@ -328,17 +328,37 @@ class Period(Title,Description):
         self.stat(dictArg)
 
         sum_h = 0.0
+        for k in sorted(dictArg.keys()):
+            sum_h += sum(dictArg[k][1])
+        sum_h /= 3600
+        
         strResult = ''
         for k in sorted(dictArg.keys()):
-            if len(dictArg[k][0]) < 1:
-                strResult += "{:4} x {:3} {:7}    {:7.01f} h\n".format(len(dictArg[k][0]), k, ' ', round(sum(dictArg[k][1]) / 3600, 1))
-            elif len(dictArg[k][0]) < 3:
-                strResult += "{:4} x {:3} {:7.0f} {} {:7.01f} h\n".format(len(dictArg[k][0]), k, sum(dictArg[k][0]), config.unit_distance, round(sum(dictArg[k][1]) / 3600, 1))        
-            else:
-                strResult += "{:4} x {:3} {:7.01f} {} {:7.01f} h {:5.01f} /{:5.01f} /{:5.01f}\n".format(len(dictArg[k][0]), k, sum(dictArg[k][0]), config.unit_distance, round(sum(dictArg[k][1]) / 3600, 2), min(dictArg[k][0]), mean(dictArg[k][0]), max(dictArg[k][0]))
-            sum_h += sum(dictArg[k][1])
+            # all registered kinds of units
+            sum_k = sum(dictArg[k][1]) / 3600
             
-        sum_h /= 3600.0
+            if len(dictArg[k][0]) < 1:
+                strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7}    {:7.01f} h {:.02f}\n").format(len(dictArg[k][0]),
+                                                                                                                   k,
+                                                                                                                   ' ',
+                                                                                                                   round(sum_k, 1),
+                                                                                                                   round(sum_k / sum_h, 2))
+            elif len(dictArg[k][0]) < 3:
+                strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f}\n").format(len(dictArg[k][0]), k, sum(dictArg[k][0]),
+                                                                                                                       config.unit_distance,
+                                                                                                                       round(sum_k,1),
+                                                                                                                       round(sum_k / sum_h, 2))        
+            else:
+                strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f} {:5.01f} /{:5.01f} /{:5.01f}\n").format(len(dictArg[k][0]),
+                                                                                                                                                    k,
+                                                                                                                                                    sum(dictArg[k][0]),
+                                                                                                                                                    config.unit_distance,
+                                                                                                                                                    round(sum_k, 2),
+                                                                                                                                                    round(sum_k / sum_h, 2),
+                                                                                                                                                    min(dictArg[k][0]),
+                                                                                                                                                    mean(dictArg[k][0]),
+                                                                                                                                                    max(dictArg[k][0]))
+            
         n = self.getNumberOfUnits()
         if n > 0:
             p = len(self)

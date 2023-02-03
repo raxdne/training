@@ -96,10 +96,10 @@ class Unit(Note):
             
             return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
 
-        else:
+        elif type(dtArg) == datetime:
 
             if self.tPlan == None:
-                self.dt = datetime.combine(dtArg.date(),time(0)).astimezone(None)
+                self.dt = dtArg
             elif type(self.tPlan) == str and self.tPlan == 'sunrise' and dt_0 != None:
                 # shift start time after twilight
                 self.dt = dt_0
@@ -114,8 +114,11 @@ class Unit(Note):
             else:
                 #self.dt = datetime.combine(dtArg.date(),time(0)).astimezone(None)
                 self.dt = dtArg
+        
+        else:
+            print('error: date type unknown', file=sys.stderr)
                 
-            return self.dt + self.duration
+        return self.dt + self.duration
         
 
     def setTypeStr(self,strArg):
@@ -124,8 +127,10 @@ class Unit(Note):
 
         if strArg == None or strArg == '':
             pass
-        else:
+        elif config.max_length_type > 0 and config.max_length_type < 32:
             self.type = strArg[0:config.max_length_type]
+        else:
+            self.type = strArg
 
         return True
 

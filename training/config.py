@@ -37,7 +37,7 @@ font_size = 8
 colors = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
 
 # maximum for length of type string
-max_length_type = 10
+max_length_type = 20
 
 # distance unit 'mi' or 'km'
 unit_distance = 'km'

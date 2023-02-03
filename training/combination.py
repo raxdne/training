@@ -134,6 +134,26 @@ class Combination(Title,Description):
         return dt
 
 
+    def remove(self,patternType=None):
+
+        """  """
+
+        if patternType != None:
+            # whole combination using pattern
+            childsNew = []
+            for u in self.child:
+                if type(u) == Unit and (u.type == None or re.match(patternType,u.type)):
+                    pass
+                elif type(u) == Pause:
+                    pass
+                else:
+                    childsNew.append(u)
+                    
+            self.child = childsNew
+            
+        return self
+
+
     def resetDistances(self):
 
         """  """

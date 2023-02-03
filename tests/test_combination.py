@@ -53,6 +53,7 @@ t = Combination([Unit('sr;3.5;RB;25:00'),
                  Note('AAAA'),
                  Unit(';3.5;RB;25:00')])
 #t.appendDescription('Running Blocks')
+#t.remove(r'^R')
 #print(t.getDuration())
 
 t.setDate(datetime(2023, 1, 7).astimezone(None))
