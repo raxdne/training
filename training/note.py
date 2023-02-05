@@ -238,16 +238,7 @@ class Note(Description):
 
         """  """
 
-        strResult = '<node'
-
-        if self.dt != None:
-            strResult += ' TEXT="' + self.dt.strftime("%Y-%m-%d") + '"'
-            
-        strResult += '>'
-
-        strResult += self.__listDescriptionToFreemind__()
-
-        strResult += '</node>\n'
+        strResult = self.__listDescriptionToFreemind__()
 
         return strResult
 

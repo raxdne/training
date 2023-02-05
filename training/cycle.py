@@ -706,9 +706,13 @@ class Cycle(Title,Description):
 
         strResult += self.__listDescriptionToFreemind__()
 
+        d_i = self.dateBegin
         for v in self.day:
+            strResult += '<node TEXT="' + d_i.strftime("%Y-%m-%d") + '">'
             for u in v:
                 strResult += u.toFreemindNode()
+            strResult += '</node>\n'
+            d_i += timedelta(days=1)
             
         strResult += '</node>\n'
 

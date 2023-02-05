@@ -281,7 +281,7 @@ class Combination(Title,Description):
         else:
             strResult += ' FOLDED="{}"'.format('true')
 
-        strResult += ' TEXT="' + self.child[0].dt.strftime("%Y-%m-%d") + '">\n'
+        strResult += ' TEXT="Combination">\n'
 
         strResult += self.__listDescriptionToFreemind__()
 
