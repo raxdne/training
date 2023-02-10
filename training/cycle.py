@@ -708,7 +708,10 @@ class Cycle(Title,Description):
 
         d_i = self.dateBegin
         for v in self.day:
-            strResult += '<node TEXT="' + d_i.strftime("%Y-%m-%d") + '">'
+            strResult += '<node TEXT="' + d_i.strftime("%Y-%m-%d %a") + '"'
+            if d_i.isoweekday() == 6 or d_i.isoweekday() == 7:
+                strResult += ' BACKGROUND_COLOR="{}"'.format('#eeeeee')
+            strResult += '>'
             for u in v:
                 strResult += u.toFreemindNode()
             strResult += '</node>\n'
