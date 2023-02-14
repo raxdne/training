@@ -17,6 +17,42 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
+import sys
+
+def __fixIt__(listArg=[]):
+
+    """ fix nesting """
+
+    listResult = []
+
+    if type(listArg) is list and len(listArg) == 1 and type(listArg[0]) is list:
+        return __fixIt__(listArg[0])
+    elif type(listArg[0]) is str:
+        for e in listArg[1:]:
+            if type(e) is list and len(e) == 1 and type(e[0]) is str:
+                listResult.append(e[0])
+            elif type(e) is list:
+                listResult.append(__fixIt__(e))
+
+        return [listArg[0],listResult]
+    else:
+        return listArg
+
+
+def __appendTo__(intDepth=0,listArg=[],strArg=''):
+
+    # search for last element where depth < intDepth => parent list
+
+    l = listArg
+    d = 0
+    while d < intDepth and type(l[-1]) is list:
+        l = l[-1]
+        d += 1
+
+    #print("{} {}".format(d, strArg))
+    l.append([strArg])
+
+
 #
 #
 #
@@ -75,6 +111,40 @@ class Description:
             self.listDescription.append([objArg])
         elif type(objArg) is list:
             self.listDescription.append(objArg)
+
+
+    def parseDescription(self,strArg):
+
+        """  """
+
+        """ https://stackoverflow.com/questions/45964731/how-to-parse-hierarchy-based-on-indents-with-python """
+
+        indentation = []
+        indentation.append(0)
+        depth = 0
+        r = []
+
+        for line in strArg.splitlines():
+
+            content = line.strip()
+            indent = len(line) - len(content)
+
+            if indent > indentation[-1]:
+                depth += 1
+                indentation.append(indent)
+
+            elif indent < indentation[-1]:
+                while indent < indentation[-1]:
+                    depth -= 1
+                    indentation.pop()
+
+                if indent != indentation[-1]:
+                    raise RuntimeError("Bad formatting")
+
+            #print(f"{content} (depth: {depth})")
+            __appendTo__(depth,r,content)
+
+        self.appendDescription(__fixIt__(r))
 
 
     def setColor(self,strColor=None):
@@ -155,18 +225,24 @@ class Description:
 
         if listArg == None:
             strResult += self.__listDescriptionToFreemind__(self.listDescription)
+        elif type(listArg) is str and len(listArg) > 0:
+            strResult += '<node TEXT="{}"/>\n'.format(listArg.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
-            strResult += '<node FOLDED="{}" TEXT="{}">\n'.format('true',listArg[0]) + self.__listDescriptionToFreemind__(listArg[1]) + '</node>\n'
-        elif type(listArg) is list and len(listArg) > 0:
+            """ tupel (str . list) """
+
+            strResult += '<node FOLDED="{}" TEXT="{}">\n'.format('true',listArg[0]) + ''
+
+            for c in listArg[1:]:
+                strResult += self.__listDescriptionToFreemind__(c)
+
+            strResult += '</node>\n'
+
+        elif type(listArg) is list:
+            """ a list, but single element only """
             for c in listArg:
-                if len(c) < 1:
-                    pass
-                elif type(c) is str and len(c) > 0:
-                    strResult += '<node TEXT="{}"/>\n'.format(c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
-                elif type(c) is list:
-                    strResult += self.__listDescriptionToFreemind__(c)
-                else:
-                    print('fail: ',c, file=sys.stderr)
+                strResult += self.__listDescriptionToFreemind__(c)
+        else:
+            print('fail: ',listArg, file=sys.stderr)
 
         return strResult
 
