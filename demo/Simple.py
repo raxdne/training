@@ -201,18 +201,17 @@ s = PlanSimple('Season Simple').schedule(date.today().year,1,1)
 
 s.remove(patternType=r'^[^B]')
 
-#print(s.report())
-print(s.stat())
+print(s.report())
 
-f = open('SimplePlanGantt.svg', 'w')
+f = open('SimplePlanGantt.svg', encoding='utf-8', mode='w')
 f.write(s.toSVGGanttChart())
 f.close()
 
-f = open('SimplePlan.svg', 'w')
+f = open('SimplePlan.svg', encoding='utf-8', mode='w')
 f.write(s.toSVGDiagram())
 f.close()
 
-f = open('SimplePlan.mm', 'w')
+f = open('SimplePlan.mm', encoding='utf-8', mode='w')
 f.write(s.toFreeMind())
 f.close()
 
@@ -220,15 +219,15 @@ f = open('SimplePlan.ics', 'wb')
 f.write(s.toVCalendar())
 f.close()
 
-f = open('SimplePlan.txt', 'w')
+f = open('SimplePlan.txt', encoding='utf-8', mode='w')
 f.write(s.toString())
 f.close()
 
-f = open('SimplePlan.csv', 'w')
+f = open('SimplePlan.csv', encoding='utf-8', mode='w')
 f.write(s.toCSV())
 f.close()
 
-f = open('SimplePlan.html', 'w')
+f = open('SimplePlan.html', encoding='utf-8', mode='w')
 f.write(s.toHtmlFile())
 f.close()
 

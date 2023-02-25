@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

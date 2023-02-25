@@ -4,7 +4,10 @@
 
 from datetime import timedelta, date, datetime, time, timezone
 
+from training.note import Note
 from training.unit import Unit
+from training.pause import Pause
+from training.combination import Combination
 from training.cycle import Cycle
 from training.period import Period
 import training.config as config
@@ -131,9 +134,7 @@ def BasicsCombination():
 def Highlight1():
     c = Cycle('Highlight Triathlon Olympic Distance')
 
-    c.insert(6,Unit('07:00;1.5;Swimming;1:00:00'))
-    c.combine(Unit('40;Cycling;1:40:00'),5)
-    c.combine(Unit('10;Running;1:30:00'),10)
+    c.insert(6,Combination([Unit('07:00;1.5;Swimming;1:00:00'),Unit('40;Cycling;1:40:00'),Unit('10;Running;1:30:00')]))
     
     return c
 
@@ -160,18 +161,17 @@ def PlanTriathlon(strArg):
 
 s = PlanTriathlon('Season Triathlon Basics').schedule(date.today().year,3,1)
 
-#print(s.report())
-print(s.stat())
+print(s.report())
 
-f = open('TriathlonPlanGantt.svg', 'w')
+f = open('TriathlonPlanGantt.svg', encoding='utf-8', mode='w')
 f.write(s.toSVGGanttChart())
 f.close()
 
-f = open('TriathlonPlan.svg', 'w')
+f = open('TriathlonPlan.svg', encoding='utf-8', mode='w')
 f.write(s.toSVGDiagram())
 f.close()
 
-f = open('TriathlonPlan.mm', 'w')
+f = open('TriathlonPlan.mm', encoding='utf-8', mode='w')
 f.write(s.toFreeMind())
 f.close()
 
@@ -179,15 +179,15 @@ f = open('TriathlonPlan.ics', 'wb')
 f.write(s.toVCalendar())
 f.close()
 
-f = open('TriathlonPlan.txt', 'w')
+f = open('TriathlonPlan.txt', encoding='utf-8', mode='w')
 f.write(s.toString())
 f.close()
 
-f = open('TriathlonPlan.csv', 'w')
+f = open('TriathlonPlan.csv', encoding='utf-8', mode='w')
 f.write(s.toCSV())
 f.close()
 
-f = open('TriathlonPlan.html', 'w')
+f = open('TriathlonPlan.html', encoding='utf-8', mode='w')
 f.write(s.toHtmlFile())
 f.close()
 
