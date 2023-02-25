@@ -37,7 +37,7 @@ font_size = 8
 colors = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
 
 # maximum for length of type string
-max_length_type = 10
+max_length_type = 20
 
 # distance unit 'mi' or 'km'
 unit_distance = 'km'
@@ -66,19 +66,3 @@ def getSettingsStr():
     return strResult
 
 
-if __name__ == "__main__":
-    
-    print('Module Test:\n')
-    
-    #print(config.getSettingsStr())
-    print(config.diagram_scale_dist)
-    config.diagram_scale_dist = 12
-    print(config.diagram_scale_dist)
-    config.max_length_type = 3
-    print(config.max_length_type)
-else:
-    #config = Config()
-
-    #print(config.getSettingsStr())
-
-    pass

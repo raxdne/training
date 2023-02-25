@@ -27,18 +27,30 @@ class Title:
 
     def __init__(self,strArg=None):
 
-        """ constructor """
+        """  """
 
         self.setTitleStr(strArg)
+
+
+    def __str__(self):
+
+        """  """
+
+        return self.strTitle
 
 
     def setTitleStr(self,strArg):
 
         """  """
 
-        self.strTitle = strArg
+        if strArg == None:
+            self.strTitle = '-'
+        else:
+            self.strTitle = strArg
 
+        return self
 
+    
     def hasTitle(self):
 
         """  """
@@ -51,6 +63,14 @@ class Title:
         """  """
 
         return self.strTitle
+        #return str(self)
+
+
+    def getTitleXML(self):
+
+        """  """
+
+        return self.strTitle.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
 
 
 

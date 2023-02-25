@@ -17,20 +17,65 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
+import sys
+
+def __fixIt__(listArg=[]):
+
+    """ fix nesting """
+
+    listResult = []
+
+    if type(listArg) is list and len(listArg) == 1 and type(listArg[0]) is list:
+        return __fixIt__(listArg[0])
+    elif type(listArg[0]) is str:
+        for e in listArg[1:]:
+            if type(e) is list and len(e) == 1 and type(e[0]) is str:
+                listResult.append(e[0])
+            elif type(e) is list:
+                listResult.append(__fixIt__(e))
+
+        return [listArg[0],listResult]
+    else:
+        return listArg
+
+
+def __appendTo__(intDepth=0,listArg=[],strArg=''):
+
+    # search for last element where depth < intDepth => parent list
+
+    l = listArg
+    d = 0
+    while d < intDepth and type(l[-1]) is list:
+        l = l[-1]
+        d += 1
+
+    #print("{} {}".format(d, strArg))
+    l.append([strArg])
+
+
 #
 #
 #
 
 class Description:
 
-    """ abstract class to handle description list """
+    """ abstract class to handle (nested) description list """
 
     def __init__(self,strArg=None):
 
-        """ constructor """
-
+        """  """
+        
+        self.color = None
         self.listDescription = []
+
         self.setDescription(strArg)
+
+
+    def __str__(self):
+
+        """ returns a string of nested self.listDescription """
+
+        return str(self.__listDescriptionToString__())
 
 
     def setDescription(self,objArg=None):
@@ -43,6 +88,8 @@ class Description:
             self.listDescription.append([objArg])
         elif type(objArg) is list:
             self.listDescription = [objArg]
+        else:
+            self.listDescription = []
 
 
     def hasDescription(self):
@@ -64,6 +111,52 @@ class Description:
             self.listDescription.append([objArg])
         elif type(objArg) is list:
             self.listDescription.append(objArg)
+
+
+    def parseDescription(self,strArg):
+
+        """  """
+
+        """ https://stackoverflow.com/questions/45964731/how-to-parse-hierarchy-based-on-indents-with-python """
+
+        indentation = []
+        indentation.append(0)
+        depth = 0
+        r = []
+
+        for line in strArg.splitlines():
+
+            content = line.strip()
+            indent = len(line) - len(content)
+
+            if indent > indentation[-1]:
+                depth += 1
+                indentation.append(indent)
+
+            elif indent < indentation[-1]:
+                while indent < indentation[-1]:
+                    depth -= 1
+                    indentation.pop()
+
+                if indent != indentation[-1]:
+                    raise RuntimeError("Bad formatting")
+
+            #print(f"{content} (depth: {depth})")
+            __appendTo__(depth,r,content)
+
+        self.appendDescription(__fixIt__(r))
+
+
+    def setColor(self,strColor=None):
+
+        """  """
+
+        if strColor != None and len(strColor) > 0:
+            self.color = strColor
+        else:
+            self.color = None
+
+        return self
 
 
     def __listDescriptionToString__(self,listArg=None):
@@ -88,6 +181,15 @@ class Description:
         return strResult
 
 
+    def __listDescriptionToSVG__(self,listArg=None):
+
+        """ returns a XML/SVG string of nested self.listDescription """
+
+        strResult = self.__listDescriptionToString__().replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
+
+        return strResult
+
+
     def __listDescriptionToHtml__(self,listArg=None):
 
         """ returns a HTML string of nested self.listDescription """
@@ -104,7 +206,7 @@ class Description:
             # list items
             for c in listArg:
                 if type(c) is str:
-                    strResult += '<li>' + c + '</li>\n'
+                    strResult += '<li>' + c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;") + '</li>\n'
                 elif type(c) is list:
                     strResult += self.__listDescriptionToHtml__(c)
                 else:
@@ -115,43 +217,40 @@ class Description:
         return strResult
 
 
-    def __listDescriptionToXML__(self,listArg=None):
+    def __listDescriptionToFreemind__(self,listArg=None):
 
         """ returns a Freemind XML string of nested self.listDescription """
 
         strResult = ''
 
         if listArg == None:
-            strResult += self.__listDescriptionToXML__(self.listDescription)
+            strResult += self.__listDescriptionToFreemind__(self.listDescription)
+        elif type(listArg) is str and len(listArg) > 0:
+            strResult += '<node TEXT="{}"/>\n'.format(listArg.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
-            strResult += '<node TEXT="{}">\n'.format(listArg[0]) + self.__listDescriptionToXML__(listArg[1]) + '</node>\n'
-        elif type(listArg) is list and len(listArg) > 0:
+            """ tupel (str . list) """
+
+            strResult += '<node FOLDED="{}" TEXT="{}">\n'.format('true',listArg[0]) + ''
+
+            for c in listArg[1:]:
+                strResult += self.__listDescriptionToFreemind__(c)
+
+            strResult += '</node>\n'
+
+        elif type(listArg) is list:
+            """ a list, but single element only """
             for c in listArg:
-                if len(c) < 1:
-                    pass
-                elif type(c) is str and len(c) > 0:
-                    strResult += '<node BACKGROUND_COLOR="{}" TEXT="{}"/>\n'.format('#ffffaa',c)
-                elif type(c) is list:
-                    strResult += self.__listDescriptionToXML__(c)
-                else:
-                    print('fail: ',c, file=sys.stderr)
+                strResult += self.__listDescriptionToFreemind__(c)
+        else:
+            print('fail: ',listArg, file=sys.stderr)
 
         return strResult
 
 
-if __name__ == "__main__":
+    def __listDescriptionToXML__(self):
 
-    print('Module Test:\n')
-    
-    d = Description(['ABC','DEF'])
+        """  """
 
-    d.appendDescription(['WWW',['YYY','ZZZ']])
+        return self.__listDescriptionToString__().replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
 
-    print(d.__listDescriptionToString__())
-
-    print(d.__listDescriptionToHtml__())
-
-    print(d.__listDescriptionToXML__())
-
-    print(d.hasDescription())
 
