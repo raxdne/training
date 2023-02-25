@@ -339,15 +339,15 @@ s = Plan2021('Season 2021')
 
 print(s.report())
 
-f = open('Season2021Gantt.svg', 'w')
+f = open('Season2021Gantt.svg', encoding='utf-8', mode='w')
 f.write(s.toSVGGanttChart())
 f.close()
 
-f = open('Season2021.svg', 'w')
+f = open('Season2021.svg', encoding='utf-8', mode='w')
 f.write(s.toSVGDiagram())
 f.close()
 
-f = open('Season2021.mm', 'w')
+f = open('Season2021.mm', encoding='utf-8', mode='w')
 f.write(s.toFreeMind())
 f.close()
 
@@ -355,15 +355,15 @@ f = open('Season2021.ics', 'wb')
 f.write(s.toVCalendar())
 f.close()
 
-f = open('Season2021.txt', 'w')
+f = open('Season2021.txt', encoding='utf-8', mode='w')
 f.write(s.toString())
 f.close()
 
-f = open('Season2021.csv', 'w')
+f = open('Season2021.csv', encoding='utf-8', mode='w')
 f.write(s.toCSV())
 f.close()
 
-f = open('Season2021.html', 'w')
+f = open('Season2021.html', encoding='utf-8', mode='w')
 f.write(s.toHtmlFile())
 f.close()
 
