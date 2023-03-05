@@ -18,6 +18,10 @@
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
 import sys
+import re
+
+# https://uibakery.io/regex-library/url-regex-python
+url_pattern = "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$"
 
 def __fixIt__(listArg=[]):
 
@@ -201,12 +205,23 @@ class Description:
             strResult += self.__listDescriptionToHtml__(self.listDescription)
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
             # list item + childs
-            strResult += '<li>' + listArg[0] + '</li>\n<ul>' + self.__listDescriptionToHtml__(listArg[1]) + '</ul>\n'
+            strResult += '<li>'
+            if re.match(url_pattern, listArg[0]):
+                strResult += '<a href="{url}">{url}</a>'.format(url=listArg[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+            else:
+                strResult += listArg[0]
+            strResult += '</li>\n'
+            strResult += '<ul>' + self.__listDescriptionToHtml__(listArg[1]) + '</ul>\n'
         elif type(listArg) is list and len(listArg) > 0:
             # list items
             for c in listArg:
                 if type(c) is str:
-                    strResult += '<li>' + c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;") + '</li>\n'
+                    strResult += '<li>'
+                    if re.match(url_pattern, c):
+                        strResult += '<a href="{url}">{url}</a>'.format(url=c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+                    else:
+                        strResult += c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
+                    strResult += '</li>\n'
                 elif type(c) is list:
                     strResult += self.__listDescriptionToHtml__(c)
                 else:
@@ -226,11 +241,17 @@ class Description:
         if listArg == None:
             strResult += self.__listDescriptionToFreemind__(self.listDescription)
         elif type(listArg) is str and len(listArg) > 0:
-            strResult += '<node TEXT="{}"/>\n'.format(listArg.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+            strResult += '<node TEXT="{}"'.format(listArg.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+            if re.match(url_pattern, listArg):
+                strResult += ' LINK="{}"'.format(listArg.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+            strResult += '/>\n'
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
             """ tupel (str . list) """
 
-            strResult += '<node FOLDED="{}" TEXT="{}">\n'.format('true',listArg[0]) + ''
+            strResult += '<node FOLDED="{}" TEXT="{}"'.format('true',listArg[0])
+            if re.match(url_pattern, listArg[0]):
+                strResult += ' LINK="{}"'.format(listArg[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+            strResult += '>\n'
 
             for c in listArg[1:]:
                 strResult += self.__listDescriptionToFreemind__(c)

@@ -842,3 +842,22 @@ class Period(Title,Description):
 
         return self
 
+
+    def CalendarLastMonthsPeriod(self,intMonth=6,strArg=None):
+
+        """ returns a last months (= 4 weeks) as periods """
+
+        dt_0 = datetime.now()
+        dt_i = dt_0 + timedelta(days=(7 - dt_0.weekday())) - timedelta(weeks = intMonth * 4)
+        dt_1 = dt_i
+        
+        for m in range(0,intMonth):
+            self.append(Cycle(dt_i.strftime("%Y-M%m"),4*7))
+            dt_i += timedelta(weeks=4)
+
+        if strArg != None and len(strArg) > 0:
+            self.setTitleStr(strArg)
+
+        self.schedule(dt_1.year,dt_1.month,dt_1.day)
+
+        return self

@@ -25,7 +25,7 @@ d = Description(['ABC','DEF'])
 print(repr(d))
 print(d)
 
-d.appendDescription(['WWW',['YYY','ZZZ']])
+d.appendDescription(['WWW',['YYY','ZZZ','http://www.demo.org/']])
 
 print(d.__listDescriptionToString__())
 
