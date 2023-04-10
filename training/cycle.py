@@ -165,7 +165,7 @@ class Cycle(Title,Description):
         if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self) and intIndexB < len(self) and intIndexA != intIndexB:
             objCopy = copy.deepcopy(self.day[intIndexA])
             if flagReplace:
-                # override exisiting
+                # override existing
                 self.day[intIndexB] = objCopy
             else:
                 self.day[intIndexB] += objCopy
@@ -192,23 +192,51 @@ class Cycle(Title,Description):
         objResult = None
 
         if objArg == None:
+            
             print('error: ' + str(objArg), file=sys.stderr)
+            
         elif type(objIndex) == list and len(objIndex) > 0:
+            
             for i in objIndex:
                 self.insert(i,objArg,flagReplace)
             return []
+        
         elif type(objArg) == list and len(objArg) > 0:
+            
             for u in objArg:
                 self.insert(objIndex,u,flagReplace)
             return []
+        
         elif (type(objArg) == Unit or type(objArg) == Combination or type(objArg) == Note) and objIndex > -1 and objIndex < len(self):
+            
             objResult = objArg.dup()
+
             if flagReplace:
-                # override exisiting
+                # override existing
                 self.day[objIndex] = [objResult]
             else:
                 self.day[objIndex].append(objResult)
+                
+        elif type(objArg) == Cycle and objIndex > -1 and objIndex < len(self) and len(objArg) > 0 and len(objArg) + objIndex <= len(self):
 
+            i = 0
+            
+            for v in objArg.day:
+                
+                if flagReplace:
+                    # override existing
+                    self.day[objIndex + i] = []
+                    
+                for u in v:
+                    self.day[objIndex + i].append(u.dup())
+                    
+                i += 1
+
+            objResult = self
+            
+        else:
+            print('error: ' + str(objArg), file=sys.stderr)
+            
         return objResult
 
 
@@ -225,7 +253,7 @@ class Cycle(Title,Description):
             if delta.days > -1 and objArg.dt.date() <= self.dateEnd:
                 objResult = objArg.dup()
                 if flagReplace:
-                    # override exisiting
+                    # override existing
                     self.day[delta.days] = [objResult]
                 else:
                     self.day[delta.days].append(objResult)

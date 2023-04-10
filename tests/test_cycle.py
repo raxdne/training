@@ -51,6 +51,14 @@ t.insert(8,Unit(';FB;25:00'))
 t.insert(10,Unit(';FB;25:00'))
 t.insert(13,Unit('08:00;30;Biking Basics;02:00:00'))
 
+b = Cycle('Block',4)
+b.insert(0,Unit(';10;Biking Basics;02:00:00'))
+b.insert(1,Unit(';20;Biking Basics;02:00:00'))
+b.insert(2,Unit(';30;Biking Basics;02:00:00'))
+t.insert(0,b,True)
+#t.insert(5,b)
+t.insert(9,b.scale(2),True)
+
 t.schedule(2023,1,1)
 print(t)
 
