@@ -437,7 +437,9 @@ class Cycle(Title,Description):
             # all registered kinds of units
             sum_k = sum(dictArg[k][1]) / 3600
 
-            if len(dictArg[k][0]) < 1:
+            if sum_h < 0.01:
+                pass
+            elif len(dictArg[k][0]) < 1:
                 # no distances found
                 strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7}    {:7.01f} h {:.02f}\n").format(len(dictArg[k][0]),
                                                                                                            k,
