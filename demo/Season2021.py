@@ -363,6 +363,10 @@ f = open('Season2021.csv', encoding='utf-8', mode='w')
 f.write(s.toCSV())
 f.close()
 
+f = open('Season2021.sqlite', encoding='utf-8', mode='w')
+f.write(s.toSqliteDump())
+f.close()
+
 f = open('Season2021.html', encoding='utf-8', mode='w')
 f.write(s.toHtmlFile())
 f.close()

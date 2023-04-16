@@ -546,6 +546,19 @@ class Cycle(Title,Description):
         return strResult
 
 
+    def toSqlite(self):
+
+        """  """
+
+        strResult = ''
+        for v in self.day:
+            for u in v:
+                if type(u) == Unit:
+                    strResult += u.toSqlite()
+            
+        return strResult
+
+
     def toSVG(self, x = config.diagram_offset, y=20):
 
         """  """

@@ -390,18 +390,6 @@ class Period(Title,Description):
             for l in content:
                 if l == None or l == '' or re.match(r"^sep",l) or re.match(r"^\*",l):
                     pass
-                elif n.parse(l):
-                    if n.dt != None:
-                        d_i = n.dt
-                        if d0 == None or n.dt < d0:
-                            d0 = t.dt
-                        if d1 == None or n.dt > d1:
-                            d1 = t.dt
-                    else:
-                        n.dt = d_i
-
-                    a.append(n)
-                    n = Note()
                 elif (fUpdater != None and t.parse(fUpdater(l))) or t.parse(l):
                     if t.dt != None:
                         d_i = t.dt
@@ -414,28 +402,43 @@ class Period(Title,Description):
 
                     a.append(t)
                     t = Unit()
+                elif (fUpdater != None and n.parse(fUpdater(l))) or n.parse(l):
+                    if n.dt != None:
+                        d_i = n.dt
+                        if d0 == None or n.dt < d0:
+                            d0 = t.dt
+                        if d1 == None or n.dt > d1:
+                            d1 = t.dt
+                    else:
+                        n.dt = d_i
+
+                    a.append(n)
+                    n = Note()
                 else:
                     print('error: ' + l, file=sys.stderr)
 
-        print('Report {} .. {}'.format(d0.strftime("%Y-%m-%d"),d1.strftime("%Y-%m-%d")), file=sys.stderr)
-
-        delta = d1 - d0
-
-        if len(self.child) > 0:
-            # there is a child list already
-            pass
-        elif delta.days < 365:
-            for y in range(d0.year,d1.year+1):
-                self.append(Period('').CalendarWeekPeriod(y))
-        elif delta.days < 3 * 365:
-            for y in range(d0.year,d1.year+1):
-                self.append(Period('').CalendarMonthPeriod(y))
+        if d0 == None:
+            print('No Report possible', file=sys.stderr)
         else:
-            for y in range(d0.year,d1.year+1):
-                self.append(Period('').CalendarYearPeriod(y))
+            print('Report {} .. {}'.format(d0.strftime("%Y-%m-%d"),d1.strftime("%Y-%m-%d")), file=sys.stderr)
 
-        for t in a:
-            self.insertByDate(t)
+            delta = d1 - d0
+
+            if len(self.child) > 0:
+                # there is a child list already
+                pass
+            elif delta.days < 365:
+                for y in range(d0.year,d1.year+1):
+                    self.append(Period('').CalendarWeekPeriod(y))
+            elif delta.days < 3 * 365:
+                for y in range(d0.year,d1.year+1):
+                    self.append(Period('').CalendarMonthPeriod(y))
+            else:
+                for y in range(d0.year,d1.year+1):
+                    self.append(Period('').CalendarYearPeriod(y))
+
+            for t in a:
+                self.insertByDate(t)
 
         return self
 
@@ -558,6 +561,42 @@ class Period(Title,Description):
         strResult = '<?xml version="1.0" encoding="UTF-8"?>\n<map>\n'
         strResult += self.toFreemindNode()
         strResult += '</map>\n'
+
+        return strResult
+
+
+    def toSqlite(self):
+
+        """  """
+
+        strResult = ''
+        for c in self.child:
+            strResult += c.toSqlite()
+            
+        return strResult
+
+
+    def toSqliteDump(self):
+
+        """  """
+        
+        strResult = 'PRAGMA journal_mode = OFF;\n\n'
+        
+        strResult += """CREATE TABLE IF NOT EXISTS "queries" (query text);
+
+        INSERT INTO 'queries' VALUES (\"SELECT type FROM units;\");
+        INSERT INTO 'queries' VALUES (\"SELECT count() AS Count, type AS Type FROM units GROUP BY type ORDER BY Count DESC;\");
+        INSERT INTO 'queries' VALUES (\"SELECT sum(dist) AS Sum, type AS Type FROM units GROUP BY type ORDER BY Sum DESC;\");\n\n"""
+
+        strResult += """CREATE TABLE IF NOT EXISTS "units" (
+	"date"	TEXT,
+	"dist"	REAL,
+	"type"	TEXT,
+	"duration"	INTEGER,
+	"description"	TEXT
+        );\n\n"""
+
+        strResult += self.toSqlite()
 
         return strResult
 

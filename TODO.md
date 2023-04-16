@@ -3,6 +3,8 @@
 
 ## Requirements
 
+REQ: multi-user data, synchronized team
+
 REQ: append note/description as normal child in cycle and period ?? #scope
 
 REQ: report of current cycle should use the days between start and today #scope ✔
@@ -36,6 +38,9 @@ REQ: different parser/generator modules for input formats
 ## Output Formats
 
 ### Plain text
+
+### SQLite dump
+
 
 ### iCal
 

@@ -282,6 +282,19 @@ class Unit(Note):
         return strResult
 
 
+    def toSqlite(self):
+
+        """  """
+
+        if self.dt == None or self.type == None or self.dist == None:
+            # not significant for reports
+            strResult = ''
+        else:
+            strResult = "INSERT INTO 'units' VALUES ('{date}',{dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=str(self.getDuration()), description=self.__listDescriptionToString__())
+
+        return strResult
+
+
     def toHtml(self):
 
         """  """
