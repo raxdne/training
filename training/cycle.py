@@ -56,6 +56,7 @@ class Cycle(Title,Description):
         
         self.setTitleStr(strArg)
         self.setDescription()
+        self.setPlan()
 
         self.day = []
         for i in range(0,int(intArg)):
@@ -107,6 +108,15 @@ class Cycle(Title,Description):
         for i in range(len(self)):
             self.day[i] = []
             
+        return self
+
+
+    def setPlan(self,fPlan=True):
+
+        """  """
+
+        self.fPlan = fPlan
+
         return self
 
 
@@ -327,7 +337,7 @@ class Cycle(Title,Description):
 
         """  """
 
-        if self.dateBegin != None and date.today() >= self.dateBegin and self.dateEnd != None and date.today() <= self.dateEnd:
+        if self.fPlan == False and self.dateBegin != None and date.today() >= self.dateBegin and self.dateEnd != None and date.today() <= self.dateEnd:
             return (date.today() - self.dateBegin).days + 1
         else:
             return len(self)

@@ -63,6 +63,8 @@ class Period(Title,Description):
         self.dateBegin = None
         self.dateEnd = None
 
+        self.setPlan()
+
 
     def __str__(self):
 
@@ -91,6 +93,19 @@ class Period(Title,Description):
             self.setPeriod(l)
 
         return self.periodInt
+
+
+    def setPlan(self,fPlan=True):
+
+        """  """
+
+        for c in self.child:
+            if type(c) == Cycle or type(c) == Period:
+                c.setPlan(fPlan)
+
+        self.fPlan = fPlan
+        
+        return self
 
 
     def appendDescription(self,objArg):
@@ -376,6 +391,7 @@ class Period(Title,Description):
         if type(listFilename) == str:
             listFilename = [listFilename]
 
+        self.setPlan(False)
         a = []
         d0 = None
         d1 = None
