@@ -171,7 +171,10 @@ class Unit(Note):
         if self.duration == None:
             self.setDuration()
 
-        return self.duration
+        if self.type != None and len(self.type) > 0:
+            return self.duration
+
+        return Duration(0)
 
 
     def scale(self,floatScale,patternType=None):
