@@ -49,7 +49,6 @@ class Note(Description):
 
         if strArg != None and len(strArg) > 0:
             self.parse(strArg)
-            #print('New Unit: ' + strArg + ' -> {} {} {} {} {}'.format(self.dt, self.dist, self.type, self.duration, self.__listDescriptionToString__()), file=sys.stderr)
 
 
     def __str__(self):
@@ -58,7 +57,7 @@ class Note(Description):
 
         if self.dt == None:
             strResult = ''
-        elif self.dt.time() == time(0):
+        elif type(self.dt) == date or self.dt.time() == time(0):
             strResult = self.dt.strftime("%Y-%m-%d")
         else:
             strResult = self.dt.strftime("%Y-%m-%d %H:%M:%S")
@@ -247,13 +246,18 @@ class Note(Description):
 
         """  """
 
-        if self.dt != None:
+        if self.dt != None and type(self.dt) == datetime:
             event = Event()
 
             event.add('summary', self.__listDescriptionToString__())
-            event.add('dtstart', self.dt.date())
-            event.add('dtend', self.dt.date() + timedelta(days=1))
-        
+
+            if type(self.dt) == datetime:
+                event.add('dtstart', self.dt.date())
+                event.add('dtend', self.dt.date() + timedelta(days=1))
+            else:
+                event.add('dtstart', self.dt)
+                event.add('dtend', self.dt + timedelta(days=1))
+                
             event.add('dtstamp', datetime.now().astimezone(None))
             cal.add_component(event)
 

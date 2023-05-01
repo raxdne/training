@@ -165,7 +165,7 @@ class Period(Title,Description):
 
         """  """
 
-        if objArg == None or (type(objArg) != Cycle and type(objArg) != Period):
+        if objArg == None or (type(objArg) != Cycle and type(objArg) != Period and type(objArg) != Note):
             print('error: ' + str(objArg), file=sys.stderr)
         else:
             self.child.append(objArg.dup())

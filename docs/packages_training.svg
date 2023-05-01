@@ -12,8 +12,8 @@
 <!-- training -->
 <g id="node1" class="node">
 <title>training</title>
-<polygon fill="none" stroke="black" points="132,-396 58,-396 58,-360 132,-360 132,-396"/>
-<text text-anchor="middle" x="95" y="-374.3" font-family="Times,serif" font-size="14.00">training</text>
+<polygon fill="none" stroke="black" points="211,-396 137,-396 137,-360 211,-360 211,-396"/>
+<text text-anchor="middle" x="174" y="-374.3" font-family="Times,serif" font-size="14.00">training</text>
 </g>
 <!-- training.combination -->
 <g id="node2" class="node">
@@ -24,8 +24,8 @@
 <!-- training.combination&#45;&gt;training -->
 <g id="edge1" class="edge">
 <title>training.combination&#45;&gt;training</title>
-<path fill="none" stroke="black" d="M452.42,-180.24C455.99,-213.27 458.49,-285.6 419,-324 380.48,-361.46 222.96,-372.49 142.62,-375.7"/>
-<polygon fill="black" stroke="black" points="132.28,-376.09 142.11,-371.22 137.28,-375.9 142.27,-375.71 142.27,-375.71 142.27,-375.71 137.28,-375.9 142.44,-380.21 132.28,-376.09 132.28,-376.09"/>
+<path fill="none" stroke="black" d="M452.24,-180.06C455.51,-212.78 457.5,-284.61 419,-324 391.99,-351.64 284.52,-366.44 221.25,-372.91"/>
+<polygon fill="black" stroke="black" points="211.11,-373.91 220.62,-368.45 216.09,-373.42 221.06,-372.93 221.06,-372.93 221.06,-372.93 216.09,-373.42 221.51,-377.41 211.11,-373.91 211.11,-373.91"/>
 </g>
 <!-- training.description -->
 <g id="node5" class="node">
@@ -54,14 +54,14 @@
 <!-- training.pause -->
 <g id="node8" class="node">
 <title>training.pause</title>
-<polygon fill="none" stroke="black" points="327,-252 207,-252 207,-216 327,-216 327,-252"/>
-<text text-anchor="middle" x="267" y="-230.3" font-family="Times,serif" font-size="14.00">training.pause</text>
+<polygon fill="none" stroke="black" points="332,-252 212,-252 212,-216 332,-216 332,-252"/>
+<text text-anchor="middle" x="272" y="-230.3" font-family="Times,serif" font-size="14.00">training.pause</text>
 </g>
 <!-- training.combination&#45;&gt;training.pause -->
 <g id="edge4" class="edge">
 <title>training.combination&#45;&gt;training.pause</title>
-<path fill="none" stroke="black" d="M405.23,-180.12C379.88,-189.82 347.99,-202.02 321.23,-212.26"/>
-<polygon fill="black" stroke="black" points="311.62,-215.93 319.35,-208.16 316.29,-214.15 320.96,-212.36 320.96,-212.36 320.96,-212.36 316.29,-214.15 322.57,-216.56 311.62,-215.93 311.62,-215.93"/>
+<path fill="none" stroke="black" d="M406.46,-180.12C381.8,-189.82 350.78,-202.02 324.75,-212.26"/>
+<polygon fill="black" stroke="black" points="315.4,-215.93 323.06,-208.08 320.06,-214.1 324.71,-212.27 324.71,-212.27 324.71,-212.27 320.06,-214.1 326.36,-216.46 315.4,-215.93 315.4,-215.93"/>
 </g>
 <!-- training.title -->
 <g id="node10" class="node">
@@ -78,14 +78,14 @@
 <!-- training.unit -->
 <g id="node12" class="node">
 <title>training.unit</title>
-<polygon fill="none" stroke="black" points="188.5,-252 81.5,-252 81.5,-216 188.5,-216 188.5,-252"/>
-<text text-anchor="middle" x="135" y="-230.3" font-family="Times,serif" font-size="14.00">training.unit</text>
+<polygon fill="none" stroke="black" points="193.5,-252 86.5,-252 86.5,-216 193.5,-216 193.5,-252"/>
+<text text-anchor="middle" x="140" y="-230.3" font-family="Times,serif" font-size="14.00">training.unit</text>
 </g>
 <!-- training.combination&#45;&gt;training.unit -->
 <g id="edge6" class="edge">
 <title>training.combination&#45;&gt;training.unit</title>
-<path fill="none" stroke="black" d="M366.88,-179.26C320.13,-188.69 260.5,-201.2 198.53,-215.94"/>
-<polygon fill="black" stroke="black" points="188.56,-218.33 197.24,-211.62 193.43,-217.16 198.29,-216 198.29,-216 198.29,-216 193.43,-217.16 199.34,-220.37 188.56,-218.33 188.56,-218.33"/>
+<path fill="none" stroke="black" d="M366.86,-179.71C321.36,-189.12 263.8,-201.46 203.64,-215.91"/>
+<polygon fill="black" stroke="black" points="193.57,-218.34 202.23,-211.62 198.43,-217.17 203.29,-215.99 203.29,-215.99 203.29,-215.99 198.43,-217.17 204.34,-220.37 193.57,-218.34 193.57,-218.34"/>
 </g>
 <!-- training.config -->
 <g id="node3" class="node">
@@ -102,8 +102,8 @@
 <!-- training.cycle&#45;&gt;training -->
 <g id="edge7" class="edge">
 <title>training.cycle&#45;&gt;training</title>
-<path fill="none" stroke="black" d="M336.78,-93.93C260.85,-101.31 129.78,-127.02 73,-216 46.62,-257.34 66.21,-316.78 81.5,-350.67"/>
-<polygon fill="black" stroke="black" points="85.86,-359.92 77.53,-352.79 83.73,-355.39 81.6,-350.87 81.6,-350.87 81.6,-350.87 83.73,-355.39 85.67,-348.95 85.86,-359.92 85.86,-359.92"/>
+<path fill="none" stroke="black" d="M336.92,-94.3C261.9,-102.1 133.12,-128.3 77,-216 65.13,-234.55 78.57,-311.15 87,-324 96.82,-338.96 112.46,-350.37 127.79,-358.7"/>
+<polygon fill="black" stroke="black" points="136.73,-363.25 125.78,-362.73 132.28,-360.99 127.82,-358.72 127.82,-358.72 127.82,-358.72 132.28,-360.99 129.86,-354.71 136.73,-363.25 136.73,-363.25"/>
 </g>
 <!-- training.cycle&#45;&gt;training.combination -->
 <g id="edge8" class="edge">
@@ -126,8 +126,8 @@
 <!-- training.cycle&#45;&gt;training.pause -->
 <g id="edge11" class="edge">
 <title>training.cycle&#45;&gt;training.pause</title>
-<path fill="none" stroke="black" d="M367.7,-108.01C354.04,-117.6 337.62,-130.36 325,-144 307.32,-163.11 291.5,-188.2 280.87,-206.87"/>
-<polygon fill="black" stroke="black" points="275.94,-215.72 276.87,-204.8 278.37,-211.36 280.81,-206.99 280.81,-206.99 280.81,-206.99 278.37,-211.36 284.74,-209.18 275.94,-215.72 275.94,-215.72"/>
+<path fill="none" stroke="black" d="M367.14,-108.04C353.49,-117.54 337.24,-130.22 325,-144 308.22,-162.89 293.89,-187.85 284.38,-206.54"/>
+<polygon fill="black" stroke="black" points="279.86,-215.67 280.26,-204.71 282.08,-211.19 284.3,-206.7 284.3,-206.7 284.3,-206.7 282.08,-211.19 288.33,-208.7 279.86,-215.67 279.86,-215.67"/>
 </g>
 <!-- training.cycle&#45;&gt;training.title -->
 <g id="edge12" class="edge">
@@ -138,20 +138,20 @@
 <!-- training.cycle&#45;&gt;training.unit -->
 <g id="edge13" class="edge">
 <title>training.cycle&#45;&gt;training.unit</title>
-<path fill="none" stroke="black" d="M361.02,-108.24C341.48,-118.51 316.26,-131.87 294,-144 252.91,-166.38 206.23,-192.61 174.13,-210.77"/>
-<polygon fill="black" stroke="black" points="165.07,-215.9 171.56,-207.05 169.42,-213.43 173.77,-210.97 173.77,-210.97 173.77,-210.97 169.42,-213.43 175.99,-214.89 165.07,-215.9 165.07,-215.9"/>
+<path fill="none" stroke="black" d="M362.48,-108.06C343.47,-118.39 318.8,-131.87 297,-144 256.51,-166.54 210.4,-192.74 178.68,-210.85"/>
+<polygon fill="black" stroke="black" points="169.73,-215.96 176.18,-207.1 174.07,-213.48 178.41,-211 178.41,-211 178.41,-211 174.07,-213.48 180.64,-214.91 169.73,-215.96 169.73,-215.96"/>
 </g>
 <!-- training.duration -->
 <g id="node6" class="node">
 <title>training.duration</title>
-<polygon fill="none" stroke="black" points="281.5,-324 142.5,-324 142.5,-288 281.5,-288 281.5,-324"/>
-<text text-anchor="middle" x="212" y="-302.3" font-family="Times,serif" font-size="14.00">training.duration</text>
+<polygon fill="none" stroke="black" points="243.5,-324 104.5,-324 104.5,-288 243.5,-288 243.5,-324"/>
+<text text-anchor="middle" x="174" y="-302.3" font-family="Times,serif" font-size="14.00">training.duration</text>
 </g>
 <!-- training.note&#45;&gt;training -->
 <g id="edge14" class="edge">
 <title>training.note&#45;&gt;training</title>
-<path fill="none" stroke="black" d="M299.86,-321.85C252.88,-334.49 186.12,-352.47 141.72,-364.42"/>
-<polygon fill="black" stroke="black" points="132.05,-367.02 140.54,-360.08 136.88,-365.72 141.71,-364.42 141.71,-364.42 141.71,-364.42 136.88,-365.72 142.88,-368.77 132.05,-367.02 132.05,-367.02"/>
+<path fill="none" stroke="black" d="M310.72,-324.12C283.39,-334.7 248.36,-348.24 220.6,-358.98"/>
+<polygon fill="black" stroke="black" points="211.11,-362.65 218.81,-354.84 215.77,-360.84 220.44,-359.04 220.44,-359.04 220.44,-359.04 215.77,-360.84 222.06,-363.24 211.11,-362.65 211.11,-362.65"/>
 </g>
 <!-- training.note&#45;&gt;training.description -->
 <g id="edge15" class="edge">
@@ -162,20 +162,20 @@
 <!-- training.pause&#45;&gt;training -->
 <g id="edge16" class="edge">
 <title>training.pause&#45;&gt;training</title>
-<path fill="none" stroke="black" d="M212.27,-252.11C181.05,-262.76 145.84,-276.55 134,-288 116.73,-304.7 106.6,-330.36 101.02,-349.84"/>
-<polygon fill="black" stroke="black" points="98.43,-359.66 96.63,-348.85 99.71,-354.83 100.98,-349.99 100.98,-349.99 100.98,-349.99 99.71,-354.83 105.33,-351.14 98.43,-359.66 98.43,-359.66"/>
+<path fill="none" stroke="black" d="M271.81,-252.21C270.81,-271.3 266.79,-302.27 252,-324 243.62,-336.32 231.34,-346.57 218.99,-354.68"/>
+<polygon fill="black" stroke="black" points="210.48,-359.95 216.62,-350.86 214.73,-357.32 218.99,-354.68 218.99,-354.68 218.99,-354.68 214.73,-357.32 221.35,-358.51 210.48,-359.95 210.48,-359.95"/>
 </g>
 <!-- training.pause&#45;&gt;training.duration -->
 <g id="edge17" class="edge">
 <title>training.pause&#45;&gt;training.duration</title>
-<path fill="none" stroke="black" d="M253.4,-252.3C246.88,-260.61 238.93,-270.72 231.75,-279.86"/>
-<polygon fill="black" stroke="black" points="225.44,-287.9 228.08,-277.25 228.53,-283.96 231.62,-280.03 231.62,-280.03 231.62,-280.03 228.53,-283.96 235.16,-282.81 225.44,-287.9 225.44,-287.9"/>
+<path fill="none" stroke="black" d="M248.03,-252.12C235.45,-261.11 219.87,-272.24 206.25,-281.97"/>
+<polygon fill="black" stroke="black" points="198.07,-287.81 203.59,-278.34 202.13,-284.9 206.2,-282 206.2,-282 206.2,-282 202.13,-284.9 208.82,-285.66 198.07,-287.81 198.07,-287.81"/>
 </g>
 <!-- training.pause&#45;&gt;training.note -->
 <g id="edge18" class="edge">
 <title>training.pause&#45;&gt;training.note</title>
-<path fill="none" stroke="black" d="M288.75,-252.3C299.84,-261.12 313.47,-271.97 325.49,-281.53"/>
-<polygon fill="black" stroke="black" points="333.5,-287.9 322.87,-285.19 329.58,-284.78 325.67,-281.67 325.67,-281.67 325.67,-281.67 329.58,-284.78 328.47,-278.15 333.5,-287.9 333.5,-287.9"/>
+<path fill="none" stroke="black" d="M292.52,-252.3C302.87,-261.03 315.59,-271.76 326.84,-281.25"/>
+<polygon fill="black" stroke="black" points="334.72,-287.9 324.17,-284.89 330.9,-284.67 327.07,-281.45 327.07,-281.45 327.07,-281.45 330.9,-284.67 329.98,-278.01 334.72,-287.9 334.72,-287.9"/>
 </g>
 <!-- training.period -->
 <g id="node9" class="node">
@@ -186,8 +186,8 @@
 <!-- training.period&#45;&gt;training -->
 <g id="edge19" class="edge">
 <title>training.period&#45;&gt;training</title>
-<path fill="none" stroke="black" d="M483.9,-22.05C340.79,-30.78 0,-61.95 0,-161 0,-161 0,-161 0,-235 0,-282.99 37.94,-327.04 65.87,-352.96"/>
-<polygon fill="black" stroke="black" points="73.44,-359.78 63,-356.43 69.73,-356.43 66.01,-353.08 66.01,-353.08 66.01,-353.08 69.73,-356.43 69.02,-349.74 73.44,-359.78 73.44,-359.78"/>
+<path fill="none" stroke="black" d="M483.9,-22.05C340.79,-30.78 0,-61.95 0,-161 0,-161 0,-161 0,-235 0,-300.75 75.5,-341.49 127.03,-361.65"/>
+<polygon fill="black" stroke="black" points="136.67,-365.29 125.73,-365.96 132,-363.52 127.32,-361.75 127.32,-361.75 127.32,-361.75 132,-363.52 128.91,-357.54 136.67,-365.29 136.67,-365.29"/>
 </g>
 <!-- training.period&#45;&gt;training.cycle -->
 <g id="edge20" class="edge">
@@ -216,8 +216,8 @@
 <!-- training.period&#45;&gt;training.unit -->
 <g id="edge24" class="edge">
 <title>training.period&#45;&gt;training.unit</title>
-<path fill="none" stroke="black" d="M483.75,-27.58C438.96,-35.3 377.89,-49.04 328,-72 278.25,-94.89 270.11,-108.98 228,-144 203.34,-164.51 177.11,-189.99 158.81,-208.42"/>
-<polygon fill="black" stroke="black" points="151.48,-215.86 155.3,-205.58 154.99,-212.3 158.5,-208.74 158.5,-208.74 158.5,-208.74 154.99,-212.3 161.71,-211.89 151.48,-215.86 151.48,-215.86"/>
+<path fill="none" stroke="black" d="M483.58,-27.21C438.7,-34.75 377.61,-48.43 328,-72 257.81,-105.34 192.98,-171.91 160.96,-208.13"/>
+<polygon fill="black" stroke="black" points="154.27,-215.8 157.45,-205.31 157.55,-212.03 160.84,-208.26 160.84,-208.26 160.84,-208.26 157.55,-212.03 164.23,-211.22 154.27,-215.8 154.27,-215.8"/>
 </g>
 <!-- training.training -->
 <g id="node11" class="node">
@@ -228,14 +228,20 @@
 <!-- training.unit&#45;&gt;training -->
 <g id="edge25" class="edge">
 <title>training.unit&#45;&gt;training</title>
-<path fill="none" stroke="black" d="M120.11,-252.39C112.65,-262.18 104.3,-275.02 100,-288 93.4,-307.92 92.39,-331.72 92.9,-349.69"/>
-<polygon fill="black" stroke="black" points="93.36,-359.78 88.41,-349.99 93.13,-354.78 92.9,-349.79 92.9,-349.79 92.9,-349.79 93.13,-354.78 97.4,-349.58 93.36,-359.78 93.36,-359.78"/>
+<path fill="none" stroke="black" d="M119.62,-252.47C110.19,-261.91 99.99,-274.4 95,-288 89.48,-303.02 87.47,-309.88 95,-324 102.26,-337.62 114.75,-348.35 127.67,-356.5"/>
+<polygon fill="black" stroke="black" points="136.64,-361.73 125.73,-360.58 132.32,-359.21 128,-356.69 128,-356.69 128,-356.69 132.32,-359.21 130.27,-352.8 136.64,-361.73 136.64,-361.73"/>
+</g>
+<!-- training.unit&#45;&gt;training.duration -->
+<g id="edge26" class="edge">
+<title>training.unit&#45;&gt;training.duration</title>
+<path fill="none" stroke="black" d="M148.4,-252.3C152.27,-260.27 156.95,-269.9 161.24,-278.74"/>
+<polygon fill="black" stroke="black" points="165.69,-287.9 157.28,-280.87 163.51,-283.4 161.32,-278.9 161.32,-278.9 161.32,-278.9 163.51,-283.4 165.37,-276.93 165.69,-287.9 165.69,-287.9"/>
 </g>
 <!-- training.unit&#45;&gt;training.note -->
-<g id="edge26" class="edge">
+<g id="edge27" class="edge">
 <title>training.unit&#45;&gt;training.note</title>
-<path fill="none" stroke="black" d="M188.54,-252.03C219.54,-261.9 258.76,-274.38 291.34,-284.75"/>
-<polygon fill="black" stroke="black" points="301.22,-287.89 290.33,-289.15 296.46,-286.37 291.69,-284.86 291.69,-284.86 291.69,-284.86 296.46,-286.37 293.06,-280.57 301.22,-287.89 301.22,-287.89"/>
+<path fill="none" stroke="black" d="M192.32,-252.03C222.62,-261.9 260.95,-274.38 292.79,-284.75"/>
+<polygon fill="black" stroke="black" points="302.45,-287.89 291.54,-289.07 297.69,-286.34 292.94,-284.79 292.94,-284.79 292.94,-284.79 297.69,-286.34 294.33,-280.51 302.45,-287.89 302.45,-287.89"/>
 </g>
 </g>
 </svg>

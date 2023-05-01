@@ -179,8 +179,6 @@ class Description:
                     strResult += ' ' + c
                 elif type(c) is list:
                     strResult += self.__listDescriptionToString__(c)
-                else:
-                    print('fail: ',c, file=sys.stderr)
 
         return strResult
 
@@ -198,7 +196,6 @@ class Description:
 
         """ returns a HTML string of nested self.listDescription """
 
-        #strResult = '<div>'
         strResult = ''
 
         if listArg == None:
@@ -224,10 +221,6 @@ class Description:
                     strResult += '</li>\n'
                 elif type(c) is list:
                     strResult += self.__listDescriptionToHtml__(c)
-                else:
-                    print('fail: ',c, file=sys.stderr)
-
-        #strResult += '</div>'
 
         return strResult
 
@@ -262,8 +255,6 @@ class Description:
             """ a list, but single element only """
             for c in listArg:
                 strResult += self.__listDescriptionToFreemind__(c)
-        else:
-            print('fail: ',listArg, file=sys.stderr)
 
         return strResult
 

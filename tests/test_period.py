@@ -29,6 +29,8 @@ print('Module Test: ' + __file__ + '\n')
 t = Period('General Basics')
 t.appendDescription('Regeneration')
 
+t.append(Note('ABC'))
+
 c = Cycle('General Endurance')
 c.insert(1,Unit('18:00;3.5;RB;25:00'))
 c.insert(3,Unit('18:00;3.5;RB;25:00'))
@@ -53,7 +55,7 @@ t.append(c)
 #print(t.report())
 #print(t.toHtml())
 #print(t.toXML())
-
+#print(t.to_ical())
 #print(t.toSVGGanttChart())
 
 #t = Period('Plan').CalendarWeekPeriod(2022)
