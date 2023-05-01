@@ -589,7 +589,8 @@ class Period(Title,Description):
 
         strResult = ''
         for c in self.child:
-            strResult += c.toSqlite()
+            if type(c) == Cycle or type(c) == Period:
+                strResult += c.toSqlite()
             
         return strResult
 
@@ -600,17 +601,17 @@ class Period(Title,Description):
         
         strResult = 'PRAGMA journal_mode = OFF;\n\n'
         
-        strResult += """CREATE TABLE IF NOT EXISTS "queries" (query text);
+        strResult += """CREATE TABLE IF NOT EXISTS "queries" (query text, "description"	TEXT);
 
-        INSERT INTO 'queries' VALUES (\"SELECT type FROM units;\");
-        INSERT INTO 'queries' VALUES (\"SELECT count() AS Count, type AS Type FROM units GROUP BY type ORDER BY Count DESC;\");
-        INSERT INTO 'queries' VALUES (\"SELECT sum(dist) AS Sum, type AS Type FROM units GROUP BY type ORDER BY Sum DESC;\");\n\n"""
+        INSERT INTO 'queries' VALUES (\"SELECT * FROM units;\",\"find all units\");
+        INSERT INTO 'queries' VALUES (\"SELECT count() AS Count, type AS Type FROM units GROUP BY type ORDER BY Count DESC;\",\"count the units\");
+        INSERT INTO 'queries' VALUES (\"SELECT sum(dist) AS Sum, type AS Type FROM units GROUP BY type ORDER BY Sum DESC;\",\"summarize all distances\");\n\n"""
 
         strResult += """CREATE TABLE IF NOT EXISTS "units" (
 	"date"	TEXT,
 	"dist"	REAL,
 	"type"	TEXT,
-	"duration"	INTEGER,
+	"duration"	TEXT,
 	"description"	TEXT
         );\n\n"""
 
