@@ -397,7 +397,7 @@ class Unit(Note):
 
             # TODO: add reminder
             alarm = Alarm()
-            alarm.add('action', 'none')
+            alarm.add('action', 'DISPLAY')
             alarm.add('trigger', self.dt - timedelta(minutes=15))
             event.add_component(alarm)
         

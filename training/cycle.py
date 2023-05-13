@@ -157,11 +157,28 @@ class Cycle(Title,Description):
         return self
 
 
-    def shift(self,intIndexA,intIndexB,flagReplace=False):
+    def shift(self,intIndexA,intIndexB=None,flagReplace=False):
 
         """  """
 
-        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self) and intIndexB < len(self) and intIndexA != intIndexB:
+        if type(intIndexA) != int:
+            print('error: shift of a cycle requires an integer value', file=sys.stderr)
+        elif intIndexB == None:
+            # shift 
+            print('info: shift by ' + str(intIndexA), file=sys.stderr)
+            if intIndexA > 0 and intIndexA < len(self.day):
+                for i in range(0,intIndexA):
+                    self.day.insert(0,[])
+                for i in range(0,intIndexA):
+                    self.day.pop()
+            elif intIndexA < 0 and intIndexA > - len(self.day):
+                for i in range(0, - intIndexA):
+                    self.day.pop(0)
+                for i in range(0, - intIndexA):
+                    self.day.append([])
+        elif type(intIndexB) != int:
+            print('error: shift of a cycle requires an integer value', file=sys.stderr)
+        elif intIndexA > -1 and intIndexB > -1 and intIndexA < len(self) and intIndexB < len(self) and intIndexA != intIndexB:
             self.copy(intIndexA,intIndexB,flagReplace)
             self.remove(intIndexA)
 
@@ -271,18 +288,12 @@ class Cycle(Title,Description):
         return objResult
 
 
-    def postpone(self,n=1):
+    def reverse(self):
 
         """  """
 
-        if type(n) == int and n > 0 and len(self.day) > n:
-
-            d = self.day[:(len(self.day) - n)]
-            for i in range(0,n):
-                d.insert(0,[])
-
-            self.day = d
-            
+        self.day.reverse()
+        
         return self
 
 
