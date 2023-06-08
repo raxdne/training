@@ -216,7 +216,7 @@ class Cycle(Title,Description):
 
         """  """
 
-        objResult = None
+        objResult = self
 
         if objArg == None:
             
@@ -226,25 +226,21 @@ class Cycle(Title,Description):
             
             for i in objIndex:
                 self.insert(i,objArg,flagReplace)
-            return []
         
         elif type(objArg) == list and len(objArg) > 0:
             
             for u in objArg:
                 self.insert(objIndex,u,flagReplace)
-            return []
         
-        elif (type(objArg) == Unit or type(objArg) == Combination or type(objArg) == Note) and objIndex > -1 and objIndex < len(self):
-            
-            objResult = objArg.dup()
+        elif type(objIndex) == int and objIndex > -1 and objIndex < len(self) and (type(objArg) == Unit or type(objArg) == Combination or type(objArg) == Note):
 
             if flagReplace:
                 # override existing
-                self.day[objIndex] = [objResult]
+                self.day[objIndex] = [objArg.dup()]
             else:
-                self.day[objIndex].append(objResult)
+                self.day[objIndex].append(objArg.dup())
                 
-        elif type(objArg) == Cycle and objIndex > -1 and objIndex < len(self) and len(objArg) > 0 and len(objArg) + objIndex <= len(self):
+        elif type(objIndex) == int and objIndex > -1 and objIndex < len(self) and type(objArg) == Cycle and len(objArg) > 0 and len(objArg) + objIndex <= len(self):
 
             i = 0
             
@@ -259,8 +255,6 @@ class Cycle(Title,Description):
                     
                 i += 1
 
-            objResult = self
-            
         else:
             print('error: ' + str(objArg), file=sys.stderr)
             
@@ -271,19 +265,20 @@ class Cycle(Title,Description):
 
         """  """
 
-        objResult = None
+        objResult = self
 
         if objArg == None or objArg.dt == None:
             print('error: ' + str(objArg), file=sys.stderr)
+        elif self.dateBegin == None:
+            print('error: date begin', file=sys.stderr)
         elif type(objArg) == Unit or type(objArg) == Combination or type(objArg) == Note:
             delta = objArg.dt.date() - self.dateBegin
             if delta.days > -1 and objArg.dt.date() <= self.dateEnd:
-                objResult = objArg.dup()
                 if flagReplace:
                     # override existing
-                    self.day[delta.days] = [objResult]
+                    self.day[delta.days] = [objArg.dup()]
                 else:
-                    self.day[delta.days].append(objResult)
+                    self.day[delta.days].append(objArg.dup())
 
         return objResult
 

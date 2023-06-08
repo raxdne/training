@@ -2,6 +2,10 @@
 #
 #
 
+#import pdb
+
+import sys
+
 from datetime import date
 
 from training.unit import Unit
@@ -199,7 +203,13 @@ def PlanSimple(strArg):
 
 s = PlanSimple('Season Simple').schedule(date.today().year,1,1)
 
-s.remove(patternType=r'^[^B]')
+# patch some days using a scheduled cycle
+c = Cycle('Pause Running').insert([1,3,5],Unit('10;Running;3:00:00')).schedule(date.today().year,7,2)
+print('info: ' + str(c), file=sys.stderr)
+#breakpoint()
+s.insertByDate(c,True)
+    
+#s.remove(patternType=r'^[^B]')
 
 print(s.report())
 

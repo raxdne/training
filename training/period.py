@@ -173,29 +173,59 @@ class Period(Title,Description):
         return self
 
     
-    def insertByDate(self,objUnit,flagReplace=False):
+    def insertByDate(self,objArg,flagReplace=False):
 
         """  """
 
-        objResult = None
+        objResult = self
 
-        if objUnit != None and objUnit.dt != None:
+        if objArg == None:
+            pass
+        elif self.dateBegin == None:
+            print('error: date begin', file=sys.stderr)
+        elif type(objArg) == Cycle:
+            d = 0
+            for v in objArg.day:
+                if len(v) < 1:
+                    # day without elements
+                    if flagReplace:
+                        # create a scheduled empty unit to override
+                        u = Unit()
+                        u.setDate(objArg.dateBegin + timedelta(days=d))
+                        self.insertByDate(u,True)
+                else:
+                    for u in v:
+                        if type(u) == Unit or type(u) == Combination:
+                            self.insertByDate(u,flagReplace)
+                        else:
+                            print('error: type ' + type(u), file=sys.stderr)
+                d += 1
+
+            if flagReplace:
+                c = self.getCycleByDate(objArg.dateBegin)
+                if c != None:
+                    if objArg.hasTitle():
+                        # copy title from objArg to c
+                        c.setTitleStr(objArg.getTitleStr())
+                    if objArg.hasDescription():
+                        # copy description from objArg to c
+                        c.setDescription(objArg.getDescription())
+                # TODO: handle multiple affected cycles
+
+        elif objArg != None and objArg.dt != None:
             if len(self.child) < 1:
                 # there is no child cycle yet
-                delta = objUnit.dt.date() - self.dateBegin
-                if delta.days > -1 and objUnit.dt.date() <= self.dateEnd:
+                delta = objArg.dt.date() - self.dateBegin
+                if delta.days > -1 and objArg.dt.date() <= self.dateEnd:
                     l = self.dateEnd - self.dateBegin
                     c = Cycle(self.getTitleStr(), l.days + 1)
                     c.schedule(self.dateBegin.year,self.dateBegin.month,self.dateBegin.day)
-                    objResult = c.insertByDate(objUnit)
-                    if objResult != None:
-                        self.append(c)
+                    c.insertByDate(objArg,flagReplace)
+                    self.append(c)
             else:
                 for c in self.child:
                     if type(c) == Cycle or type(c) == Period:
-                        objResult = c.insertByDate(objUnit,flagReplace)
-                        if objResult != None:
-                            break
+                        c.insertByDate(objArg,flagReplace)
 
         return objResult
 
