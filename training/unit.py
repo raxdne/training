@@ -378,15 +378,18 @@ class Unit(Note):
         event = Event()
 
         if self.type == None:
-            event.add('summary', self.__listDescriptionToString__())
+            if self.hasDescription():
+                event.add('summary', self.__listDescriptionToString__())
         else:
             event.add('summary', "{} {}".format(self.type, str(self.getDuration())))
             if self.hasDescription():
                 event.add('description', self.__listDescriptionToString__())
 
-        if self.dt == None:
+        if event.is_empty():
+            return
+        elif self.dt == None:
             print('error: ' + str(self), file=sys.stderr)
-            pass
+            return
         elif self.dt.time() == time(0) or self.duration == None:
             # no time defined
             event.add('dtstart', self.dt.date())
