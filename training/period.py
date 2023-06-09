@@ -39,6 +39,7 @@ from training.title import Title
 from training.note import Note
 from training.unit import Unit
 from training.cycle import Cycle
+from training.combination import Combination
 
 #
 #
@@ -134,7 +135,7 @@ class Period(Title,Description):
         """  """
 
         if len(self.child) > 0:
-            self.child[len(self.child) - 1].appendDescription(objArg)
+            self.child[-1].appendDescription(objArg)
 
 
     def getDuration(self):
@@ -173,6 +174,37 @@ class Period(Title,Description):
         return self
 
     
+    def insert(self,objArg):
+
+        """  """
+
+        objResult = self
+
+        if objArg == None or objArg.dateBegin == None:
+            print('error: date begin', file=sys.stderr)
+        elif self.dateBegin == None:
+            print('error: date begin', file=sys.stderr)
+        elif type(objArg) == Cycle or type(objArg) == Period:
+            p = self.getPeriodByDate(objArg.dateBegin)
+            if p == None:
+                print('error: no according period found' + str(objArg), file=sys.stderr)
+            elif len(p.child) < 1:
+                p.child.append(objArg.dup())
+            else:
+                i = 0
+                for i in range(len(p.child)):
+                    if type(p.child[i]) == Cycle or type(p.child[i]) == Period:
+                        if p.child[i].dateBegin >= objArg.dateBegin:
+                            p.child.insert(i,objArg.dup())
+                            break
+                        elif p.child[i] == p.child[-1]:
+                            p.child.append(objArg.dup())
+                    i += 1
+                self.schedule()
+                
+        return objResult
+
+    
     def insertByDate(self,objArg,flagReplace=False):
 
         """  """
@@ -198,7 +230,7 @@ class Period(Title,Description):
                         if type(u) == Unit or type(u) == Combination:
                             self.insertByDate(u,flagReplace)
                         else:
-                            print('error: type ' + type(u), file=sys.stderr)
+                            print('error: type ' + str(type(u)), file=sys.stderr)
                 d += 1
 
             if flagReplace:
@@ -211,6 +243,7 @@ class Period(Title,Description):
                         # copy description from objArg to c
                         c.setDescription(objArg.getDescription())
                 # TODO: handle multiple affected cycles
+                # TODO: transfer color etc
 
         elif objArg != None and objArg.dt != None:
             if len(self.child) < 1:
@@ -241,7 +274,6 @@ class Period(Title,Description):
         elif type(objDate) == date:
             return self.getCycleByDate(datetime.combine(objDate,time(0)))
         elif type(objDate) == datetime:
-
             for c in self.child:
                 if type(c) == Period:
                     if c.dateBegin <= objDate.date() and objDate.date() <= c.dateEnd:
@@ -265,13 +297,18 @@ class Period(Title,Description):
         elif type(objDate) == date:
             return self.getPeriodByDate(datetime.combine(objDate,time(0)))
         elif type(objDate) == datetime:
-            
-            for c in self.child:
-                if type(c) == Period:
-                    if c.dateBegin <= objDate.date() and objDate.date() <= c.dateEnd:
-                        return c.getPeriodByDate(objDate)
-                elif type(c) == Cycle and c.getCycleByDate(objDate) != None:
+            if len(self.child) < 1:
+                if self.dateBegin <= objDate.date() and objDate.date() <= self.dateEnd:
                     return self
+            else:
+                for c in self.child:
+                    if type(c) == Period:
+                        if c.dateBegin <= objDate.date() and objDate.date() <= c.dateEnd:
+                            return c.getPeriodByDate(objDate)
+                    elif type(c) == Cycle and c.getCycleByDate(objDate) != None:
+                        return self
+        else:
+            print('error: no according period found' + str(objDate), file=sys.stderr)
 
         return None
 
@@ -296,6 +333,15 @@ class Period(Title,Description):
         return self
 
 
+    def swap(self,intA,intB):
+
+        """  """
+
+        # TODO: swap childs
+        
+        return self
+
+
     def remove(self,patternType=None):
 
         """  """
@@ -311,45 +357,42 @@ class Period(Title,Description):
 
         """  """
 
-        if self.dateBegin == None:
-
-            if intYear == None and intMonth == None and intDay == None:
-                if len(self.child) == 1:
-                    print('info: set dates of period according to child', file=sys.stderr)
-                    self.dateBegin = self.child[0].dateBegin
-                    self.dateEnd = self.child[0].dateEnd
-                elif len(self.child) > 1:
-                    print('info: set dates of period according to childs', file=sys.stderr)
-                    self.dateBegin = self.child[0].dateBegin
-                    self.dateEnd = self.child[-1].dateEnd
-                else:
-                    print('error: cannot set dates according to childs', file=sys.stderr)
-                    return None
+        if intYear == None and intMonth == None and intDay == None:
+            if self.dateScheduled != None:
+                # re-use former schedule date
+                pass
+            elif len(self.child) > 0:
+                print('info: set dates of period according to childs', file=sys.stderr)
+                self.dateBegin = self.child[0].dateBegin
+                self.dateEnd = self.child[-1].dateEnd
+                return self
             else:
-                try:
-                    if intMonth == None and intDay == None:
-                        d = date(intYear, 1, 1)
-                    elif intDay == None:
-                        d = date(intYear, intMonth, 1)
-                    else:
-                        d = date(intYear, intMonth, intDay)
-                except ValueError as e:
-                    print('error: ' + str(e), file=sys.stderr)
-                    return None
-
-                e = d
-                for c in self.child:
-                    if type(c) == Cycle or type(c) == Period:
-                        c.schedule(e.year, e.month, e.day)
-                        e += timedelta(days=len(c))
-                    elif type(c) == Note:
-                        c.dt = e
-                        #print('type: ' + c.dt.isoformat(), file=sys.stderr)
-
-                self.dateBegin = d
-                self.dateEnd = self.dateBegin + timedelta(days=(len(self) - 1))
+                print('error: cannot set dates according to childs', file=sys.stderr)
+                return None
         else:
-            print('info: cannot set date again', file=sys.stderr)
+ 
+            try:
+                if intMonth == None and intDay == None:
+                    self.dateScheduled = date(intYear, 1, 1)
+                elif intDay == None:
+                    self.dateScheduled = date(intYear, intMonth, 1)
+                else:
+                    self.dateScheduled = date(intYear, intMonth, intDay)
+            except ValueError as e:
+                print('error: ' + str(e), file=sys.stderr)
+                return None
+
+        e = self.dateScheduled
+        for c in self.child:
+            if type(c) == Cycle or type(c) == Period:
+                c.schedule(e.year, e.month, e.day)
+                e += timedelta(days=len(c))
+            elif type(c) == Note:
+                c.dt = e
+                #print('type: ' + c.dt.isoformat(), file=sys.stderr)
+
+        self.dateBegin = self.dateScheduled
+        self.dateEnd = self.dateBegin + timedelta(days=(len(self) - 1))
 
         return self
 
@@ -747,8 +790,8 @@ class Period(Title,Description):
             if type(c) == Cycle or type(c) == Period:
                 if d_0 == None:
                     d_0 = c.dateBegin
-                elif d_1 == None:
-                    d_1 = self.child[len(self.child) - 1].dateEnd
+                if d_1 == None:
+                    d_1 = self.child[-1].dateEnd
 
         diagram_height = 40 * (config.diagram_bar_height * 2) + 100
         try:
