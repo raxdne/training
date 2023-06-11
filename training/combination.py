@@ -190,6 +190,15 @@ class Combination(Title,Description):
         return timedelta(seconds=intResult)
 
 
+    def statCollectData(self,listX,listY):
+
+        """ return a """
+
+        for u in self.child:
+            if type(u) == Unit:
+                u.statCollectData(listX,listY)
+
+
     def scale(self,floatScale,patternType=None):
 
         """  """

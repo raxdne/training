@@ -17,6 +17,8 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
+import io
+
 import sys
 
 import math
@@ -32,6 +34,9 @@ from datetime import timedelta, date, datetime, time, timezone
 from suntime import Sun
 
 from icalendar import Calendar, Event, Alarm
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 from training import config as config
 from training.description import Description
@@ -406,6 +411,15 @@ class Period(Title,Description):
                 c.stat(dictArg)
 
 
+    def statCollectData(self,listX,listY):
+
+        """  """
+
+        for c in self.child:
+            if type(c) == Cycle or type(c) == Period:
+                c.statCollectData(listX,listY)
+
+
     def report(self, dictArg=None):
 
         """  """
@@ -566,6 +580,10 @@ class Period(Title,Description):
         
         strResult += '<pre>' + self.report() + '</pre>'
         
+        strResult += self.plotTimeDist()
+        strResult += self.plotHist()
+        #strResult += self.toSVGGanttChart()
+
         #strResult += '<svg baseProfile="full" height="600" version="1.1" width="1000" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">' + self.toSVG(200,0) + '</svg>'
 
         for c in self.child:
@@ -856,6 +874,102 @@ class Period(Title,Description):
         cal.add('version', '2.0')
         self.to_ical(cal)
         return cal.to_ical()
+
+
+    def plotHist(self,fileNameOut=None):
+
+        """ Histogram chart of periods and cycles """
+
+        strResult = ''
+        
+        intMax = 100
+        
+        #plt.style.use('_mpl-gallery')
+
+        # make data
+        x = []
+        y = []
+        self.statCollectData(x,y)
+        #print('info: ' + str(x), file=sys.stderr)
+
+        if len(x) > 2:
+            # plot:
+            fig, ax = plt.subplots()
+            ax.grid(visible=True, linestyle='dotted', linewidth=0.5)
+            ax.hist(x, bins=19, linewidth=0.5, edgecolor="white")
+            ax.set_xlabel("s [km]")
+            ax.set_ylabel("n")
+            #ax.set(xlim=(0, intMax), xticks=range(0, intMax, 5))
+            #       ylim=(0, 100), yticks=np.linspace(0, 10, 10))
+
+            #plt.show()
+
+            if fileNameOut == None:
+                f = io.StringIO()
+                plt.savefig(f, format = "svg")
+                plt.close()
+                strResult = f.getvalue()
+                f.close()
+            else:
+                plt.savefig(fileNameOut)
+    
+        return strResult
+
+
+
+    def plotTimeDist(self,fileNameOut=None):
+
+        """ chart of time over distance """
+
+        # TODO: https://matplotlib.org/stable/gallery/lines_bars_and_markers/scatter_hist.html
+        
+        strResult = ''
+        
+        # make data
+        x = []
+        y = []
+        self.statCollectData(x,y)
+        #print('x = ' + str(x), file=sys.stderr)
+        #print('y = ' + str(y), file=sys.stderr)
+
+        if len(x) > 2:
+
+            z = np.polyfit(x, y, 1)
+            #print('z = ' + str(z), file=sys.stderr)
+            
+            # plot:
+            fig, ax = plt.subplots()
+            ax.grid(visible=True, linestyle='dotted', linewidth=0.5)
+
+            # Plot a curved line with ticked style path
+            x_l = np.linspace(20.0, 100.0, 2)
+            y_l = x_l * 3.0
+            ax.plot(x_l, y_l, label="v=20 km/h")
+            y_l = x_l * 2.0
+            ax.plot(x_l, y_l, label="v=30 km/h")
+
+            ax.scatter(x, y, s=4)
+            ax.set_xlabel("s [km]")
+            ax.set_ylabel("t [min]")
+
+            x_f = np.array(x)
+            #x_f = np.linspace(0.0, 1.0, nx)
+            y_f = x_f * z[0] + z[1]
+            ax.plot(x_f, y_f, label="fit {:.1f} min/km".format(z[0]))
+            ax.legend()
+
+            #plt.show()
+
+            if fileNameOut == None:
+                f = io.StringIO()
+                plt.savefig(f, format = "svg")
+                plt.close()
+                strResult = f.getvalue()
+                f.close()
+            else:
+                plt.savefig(fileNameOut)
+    
+        return strResult
 
 
     def CalendarYearPeriod(self,intYear,strArg=None):

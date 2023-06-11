@@ -177,6 +177,17 @@ class Unit(Note):
         return Duration(0)
 
 
+    def statCollectData(self,listX,listY):
+
+        """ return a """
+
+        if self.dist == None or self.dist < 0.001 or self.getDuration().total_seconds() < 100:
+            pass
+        else:
+            listX.append(self.dist)
+            listY.append(self.getDuration().total_seconds() / 60)
+
+
     def scale(self,floatScale,patternType=None):
 
         """  """

@@ -433,6 +433,16 @@ class Cycle(Title,Description):
                     u.stat(dictArg)
 
 
+    def statCollectData(self,listX,listY):
+
+        """  """
+
+        for v in self.day:
+            for u in v:
+                if type(u) == Unit or type(u) == Combination:
+                    u.statCollectData(listX,listY)
+
+
     def report(self, dictArg=None):
 
         """  """
