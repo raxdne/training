@@ -190,15 +190,6 @@ class Combination(Title,Description):
         return timedelta(seconds=intResult)
 
 
-    def statCollectData(self,listX,listY):
-
-        """ return a """
-
-        for u in self.child:
-            if type(u) == Unit:
-                u.statCollectData(listX,listY)
-
-
     def scale(self,floatScale,patternType=None):
 
         """  """
@@ -210,16 +201,17 @@ class Combination(Title,Description):
         return self
 
 
-    def stat(self, dictArg):
+    def stat(self):
 
         """  """
 
-        if dictArg == None:
-            print('error: ' + 'no dict', file=sys.stderr)
-        else:
-            for u in self.child:
-                if type(u) == Unit:
-                    u.stat(dictArg)
+        listResult = []
+
+        for u in self.child:
+            if type(u) == Unit:
+                listResult.extend(u.stat())
+
+        return listResult
 
 
     def dup(self):

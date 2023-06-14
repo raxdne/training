@@ -68,7 +68,8 @@ class Period(Title,Description):
         self.child = []
         self.dateBegin = None
         self.dateEnd = None
-
+        self.data = None
+        
         self.setPlan()
 
 
@@ -132,6 +133,8 @@ class Period(Title,Description):
             if type(c) == Cycle or type(c) == Period:
                 c.resetDistances()
 
+        self.data = []
+        
         return self
 
 
@@ -147,6 +150,8 @@ class Period(Title,Description):
 
         """ return a timedelta """
 
+        # TODO: use self.data
+        
         intResult = 0
         for u in self.child:
             if type(u) == Cycle:
@@ -159,6 +164,8 @@ class Period(Title,Description):
 
         """  """
 
+        # TODO: use self.data
+        
         intResult = 0
         for c in self.child:
             if type(c) == Cycle or type(c) == Period:
@@ -402,42 +409,48 @@ class Period(Title,Description):
         return self
 
 
-    def stat(self, dictArg):
+    def stat(self):
 
         """  """
 
-        for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
-                c.stat(dictArg)
-
-
-    def statCollectData(self,listX,listY):
-
-        """  """
-
-        for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
-                c.statCollectData(listX,listY)
+        listResult = []
+        
+        if type(self.data) == list and len(self.data) > 0:
+            return self.data
+        else:
+            for c in self.child:
+                if type(c) == Cycle or type(c) == Period:
+                    listResult.extend(c.stat())
+            self.data = listResult
+            
+        return listResult
 
 
     def report(self, dictArg=None):
 
         """  """
 
+        strResult = ''
+        
+        self.stat()
+
+        l = np.array(list(map(lambda lst: lst[2], self.data)))
+        sum_h = l.sum() / 60
+
         if dictArg == None:
             dictArg = {}
             
-        self.stat(dictArg)
+        for u in self.data:
+            
+            if u[3] not in dictArg:
+                dictArg[u[3]] = [[],[]]
+                
+            dictArg[u[3]][0].append(u[1])
+            dictArg[u[3]][1].append(u[2])
 
-        sum_h = 0.0
-        for k in sorted(dictArg.keys()):
-            sum_h += sum(dictArg[k][1])
-        sum_h /= 3600
-        
-        strResult = ''
-        for k in sorted(dictArg.keys()):
-            # all registered kinds of units
-            sum_k = sum(dictArg[k][1]) / 3600
+        for k in sorted(set(map(lambda lst: lst[3], self.data))):
+            # all kinds of units
+            sum_k = sum(dictArg[k][1]) / 60.0
             
             if sum_h < 0.01:
                 pass
@@ -882,16 +895,10 @@ class Period(Title,Description):
 
         strResult = ''
         
-        intMax = 100
-        
-        #plt.style.use('_mpl-gallery')
+        self.stat()
 
         # make data
-        x = []
-        y = []
-        self.statCollectData(x,y)
-        #print('info: ' + str(x), file=sys.stderr)
-
+        x = np.array(list(map(lambda lst: lst[1], self.data)))
         if len(x) > 2:
             # plot:
             fig, ax = plt.subplots()
@@ -899,10 +906,6 @@ class Period(Title,Description):
             ax.hist(x, bins=19, linewidth=0.5, edgecolor="white")
             ax.set_xlabel("s [km]")
             ax.set_ylabel("n")
-            #ax.set(xlim=(0, intMax), xticks=range(0, intMax, 5))
-            #       ylim=(0, 100), yticks=np.linspace(0, 10, 10))
-
-            #plt.show()
 
             if fileNameOut == None:
                 f = io.StringIO()
@@ -925,16 +928,14 @@ class Period(Title,Description):
         
         strResult = ''
         
+        self.stat()
+
         # make data
-        x = []
-        y = []
-        self.statCollectData(x,y)
-        #print('x = ' + str(x), file=sys.stderr)
-        #print('y = ' + str(y), file=sys.stderr)
+        x = np.array(list(map(lambda lst: lst[1], self.data)))
+        y = np.array(list(map(lambda lst: lst[2], self.data)))
+        if len(x) > 2 and len(x) == len(y):
 
-        if len(x) > 2:
-
-            z = np.polyfit(x, y, 1)
+            #z = np.polyfit(x, y, 1)
             #print('z = ' + str(z), file=sys.stderr)
             
             # plot:
@@ -942,7 +943,7 @@ class Period(Title,Description):
             ax.grid(visible=True, linestyle='dotted', linewidth=0.5)
 
             # Plot a curved line with ticked style path
-            x_l = np.linspace(20.0, 100.0, 2)
+            x_l = np.array([20.0, 100.0])
             y_l = x_l * 3.0
             ax.plot(x_l, y_l, label="v=20 km/h")
             y_l = x_l * 2.0
@@ -952,10 +953,10 @@ class Period(Title,Description):
             ax.set_xlabel("s [km]")
             ax.set_ylabel("t [min]")
 
-            x_f = np.array(x)
-            #x_f = np.linspace(0.0, 1.0, nx)
-            y_f = x_f * z[0] + z[1]
-            ax.plot(x_f, y_f, label="fit {:.1f} min/km".format(z[0]))
+            #x_f = np.array(x)
+            #y_f = x_f * z[0] + z[1]
+            #ax.plot(x_f, y_f, label="fit {:.1f} min/km".format(z[0]))
+
             ax.legend()
 
             #plt.show()

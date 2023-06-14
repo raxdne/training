@@ -31,6 +31,8 @@ from datetime import timedelta, date, datetime, time
 
 from icalendar import Calendar, Event, Alarm
 
+import numpy as np
+
 from suntime import Sun
 
 from training import config as config
@@ -64,6 +66,7 @@ class Cycle(Title,Description):
 
         self.dateBegin = None
         self.dateEnd = None
+        self.data = None
 
         self.color = None
 
@@ -108,6 +111,8 @@ class Cycle(Title,Description):
         for i in range(len(self)):
             self.day[i] = []
             
+        self.data = []
+        
         return self
 
 
@@ -243,16 +248,9 @@ class Cycle(Title,Description):
         elif type(objIndex) == int and objIndex > -1 and objIndex < len(self) and type(objArg) == Cycle and len(objArg) > 0 and len(objArg) + objIndex <= len(self):
 
             i = 0
-            
             for v in objArg.day:
-                
-                if flagReplace:
-                    # override existing
-                    self.day[objIndex + i] = []
-                    
                 for u in v:
-                    self.day[objIndex + i].append(u.dup())
-                    
+                    self.insert(objIndex + i,u,flagReplace)
                 i += 1
 
         else:
@@ -353,6 +351,8 @@ class Cycle(Title,Description):
 
         """  """
 
+        # TODO: use self.data
+        
         intResult = 0
         for v in self.day:
             for u in v:
@@ -368,6 +368,8 @@ class Cycle(Title,Description):
 
         """ return a timedelta """
 
+        # TODO: use self.data
+        
         intResult = 0
         for v in self.day:
             for u in v:
@@ -423,78 +425,80 @@ class Cycle(Title,Description):
         return self
     
 
-    def stat(self, dictArg):
+    def stat(self):
 
         """  """
 
-        for v in self.day:
-            for u in v:
-                if type(u) == Unit or type(u) == Combination:
-                    u.stat(dictArg)
-
-
-    def statCollectData(self,listX,listY):
-
-        """  """
-
-        for v in self.day:
-            for u in v:
-                if type(u) == Unit or type(u) == Combination:
-                    u.statCollectData(listX,listY)
+        listResult = []
+        
+        if type(self.data) == list and len(self.data) > 0:
+            return self.data
+        else:
+            for v in self.day:
+                for u in v:
+                    if type(u) == Unit or type(u) == Combination:
+                        listResult.extend(u.stat())
+            self.data = listResult
+            
+        return listResult
 
 
     def report(self, dictArg=None):
 
         """  """
 
+        strResult = ''
+        
+        self.stat()
+
+        l = np.array(list(map(lambda lst: lst[2], self.data)))
+        sum_h = l.sum() / 60
+
         if dictArg == None:
             dictArg = {}
+            
+        for u in self.data:
+            
+            if u[3] not in dictArg:
+                dictArg[u[3]] = [[],[]]
+                
+            dictArg[u[3]][0].append(u[1])
+            dictArg[u[3]][1].append(u[2])
 
-        self.stat(dictArg)
-        #print('info: ' + str(dictArg), file=sys.stderr)
-
-        sum_h = 0.0
-        for k in sorted(dictArg.keys()):
-            sum_h += sum(dictArg[k][1])
-        sum_h /= 3600
-
-        strResult = ''
-        for k in sorted(dictArg.keys()):
-            # all registered kinds of units
-            sum_k = sum(dictArg[k][1]) / 3600
-
+        for k in sorted(set(map(lambda lst: lst[3], self.data))):
+            # all kinds of units
+            sum_k = sum(dictArg[k][1]) / 60.0
+            
             if sum_h < 0.01:
                 pass
             elif len(dictArg[k][0]) < 1:
-                # no distances found
                 strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7}    {:7.01f} h {:.02f}\n").format(len(dictArg[k][0]),
-                                                                                                           k,
-                                                                                                           ' ',
-                                                                                                           round(sum_k, 2),
-                                                                                                           round(sum_k / sum_h, 2))
+                                                                                                                   k,
+                                                                                                                   ' ',
+                                                                                                                   round(sum_k, 1),
+                                                                                                                   round(sum_k / sum_h, 2))
             elif len(dictArg[k][0]) < 3:
-                # no statistics required
-                strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f}\n").format(len(dictArg[k][0]),
-                                                                                                               k,
-                                                                                                               sum(dictArg[k][0]),
-                                                                                                               config.unit_distance,
-                                                                                                               round(sum_k, 2),
-                                                                                                               round(sum_k / sum_h, 2))
+                strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f}\n").format(len(dictArg[k][0]), k, sum(dictArg[k][0]),
+                                                                                                                       config.unit_distance,
+                                                                                                                       round(sum_k,1),
+                                                                                                                       round(sum_k / sum_h, 2))        
             else:
                 strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f} {:5.01f} /{:5.01f} /{:5.01f}\n").format(len(dictArg[k][0]),
-                                                                                                                                            k,
-                                                                                                                                            sum(dictArg[k][0]),
-                                                                                                                                            config.unit_distance,
-                                                                                                                                            round(sum_k, 2),
-                                                                                                                                            round(sum_k / sum_h, 2),
-                                                                                                                                            min(dictArg[k][0]),
-                                                                                                                                            mean(dictArg[k][0]),
-                                                                                                                                            max(dictArg[k][0]))
+                                                                                                                                                    k,
+                                                                                                                                                    sum(dictArg[k][0]),
+                                                                                                                                                    config.unit_distance,
+                                                                                                                                                    round(sum_k, 2),
+                                                                                                                                                    round(sum_k / sum_h, 2),
+                                                                                                                                                    min(dictArg[k][0]),
+                                                                                                                                                    mean(dictArg[k][0]),
+                                                                                                                                                    max(dictArg[k][0]))
+            
         n = self.getNumberOfUnits()
         if n > 0:
-            p = self.getPeriodDone()
+            #p = self.getPeriodDone()
+            p = len(self)
             strResult += "\n{} Units {:.2f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(n, round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
-        
+
         return strResult
 
 

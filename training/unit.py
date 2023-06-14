@@ -177,17 +177,6 @@ class Unit(Note):
         return Duration(0)
 
 
-    def statCollectData(self,listX,listY):
-
-        """ return a """
-
-        if self.dist == None or self.dist < 0.001 or self.getDuration().total_seconds() < 100:
-            pass
-        else:
-            listX.append(self.dist)
-            listY.append(self.getDuration().total_seconds() / 60)
-
-
     def scale(self,floatScale,patternType=None):
 
         """  """
@@ -240,22 +229,22 @@ class Unit(Note):
             return False
 
 
-    def stat(self, dictArg):
+    def stat(self):
 
         """  """
 
-        if dictArg == None:
-            print('error: ' + 'no dict', file=sys.stderr)
-        elif self.type != None and len(self.type) > 0:
-            if self.type not in dictArg:
-                dictArg[self.type] = [[],[]]
-                
-            if self.dist != None:
-                dictArg[self.type][0].append(self.dist)
-            else:
-                dictArg[self.type][0].append(0.0)
-                
-            dictArg[self.type][1].append(self.getDuration().total_seconds())
+        listResult = []
+        
+        if self.type == None or len(self.type) < 1:
+            #print('error: ' + 'no type', file=sys.stderr)
+            pass
+        elif self.dist == None or self.dist < 0.001:
+            #print('error: ' + 'no dist', file=sys.stderr)
+            listResult = [[self.dt.toordinal(), 0.0, self.getDuration().total_seconds() / 60, self.type]]
+        else:
+            listResult = [[self.dt.toordinal(), self.dist, self.getDuration().total_seconds() / 60, self.type]]
+
+        return listResult
 
 
     def getSpeedStr(self):
