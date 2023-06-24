@@ -73,4 +73,9 @@ class Title:
         return self.strTitle.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+    def getTitleLineTableOfContent(self,strIndent=''):
+
+        """  """
+
+        return '{}<a href="#{}">{}</a>'.format(strIndent, str(id(self)), self.getTitleXML())
 

@@ -174,6 +174,18 @@ class Period(Title,Description):
         return intResult
 
 
+    def getDateString(self):
+
+        """  """
+
+        strResult = ''
+            
+        if type(self.dateBegin) == date and self.dateBegin != None and type(self.dateEnd) == date and self.dateEnd != None:
+            strResult = ' (' + str(len(self)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+            
+        return strResult
+
+
     def append(self,objArg):
 
         """  """
@@ -579,22 +591,22 @@ class Period(Title,Description):
 
         """  """
 
-        strResult = '<section class="{}"'.format(__name__)
+        strResult = '<section class="{}" id="{}"'.format(__name__, str(id(self)))
 
         if self.color != None:
             strResult += ' style="background-color: {}"'.format(self.color)
 
         strResult += '><div class="header">' + self.getTitleXML()
         if self.dateBegin != None and self.dateEnd != None:
-            strResult += ' (' + str(len(self)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+            strResult += self.getDateString()
         strResult += '</div>\n'
 
         strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
         
         strResult += '<pre>' + self.report() + '</pre>'
         
-        strResult += self.plotTimeDist()
-        strResult += self.plotHist()
+        #strResult += self.plotTimeDist()
+        #strResult += self.plotHist()
         #strResult += self.toSVGGanttChart()
         #strResult += self.toSVGDiagram()
 
@@ -603,6 +615,21 @@ class Period(Title,Description):
             
         strResult += '</section>\n'
 
+        return strResult
+
+
+    def toHtmlTableOfContent(self,strIndent=''):
+
+        """  """
+
+        strResult = self.getTitleLineTableOfContent(strIndent) + self.getDateString() + '\n'
+        
+        for c in self.child:
+            if type(c) == Period:
+                strResult += c.toHtmlTableOfContent(strIndent + '    ')
+            elif type(c) == Cycle:
+                strResult += c.getTitleLineTableOfContent(strIndent + '    ') + '\n'
+                
         return strResult
 
 
@@ -620,13 +647,15 @@ class Period(Title,Description):
         
         strResult += "<title></title>"
 
-        strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\npre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}</style>\n"
+        strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\npre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}\na:link {text-decoration:none;}\n</style>\n"
 
-        strResult += "</head>"
+        strResult += "</head>\n<body>\n"
 
-        strResult += "<body>" + self.toHtml() + "</body>"
+        strResult += '<pre>' + self.toHtmlTableOfContent() + '</pre>\n'
 
-        strResult += "</html>"
+        strResult += self.toHtml()
+
+        strResult += "</body>\n</html>"
 
         return strResult
 
@@ -637,7 +666,7 @@ class Period(Title,Description):
 
         strResult = '\n* ' + self.getTitleStr()
         if self.dateBegin != None and self.dateEnd != None:
-            strResult += ' (' + str(len(self)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+            strResult += self.getDateString()
         strResult += '\n'
 
         for c in self.child:
@@ -660,7 +689,7 @@ class Period(Title,Description):
 
         strResult += ' TEXT="' + self.getTitleXML()
         if self.dateBegin != None and self.dateEnd != None:
-            strResult += '&#xa; (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')&#xa;' + self.report().replace('\n','&#xa;')
+            strResult += '&#xa; ' + self.getDateString() + '&#xa;' + self.report().replace('\n','&#xa;')
         strResult += '">\n'
 
         strResult += '<font BOLD="true" NAME="Monospaced" SIZE="12"/>'
@@ -733,7 +762,7 @@ class Period(Title,Description):
             strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self))-2,x+config.diagram_width-4)
 
         if len(self.child) < 1:
-            strResult += '<text x="{}" y="{}" style="vertical-align:top"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleXML(), '(' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')')
+            strResult += '<text x="{}" y="{}" style="vertical-align:top"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleXML(), self.getDateString())
             strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+config.diagram_width,y)
             for d in range(0,len(self)):
                 strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+config.diagram_bar_height)
@@ -792,7 +821,7 @@ class Period(Title,Description):
             c = self.color
 
         strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')\n\n' + self.__listDescriptionToSVG__() + '\n\n' + self.report())
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.__listDescriptionToSVG__() + '\n\n' + self.report())
         strResult += '</rect>'
         strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 10,self.getTitleXML())
 

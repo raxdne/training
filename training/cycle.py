@@ -84,7 +84,7 @@ class Cycle(Title,Description):
 
         strResult = '\n** ' + super().getTitleStr()
         if type(self.dateBegin) == date:
-            strResult += ' (' + str(len(self)) + ', ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+            strResult += self.getDateString()
         strResult += '\n\n'
 
         for v in self.day:
@@ -379,6 +379,18 @@ class Cycle(Title,Description):
         return timedelta(seconds=intResult)
 
 
+    def getDateString(self):
+
+        """  """
+
+        strResult = ''
+            
+        if type(self.dateBegin) == date and self.dateBegin != None and type(self.dateEnd) == date and self.dateEnd != None:
+            strResult = ' (' + str(len(self)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+            
+        return strResult
+
+
     def scale(self,floatScale,patternType=None):
 
         """  """
@@ -520,12 +532,12 @@ class Cycle(Title,Description):
 
         """  """
         
-        strResult = '<section class="{}"'.format(__name__)
+        strResult = '<section class="{}" id="{}"'.format(__name__, str(id(self)))
 
         if self.color != None:
             strResult += ' style="background-color: {}"'.format(self.color)
 
-        strResult += '><div class="header">' + self.getTitleXML() + ' (' + str(len(self)) + ', ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '</div>\n'
+        strResult += '><div class="header">' + self.getTitleXML() + ' ' + self.getDateString() + '</div>\n'
 
         strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
 
@@ -571,7 +583,7 @@ class Cycle(Title,Description):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleStr() + ' (' + str(len(self)) + ', ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '\n'
+        strResult = '\n* ' + self.getTitleStr() + self.getDateString() + '\n'
         for v in self.day:
             for u in v:
                 if type(u) == Unit:
@@ -604,7 +616,7 @@ class Cycle(Title,Description):
         if self.color != None:
             strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self))-2,x+config.diagram_width-4)
 
-        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleXML(), '(' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ') ', (self.getTitleXML() + ' (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report()))
+        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleXML(), self.getDateString(), (self.getTitleXML() + self.getDateString() + '\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report()))
 
         if len(self) < 1:
             pass
@@ -678,7 +690,7 @@ class Cycle(Title,Description):
             color = self.color
             
         strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, len(self) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ') ' + self.__listDescriptionToString__())
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + ' ' + self.__listDescriptionToString__())
         strResult += '</rect>'
 
         # TODO: make config.diagram_height configurable
@@ -701,7 +713,7 @@ class Cycle(Title,Description):
             color = 'red'
             
         strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, config.diagram_height - h - 10, h, l * 2 - 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
         strResult += '</rect>'
 
         #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i,y,self.getTitleXML())
@@ -776,7 +788,7 @@ class Cycle(Title,Description):
         else:
             strResult += ' FOLDED="{}"'.format('true')
 
-        strResult += ' TEXT="' + self.getTitleXML() + '&#xa;(' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+        strResult += ' TEXT="' + self.getTitleXML() + '&#xa;' + self.getDateString() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
         strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
 
         strResult += self.__listDescriptionToFreemind__()
