@@ -596,8 +596,7 @@ class Period(Title,Description):
         strResult += self.plotTimeDist()
         strResult += self.plotHist()
         #strResult += self.toSVGGanttChart()
-
-        #strResult += '<svg baseProfile="full" height="600" version="1.1" width="1000" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">' + self.toSVG(200,0) + '</svg>'
+        #strResult += self.toSVGDiagram()
 
         for c in self.child:
             strResult += c.toHtml() + '\n'
@@ -902,6 +901,7 @@ class Period(Title,Description):
         if len(x) > 2:
             # plot:
             fig, ax = plt.subplots()
+            # TODO: label="{} Units".format(len(x))
             ax.grid(visible=True, linestyle='dotted', linewidth=0.5)
             ax.hist(x, bins=19, linewidth=0.5, edgecolor="white")
             ax.set_xlabel("s [km]")
@@ -920,42 +920,81 @@ class Period(Title,Description):
 
 
 
+    def getTimeDist(self,strArg=None):
+
+        """ lists of distance and time """
+
+        s = []
+        t = []
+        
+        for u in self.data:
+            if (strArg == None or u[3] == strArg) and u[1] > 0.0 and u[2] > 0.0:
+                s.append(u[1])
+                t.append(u[2])
+
+        return s, t
+
+
     def plotTimeDist(self,fileNameOut=None):
 
         """ chart of time over distance """
 
         # TODO: https://matplotlib.org/stable/gallery/lines_bars_and_markers/scatter_hist.html
         
-        strResult = ''
+        strResult = '<pre>not enough data to plot</pre>'
         
         self.stat()
-
-        # make data
-        x = np.array(list(map(lambda lst: lst[1], self.data)))
-        y = np.array(list(map(lambda lst: lst[2], self.data)))
-        if len(x) > 2 and len(x) == len(y):
-
-            #z = np.polyfit(x, y, 1)
-            #print('z = ' + str(z), file=sys.stderr)
-            
+        if len(self.data) > 0:
             # plot:
             fig, ax = plt.subplots()
             ax.grid(visible=True, linestyle='dotted', linewidth=0.5)
 
             # Plot a curved line with ticked style path
-            x_l = np.array([20.0, 100.0])
+            x_l = np.array([0.0, 40.0])
+            y_l = x_l * 6.0
+            ax.plot(x_l, y_l, linestyle='dotted', label="v=10 km/h")
+            x_l = np.array([0.0, 100.0])
             y_l = x_l * 3.0
-            ax.plot(x_l, y_l, label="v=20 km/h")
+            ax.plot(x_l, y_l, linestyle='dotted', label="v=20 km/h")
             y_l = x_l * 2.0
-            ax.plot(x_l, y_l, label="v=30 km/h")
+            ax.plot(x_l, y_l, linestyle='dotted', label="v=30 km/h")
 
-            ax.scatter(x, y, s=4)
             ax.set_xlabel("s [km]")
             ax.set_ylabel("t [min]")
 
-            #x_f = np.array(x)
-            #y_f = x_f * z[0] + z[1]
-            #ax.plot(x_f, y_f, label="fit {:.1f} min/km".format(z[0]))
+            for k in sorted(set(map(lambda lst: lst[3], self.data))):
+                # one fit per type
+
+                lx, ly = self.getTimeDist(k)
+                x = np.array(lx)
+                y = np.array(ly)
+                if len(x) != len(y):
+                    print('error: x and y are no matching data', file=sys.stderr)
+                    continue
+
+                ax.scatter(x, y, s=4)
+
+                if len(x) < 1:
+                    continue
+                elif True:
+                    m_y = np.mean(y)
+                    m_x = np.mean(x)
+                    ax.vlines(m_x,0,m_y)
+                    d_y = m_y / m_x
+                    x_f = np.array([0.0, 1.25 * np.max(x)])
+                    y_f = d_y * x_f
+                    if d_y > 3.5:
+                        #ax.plot(x_f, y_f, label="t({},s) = {}:{:02} * s".format(k, int(d_y), int((d_y - int(d_y)) * 60)))
+                        #ax.plot(x_f, y_f, label="{}: t∅ = {}:{:02} min/km".format(k, int(d_y), int((d_y - int(d_y)) * 60)))
+                        ax.plot(x_f, y_f, label="{}: {} TE, t∅ = {}:{:02} min/km".format(k, len(x), int(d_y), int((d_y - int(d_y)) * 60)))
+                        #ax.plot(x_f, y_f, label="{}: t∅ = {} min/km".format(k, round(60.0 / d_y)))
+                    else:
+                        ax.plot(x_f, y_f, label="{}: {} TE, v∅ = {} km/h".format(k, len(x), round(60.0 / d_y,1)))
+                else:
+                    z = np.polyfit(x, y, 1)
+                    if z[0] > 0.0 and z[0] < 10.0:
+                        y_f = z[0] * x + z[1]
+                        ax.plot(x, y_f, label="t({},s) = {:.1f} * s + {:.1f}".format(k,z[0],z[1]))
 
             ax.legend()
 
@@ -969,7 +1008,7 @@ class Period(Title,Description):
                 f.close()
             else:
                 plt.savefig(fileNameOut)
-    
+
         return strResult
 
 
@@ -998,25 +1037,30 @@ class Period(Title,Description):
         # begin of year
         d_0 = date(intYear,1,1)
 
+        s = 'Winter {}'.format(intYear)
         # begin of spring
         d_1 = date(intYear,3,21)
-        self.append(Cycle('Winter {}'.format(intYear), round((d_1 - d_0).total_seconds() / (24 * 60 * 60))))
+        self.append(Period(s).append(Cycle(s, round((d_1 - d_0).total_seconds() / (24 * 60 * 60)))))
 
+        s = 'Spring {}'.format(intYear)
         # begin of summer
         d_2 = date(intYear,6,21)
-        self.append(Cycle('Spring {}'.format(intYear), round((d_2 - d_1).total_seconds() / (24 * 60 * 60))))
+        self.append(Period(s).append(Cycle(s, round((d_2 - d_1).total_seconds() / (24 * 60 * 60)))))
 
         # begin of autumn
+        s = 'Summer {}'.format(intYear)
         d_3 = date(intYear,9,21)
-        self.append(Cycle('Summer {}'.format(intYear), round((d_3 - d_2).total_seconds() / (24 * 60 * 60))))
+        self.append(Period(s).append(Cycle(s, round((d_3 - d_2).total_seconds() / (24 * 60 * 60)))))
 
+        s = 'Autumn {}'.format(intYear)
         # begin of winter
         d_4 = date(intYear,12,21)
-        self.append(Cycle('Autumn {}'.format(intYear), round((d_4 - d_3).total_seconds() / (24 * 60 * 60))))
+        self.append(Period(s).append(Cycle(s, round((d_4 - d_3).total_seconds() / (24 * 60 * 60)))))
 
+        s = 'Winter ' + str(intYear+1)
         # begin of next year
         d_5 = date(intYear+1,1,1)
-        self.append(Cycle('Winter ' + str(intYear+1), round((d_5 - d_4).total_seconds() / (24 * 60 * 60))))
+        self.append(Period(s).append(Cycle(s, round((d_5 - d_4).total_seconds() / (24 * 60 * 60)))))
 
         if strArg != None and len(strArg) > 0:
             self.setTitleStr(strArg)

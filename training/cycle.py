@@ -529,6 +529,8 @@ class Cycle(Title,Description):
 
         strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
 
+        #strResult += self.toSVGDiagram()
+        
         for v in self.day:
             for u in v:
                 strResult += u.toHtml()

@@ -191,7 +191,7 @@ class Unit(Note):
                     self.dist = round(self.dist * floatScale / 5.0) * 5.0
 
             if self.duration != None:
-                self.duration.scale(floatScale)
+                self.duration = self.duration.scale(floatScale)
 
         return self
 
@@ -240,7 +240,11 @@ class Unit(Note):
             pass
         elif self.dist == None or self.dist < 0.001:
             #print('error: ' + 'no dist', file=sys.stderr)
-            listResult = [[self.dt.toordinal(), 0.0, self.getDuration().total_seconds() / 60, self.type]]
+            #listResult = [[self.dt.toordinal(), 0.0, self.getDuration().total_seconds() / 60, self.type]]
+            pass
+        elif self.duration == None:
+            #print('error: ' + 'no duration', file=sys.stderr)
+            pass
         else:
             listResult = [[self.dt.toordinal(), self.dist, self.getDuration().total_seconds() / 60, self.type]]
 
