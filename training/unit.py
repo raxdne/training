@@ -321,6 +321,25 @@ class Unit(Note):
         return strResult
 
 
+    def toHtmlTable(self):
+
+        """  """
+
+        strResult = '<td'
+        if self.type == None or len(self.type) < 1:
+            strResult += ' style="background-color: {}"'.format('#cccccc')
+        elif self.type[0] in config.colors:
+            strResult += ' style="background-color: {}"'.format(config.colors[self.type[0]])
+        elif self.color != None:
+            strResult += ' style="background-color: {}"'.format(self.color)
+        strResult += '>'
+
+        strResult += str(self) + ' ' + self.__listDescriptionToString__()
+        strResult += '</td>'
+
+        return strResult
+
+
     def toSVG(self,x,y):
 
         """  """

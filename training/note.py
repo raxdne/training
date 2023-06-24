@@ -210,7 +210,16 @@ class Note(Description):
 
         """  """
 
-        strResult = '<p>' + str(self) + '</p>'
+        strResult = '<p>' + self.toString() + '</p>'
+        
+        return strResult
+
+
+    def toHtmlTable(self):
+
+        """  """
+
+        strResult = '<td>' + self.toString() + '</td>'
         
         return strResult
 

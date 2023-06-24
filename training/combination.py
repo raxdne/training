@@ -67,7 +67,7 @@ class Combination(Title,Description):
         strResult = 'Combination: {} {}\n'.format(self.getDuration(), super().__listDescriptionToString__())
 
         for u in self.child:
-            strResult += '\t' + str(u) + '\n'
+            strResult += '\t + ' + str(u) + '\n'
         strResult += '\n'
 
         return strResult
@@ -237,6 +237,15 @@ class Combination(Title,Description):
         
         strResult += '</section>'
 
+        return strResult
+
+
+    def toHtmlTable(self):
+
+        """  """
+
+        strResult = '<td>' + str(self) + ' ' + self.__listDescriptionToString__() + '</td>'
+        
         return strResult
 
 

@@ -587,6 +587,13 @@ class Period(Title,Description):
         return str(self)
 
 
+    def toHtmlTable(self):
+
+        """  """
+
+        return self.toHtml()
+
+
     def toHtml(self):
 
         """  """
@@ -605,13 +612,14 @@ class Period(Title,Description):
         
         strResult += '<pre>' + self.report() + '</pre>'
         
-        #strResult += self.plotTimeDist()
-        #strResult += self.plotHist()
+        strResult += self.plotTimeDist()
+        strResult += self.plotHist()
         #strResult += self.toSVGGanttChart()
         #strResult += self.toSVGDiagram()
 
         for c in self.child:
-            strResult += c.toHtml() + '\n'
+            strResult += c.toHtmlTable() + '\n'
+            #strResult += c.toHtml() + '\n'
             
         strResult += '</section>\n'
 
@@ -647,7 +655,7 @@ class Period(Title,Description):
         
         strResult += "<title></title>"
 
-        strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\npre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}\na:link {text-decoration:none;}\n</style>\n"
+        strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\npre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}\na:link {text-decoration:none;}\ntable {width: 95%; border-collapse: collapse; empty-cells:show; margin-left:auto; margin-right:auto; border: 1px solid grey;}\ntd { border: 1px solid grey; vertical-align:top;}\n.empty {margin-bottom:0px;}\n</style>\n"
 
         strResult += "</head>\n<body>\n"
 
@@ -930,12 +938,17 @@ class Period(Title,Description):
         if len(x) > 2:
             # plot:
             fig, ax = plt.subplots()
-            # TODO: label="{} Units".format(len(x))
+            b = np.arange(-0.01, 150, 5)
             ax.grid(visible=True, linestyle='dotted', linewidth=0.5)
-            ax.hist(x, bins=19, linewidth=0.5, edgecolor="white")
+            ax.hist(x, bins=b, linewidth=0.5, edgecolor="white", label='{} Units'.format(len(x)))
             ax.set_xlabel("s [km]")
             ax.set_ylabel("n")
+            #plt.bar_label(bars, fontsize=20, color='navy')
+            #for v in b:
+            #    plt.text(x=v,y=5,s=v)
 
+            plt.legend()
+            
             if fileNameOut == None:
                 f = io.StringIO()
                 plt.savefig(f, format = "svg")

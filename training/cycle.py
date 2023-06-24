@@ -554,6 +554,43 @@ class Cycle(Title,Description):
         return strResult
 
 
+    def toHtmlTable(self):
+
+        """  """
+        
+        strResult = '<section class="{}" id="{}"'.format(__name__, str(id(self)))
+
+        if self.color != None:
+            strResult += ' style="background-color: {}"'.format(self.color)
+
+        strResult += '><div class="header">' + self.getTitleXML() + ' ' + self.getDateString() + '</div>\n'
+
+        strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
+
+        strResult += '<pre>' + self.report() + '</pre>'
+        
+        #strResult += self.toSVGDiagram()
+        
+        strResult += '<table><tbody>'
+
+        dt_i = datetime.combine(self.dateBegin,time(0)).astimezone(None)
+        for v in self.day:
+            strResult += '<tr>'
+            if len(v) > 0:
+                for u in v:
+                    strResult += u.toHtmlTable()
+            else:
+                strResult += '<td>' + dt_i.strftime("%Y-%m-%d") + '</td>'
+            strResult += '</tr>'
+            dt_i += timedelta(days=1)
+            
+        strResult += '</tbody></table>'
+
+        strResult += '</section>'
+
+        return strResult
+
+
     def toHtmlFile(self):
 
         """ returns html/body + content """
