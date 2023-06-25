@@ -219,8 +219,8 @@ class Note(Description):
 
         """  """
 
-        strResult = '<td>' + self.toString() + '</td>'
-        
+        strResult = '<div style="background-color: #cccccc">' + self.toString() + '</div>'
+
         return strResult
 
 

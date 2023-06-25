@@ -244,8 +244,8 @@ class Combination(Title,Description):
 
         """  """
 
-        strResult = '<td>' + str(self) + ' ' + self.__listDescriptionToString__() + '</td>'
-        
+        strResult = '<div>' + str(self) + ' ' + self.__listDescriptionToString__() + '</div>'
+
         return strResult
 
 

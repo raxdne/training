@@ -571,16 +571,20 @@ class Cycle(Title,Description):
         
         #strResult += self.toSVGDiagram()
         
-        strResult += '<table><tbody>'
+        strResult += '<table style="width: 80%">\n'
 
+        strResult += '<colgroup><col span="1" style="width: 10%;"><col span="1" style="width: 90%;"></colgroup>\n'
+
+        strResult += '<tbody>'
         dt_i = datetime.combine(self.dateBegin,time(0)).astimezone(None)
         for v in self.day:
             strResult += '<tr>'
+            strResult += '<td>' + dt_i.strftime("%Y-%m-%d %a (%j)") + '</td>'
+            strResult += '<td>'
             if len(v) > 0:
                 for u in v:
                     strResult += u.toHtmlTable()
-            else:
-                strResult += '<td>' + dt_i.strftime("%Y-%m-%d") + '</td>'
+            strResult += '</td>'
             strResult += '</tr>'
             dt_i += timedelta(days=1)
             

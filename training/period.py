@@ -661,6 +661,8 @@ class Period(Title,Description):
 
         strResult += '<pre>' + self.toHtmlTableOfContent() + '</pre>\n'
 
+        strResult += '<div style="text-align: center;margin: 40px;">' + self.toSVGGanttChart() + '</div>\n'
+
         strResult += self.toHtml()
 
         strResult += "</body>\n</html>"
@@ -938,7 +940,7 @@ class Period(Title,Description):
         if len(x) > 2:
             # plot:
             fig, ax = plt.subplots()
-            b = np.arange(-0.01, 150, 5)
+            b = np.arange(-0.01, 151, 5)
             ax.grid(visible=True, linestyle='dotted', linewidth=0.5)
             ax.hist(x, bins=b, linewidth=0.5, edgecolor="white", label='{} Units'.format(len(x)))
             ax.set_xlabel("s [km]")
@@ -988,14 +990,22 @@ class Period(Title,Description):
         self.stat()
         if len(self.data) > 0:
             # plot:
+
             fig, ax = plt.subplots()
+
+            #ax.set_xticks(np.arange(0, 151, 5), minor=True)
+            ax.set_xticks(np.arange(0, 151, 25))
+            
+            #ax.set_yticks(np.arange(0, 301, 15), minor=True)
+            ax.set_yticks(np.arange(0, 451, 30))
+
             ax.grid(visible=True, linestyle='dotted', linewidth=0.5)
 
             # Plot a curved line with ticked style path
             x_l = np.array([0.0, 40.0])
             y_l = x_l * 6.0
             ax.plot(x_l, y_l, linestyle='dotted', label="v=10 km/h")
-            x_l = np.array([0.0, 100.0])
+            x_l = np.array([0.0, 151.0])
             y_l = x_l * 3.0
             ax.plot(x_l, y_l, linestyle='dotted', label="v=20 km/h")
             y_l = x_l * 2.0
@@ -1028,10 +1038,10 @@ class Period(Title,Description):
                     if d_y > 3.5:
                         #ax.plot(x_f, y_f, label="t({},s) = {}:{:02} * s".format(k, int(d_y), int((d_y - int(d_y)) * 60)))
                         #ax.plot(x_f, y_f, label="{}: t∅ = {}:{:02} min/km".format(k, int(d_y), int((d_y - int(d_y)) * 60)))
-                        ax.plot(x_f, y_f, label="{}: {} TE, t∅ = {}:{:02} min/km".format(k, len(x), int(d_y), int((d_y - int(d_y)) * 60)))
+                        ax.plot(x_f, y_f, label="{}: {} Units, t∅ = {}:{:02} min/km".format(k, len(x), int(d_y), int((d_y - int(d_y)) * 60)))
                         #ax.plot(x_f, y_f, label="{}: t∅ = {} min/km".format(k, round(60.0 / d_y)))
                     else:
-                        ax.plot(x_f, y_f, label="{}: {} TE, v∅ = {} km/h".format(k, len(x), round(60.0 / d_y,1)))
+                        ax.plot(x_f, y_f, label="{}: {} Units, v∅ = {} km/h".format(k, len(x), round(60.0 / d_y,1)))
                 else:
                     z = np.polyfit(x, y, 1)
                     if z[0] > 0.0 and z[0] < 10.0:

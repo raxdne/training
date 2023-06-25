@@ -325,17 +325,17 @@ class Unit(Note):
 
         """  """
 
-        strResult = '<td'
+        strResult = '<div style="'
         if self.type == None or len(self.type) < 1:
-            strResult += ' style="background-color: {}"'.format('#cccccc')
+            strResult += ' background-color: {}'.format('#cccccc')
         elif self.type[0] in config.colors:
-            strResult += ' style="background-color: {}"'.format(config.colors[self.type[0]])
+            strResult += ' background-color: {}'.format(config.colors[self.type[0]])
         elif self.color != None:
-            strResult += ' style="background-color: {}"'.format(self.color)
-        strResult += '>'
+            strResult += ' background-color: {}'.format(self.color)
+        strResult += '">'
 
         strResult += str(self) + ' ' + self.__listDescriptionToString__()
-        strResult += '</td>'
+        strResult += '</div>'
 
         return strResult
 
