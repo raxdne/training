@@ -612,10 +612,13 @@ class Period(Title,Description):
         
         strResult += '<pre>' + self.report() + '</pre>'
         
-        strResult += self.plotTimeDist()
+        strResult += '<div>'        
+        strResult += self.plotAccumulation()
         strResult += self.plotHist()
+        strResult += self.plotTimeDist()
         #strResult += self.toSVGGanttChart()
         #strResult += self.toSVGDiagram()
+        strResult += '</div>'        
 
         for c in self.child:
             strResult += c.toHtmlTable() + '\n'
@@ -655,7 +658,7 @@ class Period(Title,Description):
         
         strResult += "<title></title>"
 
-        strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\npre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}\na:link {text-decoration:none;}\ntable {width: 95%; border-collapse: collapse; empty-cells:show; margin-left:auto; margin-right:auto; border: 1px solid grey;}\ntd { border: 1px solid grey; vertical-align:top;}\n.empty {margin-bottom:0px;}\n</style>\n"
+        strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsvg {margin: 5px 0;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\npre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}\na:link {text-decoration:none;}\ntable {width: 95%; border-collapse: collapse; empty-cells:show; margin-left:auto; margin-right:auto; border: 1px solid grey;}\ntd { border: 1px solid grey; vertical-align:top;}\n.empty {margin-bottom:0px;}\n</style>\n"
 
         strResult += "</head>\n<body>\n"
 
@@ -925,6 +928,71 @@ class Period(Title,Description):
         cal.add('version', '2.0')
         self.to_ical(cal)
         return cal.to_ical()
+
+
+    def getDayDist(self,strArg=None):
+
+        """ lists of distance and time """
+
+        d = [self.dateBegin.toordinal()]
+        s = [0.0]
+        
+        for u in self.data:
+            if (strArg == None or u[3] == strArg) and u[0] > 0 and u[1] > 0.0:
+                d.append(u[0])
+                s.append(u[1])
+
+        return d, s
+
+
+    def plotAccumulation(self,fileNameOut=None):
+
+        """ Accumulation chart of periods and cycles """
+
+        strResult = ''
+        
+        self.stat()
+
+        # make data
+        x = np.array(list(map(lambda lst: lst[0], self.data)))
+        x_0 = self.dateBegin.toordinal()
+        x_1 = self.dateEnd.toordinal()
+        if len(x) > 2:
+            # plot:
+            fig, ax = plt.subplots()
+
+            ax.grid(visible=True, linestyle='dotted', linewidth=0.5)
+            ax.set_xlabel("{} Days".format(x_1 - x_0 + 1))
+            ax.set_ylabel("Σ [km]")
+            #ax.set_xticks(np.arange(0, x_1 - x_0, 28))
+            
+            for k in sorted(set(map(lambda lst: lst[3], self.data))):
+                # one fit per type
+                lx, ly = self.getDayDist(k)
+                x_n = np.array(lx) - x_0
+                # accumulation
+                y_a = np.add.accumulate(np.array(ly))
+
+                if len(x_n) != len(y_a):
+                    print('error: x and y are no matching data', file=sys.stderr)
+                elif len(x_n) < 2:
+                    print('info: not enough data for {}'.format(k), file=sys.stderr)
+                else:
+                    ax.step(x_n, y_a, where='post', label=k)
+                    #ax.scatter(x_n, y_a, s=1, label='{}'.format(k))
+
+            plt.legend()
+            
+            if fileNameOut == None:
+                f = io.StringIO()
+                plt.savefig(f, format = "svg")
+                plt.close()
+                strResult = f.getvalue()
+                f.close()
+            else:
+                plt.savefig(fileNameOut)
+    
+        return strResult
 
 
     def plotHist(self,fileNameOut=None):
