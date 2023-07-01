@@ -42,12 +42,13 @@ from training.note import Note
 from training.unit import Unit
 from training.pause import Pause
 from training.combination import Combination
+from training.plot import Plot
 
 #
 #
 #
 
-class Cycle(Title,Description):
+class Cycle(Title,Description,Plot):
 
     def __init__(self,strArg=None,intArg=7):
 
@@ -55,7 +56,7 @@ class Cycle(Title,Description):
 
         super(Title, self).__init__()
         super(Description, self).__init__()
-        
+
         self.setTitleStr(strArg)
         self.setDescription()
         self.setPlan()
@@ -110,9 +111,9 @@ class Cycle(Title,Description):
 
         for i in range(len(self)):
             self.day[i] = []
-            
+
         self.data = []
-        
+
         return self
 
 
@@ -158,7 +159,7 @@ class Cycle(Title,Description):
                     else:
                         daysNew[i].append(u)
             self.day = daysNew
-            
+
         return self
 
 
@@ -169,7 +170,7 @@ class Cycle(Title,Description):
         if type(intIndexA) != int:
             print('error: shift of a cycle requires an integer value', file=sys.stderr)
         elif intIndexB == None:
-            # shift 
+            # shift
             print('info: shift by ' + str(intIndexA), file=sys.stderr)
             if intIndexA > 0 and intIndexA < len(self.day):
                 for i in range(0,intIndexA):
@@ -224,19 +225,19 @@ class Cycle(Title,Description):
         objResult = self
 
         if objArg == None:
-            
+
             print('error: ' + str(objArg), file=sys.stderr)
-            
+
         elif type(objIndex) == list and len(objIndex) > 0:
-            
+
             for i in objIndex:
                 self.insert(i,objArg,flagReplace)
-        
+
         elif type(objArg) == list and len(objArg) > 0:
-            
+
             for u in objArg:
                 self.insert(objIndex,u,flagReplace)
-        
+
         elif type(objIndex) == int and objIndex > -1 and objIndex < len(self) and (type(objArg) == Unit or type(objArg) == Combination or type(objArg) == Note):
 
             if flagReplace:
@@ -244,7 +245,7 @@ class Cycle(Title,Description):
                 self.day[objIndex] = [objArg.dup()]
             else:
                 self.day[objIndex].append(objArg.dup())
-                
+
         elif type(objIndex) == int and objIndex > -1 and objIndex < len(self) and type(objArg) == Cycle and len(objArg) > 0 and len(objArg) + objIndex <= len(self):
 
             i = 0
@@ -255,7 +256,7 @@ class Cycle(Title,Description):
 
         else:
             print('error: ' + str(objArg), file=sys.stderr)
-            
+
         return objResult
 
 
@@ -286,7 +287,7 @@ class Cycle(Title,Description):
         """  """
 
         self.day.reverse()
-        
+
         return self
 
 
@@ -303,7 +304,7 @@ class Cycle(Title,Description):
                     d.append([])
 
             self.day = d
-            
+
         return self
 
 
@@ -336,7 +337,7 @@ class Cycle(Title,Description):
 
         return self
 
-    
+
     def getPeriodDone(self):
 
         """  """
@@ -352,7 +353,7 @@ class Cycle(Title,Description):
         """  """
 
         # TODO: use self.data
-        
+
         intResult = 0
         for v in self.day:
             for u in v:
@@ -369,7 +370,7 @@ class Cycle(Title,Description):
         """ return a timedelta """
 
         # TODO: use self.data
-        
+
         intResult = 0
         for v in self.day:
             for u in v:
@@ -384,10 +385,10 @@ class Cycle(Title,Description):
         """  """
 
         strResult = ''
-            
+
         if type(self.dateBegin) == date and self.dateBegin != None and type(self.dateEnd) == date and self.dateEnd != None:
             strResult = ' (' + str(len(self)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
-            
+
         return strResult
 
 
@@ -435,14 +436,14 @@ class Cycle(Title,Description):
         self.dateEnd = self.dateBegin + timedelta(days=(len(self) - 1))
 
         return self
-    
+
 
     def stat(self):
 
         """  """
 
         listResult = []
-        
+
         if type(self.data) == list and len(self.data) > 0:
             return self.data
         else:
@@ -451,7 +452,7 @@ class Cycle(Title,Description):
                     if type(u) == Unit or type(u) == Combination:
                         listResult.extend(u.stat())
             self.data = listResult
-            
+
         return listResult
 
 
@@ -460,7 +461,7 @@ class Cycle(Title,Description):
         """  """
 
         strResult = ''
-        
+
         self.stat()
 
         l = np.array(list(map(lambda lst: lst[2], self.data)))
@@ -468,19 +469,19 @@ class Cycle(Title,Description):
 
         if dictArg == None:
             dictArg = {}
-            
+
         for u in self.data:
-            
+
             if u[3] not in dictArg:
                 dictArg[u[3]] = [[],[]]
-                
+
             dictArg[u[3]][0].append(u[1])
             dictArg[u[3]][1].append(u[2])
 
         for k in sorted(set(map(lambda lst: lst[3], self.data))):
             # all kinds of units
             sum_k = sum(dictArg[k][1]) / 60.0
-            
+
             if sum_h < 0.01:
                 pass
             elif len(dictArg[k][0]) < 1:
@@ -493,7 +494,7 @@ class Cycle(Title,Description):
                 strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f}\n").format(len(dictArg[k][0]), k, sum(dictArg[k][0]),
                                                                                                                        config.unit_distance,
                                                                                                                        round(sum_k,1),
-                                                                                                                       round(sum_k / sum_h, 2))        
+                                                                                                                       round(sum_k / sum_h, 2))
             else:
                 strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f} {:5.01f} /{:5.01f} /{:5.01f}\n").format(len(dictArg[k][0]),
                                                                                                                                                     k,
@@ -504,7 +505,7 @@ class Cycle(Title,Description):
                                                                                                                                                     min(dictArg[k][0]),
                                                                                                                                                     mean(dictArg[k][0]),
                                                                                                                                                     max(dictArg[k][0]))
-            
+
         n = self.getNumberOfUnits()
         if n > 0:
             #p = self.getPeriodDone()
@@ -531,7 +532,7 @@ class Cycle(Title,Description):
     def toHtml(self):
 
         """  """
-        
+
         strResult = '<section class="{}" id="{}"'.format(__name__, str(id(self)))
 
         if self.color != None:
@@ -541,14 +542,12 @@ class Cycle(Title,Description):
 
         strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
 
-        #strResult += self.toSVGDiagram()
-        
         for v in self.day:
             for u in v:
                 strResult += u.toHtml()
-            
+
         strResult += '<pre>' + self.report() + '</pre>'
-        
+
         strResult += '</section>'
 
         return strResult
@@ -557,7 +556,7 @@ class Cycle(Title,Description):
     def toHtmlTable(self):
 
         """  """
-        
+
         strResult = '<section class="{}" id="{}"'.format(__name__, str(id(self)))
 
         if self.color != None:
@@ -568,9 +567,15 @@ class Cycle(Title,Description):
         strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
 
         strResult += '<pre>' + self.report() + '</pre>'
-        
+
+        #strResult += '<div>'
+        #strResult += self.plotAccumulation()
+        #strResult += self.plotHist()
+        #strResult += self.plotTimeDist()
+        #strResult += self.toSVGGanttChart()
         #strResult += self.toSVGDiagram()
-        
+        #strResult += '</div>'
+
         strResult += '<table style="width: 80%">\n'
 
         strResult += '<colgroup><col span="1" style="width: 10%;"><col span="1" style="width: 90%;"></colgroup>\n'
@@ -587,7 +592,7 @@ class Cycle(Title,Description):
             strResult += '</td>'
             strResult += '</tr>'
             dt_i += timedelta(days=1)
-            
+
         strResult += '</tbody></table>'
 
         strResult += '</section>'
@@ -606,7 +611,7 @@ class Cycle(Title,Description):
         strResult += "<head>"
 
         strResult += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
-        
+
         strResult += "<title></title>"
 
         strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\npre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}</style>\n"
@@ -642,7 +647,7 @@ class Cycle(Title,Description):
             for u in v:
                 if type(u) == Unit:
                     strResult += u.toSqlite()
-            
+
         return strResult
 
 
@@ -715,21 +720,21 @@ class Cycle(Title,Description):
     def toSVGGantt(self,dateBase,y=0):
 
         """  """
-    
+
         try:
             l = self.getPeriodDone()
             x_i = (self.dateBegin - dateBase).days * 2
         except ValueError as e:
             print('error: ' + str(e), file=sys.stderr)
             return ''
-        
+
         strResult = '<g>'
 
         if self.color == None:
             color = '#ffaaaa'
         else:
             color = self.color
-            
+
         strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, len(self) * 2)
         strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + ' ' + self.__listDescriptionToString__())
         strResult += '</rect>'
@@ -752,7 +757,7 @@ class Cycle(Title,Description):
             h = 2
             scolor = 'red'
             color = 'red'
-            
+
         strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, config.diagram_height - h - 10, h, l * 2 - 2)
         strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
         strResult += '</rect>'
@@ -792,7 +797,7 @@ class Cycle(Title,Description):
                 color = 'black'
             else:
                 color = 'red'
-                
+
             strResult += '<line stroke-dasharray="8" stroke="{}" stroke-width="1" opacity="0.25" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(color,w, 0, w, diagram_height)
             strResult += '<title>{}</title>\n'.format(d_i.strftime("%Y-%m-%d"))
             strResult += '</line>'
@@ -808,7 +813,7 @@ class Cycle(Title,Description):
 
         for i in [0,30,45,60,90]:
             strResult += '<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0, diagram_height - 10 - i, diagram_width, diagram_height - 10 - i)
-            
+
         strResult += self.toSVGGantt(d_0)
         strResult += '</g>'
         strResult += '</svg>\n'
@@ -844,7 +849,7 @@ class Cycle(Title,Description):
                 strResult += u.toFreemindNode()
             strResult += '</node>\n'
             d_i += timedelta(days=1)
-            
+
         strResult += '</node>\n'
 
         return strResult
