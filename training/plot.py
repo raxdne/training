@@ -45,14 +45,14 @@ class Plot():
 
         """ lists of distance and time """
 
-        d = [self.dateBegin.toordinal()]
-        s = [0.0]
+        d = []
+        s = []
 
         for u in self.data:
             if (strArg == None or u[3] == strArg) and u[0] > 0 and u[1] > 0.0:
                 d.append(u[0])
                 s.append(u[1])
-
+        
         return d, s
 
 
@@ -80,6 +80,15 @@ class Plot():
             for k in sorted(set(map(lambda lst: lst[3], self.data))):
                 # one fit per type
                 lx, ly = self.getDayDist(k)
+
+                if lx[0] != x_0:
+                    lx.insert(0,x_0)
+                    ly.insert(0,0.0)
+                    
+                if lx[-1] != x_1:
+                    lx.append(x_1)
+                    ly.append(0.0)
+                    
                 x_n = np.array(lx) - x_0
                 # accumulation
                 y_a = np.add.accumulate(np.array(ly))
@@ -87,10 +96,10 @@ class Plot():
                 if len(x_n) != len(y_a):
                     print('error: x and y are no matching data', file=sys.stderr)
                 elif len(x_n) < 2:
-                    print('info: not enough data for {}'.format(k), file=sys.stderr)
+                    print(f'info: not enough data for {k}', file=sys.stderr)
                 else:
                     ax.step(x_n, y_a, where='post', label=k)
-                    #ax.scatter(x_n, y_a, s=1, label='{}'.format(k))
+                    #ax.scatter(x_n, y_a, s=1, label=k)
 
             plt.legend()
 

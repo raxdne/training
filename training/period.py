@@ -59,7 +59,7 @@ class Period(Title,Description,Plot):
 
         super(Title, self).__init__()
         super(Description, self).__init__()
-        
+
         self.setTitleStr(strArg)
         self.setDescription()
 
@@ -70,7 +70,7 @@ class Period(Title,Description,Plot):
         self.dateBegin = None
         self.dateEnd = None
         self.data = None
-        
+
         self.setPlan()
 
 
@@ -84,7 +84,7 @@ class Period(Title,Description,Plot):
 
         for c in self.child:
             strResult += str(c) + '\n'
-            
+
         return strResult
 
 
@@ -112,7 +112,7 @@ class Period(Title,Description,Plot):
                 c.setPlan(fPlan)
 
         self.fPlan = fPlan
-        
+
         return self
 
 
@@ -135,7 +135,7 @@ class Period(Title,Description,Plot):
                 c.resetDistances()
 
         self.data = []
-        
+
         return self
 
 
@@ -152,7 +152,7 @@ class Period(Title,Description,Plot):
         """ return a timedelta """
 
         # TODO: use self.data
-        
+
         intResult = 0
         for u in self.child:
             if type(u) == Cycle:
@@ -166,7 +166,7 @@ class Period(Title,Description,Plot):
         """  """
 
         # TODO: use self.data
-        
+
         intResult = 0
         for c in self.child:
             if type(c) == Cycle or type(c) == Period:
@@ -180,10 +180,10 @@ class Period(Title,Description,Plot):
         """  """
 
         strResult = ''
-            
+
         if type(self.dateBegin) == date and self.dateBegin != None and type(self.dateEnd) == date and self.dateEnd != None:
             strResult = ' (' + str(len(self)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
-            
+
         return strResult
 
 
@@ -198,7 +198,7 @@ class Period(Title,Description,Plot):
 
         return self
 
-    
+
     def insert(self,objArg):
 
         """  """
@@ -226,10 +226,10 @@ class Period(Title,Description,Plot):
                             p.child.append(objArg.dup())
                     i += 1
                 self.schedule()
-                
+
         return objResult
 
-    
+
     def insertByDate(self,objArg,flagReplace=False):
 
         """  """
@@ -363,7 +363,7 @@ class Period(Title,Description,Plot):
         """  """
 
         # TODO: swap childs
-        
+
         return self
 
 
@@ -395,7 +395,7 @@ class Period(Title,Description,Plot):
                 print('error: cannot set dates according to childs', file=sys.stderr)
                 return None
         else:
- 
+
             try:
                 if intMonth == None and intDay == None:
                     self.dateScheduled = date(intYear, 1, 1)
@@ -427,7 +427,7 @@ class Period(Title,Description,Plot):
         """  """
 
         listResult = []
-        
+
         if type(self.data) == list and len(self.data) > 0:
             return self.data
         else:
@@ -435,7 +435,7 @@ class Period(Title,Description,Plot):
                 if type(c) == Cycle or type(c) == Period:
                     listResult.extend(c.stat())
             self.data = listResult
-            
+
         return listResult
 
 
@@ -444,7 +444,7 @@ class Period(Title,Description,Plot):
         """  """
 
         strResult = ''
-        
+
         self.stat()
 
         l = np.array(list(map(lambda lst: lst[2], self.data)))
@@ -452,19 +452,19 @@ class Period(Title,Description,Plot):
 
         if dictArg == None:
             dictArg = {}
-            
+
         for u in self.data:
-            
+
             if u[3] not in dictArg:
                 dictArg[u[3]] = [[],[]]
-                
+
             dictArg[u[3]][0].append(u[1])
             dictArg[u[3]][1].append(u[2])
 
         for k in sorted(set(map(lambda lst: lst[3], self.data))):
             # all kinds of units
             sum_k = sum(dictArg[k][1]) / 60.0
-            
+
             if sum_h < 0.01:
                 pass
             elif len(dictArg[k][0]) < 1:
@@ -477,7 +477,7 @@ class Period(Title,Description,Plot):
                 strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f}\n").format(len(dictArg[k][0]), k, sum(dictArg[k][0]),
                                                                                                                        config.unit_distance,
                                                                                                                        round(sum_k,1),
-                                                                                                                       round(sum_k / sum_h, 2))        
+                                                                                                                       round(sum_k / sum_h, 2))
             else:
                 strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f} {:5.01f} /{:5.01f} /{:5.01f}\n").format(len(dictArg[k][0]),
                                                                                                                                                     k,
@@ -488,7 +488,7 @@ class Period(Title,Description,Plot):
                                                                                                                                                     min(dictArg[k][0]),
                                                                                                                                                     mean(dictArg[k][0]),
                                                                                                                                                     max(dictArg[k][0]))
-            
+
         n = self.getNumberOfUnits()
         if n > 0:
             p = len(self)
@@ -610,21 +610,21 @@ class Period(Title,Description,Plot):
         strResult += '</div>\n'
 
         strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
-        
+
         strResult += '<pre>' + self.report() + '</pre>'
-        
-        strResult += '<div>'        
+
+        strResult += '<div>'
         strResult += self.plotAccumulation()
         strResult += self.plotHist()
         strResult += self.plotTimeDist()
         #strResult += self.toSVGGanttChart()
         #strResult += self.toSVGDiagram()
-        strResult += '</div>'        
+        strResult += '</div>'
 
         for c in self.child:
             strResult += c.toHtmlTable() + '\n'
             #strResult += c.toHtml() + '\n'
-            
+
         strResult += '</section>\n'
 
         return strResult
@@ -635,13 +635,13 @@ class Period(Title,Description,Plot):
         """  """
 
         strResult = self.getTitleLineTableOfContent(strIndent) + self.getDateString() + '\n'
-        
+
         for c in self.child:
             if type(c) == Period:
                 strResult += c.toHtmlTableOfContent(strIndent + '    ')
             elif type(c) == Cycle:
                 strResult += c.getTitleLineTableOfContent(strIndent + '    ') + '\n'
-                
+
         return strResult
 
 
@@ -656,7 +656,7 @@ class Period(Title,Description,Plot):
         strResult += "<head>"
 
         strResult += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
-        
+
         strResult += "<title></title>"
 
         strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsvg {margin: 5px 0;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\npre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}\na:link {text-decoration:none;}\ntable {width: 95%; border-collapse: collapse; empty-cells:show; margin-left:auto; margin-right:auto; border: 1px solid grey;}\ntd { border: 1px solid grey; vertical-align:top;}\n.empty {margin-bottom:0px;}\n</style>\n"
@@ -668,6 +668,53 @@ class Period(Title,Description,Plot):
         strResult += '<div style="text-align: center;margin: 40px;">' + self.toSVGGanttChart() + '</div>\n'
 
         strResult += self.toHtml()
+
+        strResult += "</body>\n</html>"
+
+        return strResult
+
+
+    def toComparisonHtmlFile(self, listArg=[]):
+
+        """ returns html/body + content """
+
+        strResult = '<!doctype html public "-//IETF//DTD HTML 4.0//EN">'
+
+        strResult += "<html>"
+
+        strResult += "<head>"
+
+        strResult += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
+
+        strResult += "<title></title>"
+
+        strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsvg {margin: 5px 0;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\npre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}\na:link {text-decoration:none;}\ntable {width: 95%; border-collapse: collapse; empty-cells:show; margin-left:auto; margin-right:auto; border: 1px solid grey;}\ntd { border: 1px solid grey; vertical-align:top;}\n.empty {margin-bottom:0px;}\n</style>\n"
+
+        strResult += "</head>\n<body>\n"
+
+        if len(listArg) < 1:
+            l = self.child
+        else:
+            l = listArg
+
+        for c in l:
+            if type(c) == Period or type(c) == Cycle:
+                strResult += '<section class="{}" id="{}">'.format(__name__, str(id(c)))
+
+                strResult += '<div class="header">' + c.getTitleXML()
+                if c.dateBegin != None and c.dateEnd != None:
+                    strResult += c.getDateString()
+                strResult += '</div>\n'
+
+                strResult += '<div>'
+                strResult += c.plotAccumulation()
+                strResult += c.plotHist()
+                strResult += c.plotTimeDist()
+                #strResult += c.toSVGGanttChart()
+                #strResult += c.toSVGDiagram()
+                strResult += '</div>'
+
+                strResult += '</section>\n'
 
         strResult += "</body>\n</html>"
 
@@ -712,7 +759,7 @@ class Period(Title,Description,Plot):
 
         for c in self.child:
             strResult += c.toFreemindNode()
-            
+
         strResult += '</node>\n'
 
         return strResult
@@ -737,16 +784,16 @@ class Period(Title,Description,Plot):
         for c in self.child:
             if type(c) == Cycle or type(c) == Period:
                 strResult += c.toSqlite()
-            
+
         return strResult
 
 
     def toSqliteDump(self):
 
         """  """
-        
+
         strResult = 'PRAGMA journal_mode = OFF;\n\n'
-        
+
         strResult += """CREATE TABLE IF NOT EXISTS "queries" (query text, "description"	TEXT);
 
         INSERT INTO 'queries' VALUES (\"SELECT * FROM units;\",\"find all units\");
@@ -828,7 +875,7 @@ class Period(Title,Description,Plot):
             return '<text x="{}" y="{}">{}</text>\n'.format(0 + 2, y + 10,self.getTitleXML())
 
         strResult = '<g>'
-        
+
         if self.color == None:
             c = '#aaaaff'
         else:
@@ -888,7 +935,7 @@ class Period(Title,Description,Plot):
                 color = 'black'
             else:
                 color = 'red'
-                
+
             strResult += '<line stroke-dasharray="8" stroke="{}" stroke-width="1" opacity="0.25" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(color,w, 0, w, diagram_height)
             strResult += '<title>{}</title>\n'.format(d_i.strftime("%Y-%m-%d"))
             strResult += '</line>'
@@ -904,7 +951,7 @@ class Period(Title,Description,Plot):
 
         for i in [0,30,45,60,90]:
             strResult += '<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0, diagram_height - 10 - i, diagram_width, diagram_height - 10 - i)
-            
+
         strResult += self.toSVGGantt(d_0)
         strResult += '</g>'
         strResult += '</svg>\n'
@@ -999,7 +1046,7 @@ class Period(Title,Description,Plot):
         d = date(intYear,1,1)
         if d.isoweekday() > 4:
             # skip to next monday
-            d += timedelta(days=(8 - d.isoweekday())) 
+            d += timedelta(days=(8 - d.isoweekday()))
         else:
             # skip to previous monday
             d -= timedelta(days=(d.isoweekday() - 1))
@@ -1039,7 +1086,7 @@ class Period(Title,Description,Plot):
         dt_0 = datetime.now()
         dt_i = dt_0 + timedelta(days=(7 - dt_0.weekday())) - timedelta(weeks=intWeek)
         dt_1 = dt_i
-        
+
         for m in range(0,intWeek):
             self.append(Cycle(dt_i.strftime("%Y-W%U")))
             dt_i += timedelta(weeks=1)
@@ -1059,7 +1106,7 @@ class Period(Title,Description,Plot):
         dt_0 = datetime.now()
         dt_i = dt_0 + timedelta(days=(7 - dt_0.weekday())) - timedelta(weeks = intMonth * 4)
         dt_1 = dt_i
-        
+
         for m in range(0,intMonth):
             self.append(Cycle(dt_i.strftime("%Y-M%m"),4*7))
             dt_i += timedelta(weeks=4)
