@@ -34,13 +34,15 @@ font_family = 'Arial'
 font_size = 8
 
 # default colors in diagram
-colors = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
+colors = {'Bicycle': '#ffdddd', 'Running': '#ddffdd', 'Swimming': '#ddddff'}
 
 # maximum for length of type string
 max_length_type = 20
 
 # distance unit 'mi' or 'km'
 unit_distance = 'km'
+# default velocity for planning
+v_defaults = {'Bicycle': 25.0, 'Running': 10.0, 'Swimming': 2.0}
 
 #
 twilight = 1800

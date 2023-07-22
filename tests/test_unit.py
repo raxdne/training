@@ -25,10 +25,32 @@ from training.unit import Unit
 
 print('Module Test: ' + __file__ + '\n')
 
-#t = Unit('2020-03-03T17:00:00+1:00;10;RG;20min')
-t = Unit('10:00;10;R Basics;20min')
+t = Unit()
+t.setDistStr('40')
+t.setTypeStr('Biking')
+t.setDuration('2h')
+print(t)
+
+t = Unit()
+t.setTypeStr('Biking')
+t.setDuration('30min')
+t.setDistStr()
+print(t)
+
+t = Unit('Running')
+t.setDistStr('20')
+t.setDuration()
 t.setDate(date(2025, 1, 7))
 print(t)
+
+t = Unit(['2020-03-02', '10,0', 'Biking', '1h', ''])
+print(t)
+
+t = Unit('2020-03-03T17:00:00+1:00;10;Biking;20min')
+print(t)
+
+quit()
+
 t.scale(2)
 print(t)
 

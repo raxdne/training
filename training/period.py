@@ -69,6 +69,7 @@ class Period(Title,Description,Plot):
         self.child = []
         self.dateBegin = None
         self.dateEnd = None
+        self.dateScheduled = None
         self.data = None
 
         self.setPlan()
@@ -705,6 +706,8 @@ class Period(Title,Description,Plot):
                 if c.dateBegin != None and c.dateEnd != None:
                     strResult += c.getDateString()
                 strResult += '</div>\n'
+
+                strResult += '<pre>' + c.report() + '</pre>'
 
                 strResult += '<div>'
                 strResult += c.plotAccumulation()

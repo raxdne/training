@@ -47,8 +47,9 @@ class Unit(Note):
         
         self.dist = None
         self.type = None
-
-        self.setDuration()
+        self.duration = None
+        
+        self.setDuration(0)
 
         self.parse(strArg)
 
@@ -135,12 +136,19 @@ class Unit(Note):
         return True
 
 
-    def setDistStr(self,strArg):
+    def setDistStr(self,strArg=None):
 
         """  """
 
-        if strArg == None or strArg == '':
-            self.dist = None
+        if strArg == None or len(strArg) < 1:
+            if self.type != None and self.type in config.v_defaults and config.v_defaults[self.type] > 1.0 and self.duration != None and self.duration > Duration(0):
+                # there is a defined default velocity
+                self.dist = config.v_defaults[self.type] * (self.duration.total_seconds() / 3600)
+                print('info updating distance: ' + str(self), file=sys.stderr)
+            elif self.dist != None and self.dist > 0.1:
+                pass
+            else:
+                self.dist = None
         else:
             try:
                 self.dist = float(strArg.replace(',','.'))
@@ -149,19 +157,26 @@ class Unit(Note):
             except ValueError:
                 self.dist = None
 
-        return True
+        return (self.dist != None and self.dist > 0.1)
 
 
     def setDuration(self,intArg=None):
 
         """  """
 
-        if intArg == None:
-            self.duration = Duration(0)
+        if intArg == None or intArg == 0:
+            if self.type != None and self.type in config.v_defaults and config.v_defaults[self.type] > 1.0 and self.dist != None and self.dist > 0.1:
+                # there is a defined default velocity
+                self.duration = Duration(int(self.dist / config.v_defaults[self.type] * 60))
+                print('info updating duration: ' + str(self), file=sys.stderr)
+            elif self.duration != None:
+                pass
+            else:
+                self.duration = Duration(0)
         else:
             self.duration = Duration(intArg)
 
-        return True
+        return (self.duration != None and self.duration != Duration(0))
 
 
     def getDuration(self):
@@ -210,8 +225,10 @@ class Unit(Note):
                 entry.insert(0,'')
                 entry.insert(0,'')
                 entry.append('')
+                entry.append('')
             elif len(entry) == 2:
                 # type + time only
+                entry.insert(0,'')
                 entry.insert(0,'')
                 entry.append('')
             elif len(entry) == 3:
@@ -219,7 +236,16 @@ class Unit(Note):
                 entry.insert(0,'')
             return self.parse(entry)
         elif type(objArg) is list and len(objArg) > 3:
-            if self.setDistStr(objArg[1]) and self.setTypeStr(objArg[2]) and self.setDuration(objArg[3]):
+
+            if self.setTypeStr(objArg[2]):
+                if self.setDuration(objArg[3]):
+                    if self.setDistStr(objArg[1]):
+                        pass
+                    else:
+                        self.setDistStr()
+                elif self.setDistStr(objArg[1]):
+                    self.setDuration()
+
                 self.setDateStr(objArg[0])
                 self.appendDescription(objArg[4:])
                 return True

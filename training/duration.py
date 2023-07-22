@@ -27,25 +27,25 @@ class Duration(timedelta):
 
     """ extension class for timedelta (https://stackoverflow.com/questions/48461081/cant-inherit-from-timedelta) """
 
-    def __new__(cls,strArg):
+    def __new__(cls,objArg):
 
         """  """
 
         intMin = 0
         
-        if strArg == None:
+        if objArg == None:
             pass
-        elif type(strArg) == int:
-            intMin = strArg
-        elif type(strArg) == str:
-            entry = strArg.split(':')
+        elif type(objArg) == int:
+            intMin = objArg
+        elif type(objArg) == str:
+            entry = objArg.split(':')
             if len(entry) == 1:
                 # nothing to split
-                entry = strArg.split('min')
+                entry = objArg.split('min')
                 if len(entry) == 2:
                     intMin = int(entry[0])
                 else:
-                    entry = strArg.split('h')
+                    entry = objArg.split('h')
                     if len(entry) == 2:
                         intMin = int(float(entry[0]) * 60.0)
             elif len(entry) == 2:
