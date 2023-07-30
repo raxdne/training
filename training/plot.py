@@ -41,6 +41,22 @@ class Plot():
         """  """
 
 
+    def setPlot(self,fPlot=False):
+
+        """  """
+
+        if hasattr(self,'child'):
+            for c in self.child:
+                try:
+                    c.setPlot(fPlot)
+                except:
+                    pass
+
+        self.fPlot = fPlot
+        
+        return self
+
+
     def getDayDist(self,strArg=None):
 
         """ lists of distance and time """
@@ -81,6 +97,10 @@ class Plot():
                 # one fit per type
                 lx, ly = self.getDayDist(k)
 
+                if len(lx) < 1 or len(lx) != len(ly):
+                    print(f'error: x and y are no matching data for "{k}"', file=sys.stderr)
+                    continue
+
                 if lx[0] != x_0:
                     lx.insert(0,x_0)
                     ly.insert(0,0.0)
@@ -111,6 +131,83 @@ class Plot():
                 f.close()
             else:
                 plt.savefig(fileNameOut)
+
+        return strResult
+
+
+    def getDayDuration(self,strArg=None):
+
+        """ lists of duration and time """
+
+        d = []
+        s = []
+
+        for u in self.data:
+            if (strArg == None or u[3] == strArg) and u[0] > 0 and u[2] > 0.0:
+                d.append(u[0])
+                s.append(u[2] / 60.0)
+        
+        return d, s
+
+
+    def plotAccumulationDuration(self,fileNameOut=None):
+
+        """ Accumulation chart of periods and cycles """
+
+        strResult = '<pre>not enough data to plot</pre>'
+
+        if (hasattr(self,'child') and len(self.child) > 0) or hasattr(self,'day'):
+
+            self.stat()
+            # make data
+            x = np.array(list(map(lambda lst: lst[0], self.data)))
+            x_0 = self.dateBegin.toordinal()
+            x_1 = self.dateEnd.toordinal()
+            if len(x) > 4:
+                # plot:
+                fig, ax = plt.subplots()
+
+                ax.grid(visible=True, linestyle='dotted', linewidth=0.5)
+                ax.set_xlabel("{} Days".format(x_1 - x_0 + 1))
+                ax.set_ylabel(f'Σ [h]')
+                #ax.set_xticks(np.arange(0, x_1 - x_0, 28))
+
+                lx, ly = self.getDayDuration()
+
+                if len(lx) < 1 or len(lx) != len(ly):
+                    print('error: x and y are no matching data', file=sys.stderr)
+                    return strResult
+                
+                if lx[0] != x_0:
+                    lx.insert(0,x_0)
+                    ly.insert(0,0.0)
+
+                if lx[-1] != x_1:
+                    lx.append(x_1)
+                    ly.append(0.0)
+
+                x_n = np.array(lx) - x_0
+                # accumulation
+                y_a = np.add.accumulate(np.array(ly))
+
+                if len(x_n) != len(y_a):
+                    print('error: x and y are no matching data', file=sys.stderr)
+                elif len(x_n) < 2:
+                    print(f'info: not enough data', file=sys.stderr)
+                else:
+                    ax.step(x_n, y_a, where='post', label='Duration')
+                    #ax.scatter(x_n, y_a, s=1, label=k)
+
+                plt.legend()
+
+                if fileNameOut == None:
+                    f = io.StringIO()
+                    plt.savefig(f, format = "svg")
+                    plt.close()
+                    strResult = f.getvalue()
+                    f.close()
+                else:
+                    plt.savefig(fileNameOut)
 
         return strResult
 
@@ -245,6 +342,82 @@ class Plot():
                 f.close()
             else:
                 plt.savefig(fileNameOut)
+
+        return strResult
+
+
+    def toSVGGanttBar(self,dateBase,y=0):
+
+        """ returns SVG string of vertical and horizontal bars in Gantt Chart """
+
+        flagHBar = False
+        flagVBar = True
+        
+        if hasattr(self,'day'):
+            # it's a Cycle
+            if self.day == None:
+                print('error: empty ' + str(type(self)), file=sys.stderr)
+                return ''
+            elif len(self.day) > 0:
+                l = self.getPeriodDone()
+                flagHBar = True
+            else:
+                print('error: YYY', file=sys.stderr)
+                return ''
+        elif hasattr(self,'child'):
+            # it's a Period
+            l = (self.dateEnd - self.dateBegin).days + 1
+            flagVBar = len(self.child) < 1
+        else:
+            print('error: ' + str(e), file=sys.stderr)
+            return ''
+
+        # TODO: make config.diagram_height configurable
+        config.diagram_height = 40 * (config.diagram_bar_height * 2) + 100
+
+        x_i = (self.dateBegin - dateBase).days * 2
+
+        strResult = '<g>'
+
+        if flagHBar:
+            
+            # horizontal bar
+
+            if self.color == None:
+                color = '#ffaaaa'
+            else:
+                color = self.color
+
+            strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, len(self) * 2)
+            strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + ' ' + self.__listDescriptionToString__())
+            strResult += '</rect>'
+
+        if flagVBar:
+
+            # vertical bar
+
+            h = round(self.getDuration().total_seconds() / 60 / l)
+
+            if self.color != None:
+                scolor = 'red'
+                color = self.color
+            elif h > 20:
+                scolor = 'green'
+                color = '#aaffaa'
+            elif h > 4:
+                scolor = 'red'
+                color = '#ffaaaa'
+            else:
+                h = 2
+                scolor = 'red'
+                color = 'red'
+
+            strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, config.diagram_height - h - 10, h, l * 2 - 2)
+            strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
+            strResult += '</rect>'
+
+        #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i,y,self.getTitleXML())
+        strResult += '</g>'
 
         return strResult
 

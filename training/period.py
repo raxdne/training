@@ -73,6 +73,7 @@ class Period(Title,Description,Plot):
         self.data = None
 
         self.setPlan()
+        self.setPlot()
 
 
     def __str__(self):
@@ -155,11 +156,31 @@ class Period(Title,Description,Plot):
         # TODO: use self.data
 
         intResult = 0
-        for u in self.child:
-            if type(u) == Cycle:
-                intResult += u.getDuration().total_seconds()
+        if len(self.child) > 0:
+            for u in self.child:
+                if type(u) == Cycle or type(u) == Period:
+                    intResult += u.getDuration().total_seconds()
+        elif len(self.data) > 0:
+            for t in map(lambda lst: lst[2], self.data):
+                intResult += round(t * 60.0)
 
         return timedelta(seconds=intResult)
+
+
+    def getNumberOfCycles(self):
+
+        """  """
+
+        # TODO: use self.data
+
+        intResult = 0
+        for c in self.child:
+            if type(c) == Period:
+                intResult += c.getNumberOfCycles()
+            elif type(c) == Cycle:
+                intResult += 1
+
+        return intResult
 
 
     def getNumberOfUnits(self):
@@ -192,7 +213,15 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        if objArg == None or (type(objArg) != Cycle and type(objArg) != Period and type(objArg) != Note):
+        # print(f'info: reset data collection of period "{self.getTitleStr()}"', file=sys.stderr)
+        self.data = None
+
+        if objArg == None:
+            print('error: ' + str(objArg), file=sys.stderr)
+        elif type(objArg) == list:
+            for a in objArg:
+                self.append(a)
+        elif objArg == None or (type(objArg) != Cycle and type(objArg) != Period and type(objArg) != Note):
             print('error: ' + str(objArg), file=sys.stderr)
         else:
             self.child.append(objArg.dup())
@@ -352,10 +381,16 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
-                c.scale(floatScale,patternType)
-
+        if len(self.child) > 0:
+            for c in self.child:
+                if type(c) == Cycle or type(c) == Period:
+                    c.scale(floatScale,patternType)
+        elif len(self.data) > 0:
+            l = []
+            for d in self.data:
+                l.append([0,d[1]*floatScale,d[2]*floatScale,d[3]])
+            self.data = l
+            
         return self
 
 
@@ -423,6 +458,33 @@ class Period(Title,Description,Plot):
         return self
 
 
+    def define(self, objArg=None):
+
+        """  """
+
+        if self.data != None and len(self.data) > 0:
+            print(f'error: cannot override existing data collection of period "{self.getTitleStr()}"', file=sys.stderr)
+        elif objArg == None:
+            print('error: empty period initialization', file=sys.stderr)
+        elif type(objArg) == str and len(objArg) > 0:
+            return self.define([objArg])
+        elif type(objArg) == list and len(objArg) > 0:
+            self.data = []
+            u = Unit()
+            for s in objArg:
+                #print('info: ' + s, file=sys.stderr)
+                if u.parse(s):
+                    #print('info: ' + str(u.stat()), file=sys.stderr)
+                    self.data.extend(u.stat())
+                else:
+                    print('error: parsing ' + s, file=sys.stderr)
+            print('info: ' + str(list(map(lambda lst: lst[2], self.data))), file=sys.stderr)
+        else:
+            print('error: empty period initialization', file=sys.stderr)
+            
+        return self
+
+
     def stat(self):
 
         """  """
@@ -430,7 +492,7 @@ class Period(Title,Description,Plot):
         listResult = []
 
         if type(self.data) == list and len(self.data) > 0:
-            return self.data
+            listResult = self.data
         else:
             for c in self.child:
                 if type(c) == Cycle or type(c) == Period:
@@ -491,7 +553,7 @@ class Period(Title,Description,Plot):
                                                                                                                                                     max(dictArg[k][0]))
 
         n = self.getNumberOfUnits()
-        if n > 0:
+        if True or n > 0 or (len(self.data) > 0 and len(self.child) < 1):
             p = len(self)
             strResult += "\n{} Units {:.2f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(n, round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
 
@@ -614,13 +676,15 @@ class Period(Title,Description,Plot):
 
         strResult += '<pre>' + self.report() + '</pre>'
 
-        strResult += '<div>'
-        strResult += self.plotAccumulation()
-        strResult += self.plotHist()
-        strResult += self.plotTimeDist()
-        #strResult += self.toSVGGanttChart()
-        #strResult += self.toSVGDiagram()
-        strResult += '</div>'
+        if self.getNumberOfCycles() > 0 and self.fPlot:
+            strResult += '<div>'
+            strResult += self.plotAccumulationDuration()
+            strResult += self.plotAccumulation()
+            strResult += self.plotHist()
+            strResult += self.plotTimeDist()
+            #strResult += self.toSVGGanttChart()
+            #strResult += self.toSVGDiagram()
+            strResult += '</div>'
 
         for c in self.child:
             strResult += c.toHtmlTable() + '\n'
@@ -709,13 +773,15 @@ class Period(Title,Description,Plot):
 
                 strResult += '<pre>' + c.report() + '</pre>'
 
-                strResult += '<div>'
-                strResult += c.plotAccumulation()
-                strResult += c.plotHist()
-                strResult += c.plotTimeDist()
-                #strResult += c.toSVGGanttChart()
-                #strResult += c.toSVGDiagram()
-                strResult += '</div>'
+                if self.getNumberOfCycles() > 0 and self.fPlot:
+                    strResult += '<div>'
+                    strResult += c.plotAccumulationDuration()
+                    strResult += c.plotAccumulation()
+                    strResult += c.plotHist()
+                    strResult += c.plotTimeDist()
+                    #strResult += c.toSVGGanttChart()
+                    #strResult += c.toSVGDiagram()
+                    strResult += '</div>'
 
                 strResult += '</section>\n'
 
@@ -892,10 +958,11 @@ class Period(Title,Description,Plot):
         y_i = y + config.diagram_bar_height * 3
         for c in self.child:
             if type(c) == Cycle or type(c) == Period:
-                strResult += c.toSVGGantt(dateBase,y_i)
-                #if type(c) is period:
+                strResult += c.toSVGGanttBar(dateBase,y_i)
+                if type(c) == Period:
+                    strResult += c.toSVGGantt(dateBase,y_i)
                 y_i += config.diagram_bar_height * 3
-
+                
         strResult += '<line stroke-dasharray="4" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x_i + (l.days + 1) * 2, y, x_i + (l.days + 1) * 2, y_i)
 
         strResult += '</g>'

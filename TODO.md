@@ -3,6 +3,8 @@
 
 ## Requirements
 
+REQ: accumulated time chart ✔
+
 REQ: multi-user data, synchronized team
 
 REQ: append note/description as normal child in cycle and period ?? #scope

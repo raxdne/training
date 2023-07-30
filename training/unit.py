@@ -271,6 +271,8 @@ class Unit(Note):
         elif self.duration == None:
             #print('error: ' + 'no duration', file=sys.stderr)
             pass
+        elif self.dt == None:
+            listResult = [[0, self.dist, self.getDuration().total_seconds() / 60, self.type]]
         else:
             listResult = [[self.dt.toordinal(), self.dist, self.getDuration().total_seconds() / 60, self.type]]
 

@@ -60,6 +60,7 @@ class Cycle(Title,Description,Plot):
         self.setTitleStr(strArg)
         self.setDescription()
         self.setPlan()
+        self.setPlot()
 
         self.day = []
         for i in range(0,int(intArg)):
@@ -345,7 +346,7 @@ class Cycle(Title,Description,Plot):
         if self.fPlan == False and self.dateBegin != None and date.today() >= self.dateBegin and self.dateEnd != None and date.today() <= self.dateEnd:
             return (date.today() - self.dateBegin).days + 1
         else:
-            return len(self)
+            return (self.dateEnd - self.dateBegin).days + 1
 
 
     def getNumberOfUnits(self):
@@ -568,13 +569,15 @@ class Cycle(Title,Description,Plot):
 
         strResult += '<pre>' + self.report() + '</pre>'
 
-        #strResult += '<div>'
-        #strResult += self.plotAccumulation()
-        #strResult += self.plotHist()
-        #strResult += self.plotTimeDist()
-        #strResult += self.toSVGGanttChart()
-        #strResult += self.toSVGDiagram()
-        #strResult += '</div>'
+        if self.fPlot:
+            strResult += '<div>'
+            strResult += self.plotAccumulationDuration()
+            strResult += self.plotAccumulation()
+            strResult += self.plotHist()
+            strResult += self.plotTimeDist()
+            #strResult += self.toSVGGanttChart()
+            #strResult += self.toSVGDiagram()
+            strResult += '</div>'
 
         strResult += '<table style="width: 80%">\n'
 
@@ -717,57 +720,6 @@ class Cycle(Title,Description,Plot):
         return strResult
 
 
-    def toSVGGantt(self,dateBase,y=0):
-
-        """  """
-
-        try:
-            l = self.getPeriodDone()
-            x_i = (self.dateBegin - dateBase).days * 2
-        except ValueError as e:
-            print('error: ' + str(e), file=sys.stderr)
-            return ''
-
-        strResult = '<g>'
-
-        if self.color == None:
-            color = '#ffaaaa'
-        else:
-            color = self.color
-
-        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, len(self) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + ' ' + self.__listDescriptionToString__())
-        strResult += '</rect>'
-
-        # TODO: make config.diagram_height configurable
-        config.diagram_height = 40 * (config.diagram_bar_height * 2) + 100
-
-        h = round(self.getDuration().total_seconds() / 60 / l)
-
-        if self.color != None:
-            scolor = 'red'
-            color = self.color
-        elif h > 20:
-            scolor = 'green'
-            color = '#aaffaa'
-        elif h > 4:
-            scolor = 'red'
-            color = '#ffaaaa'
-        else:
-            h = 2
-            scolor = 'red'
-            color = 'red'
-
-        strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, config.diagram_height - h - 10, h, l * 2 - 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
-        strResult += '</rect>'
-
-        #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i,y,self.getTitleXML())
-        strResult += '</g>'
-
-        return strResult
-
-
     def toSVGGanttChart(self):
 
         """ Gantt chart of this cycle """
@@ -814,7 +766,7 @@ class Cycle(Title,Description,Plot):
         for i in [0,30,45,60,90]:
             strResult += '<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0, diagram_height - 10 - i, diagram_width, diagram_height - 10 - i)
 
-        strResult += self.toSVGGantt(d_0)
+        strResult += self.toSVGGanttBar(d_0)
         strResult += '</g>'
         strResult += '</svg>\n'
 
