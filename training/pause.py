@@ -107,17 +107,7 @@ class Pause(Note):
 
         """  """
 
-        if self.dt == None:
-            strResult = ''
-        else:
-            if self.type == None:
-                strResult = '{date};;;'.format(date=self.dt.isoformat())
-            elif self.dist == None:
-                strResult = '{date};;{type};{duration}'.format(date=self.dt.isoformat(), type=self.type, duration=str(self.getDuration()))
-            else:
-                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.isoformat(), dist=self.dist, type=self.type, duration=str(self.getDuration()))
-
-            strResult += ';' + self.__listDescriptionToString__()
+        strResult = ''
 
         return strResult
 

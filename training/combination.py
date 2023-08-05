@@ -253,11 +253,9 @@ class Combination(Title,Description):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleStr() + ' (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '\n'
-        for v in self.child:
-            for u in v:
-                if type(u) == Unit:
-                    strResult += u.toCSV() + '\n'
+        strResult = ''
+        for u in self.child:
+            strResult += u.toCSV()
 
         return strResult
 

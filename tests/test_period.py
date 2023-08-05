@@ -26,10 +26,25 @@ from training.period import Period
 
 print('Module Test: ' + __file__ + '\n')
 
-t = Period('General Basics')
+t = Period('General Basics',30)
 t.appendDescription('Regeneration')
 
 t.append(Note('ABC'))
+
+#t.define(['3000;Bicycle;100h','100;Running;'])
+t.define(['2000;Bicycle;','100;Running;'])
+t.define(';Bicycle;100h')
+t.schedule(2025,3,4)
+#print(t.report())
+#
+
+t = Period('General Basics',60).define(['2000;Bicycle;','100;Running;']).schedule(2025,3,4)
+print(t.getNumberOfCycles())
+print(t.toHtml())
+
+
+
+quit()
 
 c = Cycle('General Endurance')
 c.insert(1,Unit('18:00;3.5;RB;25:00;;http://www.demo.com/'))

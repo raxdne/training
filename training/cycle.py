@@ -110,7 +110,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        for i in range(len(self)):
+        for i in range(len(self.day)):
             self.day[i] = []
 
         self.data = []
@@ -131,7 +131,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        if intIndexA > -1 and intIndexA < len(self):
+        if intIndexA > -1 and intIndexA < len(self.day):
             if patternType != None:
                 # delete only matching elements in list of indexed day
                 dayNew = []
@@ -148,7 +148,7 @@ class Cycle(Title,Description,Plot):
         elif patternType != None:
             # whole cycle using pattern
             daysNew = []
-            for i in range(0,len(self)):
+            for i in range(0,len(self.day)):
                 daysNew.append([])
                 for u in self.day[i]:
                     if type(u) == Combination:
@@ -185,7 +185,7 @@ class Cycle(Title,Description,Plot):
                     self.day.append([])
         elif type(intIndexB) != int:
             print('error: shift of a cycle requires an integer value', file=sys.stderr)
-        elif intIndexA > -1 and intIndexB > -1 and intIndexA < len(self) and intIndexB < len(self) and intIndexA != intIndexB:
+        elif intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.day) and intIndexB < len(self.day) and intIndexA != intIndexB:
             self.copy(intIndexA,intIndexB,flagReplace)
             self.remove(intIndexA)
 
@@ -196,7 +196,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self) and intIndexB < len(self) and intIndexA != intIndexB:
+        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.day) and intIndexB < len(self.day) and intIndexA != intIndexB:
             objCopy = copy.deepcopy(self.day[intIndexA])
             if flagReplace:
                 # override existing
@@ -211,7 +211,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self) and intIndexB < len(self) and intIndexA != intIndexB:
+        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.day) and intIndexB < len(self.day) and intIndexA != intIndexB:
             t = self.day[intIndexB]
             self.day[intIndexB] = self.day[intIndexA]
             self.day[intIndexA] = t
@@ -227,7 +227,7 @@ class Cycle(Title,Description,Plot):
 
         if objArg == None:
 
-            print('error: ' + str(objArg), file=sys.stderr)
+            print('error: undefined object', file=sys.stderr)
 
         elif type(objIndex) == list and len(objIndex) > 0:
 
@@ -239,7 +239,7 @@ class Cycle(Title,Description,Plot):
             for u in objArg:
                 self.insert(objIndex,u,flagReplace)
 
-        elif type(objIndex) == int and objIndex > -1 and objIndex < len(self) and (type(objArg) == Unit or type(objArg) == Combination or type(objArg) == Note):
+        elif type(objIndex) == int and objIndex > -1 and objIndex < len(self.day) and (type(objArg) == Unit or type(objArg) == Combination or type(objArg) == Note):
 
             if flagReplace:
                 # override existing
@@ -247,7 +247,7 @@ class Cycle(Title,Description,Plot):
             else:
                 self.day[objIndex].append(objArg.dup())
 
-        elif type(objIndex) == int and objIndex > -1 and objIndex < len(self) and type(objArg) == Cycle and len(objArg) > 0 and len(objArg) + objIndex <= len(self):
+        elif type(objIndex) == int and objIndex > -1 and objIndex < len(self.day) and type(objArg) == Cycle and len(objArg.day) > 0 and len(objArg.day) + objIndex <= len(self.day):
 
             i = 0
             for v in objArg.day:
@@ -256,7 +256,7 @@ class Cycle(Title,Description,Plot):
                 i += 1
 
         else:
-            print('error: ' + str(objArg), file=sys.stderr)
+            print(f'error: inserting {type(objArg)} at position {objIndex} of {len(self.day)} {objArg}', file=sys.stderr)
 
         return objResult
 
@@ -268,7 +268,7 @@ class Cycle(Title,Description,Plot):
         objResult = self
 
         if objArg == None or objArg.dt == None:
-            print('error: ' + str(objArg), file=sys.stderr)
+            print('error: undefined ' + str(objArg), file=sys.stderr)
         elif self.dateBegin == None:
             print('error: date begin', file=sys.stderr)
         elif type(objArg) == Unit or type(objArg) == Combination or type(objArg) == Note:
@@ -333,7 +333,7 @@ class Cycle(Title,Description,Plot):
 
         if strArg == None or strArg == '':
             pass
-        elif len(self) > intIndex and len(self.day[intIndex]) > 0:
+        elif len(self.day) > intIndex and len(self.day[intIndex]) > 0:
             self.day[intIndex][len(self.day[intIndex]) - 1].appendDescription(strArg)
 
         return self
@@ -388,7 +388,7 @@ class Cycle(Title,Description,Plot):
         strResult = ''
 
         if type(self.dateBegin) == date and self.dateBegin != None and type(self.dateEnd) == date and self.dateEnd != None:
-            strResult = ' (' + str(len(self)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+            strResult = ' (' + str(len(self.day)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
 
         return strResult
 
@@ -434,7 +434,7 @@ class Cycle(Title,Description,Plot):
 
             dt_i += timedelta(days=1)
 
-        self.dateEnd = self.dateBegin + timedelta(days=(len(self) - 1))
+        self.dateEnd = self.dateBegin + timedelta(days=(len(self.day) - 1))
 
         return self
 
@@ -510,7 +510,7 @@ class Cycle(Title,Description,Plot):
         n = self.getNumberOfUnits()
         if n > 0:
             #p = self.getPeriodDone()
-            p = len(self)
+            p = len(self.day)
             strResult += "\n{} Units {:.2f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(n, round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
 
         return strResult
@@ -570,33 +570,33 @@ class Cycle(Title,Description,Plot):
         strResult += '<pre>' + self.report() + '</pre>'
 
         if self.fPlot:
-            strResult += '<div>'
-            strResult += self.plotAccumulationDuration()
-            strResult += self.plotAccumulation()
-            strResult += self.plotHist()
-            strResult += self.plotTimeDist()
+            strResult += '<div style="text-align: center;margin: 0px;">'
+            #strResult += self.plotAccumulationDuration()
+            #strResult += self.plotAccumulation()
+            #strResult += self.plotHist()
+            #strResult += self.plotTimeDist()
             #strResult += self.toSVGGanttChart()
-            #strResult += self.toSVGDiagram()
             strResult += '</div>'
+            strResult += self.toSVGDiagram()
+        else:
+            strResult += '<table style="width: 80%">\n'
 
-        strResult += '<table style="width: 80%">\n'
+            strResult += '<colgroup><col span="1" style="width: 10%;"><col span="1" style="width: 90%;"></colgroup>\n'
 
-        strResult += '<colgroup><col span="1" style="width: 10%;"><col span="1" style="width: 90%;"></colgroup>\n'
+            strResult += '<tbody>'
+            dt_i = datetime.combine(self.dateBegin,time(0)).astimezone(None)
+            for v in self.day:
+                strResult += '<tr>'
+                strResult += '<td>' + dt_i.strftime("%Y-%m-%d %a (%j)") + '</td>'
+                strResult += '<td>'
+                if len(v) > 0:
+                    for u in v:
+                        strResult += u.toHtmlTable()
+                strResult += '</td>'
+                strResult += '</tr>'
+                dt_i += timedelta(days=1)
 
-        strResult += '<tbody>'
-        dt_i = datetime.combine(self.dateBegin,time(0)).astimezone(None)
-        for v in self.day:
-            strResult += '<tr>'
-            strResult += '<td>' + dt_i.strftime("%Y-%m-%d %a (%j)") + '</td>'
-            strResult += '<td>'
-            if len(v) > 0:
-                for u in v:
-                    strResult += u.toHtmlTable()
-            strResult += '</td>'
-            strResult += '</tr>'
-            dt_i += timedelta(days=1)
-
-        strResult += '</tbody></table>'
+            strResult += '</tbody></table>'
 
         strResult += '</section>'
 
@@ -632,11 +632,11 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleStr() + self.getDateString() + '\n'
+        strResult = '{};;;;Cycle "{}" {}\n'.format(self.dateBegin.strftime("%Y-%m-%d"), self.getTitleStr(), self.getDateString())
         for v in self.day:
             for u in v:
-                if type(u) == Unit:
-                    strResult += u.toCSV() + '\n'
+                strResult += u.toCSV()
+        strResult += '\n'
 
         return strResult
 
@@ -654,20 +654,18 @@ class Cycle(Title,Description,Plot):
         return strResult
 
 
-    def toSVG(self, x = config.diagram_offset, y=20):
+    def toSVG(self, x = config.diagram_offset, y=0):
 
         """  """
 
         strResult = '<g>'
 
-        strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+config.diagram_width,y)
-
         if self.color != None:
-            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self))-2,x+config.diagram_width-4)
+            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self.day))-2,x+config.diagram_width-4)
 
         strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleXML(), self.getDateString(), (self.getTitleXML() + self.getDateString() + '\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report()))
 
-        if len(self) < 1:
+        if len(self.day) < 1:
             pass
         else:
             y += config.diagram_bar_height / 2
@@ -678,8 +676,8 @@ class Cycle(Title,Description,Plot):
 
                 if d.month == t.month and d.day == t.day:
                     strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format('#ffaaaa',x,y-1,config.diagram_bar_height+2,config.diagram_width - config.diagram_offset)
-                    if d.year == t.year:
-                        strResult +=  '<foreignObject x="{}" y="{}" height="{}" width="{}"><a xmlns="http://www.w3.org/1999/xhtml" name="today"/></foreignObject>\n'.format(x,y-1,config.diagram_bar_height+2,config.diagram_width - config.diagram_offset)
+                    #if d.year == t.year:
+                    #    strResult +=  '<foreignObject x="{}" y="{}" height="{}" width="{}"><a xmlns="http://www.w3.org/1999/xhtml" name="today"/></foreignObject>\n'.format(x,y-1,config.diagram_bar_height+2,config.diagram_width - config.diagram_offset)
                 elif d.isoweekday() == 6 or d.isoweekday() == 7:
                     strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format('#eeeeee',x,y-1,config.diagram_bar_height+2,config.diagram_width - config.diagram_offset)
                 d += timedelta(days=1)
@@ -701,20 +699,22 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        diagram_height = len(self) * (config.diagram_bar_height * 2) + 100
+        diagram_height = len(self.day) * (config.diagram_bar_height * 2) + 0
+
         strResult = '<svg baseProfile="full" height="{}" version="1.1" width="{}" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, config.diagram_width)
 
         strResult += '<style type="text/css">svg { font-family: ' + config.font_family + '; font-size: ' + str(config.font_size) + 'pt; }</style>'
-
-        #strResult += '<g transform="rotate(90)">'
-        #'<text x="210" y="110">Period 2.2021</text>
+        strResult += '<g>'
+        
+        strResult += '<rect fill="transparent" stroke="{}" stroke-width="2" x="{}" y="{}" rx="3" ry="3" height="{}" width="{}"/>\n'.format('#aaaaaa', 0, 0, diagram_height, config.diagram_width)
 
         for i in [3600/4,3600/2,3600,2*3600,3*3600,4*3600,5*3600,6*3600]:
-            w = i / 3600 * 25 * config.diagram_scale_dist
-            strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( config.diagram_offset + w, 20, config.diagram_offset + w, diagram_height)
+            w = config.diagram_offset + i / 3600 * 25 * config.diagram_scale_dist
+            strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 0, w, diagram_height)
 
         strResult += self.toSVG()
-        #strResult += '</g>'
+
+        strResult += '</g>'
         strResult += '</svg>\n'
 
         return strResult

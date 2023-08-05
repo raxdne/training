@@ -127,7 +127,7 @@ class Unit(Note):
         """  """
 
         if strArg == None or strArg == '':
-            pass
+            return False
         elif config.max_length_type > 0 and config.max_length_type < 32:
             self.type = strArg[0:config.max_length_type]
         else:
@@ -144,7 +144,7 @@ class Unit(Note):
             if self.type != None and self.type in config.v_defaults and config.v_defaults[self.type] > 1.0 and self.duration != None and self.duration > Duration(0):
                 # there is a defined default velocity
                 self.dist = config.v_defaults[self.type] * (self.duration.total_seconds() / 3600)
-                print('info updating distance: ' + str(self), file=sys.stderr)
+                #print('info updating distance: ' + str(self), file=sys.stderr)
             elif self.dist != None and self.dist > 0.1:
                 pass
             else:
@@ -168,7 +168,7 @@ class Unit(Note):
             if self.type != None and self.type in config.v_defaults and config.v_defaults[self.type] > 1.0 and self.dist != None and self.dist > 0.1:
                 # there is a defined default velocity
                 self.duration = Duration(int(self.dist / config.v_defaults[self.type] * 60))
-                print('info updating duration: ' + str(self), file=sys.stderr)
+                #print('info updating duration: ' + str(self), file=sys.stderr)
             elif self.duration != None:
                 pass
             else:
@@ -279,6 +279,24 @@ class Unit(Note):
         return listResult
 
 
+    def getColor(self):
+
+        """  """
+        
+        strResult = '#ffffff'
+        
+        if self.type == None or len(self.type) < 1:
+            strResult = '#cccccc'
+        elif self.type in config.colors:
+            strResult = config.colors[self.type]
+        elif self.type[0] in config.colors:
+            strResult = config.colors[self.type[0]]
+        elif self.color != None:
+            strResult = self.color
+
+        return strResult
+
+            
     def getSpeedStr(self):
 
         """  """
@@ -312,7 +330,7 @@ class Unit(Note):
             else:
                 strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=str(self.getDuration()))
 
-            strResult += ';' + self.__listDescriptionToString__()
+            strResult += ';' + self.__listDescriptionToString__() + '\n'
 
         return strResult
 
@@ -334,15 +352,7 @@ class Unit(Note):
 
         """  """
 
-        strResult = '<p'
-        if self.type == None or len(self.type) < 1:
-            strResult += ' style="background-color: {}"'.format('#cccccc')
-        elif self.type[0] in config.colors:
-            strResult += ' style="background-color: {}"'.format(config.colors[self.type[0]])
-        elif self.color != None:
-            strResult += ' style="background-color: {}"'.format(self.color)
-        strResult += '>'
-
+        strResult = '<p style="background-color: {}">'.format(self.getColor())
         strResult += str(self) + ' ' + self.__listDescriptionToString__()
         strResult += '</p>'
         
@@ -353,15 +363,7 @@ class Unit(Note):
 
         """  """
 
-        strResult = '<div style="'
-        if self.type == None or len(self.type) < 1:
-            strResult += ' background-color: {}'.format('#cccccc')
-        elif self.type[0] in config.colors:
-            strResult += ' background-color: {}'.format(config.colors[self.type[0]])
-        elif self.color != None:
-            strResult += ' background-color: {}'.format(self.color)
-        strResult += '">'
-
+        strResult = '<div style="background-color: {}">'.format(self.getColor())
         strResult += str(self) + ' ' + self.__listDescriptionToString__()
         strResult += '</div>'
 
@@ -377,12 +379,7 @@ class Unit(Note):
         if self.duration == None or self.getDuration().total_seconds() < 60:
             strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.__listDescriptionToSVG__(), str(self))
         else:
-            strResult += '<rect '
-
-            if self.type == None or len(self.type) < 1:
-                strResult += ' fill="{}"'.format('#cccccc')
-            elif self.type[0] in config.colors:
-                strResult += ' fill="{}"'.format(config.colors[self.type[0]])
+            strResult += '<rect fill="{}"'.format(self.getColor())
 
             if self.dist == None or True:
                 # "about 25 distance units per hour"
@@ -405,11 +402,8 @@ class Unit(Note):
         """  """
 
         strResult = '<node'
-
         strResult += ' TEXT="' + str(self) + '"'
-
-        if self.type != None and len(self.type) > 0 and self.type[0] in config.colors:
-            strResult += ' BACKGROUND_COLOR="{}"'.format(config.colors[self.type[0]])
+        strResult += ' BACKGROUND_COLOR="{}"'.format(self.getColor())
         strResult += '>'
 
         if self.dist != None:
@@ -439,7 +433,7 @@ class Unit(Note):
         if event.is_empty():
             return
         elif self.dt == None:
-            print('error: ' + str(self), file=sys.stderr)
+            print('error: no date ' + str(self), file=sys.stderr)
             return
         elif self.dt.time() == time(0) or self.duration == None:
             # no time defined

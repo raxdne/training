@@ -103,7 +103,7 @@ class Note(Description):
                 self.dt = dtArg
                 return self.dt
         else:
-            print('error: ' + str(dtArg), file=sys.stderr)
+            print('error: date ' + str(dtArg), file=sys.stderr)
 
         return None
 
@@ -228,7 +228,7 @@ class Note(Description):
 
         """  """
 
-        strResult = ';' + self.__listDescriptionToString__()
+        strResult = '{};;;;{}\n'.format(self.dt.strftime("%Y-%m-%d"), self.__listDescriptionToString__())
 
         return strResult
 

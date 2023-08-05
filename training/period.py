@@ -611,11 +611,14 @@ class Period(Title,Description,Plot):
                 else:
                     print('error: ' + l, file=sys.stderr)
 
-        if d0 == None:
-            print('No Report possible', file=sys.stderr)
-        else:
-            print('Report {} .. {}'.format(d0.strftime("%Y-%m-%d"),d1.strftime("%Y-%m-%d")), file=sys.stderr)
+                if d1 == None and d0 != None:
+                    d1 = d0
 
+        if d0 == None:
+            print('error: No start date found', file=sys.stderr)
+        elif d1 == None:
+            print('error: No end date found', file=sys.stderr)
+        else:
             delta = d1 - d0
 
             if len(self.child) > 0:
@@ -677,7 +680,7 @@ class Period(Title,Description,Plot):
         strResult += '<pre>' + self.report() + '</pre>'
 
         if self.getNumberOfCycles() > 0 and self.fPlot:
-            strResult += '<div>'
+            strResult += '<div style="text-align: center;margin: 0px;">'
             strResult += self.plotAccumulationDuration()
             strResult += self.plotAccumulation()
             strResult += self.plotHist()
@@ -728,9 +731,10 @@ class Period(Title,Description,Plot):
 
         strResult += "</head>\n<body>\n"
 
-        strResult += '<pre>' + self.toHtmlTableOfContent() + '</pre>\n'
-
-        strResult += '<div style="text-align: center;margin: 40px;">' + self.toSVGGanttChart() + '</div>\n'
+        if self.fPlot:
+            strResult += '<div style="text-align: center;margin: 40px;">' + self.toSVGGanttChart() + '</div>\n'
+        else:
+            strResult += '<pre>' + self.toHtmlTableOfContent() + '</pre>\n'
 
         strResult += self.toHtml()
 
@@ -794,13 +798,10 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleStr()
-        if self.dateBegin != None and self.dateEnd != None:
-            strResult += self.getDateString()
-        strResult += '\n'
-
+        strResult = '{};;;;Period "{}" {}\n\n'.format(self.dateBegin.strftime("%Y-%m-%d"), self.getTitleStr(), self.getDateString())
         for c in self.child:
-            strResult += c.toCSV() + '\n'
+            strResult += c.toCSV()
+        strResult += '\n'
 
         return strResult
 
@@ -900,8 +901,7 @@ class Period(Title,Description,Plot):
         else:
             for c in self.child:
                 if type(c) == Cycle or type(c) == Period:
-                    #strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x+400,y)
-                    #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x+400,y,c.getTitleXML())
+                    strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,config.diagram_width,y)
                     strResult += c.toSVG(x,y)
                     y += len(c) * config.diagram_bar_height * 2
 
@@ -950,10 +950,12 @@ class Period(Title,Description,Plot):
         else:
             c = self.color
 
+        strResult += '<a href="#{}"><\n'.format(str(id(self)))
         strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
         strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.__listDescriptionToSVG__() + '\n\n' + self.report())
         strResult += '</rect>'
         strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 10,self.getTitleXML())
+        strResult += '</a>\n'
 
         y_i = y + config.diagram_bar_height * 3
         for c in self.child:

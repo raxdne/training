@@ -34,7 +34,8 @@ font_family = 'Arial'
 font_size = 8
 
 # default colors in diagram
-colors = {'Bicycle': '#ffdddd', 'Running': '#ddffdd', 'Swimming': '#ddddff'}
+#colors = {'Bicycle': '#ffdddd', 'Running': '#ddffdd', 'Swimming': '#ddddff'}
+colors = {}
 
 # maximum for length of type string
 max_length_type = 20

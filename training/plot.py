@@ -388,9 +388,11 @@ class Plot():
             else:
                 color = self.color
 
+            strResult += '<a href="#{}">'.format(str(id(self)))
             strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, len(self) * 2)
             strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + ' ' + self.__listDescriptionToString__())
             strResult += '</rect>'
+            strResult += '</a>'
 
         if flagVBar:
 
@@ -412,9 +414,11 @@ class Plot():
                 scolor = 'red'
                 color = 'red'
 
+            strResult += '<a href="#{}">'.format(str(id(self)))
             strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, config.diagram_height - h - 10, h, l * 2 - 2)
             strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
             strResult += '</rect>'
+            strResult += '</a>'
 
         #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i,y,self.getTitleXML())
         strResult += '</g>'
