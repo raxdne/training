@@ -35,9 +35,9 @@ class Duration(timedelta):
         
         if objArg == None:
             pass
-        elif type(objArg) == int:
+        elif type(objArg) is int:
             intMin = objArg
-        elif type(objArg) == str:
+        elif type(objArg) is str:
             entry = objArg.split(':')
             if len(entry) == 1:
                 # nothing to split

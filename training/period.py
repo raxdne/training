@@ -96,7 +96,7 @@ class Period(Title,Description,Plot):
 
         l = 0
         for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
+            if type(c) is Cycle or type(c) is Period:
                 l += len(c)
 
         if self.periodInt == None or l > self.periodInt:
@@ -110,7 +110,7 @@ class Period(Title,Description,Plot):
         """  """
 
         for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
+            if type(c) is Cycle or type(c) is Period:
                 c.setPlan(fPlan)
 
         self.fPlan = fPlan
@@ -133,7 +133,7 @@ class Period(Title,Description,Plot):
         """  """
 
         for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
+            if type(c) is Cycle or type(c) is Period:
                 c.resetDistances()
 
         self.data = []
@@ -158,7 +158,7 @@ class Period(Title,Description,Plot):
         intResult = 0
         if len(self.child) > 0:
             for u in self.child:
-                if type(u) == Cycle or type(u) == Period:
+                if type(u) is Cycle or type(u) is Period:
                     intResult += u.getDuration().total_seconds()
         elif len(self.data) > 0:
             for t in map(lambda lst: lst[2], self.data):
@@ -175,9 +175,9 @@ class Period(Title,Description,Plot):
 
         intResult = 0
         for c in self.child:
-            if type(c) == Period:
+            if type(c) is Period:
                 intResult += c.getNumberOfCycles()
-            elif type(c) == Cycle:
+            elif type(c) is Cycle:
                 intResult += 1
 
         return intResult
@@ -191,7 +191,7 @@ class Period(Title,Description,Plot):
 
         intResult = 0
         for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
+            if type(c) is Cycle or type(c) is Period:
                 intResult += c.getNumberOfUnits()
 
         return intResult
@@ -203,7 +203,7 @@ class Period(Title,Description,Plot):
 
         strResult = ''
 
-        if type(self.dateBegin) == date and self.dateBegin != None and type(self.dateEnd) == date and self.dateEnd != None:
+        if type(self.dateBegin) is date and self.dateBegin != None and type(self.dateEnd) is date and self.dateEnd != None:
             strResult = ' (' + str(len(self)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
 
         return strResult
@@ -218,7 +218,7 @@ class Period(Title,Description,Plot):
 
         if objArg == None:
             print('error: ' + str(objArg), file=sys.stderr)
-        elif type(objArg) == list:
+        elif type(objArg) is list:
             for a in objArg:
                 self.append(a)
         elif objArg == None or (type(objArg) != Cycle and type(objArg) != Period and type(objArg) != Note):
@@ -239,7 +239,7 @@ class Period(Title,Description,Plot):
             print('error: date begin', file=sys.stderr)
         elif self.dateBegin == None:
             print('error: date begin', file=sys.stderr)
-        elif type(objArg) == Cycle or type(objArg) == Period:
+        elif type(objArg) is Cycle or type(objArg) is Period:
             p = self.getPeriodByDate(objArg.dateBegin)
             if p == None:
                 print('error: no according period found' + str(objArg), file=sys.stderr)
@@ -248,7 +248,7 @@ class Period(Title,Description,Plot):
             else:
                 i = 0
                 for i in range(len(p.child)):
-                    if type(p.child[i]) == Cycle or type(p.child[i]) == Period:
+                    if type(p.child[i]) is Cycle or type(p.child[i]) is Period:
                         if p.child[i].dateBegin >= objArg.dateBegin:
                             p.child.insert(i,objArg.dup())
                             break
@@ -270,7 +270,7 @@ class Period(Title,Description,Plot):
             pass
         elif self.dateBegin == None:
             print('error: date begin', file=sys.stderr)
-        elif type(objArg) == Cycle:
+        elif type(objArg) is Cycle:
             d = 0
             for v in objArg.day:
                 if len(v) < 1:
@@ -282,7 +282,7 @@ class Period(Title,Description,Plot):
                         self.insertByDate(u,True)
                 else:
                     for u in v:
-                        if type(u) == Unit or type(u) == Combination:
+                        if type(u) is Unit or type(u) is Combination:
                             self.insertByDate(u,flagReplace)
                         else:
                             print('error: type ' + str(type(u)), file=sys.stderr)
@@ -312,7 +312,7 @@ class Period(Title,Description,Plot):
                     self.append(c)
             else:
                 for c in self.child:
-                    if type(c) == Cycle or type(c) == Period:
+                    if type(c) is Cycle or type(c) is Period:
                         c.insertByDate(objArg,flagReplace)
 
         return objResult
@@ -324,16 +324,16 @@ class Period(Title,Description,Plot):
 
         if objDate == None:
             return self.getCycleByDate(datetime.now())
-        elif type(objDate) == str:
+        elif type(objDate) is str:
             return self.getCycleByDate(datetime.fromisoformat(objDate))
-        elif type(objDate) == date:
+        elif type(objDate) is date:
             return self.getCycleByDate(datetime.combine(objDate,time(0)))
-        elif type(objDate) == datetime:
+        elif type(objDate) is datetime:
             for c in self.child:
-                if type(c) == Period:
+                if type(c) is Period:
                     if c.dateBegin <= objDate.date() and objDate.date() <= c.dateEnd:
                         return c.getCycleByDate(objDate)
-                elif type(c) == Cycle:
+                elif type(c) is Cycle:
                     r = c.getCycleByDate(objDate)
                     if r != None:
                         return r
@@ -347,20 +347,20 @@ class Period(Title,Description,Plot):
 
         if objDate == None:
             return self.getPeriodByDate(datetime.now())
-        elif type(objDate) == str:
+        elif type(objDate) is str:
             return self.getPeriodByDate(datetime.fromisoformat(objDate))
-        elif type(objDate) == date:
+        elif type(objDate) is date:
             return self.getPeriodByDate(datetime.combine(objDate,time(0)))
-        elif type(objDate) == datetime:
+        elif type(objDate) is datetime:
             if len(self.child) < 1:
                 if self.dateBegin <= objDate.date() and objDate.date() <= self.dateEnd:
                     return self
             else:
                 for c in self.child:
-                    if type(c) == Period:
+                    if type(c) is Period:
                         if c.dateBegin <= objDate.date() and objDate.date() <= c.dateEnd:
                             return c.getPeriodByDate(objDate)
-                    elif type(c) == Cycle and c.getCycleByDate(objDate) != None:
+                    elif type(c) is Cycle and c.getCycleByDate(objDate) != None:
                         return self
         else:
             print('error: no according period found' + str(objDate), file=sys.stderr)
@@ -383,7 +383,7 @@ class Period(Title,Description,Plot):
 
         if len(self.child) > 0:
             for c in self.child:
-                if type(c) == Cycle or type(c) == Period:
+                if type(c) is Cycle or type(c) is Period:
                     c.scale(floatScale,patternType)
         elif len(self.data) > 0:
             l = []
@@ -408,7 +408,7 @@ class Period(Title,Description,Plot):
         """  """
 
         for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
+            if type(c) is Cycle or type(c) is Period:
                 c.remove(patternType=patternType)
 
         return self
@@ -445,10 +445,10 @@ class Period(Title,Description,Plot):
 
         e = self.dateScheduled
         for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
+            if type(c) is Cycle or type(c) is Period:
                 c.schedule(e.year, e.month, e.day)
                 e += timedelta(days=len(c))
-            elif type(c) == Note:
+            elif type(c) is Note:
                 c.dt = e
                 #print('type: ' + c.dt.isoformat(), file=sys.stderr)
 
@@ -466,9 +466,9 @@ class Period(Title,Description,Plot):
             print(f'error: cannot override existing data collection of period "{self.getTitleStr()}"', file=sys.stderr)
         elif objArg == None:
             print('error: empty period initialization', file=sys.stderr)
-        elif type(objArg) == str and len(objArg) > 0:
+        elif type(objArg) is str and len(objArg) > 0:
             return self.define([objArg])
-        elif type(objArg) == list and len(objArg) > 0:
+        elif type(objArg) is list and len(objArg) > 0:
             self.data = []
             u = Unit()
             for s in objArg:
@@ -491,11 +491,11 @@ class Period(Title,Description,Plot):
 
         listResult = []
 
-        if type(self.data) == list and len(self.data) > 0:
+        if type(self.data) is list and len(self.data) > 0:
             listResult = self.data
         else:
             for c in self.child:
-                if type(c) == Cycle or type(c) == Period:
+                if type(c) is Cycle or type(c) is Period:
                     listResult.extend(c.stat())
             self.data = listResult
 
@@ -564,7 +564,7 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        if type(listFilename) == str:
+        if type(listFilename) is str:
             listFilename = [listFilename]
 
         self.setPlan(False)
@@ -705,9 +705,9 @@ class Period(Title,Description,Plot):
         strResult = self.getTitleLineTableOfContent(strIndent) + self.getDateString() + '\n'
 
         for c in self.child:
-            if type(c) == Period:
+            if type(c) is Period:
                 strResult += c.toHtmlTableOfContent(strIndent + '    ')
-            elif type(c) == Cycle:
+            elif type(c) is Cycle:
                 strResult += c.getTitleLineTableOfContent(strIndent + '    ') + '\n'
 
         return strResult
@@ -767,7 +767,7 @@ class Period(Title,Description,Plot):
             l = listArg
 
         for c in l:
-            if type(c) == Period or type(c) == Cycle:
+            if type(c) is Period or type(c) is Cycle:
                 strResult += '<section class="{}" id="{}">'.format(__name__, str(id(c)))
 
                 strResult += '<div class="header">' + c.getTitleXML()
@@ -852,7 +852,7 @@ class Period(Title,Description,Plot):
 
         strResult = ''
         for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
+            if type(c) is Cycle or type(c) is Period:
                 strResult += c.toSqlite()
 
         return strResult
@@ -900,7 +900,7 @@ class Period(Title,Description,Plot):
                 y += config.diagram_bar_height * 2
         else:
             for c in self.child:
-                if type(c) == Cycle or type(c) == Period:
+                if type(c) is Cycle or type(c) is Period:
                     strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,config.diagram_width,y)
                     strResult += c.toSVG(x,y)
                     y += len(c) * config.diagram_bar_height * 2
@@ -959,9 +959,9 @@ class Period(Title,Description,Plot):
 
         y_i = y + config.diagram_bar_height * 3
         for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
+            if type(c) is Cycle or type(c) is Period:
                 strResult += c.toSVGGanttBar(dateBase,y_i)
-                if type(c) == Period:
+                if type(c) is Period:
                     strResult += c.toSVGGantt(dateBase,y_i)
                 y_i += config.diagram_bar_height * 3
                 
@@ -979,7 +979,7 @@ class Period(Title,Description,Plot):
         d_0 = None
         d_1 = None
         for c in self.child:
-            if type(c) == Cycle or type(c) == Period:
+            if type(c) is Cycle or type(c) is Period:
                 if d_0 == None:
                     d_0 = c.dateBegin
                 if d_1 == None:

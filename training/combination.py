@@ -90,31 +90,31 @@ class Combination(Title,Description):
 
         if dtArg == None:
             return None
-        elif type(dtArg) == date:
+        elif type(dtArg) is date:
             return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
         else:
             i = 0
             dt = dtArg
             for u in self.child:
                 
-                if type(u) == Note:
+                if type(u) is Note:
                     u.setDate(dt)
-                elif type(u) == Unit:
+                elif type(u) is Unit:
 
                     if i == 0:
                         # initial unit
                         if u.tPlan == None:
                             #dt = dt_0
                             pass
-                        elif type(u.tPlan) == str and u.tPlan == 'sunrise' and dt_0 != None:
+                        elif type(u.tPlan) is str and u.tPlan == 'sunrise' and dt_0 != None:
                             # shift start time after twilight
                             dt = dt_0
                             dt += timedelta(minutes=(dt.minute % 15))
-                        elif type(u.tPlan) == str and u.tPlan == 'sunset' and dt_1 != None:
+                        elif type(u.tPlan) is str and u.tPlan == 'sunset' and dt_1 != None:
                             # shift end time before twilight
                             dt = dt_1 - self.getDuration()
                             dt -= timedelta(minutes=(dt.minute % 15))
-                        elif type(u.tPlan) == time:
+                        elif type(u.tPlan) is time:
                             dt = datetime.combine(dtArg.date(),u.tPlan).astimezone(None)
                         else:
                             #dt = datetime.combine(dtArg.date(),u.tPlan).astimezone(None)
@@ -124,7 +124,7 @@ class Combination(Title,Description):
                         
                     dt = u.setDate(dt)
                     i += 1
-                elif type(u) == Pause:
+                elif type(u) is Pause:
                     if i == 0:
                         print(__name__ + ': ignoring initial' + str(self), file=sys.stderr)
                     else:
@@ -142,9 +142,9 @@ class Combination(Title,Description):
             # whole combination using pattern
             childsNew = []
             for u in self.child:
-                if type(u) == Unit and (u.type == None or re.match(patternType,u.type)):
+                if type(u) is Unit and (u.type == None or re.match(patternType,u.type)):
                     pass
-                elif type(u) == Pause:
+                elif type(u) is Pause:
                     pass
                 else:
                     childsNew.append(u)
@@ -159,7 +159,7 @@ class Combination(Title,Description):
         """  """
 
         for u in self.child:
-            if type(u) == Unit:
+            if type(u) is Unit:
                 u.setDistStr(None)
 
         return self
@@ -172,7 +172,7 @@ class Combination(Title,Description):
         intResult = 0
 
         for u in self.child:
-            if type(u) == Unit and u.type != None and len(u.type) > 0:
+            if type(u) is Unit and u.type != None and len(u.type) > 0:
                 intResult += 1
 
         return intResult
@@ -184,7 +184,7 @@ class Combination(Title,Description):
 
         intResult = 0
         for u in self.child:
-            if (type(u) == Unit or type(u) == Pause):
+            if (type(u) is Unit or type(u) is Pause):
                 intResult += u.getDuration().total_seconds()
 
         return timedelta(seconds=intResult)
@@ -195,7 +195,7 @@ class Combination(Title,Description):
         """  """
 
         for u in self.child:
-            if type(u) == Unit:
+            if type(u) is Unit:
                 u.scale(floatScale,patternType)
 
         return self
@@ -208,7 +208,7 @@ class Combination(Title,Description):
         listResult = []
 
         for u in self.child:
-            if type(u) == Unit:
+            if type(u) is Unit:
                 listResult.extend(u.stat())
 
         return listResult

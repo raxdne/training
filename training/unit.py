@@ -93,24 +93,24 @@ class Unit(Note):
             self.dt = None
             return self.dt
         
-        elif type(dtArg) == date:
+        elif type(dtArg) is date:
             
             return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
 
-        elif type(dtArg) == datetime:
+        elif type(dtArg) is datetime:
 
             if self.tPlan == None:
                 self.dt = dtArg
-            elif type(self.tPlan) == str and self.tPlan == 'sunrise' and dt_0 != None:
+            elif type(self.tPlan) is str and self.tPlan == 'sunrise' and dt_0 != None:
                 # shift start time after twilight
                 self.dt = dt_0
                 # adjust to 15min steps
                 self.dt -= timedelta(minutes=(self.dt.minute % 15))
-            elif type(self.tPlan) == str and self.tPlan == 'sunset' and dt_1 != None:
+            elif type(self.tPlan) is str and self.tPlan == 'sunset' and dt_1 != None:
                 # shift end time before twilight
                 self.dt = dt_1 - self.duration
                 self.dt -= timedelta(minutes=(self.dt.minute % 15))
-            elif type(self.tPlan) == time:
+            elif type(self.tPlan) is time:
                 self.dt = datetime.combine(dtArg.date(),self.tPlan).astimezone(None)
             else:
                 #self.dt = datetime.combine(dtArg.date(),time(0)).astimezone(None)

@@ -71,7 +71,7 @@ class Pause(Note):
 
         if dtArg == None:
             self.dt = None
-        elif type(dtArg) == date or dtArg.time() == time(0):
+        elif type(dtArg) is date or dtArg.time() == time(0):
             print(__name__ + ': requires a complete datetime ' + str(self), file=sys.stderr)
         else:
             # fully defined dtArg

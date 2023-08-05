@@ -57,7 +57,7 @@ class Note(Description):
 
         if self.dt == None:
             strResult = ''
-        elif type(self.dt) == date or self.dt.time() == time(0):
+        elif type(self.dt) is date or self.dt.time() is time(0):
             strResult = self.dt.strftime("%Y-%m-%d")
         else:
             strResult = self.dt.strftime("%Y-%m-%d %H:%M:%S")
@@ -91,12 +91,12 @@ class Note(Description):
 
         if dtArg == None:
             self.dt = None
-        elif type(dtArg) == date:
+        elif type(dtArg) is date:
             if self.tPlan == None:
                 return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
             else:
                 return self.setDate(datetime.combine(dtArg,self.tPlan).astimezone(None),dt_0,dt_1)
-        elif type(dtArg) == datetime:
+        elif type(dtArg) is datetime:
             if self.tPlan != None and dtArg.time() == time(0):
                 return self.setDate(datetime.combine(dtArg.date(),self.tPlan).astimezone(None),dt_0,dt_1)
             else:
@@ -255,12 +255,12 @@ class Note(Description):
 
         """  """
 
-        if self.dt != None and type(self.dt) == datetime:
+        if self.dt != None and type(self.dt) is datetime:
             event = Event()
 
             event.add('summary', self.__listDescriptionToString__())
 
-            if type(self.dt) == datetime:
+            if type(self.dt) is datetime:
                 event.add('dtstart', self.dt.date())
                 event.add('dtend', self.dt.date() + timedelta(days=1))
             else:

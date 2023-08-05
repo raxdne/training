@@ -85,7 +85,7 @@ class Cycle(Title,Description,Plot):
         """  """
 
         strResult = '\n** ' + super().getTitleStr()
-        if type(self.dateBegin) == date:
+        if type(self.dateBegin) is date:
             strResult += self.getDateString()
         strResult += '\n\n'
 
@@ -151,11 +151,11 @@ class Cycle(Title,Description,Plot):
             for i in range(0,len(self.day)):
                 daysNew.append([])
                 for u in self.day[i]:
-                    if type(u) == Combination:
+                    if type(u) is Combination:
                         c = u.remove(patternType)
                         if c.getNumberOfUnits() > 0:
                             daysNew[i].append(c)
-                    elif type(u) == Unit and (u.type == None or re.match(patternType,u.type)):
+                    elif type(u) is Unit and (u.type == None or re.match(patternType,u.type)):
                         pass
                     else:
                         daysNew[i].append(u)
@@ -229,17 +229,17 @@ class Cycle(Title,Description,Plot):
 
             print('error: undefined object', file=sys.stderr)
 
-        elif type(objIndex) == list and len(objIndex) > 0:
+        elif type(objIndex) is list and len(objIndex) > 0:
 
             for i in objIndex:
                 self.insert(i,objArg,flagReplace)
 
-        elif type(objArg) == list and len(objArg) > 0:
+        elif type(objArg) is list and len(objArg) > 0:
 
             for u in objArg:
                 self.insert(objIndex,u,flagReplace)
 
-        elif type(objIndex) == int and objIndex > -1 and objIndex < len(self.day) and (type(objArg) == Unit or type(objArg) == Combination or type(objArg) == Note):
+        elif type(objIndex) is int and objIndex > -1 and objIndex < len(self.day) and (type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note):
 
             if flagReplace:
                 # override existing
@@ -247,7 +247,7 @@ class Cycle(Title,Description,Plot):
             else:
                 self.day[objIndex].append(objArg.dup())
 
-        elif type(objIndex) == int and objIndex > -1 and objIndex < len(self.day) and type(objArg) == Cycle and len(objArg.day) > 0 and len(objArg.day) + objIndex <= len(self.day):
+        elif type(objIndex) is int and objIndex > -1 and objIndex < len(self.day) and type(objArg) is Cycle and len(objArg.day) > 0 and len(objArg.day) + objIndex <= len(self.day):
 
             i = 0
             for v in objArg.day:
@@ -271,7 +271,7 @@ class Cycle(Title,Description,Plot):
             print('error: undefined ' + str(objArg), file=sys.stderr)
         elif self.dateBegin == None:
             print('error: date begin', file=sys.stderr)
-        elif type(objArg) == Unit or type(objArg) == Combination or type(objArg) == Note:
+        elif type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note:
             delta = objArg.dt.date() - self.dateBegin
             if delta.days > -1 and objArg.dt.date() <= self.dateEnd:
                 if flagReplace:
@@ -296,7 +296,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        if type(n) == int and n > 0 and len(self.day) > n:
+        if type(n) is int and n > 0 and len(self.day) > n:
 
             d = []
             for i in range(0,len(self.day)):
@@ -315,11 +315,11 @@ class Cycle(Title,Description,Plot):
 
         if objDate == None:
             return self.getCycleByDate(datetime.now())
-        elif type(objDate) == str:
+        elif type(objDate) is str:
             return self.getCycleByDate(datetime.fromisoformat(objDate))
-        elif type(objDate) == date:
+        elif type(objDate) is date:
             return self.getCycleByDate(datetime.combine(objDate,time(0)))
-        elif type(objDate) == datetime:
+        elif type(objDate) is datetime:
             for v in self.day:
                 if self.dateBegin <= objDate.date() and objDate.date() <= self.dateEnd:
                     return self
@@ -358,9 +358,9 @@ class Cycle(Title,Description,Plot):
         intResult = 0
         for v in self.day:
             for u in v:
-                if type(u) == Combination:
+                if type(u) is Combination:
                     intResult += u.getNumberOfUnits()
-                elif type(u) == Unit and u.type != None and len(u.type) > 0:
+                elif type(u) is Unit and u.type != None and len(u.type) > 0:
                     intResult += 1
 
         return intResult
@@ -375,7 +375,7 @@ class Cycle(Title,Description,Plot):
         intResult = 0
         for v in self.day:
             for u in v:
-                if (type(u) == Unit or type(u) == Combination):
+                if (type(u) is Unit or type(u) is Combination):
                     intResult += u.getDuration().total_seconds()
 
         return timedelta(seconds=intResult)
@@ -387,7 +387,7 @@ class Cycle(Title,Description,Plot):
 
         strResult = ''
 
-        if type(self.dateBegin) == date and self.dateBegin != None and type(self.dateEnd) == date and self.dateEnd != None:
+        if type(self.dateBegin) is date and self.dateBegin != None and type(self.dateEnd) is date and self.dateEnd != None:
             strResult = ' (' + str(len(self.day)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
 
         return strResult
@@ -399,7 +399,7 @@ class Cycle(Title,Description,Plot):
 
         for v in self.day:
             for u in v:
-                if type(u) == Unit or type(u) == Combination:
+                if type(u) is Unit or type(u) is Combination:
                     u.scale(floatScale,patternType)
 
         return self
@@ -445,12 +445,12 @@ class Cycle(Title,Description,Plot):
 
         listResult = []
 
-        if type(self.data) == list and len(self.data) > 0:
+        if type(self.data) is list and len(self.data) > 0:
             return self.data
         else:
             for v in self.day:
                 for u in v:
-                    if type(u) == Unit or type(u) == Combination:
+                    if type(u) is Unit or type(u) is Combination:
                         listResult.extend(u.stat())
             self.data = listResult
 
@@ -648,7 +648,7 @@ class Cycle(Title,Description,Plot):
         strResult = ''
         for v in self.day:
             for u in v:
-                if type(u) == Unit:
+                if type(u) is Unit:
                     strResult += u.toSqlite()
 
         return strResult
@@ -685,7 +685,7 @@ class Cycle(Title,Description,Plot):
                 x_i = x
                 for u in v:
                     strResult += u.toSVG(x_i,y)
-                    if type(u) == Unit or type(u) == Combination:
+                    if type(u) is Unit or type(u) is Combination:
                         x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist + 5
 
                 y += config.diagram_bar_height * 2
