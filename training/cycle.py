@@ -106,6 +106,28 @@ class Cycle(Title,Description,Plot):
         return self
 
 
+    def insertDescription(self,objArgA,objArgB):
+
+        """  """
+
+        if objArgA == None or objArgB == None:
+            pass
+        elif type(objArgA) is list:
+            if len(objArgA) == 1:
+                self.insertDescription(objArgA[0],objArgB)
+        elif type(objArgA) is int:
+            if objArgA >= len(self.day):
+                print(f'error: there is no entry for index {objArgA}', file=sys.stderr)
+            elif type(objArgB) is list:
+                self.day[objArgA][0].appendDescription(objArgB)
+            elif type(objArgB) is str:
+                self.day[objArgA][0].appendDescription(objArgB)
+            elif type(objArgB) is Description:
+                self.day[objArgA][0].appendDescription(objArgB)
+
+        return self
+
+
     def resetDistances(self):
 
         """  """

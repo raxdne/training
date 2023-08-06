@@ -188,7 +188,7 @@ class Note(Description):
             else:
                 return self.parse(entry)
         elif type(objArg) is list and len(objArg) > 3:
-            if len(objArg[0]) > 0 and len(objArg[1]) == 0 and len(objArg[2]) == 0 and  len(objArg[3]) == 0 and (len(objArg[4]) > 0 or len(objArg[5]) > 0):
+            if len(objArg[0]) > 0 and len(objArg[1]) == 0 and len(objArg[2]) == 0 and len(objArg[3]) == 0:
                 self.setDateStr(objArg[0])
                 self.appendDescription(objArg[4:])
                 #print('Note {}'.format(str(self)), file=sys.stderr)

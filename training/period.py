@@ -738,6 +738,12 @@ class Period(Title,Description,Plot):
 
         strResult += self.toHtml()
 
+        if self.fPlot:
+            strResult += '<section class="{}">'.format(__name__)
+            strResult += '<div class="header">' + self.getTitleXML() + self.getDateString() + '</div>\n'
+            strResult += '<div style="text-align: center;margin: 40px;">' + self.toSVGDiagram() + '</div>\n'
+            strResult += '</section>\n'
+
         strResult += "</body>\n</html>"
 
         return strResult
@@ -950,7 +956,7 @@ class Period(Title,Description,Plot):
         else:
             c = self.color
 
-        strResult += '<a href="#{}"><\n'.format(str(id(self)))
+        strResult += '<a href="#{}">\n'.format(str(id(self)))
         strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
         strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.__listDescriptionToSVG__() + '\n\n' + self.report())
         strResult += '</rect>'
