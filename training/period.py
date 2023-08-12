@@ -1041,6 +1041,14 @@ class Period(Title,Description,Plot):
 
         """  """
 
+        if len(self.child) < 1:
+            event = Event()
+            event.add('summary', 'Period: {}'.format(self.getTitleStr()))
+            event.add('dtstart', self.dateBegin)
+            event.add('dtend', self.dateEnd + timedelta(days=1))
+            event.add('dtstamp', datetime.now().astimezone(None))
+            cal.add_component(event)
+
         for c in self.child:
             c.to_ical(cal)
 

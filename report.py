@@ -7,13 +7,9 @@ import argparse
 import glob
 import datetime
 
-import config
+from training import config as config
 
-from unit import Unit
-
-from cycle import Cycle
-
-from period import Period
+from training.period import Period
 
 
 def parse_args(args=None):
@@ -49,10 +45,11 @@ def main(args=None):
 
     options = parse_args(args)
 
-    s = Period('Report ' + datetime.date.today().isoformat())
+    s = Period('Report ' + datetime.date.today().isoformat()).CalendarMonthPeriod(2023)
     s.parseFile(options.infile)
     #config.max_length_type = 1
     #config.unit_distance = 'mi'
+    s.setPlot(True)
     
     try:
         if options.type == "xml":
