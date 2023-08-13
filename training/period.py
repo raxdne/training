@@ -35,7 +35,6 @@ from suntime import Sun
 
 from icalendar import Calendar, Event, Alarm
 
-import matplotlib.pyplot as plt
 import numpy as np
 
 from training import config as config
@@ -59,6 +58,7 @@ class Period(Title,Description,Plot):
 
         super(Title, self).__init__()
         super(Description, self).__init__()
+        super(Plot, self).__init__()
 
         self.setTitleStr(strArg)
         self.setDescription()
@@ -137,6 +137,9 @@ class Period(Title,Description,Plot):
                 c.resetDistances()
 
         self.data = []
+        #super(Plot, self).__init__()
+        #self.strPlotAccumulation = None
+        Plot.__init__(self)
 
         return self
 

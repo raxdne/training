@@ -49,6 +49,9 @@ v_defaults = {'Bicycle': 25.0, 'Running': 10.0, 'Swimming': 2.0}
 twilight = 1800
 sun = None
 
+# minimum count of data
+plot_min = 1
+
 
 def getSettingsStr():
 

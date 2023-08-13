@@ -56,6 +56,7 @@ class Cycle(Title,Description,Plot):
 
         super(Title, self).__init__()
         super(Description, self).__init__()
+        super(Plot, self).__init__()
 
         self.setTitleStr(strArg)
         self.setDescription()
@@ -136,6 +137,8 @@ class Cycle(Title,Description,Plot):
             self.day[i] = []
 
         self.data = []
+        #super(Plot, self).__init__()
+        Plot.__init__(self)
 
         return self
 
