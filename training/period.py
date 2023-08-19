@@ -786,7 +786,7 @@ class Period(Title,Description,Plot):
 
                 strResult += '<pre>' + c.report() + '</pre>'
 
-                if self.getNumberOfCycles() > 0 and self.fPlot:
+                if c.getNumberOfCycles() > 0 and c.fPlot:
                     strResult += '<div>'
                     strResult += c.plotAccumulationDuration()
                     strResult += c.plotAccumulation()
