@@ -494,7 +494,7 @@ class Period(Title,Description,Plot):
 
         listResult = []
 
-        if type(self.data) is list and len(self.data) > 0:
+        if type(self.data) is list and len(self.data) > 0 and self.getNumberOfUnits() > 0:
             listResult = self.data
         else:
             for c in self.child:
@@ -730,7 +730,7 @@ class Period(Title,Description,Plot):
 
         strResult += "<title></title>"
 
-        strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsvg {margin: 5px 0;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\npre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}\na:link {text-decoration:none;}\ntable {width: 95%; border-collapse: collapse; empty-cells:show; margin-left:auto; margin-right:auto; border: 1px solid grey;}\ntd { border: 1px solid grey; vertical-align:top;}\n.empty {margin-bottom:0px;}\n</style>\n"
+        strResult += config.style
 
         strResult += "</head>\n<body>\n"
 
@@ -766,7 +766,7 @@ class Period(Title,Description,Plot):
 
         strResult += "<title></title>"
 
-        strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsvg {margin: 5px 0;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\npre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}\na:link {text-decoration:none;}\ntable {width: 95%; border-collapse: collapse; empty-cells:show; margin-left:auto; margin-right:auto; border: 1px solid grey;}\ntd { border: 1px solid grey; vertical-align:top;}\n.empty {margin-bottom:0px;}\n</style>\n"
+        strResult += config.style
 
         strResult += "</head>\n<body>\n"
 

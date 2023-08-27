@@ -135,7 +135,6 @@ class Plot():
                     # plot today as vertical line
                     x_nt = date.today().toordinal() - x_0
                     if x_nt >= 0 and x_nt <= (x_1 - x_0):
-                        print(f'info: plot today at {x_nt} in "{self.getTitleStr()}"', file=sys.stderr)
                         plt.axvline(x=x_nt, color='#ff0000', linewidth=0.5)
 
                     plt.legend()
@@ -228,7 +227,6 @@ class Plot():
                     # plot today as vertical line
                     x_nt = date.today().toordinal() - x_0
                     if x_nt >= 0 and x_nt <= (x_1 - x_0):
-                        print(f'info: plot today at {x_nt} in "{self.getTitleStr()}"', file=sys.stderr)
                         plt.axvline(x=x_nt, color='#ff0000', linewidth=0.5)
 
                     plt.legend()

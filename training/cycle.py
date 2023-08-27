@@ -470,7 +470,7 @@ class Cycle(Title,Description,Plot):
 
         listResult = []
 
-        if type(self.data) is list and len(self.data) > 0:
+        if type(self.data) is list and len(self.data) > 0 and self.getNumberOfUnits() > 0:
             return self.data
         else:
             for v in self.day:
@@ -594,7 +594,7 @@ class Cycle(Title,Description,Plot):
 
         strResult += '<pre>' + self.report() + '</pre>'
 
-        if self.fPlot:
+        if False and self.fPlot:
             strResult += '<div style="text-align: center;margin: 0px;">'
             #strResult += self.plotAccumulationDuration()
             #strResult += self.plotAccumulation()
@@ -612,7 +612,16 @@ class Cycle(Title,Description,Plot):
             dt_i = datetime.combine(self.dateBegin,time(0)).astimezone(None)
             for v in self.day:
                 strResult += '<tr>'
-                strResult += '<td>' + dt_i.strftime("%Y-%m-%d %a (%j)") + '</td>'
+
+                strResult += '<td>'
+                if len(v) > 0:
+                    strResult += '<a href="/cxproc/exe?research={}&xsl=fitx2html">'.format(dt_i.strftime("%Y-%m-%d.*fitx"))
+                    strResult += dt_i.strftime("%Y-%m-%d %a (%j)")
+                    strResult += '</a>'
+                else:
+                    strResult += dt_i.strftime("%Y-%m-%d %a (%j)")
+                strResult += '</td>'
+
                 strResult += '<td>'
                 if len(v) > 0:
                     for u in v:
@@ -642,7 +651,7 @@ class Cycle(Title,Description,Plot):
 
         strResult += "<title></title>"
 
-        strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\npre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}</style>\n"
+        strResult += config.style
 
         strResult += "</head>"
 

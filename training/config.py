@@ -52,6 +52,22 @@ sun = None
 # minimum count of data
 plot_min = 1
 
+style = """
+<style>
+    body {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}
+    svg {margin: 5px 0;}
+    section {border-left: 1px dotted #aaaaaa;}
+    section > * {margin: 0px 0px 0px 2px;}
+    section > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}
+    div.header {font-weight:bold;}
+    table {width: 95%; border-collapse: collapse; empty-cells:show; margin-left:auto; margin-right:auto; border: 1px solid grey;}
+    th, td {padding: 0.5em;}
+    td { border: 1px solid grey; vertical-align:top;}
+    pre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}
+    ul, ol {padding: 0px 0px 0px 2em;}
+    a:link {text-decoration:none;}
+</style>
+"""
 
 def getSettingsStr():
 
