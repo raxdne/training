@@ -57,7 +57,7 @@ class Note(Description):
 
         if self.dt == None:
             strResult = ''
-        elif type(self.dt) is date or self.dt.time() is time(0):
+        elif type(self.dt) is date or self.dt.time() == time(0):
             strResult = self.dt.strftime("%Y-%m-%d")
         else:
             strResult = self.dt.strftime("%Y-%m-%d %H:%M:%S")
