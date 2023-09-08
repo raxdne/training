@@ -60,11 +60,12 @@ style = """
     section > * {margin: 0px 0px 0px 2px;}
     section > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}
     div.header {font-weight:bold;}
-    table {width: 95%; border-collapse: collapse; empty-cells:show; margin-left:auto; margin-right:auto; border: 1px solid grey;}
-    th, td {padding: 0.5em;}
+    table {border-collapse: collapse; empty-cells:show; margin-left:auto; margin-right:auto; border: 1px solid grey;}
+    th, td {padding: 3px}
     td { border: 1px solid grey; vertical-align:top;}
     pre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}
     ul, ol {padding: 0px 0px 0px 2em;}
+    div > ul {margin-top: 2px; margin-bottom: 3px;}
     a:link {text-decoration:none;}
 </style>
 """
@@ -74,16 +75,16 @@ def getSettingsStr():
     """ returns a Python string containing all module settings """
 
     strResult = '# Diagram\n'
-    strResult += '{}.diagram_scale_dist = {}\n'.format(__name__, self.diagram_scale_dist)
-    strResult += '{}.diagram_bar_height = {}\n'.format(__name__, self.diagram_bar_height)
-    strResult += '{}.diagram_offset = {}\n'.format(__name__, self.diagram_offset)
-    strResult += '{}.diagram_width = {}\n'.format(__name__, self.diagram_width)
-    strResult += '{}.font_family = {}\n'.format(__name__, self.font_family)
-    strResult += '{}.font_size = {}\n'.format(__name__, self.font_size)
+    strResult += '{}.diagram_scale_dist = {}\n'.format(__name__, diagram_scale_dist)
+    strResult += '{}.diagram_bar_height = {}\n'.format(__name__, diagram_bar_height)
+    strResult += '{}.diagram_offset = {}\n'.format(__name__, diagram_offset)
+    strResult += '{}.diagram_width = {}\n'.format(__name__, diagram_width)
+    strResult += '{}.font_family = {}\n'.format(__name__, font_family)
+    strResult += '{}.font_size = {}\n'.format(__name__, font_size)
 
-    strResult += '{}.colors = {}\n'.format(__name__, self.colors)
-    strResult += '{}.max_length_type = {}\n'.format(__name__, self.max_length_type)
-    strResult += '{}.unit_distance = \'{}\'\n'.format(__name__, self.unit_distance)
+    strResult += '{}.colors = {}\n'.format(__name__, colors)
+    strResult += '{}.max_length_type = {}\n'.format(__name__, max_length_type)
+    strResult += '{}.unit_distance = \'{}\'\n'.format(__name__, unit_distance)
 
     return strResult
 

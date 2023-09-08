@@ -62,22 +62,22 @@ class Unit(Note):
             strResult = '-'
         elif self.type == None:
             if self.dt == None or self.dt.time() == time(0):
-                strResult = '{} {}'.format(self.dt.strftime("%Y-%m-%d"), str(self.getDuration()))
+                strResult = '{} {}'.format(self.dt.strftime("%Y-%m-%d"), self.getDurationString())
             else:
-                strResult = '{} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), str(self.getDuration()))
+                strResult = '{} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.getDurationString())
         elif self.dist == None:
             if self.dt == None:
-                strResult = '{} {}'.format(self.type, str(self.getDuration()))
+                strResult = '{} {}'.format(self.type, self.getDurationString())
             elif self.dt.time() == time(0):
-                strResult = '{} {} {}'.format(self.dt.strftime("%Y-%m-%d"), self.type, str(self.getDuration()))
+                strResult = '{} {} {}'.format(self.dt.strftime("%Y-%m-%d"), self.type, self.getDurationString())
             else:
-                strResult = '{} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.type, str(self.getDuration()))
+                strResult = '{} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.type, self.getDurationString())
         elif self.dt == None:
-            strResult = '{:5.1f} {} {}'.format(self.dist, self.type, str(self.getDuration()))
+            strResult = '{:5.1f} {} {}'.format(self.dist, self.type, self.getDurationString())
         elif self.dt.time() == time(0):
-            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("%Y-%m-%d"), self.dist, self.type, str(self.getDuration()))
+            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("%Y-%m-%d"), self.dist, self.type, self.getDurationString())
         else:
-            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.dist, self.type, str(self.getDuration()))
+            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.dist, self.type, self.getDurationString())
 
         return strResult
 
@@ -192,6 +192,13 @@ class Unit(Note):
         return Duration(0)
 
 
+    def getDurationString(self):
+
+        """  """
+        
+        return self.getDuration().toString()
+
+
     def scale(self,floatScale,patternType=None):
 
         """  """
@@ -283,7 +290,7 @@ class Unit(Note):
 
         """  """
         
-        strResult = '#ffffff'
+        strResult = ''
         
         if self.type == None or len(self.type) < 1:
             strResult = '#cccccc'
@@ -326,9 +333,9 @@ class Unit(Note):
             if self.type == None:
                 strResult = '{date};;;'.format(date=self.dt.strftime("%Y-%m-%d"))
             elif self.dist == None:
-                strResult = '{date};;{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), type=self.type, duration=str(self.getDuration()))
+                strResult = '{date};;{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), type=self.type, duration=self.getDurationString())
             else:
-                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=str(self.getDuration()))
+                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=self.getDurationString())
 
             strResult += ';' + self.getDescriptionString() + '\n'
 
@@ -343,7 +350,7 @@ class Unit(Note):
             # not significant for reports
             strResult = ''
         else:
-            strResult = "INSERT INTO 'units' VALUES ('{date}',{dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=str(self.getDuration()), description=self.getDescriptionString())
+            strResult = "INSERT INTO 'units' VALUES ('{date}',{dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=self.getDurationString(), description=self.getDescriptionString())
 
         return strResult
 
@@ -364,7 +371,16 @@ class Unit(Note):
         """  """
 
         strResult = '<div style="background-color: {}">'.format(self.getColor())
-        strResult += str(self) + ' ' + self.getDescriptionString()
+        if self.type == None and self.dist == None and self.dt == None:
+            pass
+        elif self.type == None:
+            pass
+        elif self.dist == None:
+            strResult += '{} {}'.format(self.type, self.getDurationString())
+        else:
+            strResult += '{:.1f} {} {}'.format(self.dist, self.type, self.getDurationString())
+
+        strResult += self.getDescriptionHTML()
         strResult += '</div>'
 
         return strResult
@@ -426,7 +442,7 @@ class Unit(Note):
             if self.hasDescription():
                 event.add('summary', self.getDescriptionString())
         else:
-            event.add('summary', "{} {}".format(self.type, str(self.getDuration())))
+            event.add('summary', "{} {}".format(self.type, self.getDurationString()))
             if self.hasDescription():
                 event.add('description', self.getDescriptionString())
 

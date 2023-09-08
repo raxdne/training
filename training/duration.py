@@ -35,6 +35,8 @@ class Duration(timedelta):
         
         if objArg == None:
             pass
+        elif type(objArg) is timedelta:
+            intMin = int(objArg.total_seconds() / 60.0)
         elif type(objArg) is int:
             intMin = objArg
         elif type(objArg) is str:
@@ -60,10 +62,21 @@ class Duration(timedelta):
 
         """  """
 
+        return self.toString()
+
+
+    def toString(self):
+
+        """  """
+
         seconds = super().total_seconds()
         
-        if seconds > 0:        
-            strResult = '{:02}:{:02}:{:02}'.format(int(seconds // 3600), int((seconds % 3600) // 60), int(seconds % 60))
+        if seconds > 3599:        
+            strResult = '{}:{:02}h'.format(int(seconds // 3600), int((seconds % 3600) // 60))
+        elif seconds > 120:        
+            strResult = '{}:{:02}min'.format(int((seconds % 3600) // 60), int(seconds % 60))
+        elif seconds > 0:        
+            strResult = '{}s'.format(int(seconds))
         else:
             strResult = ''
             

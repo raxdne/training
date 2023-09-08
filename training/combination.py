@@ -32,6 +32,7 @@ from datetime import timedelta, date, datetime, time
 from icalendar import Calendar, Event, Alarm
 
 from training import config as config
+from training.duration import Duration
 from training.description import Description
 from training.title import Title
 from training.note import Note
@@ -64,7 +65,7 @@ class Combination(Title,Description):
 
         """  """
 
-        strResult = 'Combination: {} {} {}\n'.format(self.getDuration(), self.getTitleString(), self.getDescriptionString())
+        strResult = 'Combination: {} {} {}\n'.format(self.getDuration().toString(), self.getTitleString(), self.getDescriptionString())
         for u in self.child:
             strResult += '\t + ' + str(u) + '\n'
         strResult += '\n'
@@ -234,7 +235,11 @@ class Combination(Title,Description):
 
         """  """
 
-        strResult = '<div>' + str(self) + ' ' + self.getDescriptionString() + '</div>'
+        strResult = '<div>' + 'Combination: {} {}\n'.format(Duration(self.getDuration()), self.getDescriptionString()) + '</div>'
+        strResult += '<ol>'
+        for u in self.child:
+            strResult += '<li>' + u.toHtmlTable() + '</li>'
+        strResult += '</ol>'
 
         return strResult
 

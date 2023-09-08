@@ -188,6 +188,18 @@ class Note(Description):
             return False
 
 
+    def getColor(self):
+
+        """  """
+        
+        strResult = '#ffffff'
+        
+        if self.color != None:
+            strResult = self.color
+
+        return strResult
+
+
     def toString(self):
 
         """  """
@@ -199,7 +211,9 @@ class Note(Description):
 
         """  """
 
-        strResult = '<p>' + self.toString() + '</p>'
+        strResult = '<div style="background-color: {}">'.format(self.getColor())
+        strResult += str(self).replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
+        strResult += '</div>'
         
         return strResult
 
@@ -208,7 +222,9 @@ class Note(Description):
 
         """  """
 
-        strResult = '<div style="background-color: #cccccc">' + self.toString() + '</div>'
+        strResult = '<div style="background-color: {}">'.format(self.getColor())
+        strResult += self.getDescriptionHTML()
+        strResult += '</div>'
 
         return strResult
 

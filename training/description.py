@@ -56,6 +56,28 @@ def _appendTo(intDepth=0,listArg=[],strArg=''):
     l.append([strArg])
 
 
+def _flatten(objArg):
+
+    """ returns a string of nested self.listDescription """
+
+    listResult=[]
+
+    if objArg == None:
+        pass
+    elif type(objArg) is str and len(objArg) > 0:
+        listResult = [objArg]
+    elif type(objArg) is list and len(objArg) > 0:
+        for c in objArg:
+            if len(c) < 1:
+                pass
+            elif type(c) is str:
+                listResult.append(c)
+            elif type(c) is list:
+                listResult.extend(_flatten(c))
+
+    return listResult
+
+
 #
 #
 #
@@ -199,7 +221,12 @@ class Description:
         strResult = ''
 
         if listArg == None:
-            strResult += self.getDescriptionHTML(self.listDescription)
+            f = _flatten(self.listDescription)
+            if len(f) == 1:
+                # only one item
+                strResult += ' ' + f[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
+            elif len(f) > 1:
+                strResult += '<ul>' + self.getDescriptionHTML(self.listDescription) + '</ul>'
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
             # list item + childs
             strResult += '<li>'
@@ -212,7 +239,7 @@ class Description:
         elif type(listArg) is list and len(listArg) > 0:
             # list items
             for c in listArg:
-                if type(c) is str:
+                if type(c) is str and len(c) > 0:
                     strResult += '<li>'
                     if re.match(url_pattern, c):
                         strResult += '<a href="{url}">{url}</a>'.format(url=c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))

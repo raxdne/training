@@ -604,7 +604,8 @@ class Cycle(Title,Description,Plot):
                 strResult += '<tr>'
 
                 strResult += '<td>'
-                if len(v) > 0:
+                if len([u for u in v if type(u) is Unit]) > 0:
+                    # TODO: make link portable/configurable
                     strResult += '<a href="/cxproc/exe?research={}&xsl=fitx2html">'.format(dt_i.strftime("%Y-%m-%d.*fitx"))
                     strResult += dt_i.strftime("%Y-%m-%d %a (%j)")
                     strResult += '</a>'

@@ -60,7 +60,7 @@ class Pause(Note):
         """  """
 
         if self.getDuration().total_seconds() > 0:
-            return '{} {} Pause'.format(str(super().__str__()), str(self.getDuration()))
+            return '{} {} Pause'.format(str(super().__str__()), Duration(self.getDuration()))
         else:
             return ''
 
@@ -120,6 +120,17 @@ class Pause(Note):
         strResult += str(self)
         strResult += '</p>'
         
+        return strResult
+
+
+    def toHtmlTable(self):
+
+        """  """
+
+        strResult = '<div style="background-color: {}">'.format(self.getColor())
+        strResult += 'Pause ' + self.getDuration().toString()
+        strResult += '</div>'
+
         return strResult
 
 

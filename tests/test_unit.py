@@ -46,8 +46,8 @@ print(t)
 t = Unit(['2020-03-02', '10,0', 'Biking', '1h', ''])
 print(t)
 
-t = Unit('2020-03-03T17:00:00+1:00;10;Biking;20min')
-print(t)
+t = Unit('2020-03-03T17:00:00+1:00;10;Biking;20min').appendDescription(['WWW',['YYY','ZZZ','http://www.demo.org/']])
+print(t.toHtmlTable())
 
 quit()
 
