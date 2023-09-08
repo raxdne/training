@@ -36,14 +36,14 @@ class Title:
 
         """  """
 
-        return self.strTitle
+        return str(self.strTitle)
 
 
     def setTitleStr(self,strArg):
 
         """  """
 
-        if strArg == None:
+        if strArg == None or type(strArg) is not str:
             self.strTitle = '-'
         else:
             self.strTitle = strArg
@@ -58,12 +58,11 @@ class Title:
         return self.strTitle != None and len(self.strTitle) > 0
 
 
-    def getTitleStr(self):
+    def getTitleString(self):
 
         """  """
 
         return self.strTitle
-        #return str(self)
 
 
     def getTitleXML(self):

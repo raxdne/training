@@ -27,13 +27,13 @@ print(d)
 
 d.appendDescription(['WWW',['YYY','ZZZ','http://www.demo.org/']])
 
-print(d.__listDescriptionToString__())
+print(d.getDescriptionString())
 
-print(d.__listDescriptionToHtml__())
+print(d.getDescriptionHTML())
 
-print(d.__listDescriptionToXML__())
+print(d.getDescriptionXML())
 
-print(d.__listDescriptionToFreemind__())
+print(d.getDescriptionFreemind())
 
 print(d.hasDescription())
 

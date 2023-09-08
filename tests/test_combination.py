@@ -53,6 +53,7 @@ t = Combination([Unit('sr;3.5;RB;25:00'),
                  Note('AAAA'),
                  Unit(';3.5;RB;25:00')])
 #t.appendDescription('Running Blocks')
+#t.setTitleStr('My Combination')
 #t.remove(r'^R')
 #print(t.getDuration())
 
@@ -70,5 +71,4 @@ print(t)
 
 #print(t.toSVG(0,0))
 
-d = {}
-t.stat(d)
+print(t.stat())

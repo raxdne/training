@@ -85,7 +85,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        strResult = '\n** ' + super().getTitleStr()
+        strResult = '\n** ' + super().getTitleString()
         if type(self.dateBegin) is date:
             strResult += self.getDateString()
         strResult += '\n\n'
@@ -95,16 +95,6 @@ class Cycle(Title,Description,Plot):
                 strResult += str(u) + '\n'
 
         return strResult
-
-
-    def appendDescription(self,objArg):
-
-        """  """
-
-        if objArg != None and len(objArg) > 0:
-            super().appendDescription(objArg)
-
-        return self
 
 
     def insertDescription(self,objArgA,objArgB):
@@ -252,7 +242,7 @@ class Cycle(Title,Description,Plot):
 
         if objArg == None:
 
-            print('error: undefined object', file=sys.stderr)
+            print('error: undefined object ' + str(objArg), file=sys.stderr)
 
         elif type(objIndex) is list and len(objIndex) > 0:
 
@@ -566,7 +556,7 @@ class Cycle(Title,Description,Plot):
 
         strResult += '><div class="header">' + self.getTitleXML() + ' ' + self.getDateString() + '</div>\n'
 
-        strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
+        strResult += '<ul>' + self.getDescriptionHTML() + '</ul>'
 
         for v in self.day:
             for u in v:
@@ -590,7 +580,7 @@ class Cycle(Title,Description,Plot):
 
         strResult += '><div class="header">' + self.getTitleXML() + ' ' + self.getDateString() + '</div>\n'
 
-        strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
+        strResult += '<ul>' + self.getDescriptionHTML() + '</ul>'
 
         strResult += '<pre>' + self.report() + '</pre>'
 
@@ -666,7 +656,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        strResult = '{};;;;Cycle "{}" {}\n'.format(self.dateBegin.strftime("%Y-%m-%d"), self.getTitleStr(), self.getDateString())
+        strResult = '{};;;;Cycle "{}" {}\n'.format(self.dateBegin.strftime("%Y-%m-%d"), self.getTitleString(), self.getDateString())
         for v in self.day:
             for u in v:
                 strResult += u.toCSV()
@@ -697,7 +687,7 @@ class Cycle(Title,Description,Plot):
         if self.color != None:
             strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self.day))-2,x+config.diagram_width-4)
 
-        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleXML(), self.getDateString(), (self.getTitleXML() + self.getDateString() + '\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report()))
+        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleXML(), self.getDateString(), (self.getTitleXML() + self.getDateString() + '\n\n' + self.getDescriptionString() + '\n\n' + self.report()))
 
         if len(self.day) < 1:
             pass
@@ -823,7 +813,7 @@ class Cycle(Title,Description,Plot):
         strResult += ' TEXT="' + self.getTitleXML() + '&#xa;' + self.getDateString() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
         strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
 
-        strResult += self.__listDescriptionToFreemind__()
+        strResult += self.getDescriptionFreemind()
 
         d_i = self.dateBegin
         for v in self.day:
@@ -857,7 +847,7 @@ class Cycle(Title,Description,Plot):
         """  """
 
         event = Event()
-        event.add('summary', 'Cycle: {}'.format(self.getTitleStr()))
+        event.add('summary', 'Cycle: {}'.format(self.getTitleString()))
         event.add('dtstart', self.dateBegin)
         event.add('dtend', self.dateEnd + timedelta(days=1))
         event.add('dtstamp', datetime.now().astimezone(None))
@@ -873,7 +863,7 @@ class Cycle(Title,Description,Plot):
         """  """
 
         cal = Calendar()
-        cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleStr()))
+        cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleString()))
         cal.add('version', '2.0')
         self.to_ical(cal)
         return cal.to_ical()

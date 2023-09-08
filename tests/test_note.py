@@ -28,19 +28,19 @@ print('Module Test: ' + __file__ + '\n')
 t = Note()
 print(t)
 
-t = Note(['TEST','AAA'])
 t.setDateStr('2020-04-04')
-print(t)
+t.appendDescription(['TEST','AAA & "BBB"'])
+print(t.toString())
 
 t1 = t.dup()
-print(t1)
+print(t1.getDescriptionHTML())
 
-t.parse('TEST, TTT')
-t.setDate(datetime(2025, 1, 7, 22, 0).astimezone(None))
+t2 = Note('2020-04-06;TEST, TTT')
+t2.setDate(datetime(2025, 1, 7, 22, 0).astimezone(None))
 #t.setClock(time(8,15,0))
 #t.setDate(date(2025,1,1))
 #t.setDate(True)
-print(t)
+print(t2)
 
 #print(t.toXML())
 

@@ -48,8 +48,8 @@ class Combination(Title,Description):
 
         """  """
 
-        super(Title, self).__init__()
-        super(Description, self).__init__()
+        Title.__init__(self)
+        Description.__init__(self)
         
         self.child = []
 
@@ -64,22 +64,12 @@ class Combination(Title,Description):
 
         """  """
 
-        strResult = 'Combination: {} {}\n'.format(self.getDuration(), super().__listDescriptionToString__())
-
+        strResult = 'Combination: {} {} {}\n'.format(self.getDuration(), self.getTitleString(), self.getDescriptionString())
         for u in self.child:
             strResult += '\t + ' + str(u) + '\n'
         strResult += '\n'
 
         return strResult
-
-
-    def appendDescription(self,objArg):
-
-        """  """
-
-        super().appendDescription(objArg)
-
-        return self
 
 
     def setDate(self,dtArg=None,dt_0=None,dt_1=None):
@@ -230,7 +220,7 @@ class Combination(Title,Description):
         if self.color != None:
             strResult += ' style="background-color: {}"'.format(self.color)
 
-        strResult += '>\n<ul>' + super().__listDescriptionToHtml__() + '</ul>'
+        strResult += '>\n<ul>' + self.getDescriptionHTML() + '</ul>'
 
         for u in self.child:
             strResult += u.toHtml()
@@ -244,7 +234,7 @@ class Combination(Title,Description):
 
         """  """
 
-        strResult = '<div>' + str(self) + ' ' + self.__listDescriptionToString__() + '</div>'
+        strResult = '<div>' + str(self) + ' ' + self.getDescriptionString() + '</div>'
 
         return strResult
 
@@ -291,7 +281,7 @@ class Combination(Title,Description):
 
         strResult += ' TEXT="Combination">\n'
 
-        strResult += self.__listDescriptionToFreemind__()
+        strResult += self.getDescriptionFreemind()
 
         for u in self.child:
             strResult += u.toFreemindNode()

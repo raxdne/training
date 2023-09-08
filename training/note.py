@@ -46,9 +46,7 @@ class Note(Description):
         
         self.dt = None
         self.tPlan = None
-
-        if strArg != None and len(strArg) > 0:
-            self.parse(strArg)
+        self.parse(strArg)
 
 
     def __str__(self):
@@ -62,18 +60,9 @@ class Note(Description):
         else:
             strResult = self.dt.strftime("%Y-%m-%d %H:%M:%S")
             
-        strResult += ' ' + super().__str__()
+        strResult += ' ' + self.getDescriptionString()
 
         return strResult
-
-
-    def appendDescription(self,objArg):
-
-        """  """
-
-        super().appendDescription(objArg)
-
-        return self
 
 
     def setClock(self,timeArg=None):
@@ -228,7 +217,7 @@ class Note(Description):
 
         """  """
 
-        strResult = '{};;;;{}\n'.format(self.dt.strftime("%Y-%m-%d"), self.__listDescriptionToString__())
+        strResult = '{};;;;{}\n'.format(self.dt.strftime("%Y-%m-%d"), self.getDescriptionString())
 
         return strResult
 
@@ -237,7 +226,7 @@ class Note(Description):
 
         """  """
 
-        strResult = '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.__listDescriptionToString__(), str(self))
+        strResult = '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.getDescriptionString(), str(self))
 
         return strResult
 
@@ -246,7 +235,7 @@ class Note(Description):
 
         """  """
 
-        strResult = self.__listDescriptionToFreemind__()
+        strResult = self.getDescriptionFreemind()
 
         return strResult
 
@@ -258,7 +247,7 @@ class Note(Description):
         if self.dt != None and type(self.dt) is datetime:
             event = Event()
 
-            event.add('summary', self.__listDescriptionToString__())
+            event.add('summary', self.getDescriptionString())
 
             if type(self.dt) is datetime:
                 event.add('dtstart', self.dt.date())

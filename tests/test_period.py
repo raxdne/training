@@ -17,8 +17,6 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
-from training.description import Description
-from training.title import Title
 from training.note import Note
 from training.unit import Unit
 from training.cycle import Cycle
@@ -38,11 +36,12 @@ t.schedule(2025,3,4)
 #print(t.report())
 #
 
-t = Period('General Basics',60).define(['2000;Bicycle;','100;Running;']).schedule(2025,3,4)
-print(t.getNumberOfCycles())
+#t = Period('General Basics',60).define(['2000;Bicycle;','100;Running;']).schedule(2025,3,4)
+#print(t.getNumberOfCycles())
+print(t.getTitleString())
+
+print(t.toString())
 print(t.toHtml())
-
-
 
 quit()
 

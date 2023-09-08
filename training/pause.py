@@ -130,7 +130,7 @@ class Pause(Note):
         strResult = ''
 
         if self.duration == None or self.getDuration().total_seconds() < 60:
-            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.__listDescriptionToString__(), str(self))
+            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.getDescriptionString(), str(self))
         else:
             strResult += '<rect '
 

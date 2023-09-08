@@ -80,9 +80,9 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleStr() + ' (' + str(len(self)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '\n\n'
+        strResult = '\n* ' + self.getTitleString() + ' (' + str(len(self)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '\n\n'
 
-        strResult += self.__listDescriptionToString__()
+        strResult += self.getDescriptionString()
 
         for c in self.child:
             strResult += str(c) + '\n'
@@ -114,16 +114,6 @@ class Period(Title,Description,Plot):
                 c.setPlan(fPlan)
 
         self.fPlan = fPlan
-
-        return self
-
-
-    def appendDescription(self,objArg):
-
-        """  """
-
-        if objArg != None and len(objArg) > 0:
-            super().appendDescription(objArg)
 
         return self
 
@@ -296,7 +286,7 @@ class Period(Title,Description,Plot):
                 if c != None:
                     if objArg.hasTitle():
                         # copy title from objArg to c
-                        c.setTitleStr(objArg.getTitleStr())
+                        c.setTitleStr(objArg.getTitleString())
                     if objArg.hasDescription():
                         # copy description from objArg to c
                         c.setDescription(objArg.getDescription())
@@ -309,7 +299,7 @@ class Period(Title,Description,Plot):
                 delta = objArg.dt.date() - self.dateBegin
                 if delta.days > -1 and objArg.dt.date() <= self.dateEnd:
                     l = self.dateEnd - self.dateBegin
-                    c = Cycle(self.getTitleStr(), l.days + 1)
+                    c = Cycle(self.getTitleString(), l.days + 1)
                     c.schedule(self.dateBegin.year,self.dateBegin.month,self.dateBegin.day)
                     c.insertByDate(objArg,flagReplace)
                     self.append(c)
@@ -466,7 +456,7 @@ class Period(Title,Description,Plot):
         """  """
 
         if self.data != None and len(self.data) > 0:
-            print(f'error: cannot override existing data collection of period "{self.getTitleStr()}"', file=sys.stderr)
+            print(f'error: cannot override existing data collection of period "{self.getTitleString()}"', file=sys.stderr)
         elif objArg == None:
             print('error: empty period initialization', file=sys.stderr)
         elif type(objArg) is str and len(objArg) > 0:
@@ -678,7 +668,7 @@ class Period(Title,Description,Plot):
             strResult += self.getDateString()
         strResult += '</div>\n'
 
-        strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
+        strResult += '<ul>' + self.getDescriptionHTML() + '</ul>'
 
         strResult += '<pre>' + self.report() + '</pre>'
 
@@ -807,7 +797,7 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        strResult = '{};;;;Period "{}" {}\n\n'.format(self.dateBegin.strftime("%Y-%m-%d"), self.getTitleStr(), self.getDateString())
+        strResult = '{};;;;Period "{}" {}\n\n'.format(self.dateBegin.strftime("%Y-%m-%d"), self.getTitleString(), self.getDateString())
         for c in self.child:
             strResult += c.toCSV()
         strResult += '\n'
@@ -834,7 +824,7 @@ class Period(Title,Description,Plot):
 
         strResult += '<font BOLD="true" NAME="Monospaced" SIZE="12"/>'
 
-        strResult += self.__listDescriptionToFreemind__()
+        strResult += self.getDescriptionFreemind()
 
         for c in self.child:
             strResult += c.toFreemindNode()
@@ -961,7 +951,7 @@ class Period(Title,Description,Plot):
 
         strResult += '<a href="#{}">\n'.format(str(id(self)))
         strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.__listDescriptionToSVG__() + '\n\n' + self.report())
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.getDescriptionSVG() + '\n\n' + self.report())
         strResult += '</rect>'
         strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 10,self.getTitleXML())
         strResult += '</a>\n'
@@ -1046,7 +1036,7 @@ class Period(Title,Description,Plot):
 
         if len(self.child) < 1:
             event = Event()
-            event.add('summary', 'Period: {}'.format(self.getTitleStr()))
+            event.add('summary', 'Period: {}'.format(self.getTitleString()))
             event.add('dtstart', self.dateBegin)
             event.add('dtend', self.dateEnd + timedelta(days=1))
             event.add('dtstamp', datetime.now().astimezone(None))
@@ -1061,7 +1051,7 @@ class Period(Title,Description,Plot):
         """  """
 
         cal = Calendar()
-        cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleStr()))
+        cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleString()))
         cal.add('version', '2.0')
         self.to_ical(cal)
         return cal.to_ical()

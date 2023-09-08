@@ -330,7 +330,7 @@ class Unit(Note):
             else:
                 strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=str(self.getDuration()))
 
-            strResult += ';' + self.__listDescriptionToString__() + '\n'
+            strResult += ';' + self.getDescriptionString() + '\n'
 
         return strResult
 
@@ -343,7 +343,7 @@ class Unit(Note):
             # not significant for reports
             strResult = ''
         else:
-            strResult = "INSERT INTO 'units' VALUES ('{date}',{dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=str(self.getDuration()), description=self.__listDescriptionToString__())
+            strResult = "INSERT INTO 'units' VALUES ('{date}',{dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=str(self.getDuration()), description=self.getDescriptionString())
 
         return strResult
 
@@ -353,7 +353,7 @@ class Unit(Note):
         """  """
 
         strResult = '<p style="background-color: {}">'.format(self.getColor())
-        strResult += str(self) + ' ' + self.__listDescriptionToString__()
+        strResult += str(self) + ' ' + self.getDescriptionString()
         strResult += '</p>'
         
         return strResult
@@ -364,7 +364,7 @@ class Unit(Note):
         """  """
 
         strResult = '<div style="background-color: {}">'.format(self.getColor())
-        strResult += str(self) + ' ' + self.__listDescriptionToString__()
+        strResult += str(self) + ' ' + self.getDescriptionString()
         strResult += '</div>'
 
         return strResult
@@ -377,7 +377,7 @@ class Unit(Note):
         strResult = ''
 
         if self.duration == None or self.getDuration().total_seconds() < 60:
-            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.__listDescriptionToSVG__(), str(self))
+            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.getDescriptionSVG(), str(self))
         else:
             strResult += '<rect fill="{}"'.format(self.getColor())
 
@@ -390,7 +390,7 @@ class Unit(Note):
             strResult += ' height="{}" stroke="black" stroke-width=".5" width="{:.0f}" x="{}" y="{}"'.format(config.diagram_bar_height, bar_width, x, y)
             strResult += '>'
 
-            strResult += '<title>{}: {}</title>'.format(str(self), self.__listDescriptionToString__())
+            strResult += '<title>{}: {}</title>'.format(str(self), self.getDescriptionString())
 
             strResult += '</rect>\n'
 
@@ -409,7 +409,7 @@ class Unit(Note):
         if self.dist != None:
             strResult += '<node TEXT="' + self.getSpeedStr() + '"/>'
 
-        strResult += self.__listDescriptionToFreemind__()
+        strResult += self.getDescriptionFreemind()
 
         strResult += '</node>\n'
 
@@ -424,11 +424,11 @@ class Unit(Note):
 
         if self.type == None:
             if self.hasDescription():
-                event.add('summary', self.__listDescriptionToString__())
+                event.add('summary', self.getDescriptionString())
         else:
             event.add('summary', "{} {}".format(self.type, str(self.getDuration())))
             if self.hasDescription():
-                event.add('description', self.__listDescriptionToString__())
+                event.add('description', self.getDescriptionString())
 
         if event.is_empty():
             return

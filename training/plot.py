@@ -88,7 +88,7 @@ class Plot():
 
             if self.strPlotAccumulation == None:
 
-                #print(f'info: new plot of "{self.getTitleStr()}"', file=sys.stderr)
+                #print(f'info: new plot of "{self.getTitleString()}"', file=sys.stderr)
                 self.stat()
 
                 # make data
@@ -149,7 +149,7 @@ class Plot():
                         plt.savefig(fileNameOut)
 
             elif len(self.strPlotAccumulation) > 0:
-                print(f'info: re-using plot of "{self.getTitleStr()}"', file=sys.stderr)
+                print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
 
             if self.strPlotAccumulation != None:
                 strResult = self.strPlotAccumulation
@@ -183,7 +183,7 @@ class Plot():
 
             if self.strPlotAccumulationDuration == None:
 
-                #print(f'info: new plot of "{self.getTitleStr()}"', file=sys.stderr)
+                #print(f'info: new plot of "{self.getTitleString()}"', file=sys.stderr)
                 self.stat()
                 # make data
                 x = np.array(list(map(lambda lst: lst[0], self.data)))
@@ -241,7 +241,7 @@ class Plot():
                         plt.savefig(fileNameOut)
             elif len(self.strPlotAccumulationDuration) > 0:
                 # use existing plot
-                print(f'info: re-using plot of "{self.getTitleStr()}"', file=sys.stderr)
+                print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
 
             if self.strPlotAccumulationDuration != None:
                 strResult = self.strPlotAccumulationDuration
@@ -260,7 +260,7 @@ class Plot():
 
             if self.strPlotHist == None:
 
-                #print(f'info: new plot of "{self.getTitleStr()}"', file=sys.stderr)
+                #print(f'info: new plot of "{self.getTitleString()}"', file=sys.stderr)
                 self.stat()
 
                 # make data
@@ -289,7 +289,7 @@ class Plot():
                         plt.savefig(fileNameOut)
             elif len(self.strPlotHist) > 0:
                 # use existing plot
-                print(f'info: re-using plot of "{self.getTitleStr()}"', file=sys.stderr)
+                print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
 
             if self.strPlotHist != None:
                 strResult = self.strPlotHist
@@ -326,7 +326,7 @@ class Plot():
 
             if self.strPlotTimeDist == None:
 
-                #print(f'info: new plot of "{self.getTitleStr()}"', file=sys.stderr)
+                #print(f'info: new plot of "{self.getTitleString()}"', file=sys.stderr)
                 self.stat()
                 if len(self.data) >= config.plot_min:
                     # plot:
@@ -399,7 +399,7 @@ class Plot():
                         plt.savefig(fileNameOut)
             elif len(self.strPlotTimeDist) > 0:
                 # use existing plot
-                print(f'info: re-using plot of "{self.getTitleStr()}"', file=sys.stderr)
+                print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
 
             if self.strPlotTimeDist != None:
                 strResult = self.strPlotTimeDist
@@ -452,7 +452,7 @@ class Plot():
 
             strResult += '<a href="#{}">'.format(str(id(self)))
             strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, len(self) * 2)
-            strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + ' ' + self.__listDescriptionToString__())
+            strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + ' ' + self.getDescriptionString())
             strResult += '</rect>'
             strResult += '</a>'
 
@@ -478,7 +478,7 @@ class Plot():
 
             strResult += '<a href="#{}">'.format(str(id(self)))
             strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, config.diagram_height - h - 10, h, l * 2 - 2)
-            strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
+            strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.getDescriptionString() + '\n\n' + self.report())
             strResult += '</rect>'
             strResult += '</a>'
 

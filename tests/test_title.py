@@ -28,6 +28,11 @@ print('Module Test: ' + __file__ + '\n')
 t = Title()
 print(t)
 
-t = Title('AAA')
+t = Title(1.0)
 print(t)
+
+t = Title('AAA & "BB" C')
+print(t)
+print(t.getTitleString())
+print(t.getTitleXML())
 
