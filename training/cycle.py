@@ -582,7 +582,8 @@ class Cycle(Title,Description,Plot):
 
         strResult += '<ul>' + self.getDescriptionHTML() + '</ul>'
 
-        strResult += '<pre>' + self.report() + '</pre>'
+        if self.getNumberOfUnits() > 0:
+            strResult += '<pre>' + self.report() + '</pre>'
 
         if False and self.fPlot:
             strResult += '<div style="text-align: center;margin: 0px;">'
@@ -603,14 +604,19 @@ class Cycle(Title,Description,Plot):
             for v in self.day:
                 strResult += '<tr>'
 
-                strResult += '<td>'
-                if len([u for u in v if type(u) is Unit]) > 0:
+                strResult += '<td '
+                if dt_i.weekday() == 5 or dt_i.weekday() == 6:
+                    strResult += 'class="we"'
+                strResult += '>'
+
+                if not self.fPlan and len([u for u in v if type(u) is Unit]) > 0:
                     # TODO: make link portable/configurable
                     strResult += '<a href="/cxproc/exe?research={}&xsl=fitx2html">'.format(dt_i.strftime("%Y-%m-%d.*fitx"))
                     strResult += dt_i.strftime("%Y-%m-%d %a (%j)")
                     strResult += '</a>'
                 else:
                     strResult += dt_i.strftime("%Y-%m-%d %a (%j)")
+
                 strResult += '</td>'
 
                 strResult += '<td>'
@@ -730,7 +736,7 @@ class Cycle(Title,Description,Plot):
 
         strResult += '<style type="text/css">svg { font-family: ' + config.font_family + '; font-size: ' + str(config.font_size) + 'pt; }</style>'
         strResult += '<g>'
-        
+
         strResult += '<rect fill="transparent" stroke="{}" stroke-width="2" x="{}" y="{}" rx="3" ry="3" height="{}" width="{}"/>\n'.format('#aaaaaa', 0, 0, diagram_height, config.diagram_width)
 
         for i in [3600/4,3600/2,3600,2*3600,3*3600,4*3600,5*3600,6*3600]:

@@ -670,7 +670,8 @@ class Period(Title,Description,Plot):
 
         strResult += '<ul>' + self.getDescriptionHTML() + '</ul>'
 
-        strResult += '<pre>' + self.report() + '</pre>'
+        if self.getNumberOfCycles() > 0:
+            strResult += '<pre>' + self.report() + '</pre>'
 
         if self.getNumberOfCycles() > 0 and self.fPlot:
             strResult += '<div style="text-align: center;margin: 0px;">'

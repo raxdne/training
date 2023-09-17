@@ -63,6 +63,7 @@ style = """
     table {border-collapse: collapse; empty-cells:show; margin-left:auto; margin-right:auto; border: 1px solid grey;}
     th, td {padding: 3px}
     td { border: 1px solid grey; vertical-align:top;}
+    td.we {background-color: #eeeeee;}
     pre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}
     ul, ol {padding: 0px 0px 0px 2em;}
     div > ul {margin-top: 2px; margin-bottom: 3px;}
