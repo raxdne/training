@@ -160,6 +160,24 @@ class Unit(Note):
         return (self.dist != None and self.dist > 0.1)
 
 
+    def getDistString(self):
+
+        """  """
+
+        strResult = ''
+        
+        if self.dist == None:
+            pass
+        elif self.dist < 1.0:
+             strResult = '{:.02f} {}'.format(self.dist, config.unit_distance)
+        elif self.dist < 10.0:
+             strResult = '{:.1f} {}'.format(self.dist, config.unit_distance)
+        else:
+             strResult = '{:.0f} {}'.format(self.dist, config.unit_distance)
+
+        return strResult
+
+
     def setDuration(self,intArg=None):
 
         """  """
@@ -376,9 +394,9 @@ class Unit(Note):
         elif self.type == None:
             pass
         elif self.dist == None:
-            strResult += '{} {}'.format(self.type, self.getDurationString())
+            strResult += self.type + ' ' + self.getDurationString()
         else:
-            strResult += '{:.1f} {} {}'.format(self.dist, self.type, self.getDurationString())
+            strResult += self.getDistString() + ' ' + self.type + ' ' + self.getDurationString()
 
         strResult += self.getDescriptionHTML()
         strResult += '</div>'

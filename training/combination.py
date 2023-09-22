@@ -178,7 +178,7 @@ class Combination(Title,Description):
             if (type(u) is Unit or type(u) is Pause):
                 intResult += u.getDuration().total_seconds()
 
-        return timedelta(seconds=intResult)
+        return Duration(intResult / 60)
 
 
     def scale(self,floatScale,patternType=None):

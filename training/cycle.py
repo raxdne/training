@@ -276,6 +276,51 @@ class Cycle(Title,Description,Plot):
         return objResult
 
 
+    def fill(self,objArg,flagReplace=False):
+
+        """  """
+
+        objResult = self
+
+        if objArg == None:
+
+            print('error: undefined object ' + str(objArg), file=sys.stderr)
+
+        elif type(objArg) is list and len(objArg) > 0:
+
+            for u in objArg:
+                self.insert(u,flagReplace)
+
+        elif type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note:
+
+            i = 0
+            for v in objArg.day:
+                for u in v:
+                    self.insert(i,u,flagReplace)
+                i += 1
+
+        elif type(objArg) is Cycle and len(objArg.day) > 0:
+
+            i = 0
+            d = len(self.day)
+            b = len(objArg.day)
+            while i < d:
+                j = 0
+                while j < b and i < d:
+                    if len(objArg.day[j]) > 0:
+                        for u in objArg.day[j]:
+                            self.insert(i,u,flagReplace)
+                    elif flagReplace:
+                        self.day[i] = []
+                    i += 1
+                    j += 1
+
+        else:
+            print(f'error: inserting {type(objArg)} at position {objIndex} of {len(self.day)} {objArg}', file=sys.stderr)
+
+        return objResult
+
+
     def insertByDate(self,objArg,flagReplace=False):
 
         """  """
@@ -562,7 +607,7 @@ class Cycle(Title,Description,Plot):
             for u in v:
                 strResult += u.toHtml()
 
-        strResult += '<pre>' + self.report() + '</pre>'
+        strResult += '<pre style="width: 80%;">' + self.report() + '</pre>'
 
         strResult += '</section>'
 
@@ -583,7 +628,7 @@ class Cycle(Title,Description,Plot):
         strResult += '<ul>' + self.getDescriptionHTML() + '</ul>'
 
         if self.getNumberOfUnits() > 0:
-            strResult += '<pre>' + self.report() + '</pre>'
+            strResult += '<pre style="width: 80%;">' + self.report() + '</pre>'
 
         if False and self.fPlot:
             strResult += '<div style="text-align: center;margin: 0px;">'

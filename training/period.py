@@ -484,7 +484,7 @@ class Period(Title,Description,Plot):
 
         listResult = []
 
-        if type(self.data) is list and len(self.data) > 0 and self.getNumberOfUnits() > 0:
+        if type(self.data) is list and len(self.data) > 0:
             listResult = self.data
         else:
             for c in self.child:
@@ -670,8 +670,7 @@ class Period(Title,Description,Plot):
 
         strResult += '<ul>' + self.getDescriptionHTML() + '</ul>'
 
-        if self.getNumberOfCycles() > 0:
-            strResult += '<pre>' + self.report() + '</pre>'
+        strResult += '<pre style="width: 80%;">' + self.report() + '</pre>'
 
         if self.getNumberOfCycles() > 0 and self.fPlot:
             strResult += '<div style="text-align: center;margin: 0px;">'

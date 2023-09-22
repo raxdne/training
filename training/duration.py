@@ -72,11 +72,11 @@ class Duration(timedelta):
         seconds = super().total_seconds()
         
         if seconds > 3599:        
-            strResult = '{}:{:02}h'.format(int(seconds // 3600), int((seconds % 3600) // 60))
+            strResult = '{}:{:02} h'.format(int(seconds // 3600), int((seconds % 3600) // 60))
         elif seconds > 120:        
-            strResult = '{}:{:02}min'.format(int((seconds % 3600) // 60), int(seconds % 60))
+            strResult = '{}:{:02} min'.format(int((seconds % 3600) // 60), int(seconds % 60))
         elif seconds > 0:        
-            strResult = '{}s'.format(int(seconds))
+            strResult = '{} s'.format(int(seconds))
         else:
             strResult = ''
             
