@@ -276,10 +276,11 @@ class Cycle(Title,Description,Plot):
         return objResult
 
 
-    def fill(self,objArg,flagReplace=False):
+    def fill(self,objArg,floatProgression=1.0):
 
         """  """
 
+        flagReplace=False
         objResult = self
 
         if objArg == None:
@@ -314,9 +315,10 @@ class Cycle(Title,Description,Plot):
                         self.day[i] = []
                     i += 1
                     j += 1
+                objArg.scale(floatProgression)
 
         else:
-            print(f'error: inserting {type(objArg)} at position {objIndex} of {len(self.day)} {objArg}', file=sys.stderr)
+            print(f'error: filling {type(objArg)} of {len(self.day)} {objArg}', file=sys.stderr)
 
         return objResult
 
@@ -758,11 +760,19 @@ class Cycle(Title,Description,Plot):
                     strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format('#eeeeee',x,y-1,config.diagram_bar_height+2,config.diagram_width - config.diagram_offset)
                 d += timedelta(days=1)
 
+                n = ''
                 x_i = x
                 for u in v:
-                    strResult += u.toSVG(x_i,y)
-                    if type(u) is Unit or type(u) is Combination:
-                        x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist + 5
+                    if type(u) is Note:
+                        # collect all notes of day v
+                        n += u.getDescriptionString() + ' '
+                    else:
+                        strResult += u.toSVG(x_i,y)
+                        if type(u) is Unit or type(u) is Combination:
+                            x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist + 5
+
+                if len(n) > 0:
+                    strResult += '<text x="{}" y="{}" style="">{}</text>\n'.format(x_i + 2,y + config.diagram_bar_height,n)
 
                 y += config.diagram_bar_height * 2
 

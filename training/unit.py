@@ -62,22 +62,22 @@ class Unit(Note):
             strResult = '-'
         elif self.type == None:
             if self.dt == None or self.dt.time() == time(0):
-                strResult = '{} {}'.format(self.dt.strftime("%Y-%m-%d"), self.getDurationString())
+                strResult = f'{self.dt.strftime("%Y-%m-%d")} {self.getDurationString()}'
             else:
-                strResult = '{} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.getDurationString())
+                strResult = f'{self.dt.strftime("%Y-%m-%d %H:%M:%S")} {self.getDurationString()}'
         elif self.dist == None:
             if self.dt == None:
-                strResult = '{} {}'.format(self.type, self.getDurationString())
+                strResult = f'{self.type} {self.getDurationString()}'
             elif self.dt.time() == time(0):
-                strResult = '{} {} {}'.format(self.dt.strftime("%Y-%m-%d"), self.type, self.getDurationString())
+                strResult = f'{self.dt.strftime("%Y-%m-%d")} {self.type} {self.getDurationString()}'
             else:
-                strResult = '{} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.type, self.getDurationString())
+                strResult = f'{self.dt.strftime("%Y-%m-%d %H:%M:%S")} {self.type} {self.getDurationString()}'
         elif self.dt == None:
-            strResult = '{:5.1f} {} {}'.format(self.dist, self.type, self.getDurationString())
+            strResult = f'{self.getDistString():>7} {self.type} {self.getDurationString()}'
         elif self.dt.time() == time(0):
-            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("%Y-%m-%d"), self.dist, self.type, self.getDurationString())
+            strResult = f'{self.dt.strftime("%Y-%m-%d")} {self.getDistString():>7} {self.type} {self.getDurationString()}'
         else:
-            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.dist, self.type, self.getDurationString())
+            strResult = f'{self.dt.strftime("%Y-%m-%d %H:%M:%S")} {self.getDistString():>7} {self.type} {self.getDurationString()}'
 
         return strResult
 
@@ -424,7 +424,7 @@ class Unit(Note):
             strResult += ' height="{}" stroke="black" stroke-width=".5" width="{:.0f}" x="{}" y="{}"'.format(config.diagram_bar_height, bar_width, x, y)
             strResult += '>'
 
-            strResult += '<title>{}: {}</title>'.format(str(self), self.getDescriptionString())
+            strResult += '<title>{} {}</title>'.format(str(self), self.getDescriptionString())
 
             strResult += '</rect>\n'
 
