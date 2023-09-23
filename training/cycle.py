@@ -69,6 +69,7 @@ class Cycle(Title,Description,Plot):
 
         self.dateBegin = None
         self.dateEnd = None
+        self.dateFixed = None
         self.data = None
 
         self.color = None
@@ -471,11 +472,17 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        try:
-            self.dateBegin = date(intYear, intMonth, intDay)
-        except ValueError as e:
-            print('error: ' + str(e), file=sys.stderr)
-            return self
+        if self.dateFixed != None:
+            # keep fixed date
+            pass
+        else:
+            try:
+                self.dateBegin = date(intYear, intMonth, intDay)
+            except ValueError as e:
+                print('error: ' + str(e), file=sys.stderr)
+                return self
+
+            self.dateEnd = self.dateBegin + timedelta(days=(len(self.day) - 1))
 
         #if config.sun != None:
         #    print('sunrise/sunset: ' + str(config.twilight), file=sys.stderr)
@@ -496,7 +503,21 @@ class Cycle(Title,Description,Plot):
 
             dt_i += timedelta(days=1)
 
-        self.dateEnd = self.dateBegin + timedelta(days=(len(self.day) - 1))
+        return self
+
+
+    def fix(self, objArg):
+
+        """  """
+
+        if self.dateFixed != None:
+            # keep fixed date
+            pass
+        elif objArg != None and type(objArg) is date:
+            self.dateFixed = objArg
+
+        self.dateBegin = self.dateFixed
+        self.dateEnd = self.dateBegin + timedelta(days = len(self.day) - 1)
 
         return self
 

@@ -69,7 +69,7 @@ class Period(Title,Description,Plot):
         self.child = []
         self.dateBegin = None
         self.dateEnd = None
-        self.dateScheduled = None
+        self.dateFixed = None
         self.data = None
 
         self.setPlan()
@@ -242,7 +242,7 @@ class Period(Title,Description,Plot):
                 i = 0
                 for i in range(len(p.child)):
                     if type(p.child[i]) is Cycle or type(p.child[i]) is Period:
-                        if p.child[i].dateBegin >= objArg.dateBegin:
+                        if p.child[i].dateEnd >= objArg.dateBegin:
                             p.child.insert(i,objArg.dup())
                             break
                         elif p.child[i] == p.child[-1]:
@@ -353,8 +353,7 @@ class Period(Title,Description,Plot):
                     if type(c) is Period:
                         if c.dateBegin <= objDate.date() and objDate.date() <= c.dateEnd:
                             return c.getPeriodByDate(objDate)
-                    elif type(c) is Cycle and c.getCycleByDate(objDate) != None:
-                        return self
+                return self
         else:
             print('error: no according period found' + str(objDate), file=sys.stderr)
 
@@ -411,42 +410,55 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        if intYear == None and intMonth == None and intDay == None:
-            if self.dateScheduled != None:
-                # re-use former schedule date
-                pass
-            elif len(self.child) > 0:
-                print('info: set dates of period according to childs', file=sys.stderr)
-                self.dateBegin = self.child[0].dateBegin
-                self.dateEnd = self.child[-1].dateEnd
-                return self
-            else:
-                print('error: cannot set dates according to childs', file=sys.stderr)
-                return None
-        else:
-
-            try:
-                if intMonth == None and intDay == None:
-                    self.dateScheduled = date(intYear, 1, 1)
-                elif intDay == None:
-                    self.dateScheduled = date(intYear, intMonth, 1)
+        if self.dateFixed != None:
+            # keep fixed date and schedule childs
+            pass
+        elif intYear != None and intYear > 2000 and intYear < 2100:
+            if intMonth == None and intDay == None:
+                self.dateBegin = date(intYear, 1, 1)
+            elif intMonth != None and intMonth > 0 and intMonth < 13:
+                if intDay == None:
+                    self.dateBegin = date(intYear, intMonth, 1)
+                elif intDay > 0 and intDay < 32:
+                    try:
+                        # if mismatch intMonth and intDay
+                        self.dateBegin = date(intYear, intMonth, intDay)
+                    except ValueError as e:
+                        print('error: ' + str(e), file=sys.stderr)
+                        self.dateBegin = None
                 else:
-                    self.dateScheduled = date(intYear, intMonth, intDay)
-            except ValueError as e:
-                print('error: ' + str(e), file=sys.stderr)
-                return None
+                    self.dateBegin = None
 
-        e = self.dateScheduled
-        for c in self.child:
-            if type(c) is Cycle or type(c) is Period:
-                c.schedule(e.year, e.month, e.day)
-                e += timedelta(days=len(c))
-            elif type(c) is Note:
-                c.dt = e
-                #print('type: ' + c.dt.isoformat(), file=sys.stderr)
+        dt_i = self.dateBegin
 
-        self.dateBegin = self.dateScheduled
-        self.dateEnd = self.dateBegin + timedelta(days=(len(self) - 1))
+        if len(self.child) < 1:
+            if hasattr(self,'periodInt'):
+                self.dateEnd = self.dateBegin + timedelta(days = self.periodInt)
+        else:
+            for c in self.child:
+                if type(c) is Cycle or type(c) is Period:
+                    c.schedule(dt_i.year, dt_i.month, dt_i.day)
+                    self.dateEnd = c.dateEnd
+                    dt_i = self.dateEnd + timedelta(days=1)
+                elif type(c) is Note:
+                    c.dt = dt_i
+
+        return self
+
+
+    def fix(self, objArg):
+
+        """  """
+
+        if self.dateFixed != None:
+            # keep fixed date
+            pass
+        elif objArg != None and type(objArg) is date:
+            self.dateFixed = objArg
+
+        self.dateBegin = self.dateFixed
+        if hasattr(self,'periodInt') and type(self.periodInt) is int and self.periodInt > 0:
+            self.dateEnd = self.dateBegin + timedelta(days = self.periodInt)
 
         return self
 
@@ -560,7 +572,6 @@ class Period(Title,Description,Plot):
         if type(listFilename) is str:
             listFilename = [listFilename]
 
-        self.setPlan(False)
         a = []
         d0 = None
         d1 = None
@@ -630,6 +641,7 @@ class Period(Title,Description,Plot):
             for t in a:
                 self.insertByDate(t)
 
+        self.setPlan(False)
         return self
 
 
