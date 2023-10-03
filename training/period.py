@@ -74,6 +74,7 @@ class Period(Title,Description,Plot):
 
         self.setPlan()
         self.setPlot()
+        self.setTextOnly(False)
 
 
     def __str__(self):
@@ -115,6 +116,15 @@ class Period(Title,Description,Plot):
 
         self.fPlan = fPlan
 
+        return self
+
+
+    def setTextOnly(self,fText=True):
+
+        """  """
+
+        self.fText = fText
+        
         return self
 
 
@@ -798,14 +808,14 @@ class Period(Title,Description,Plot):
 
         strResult += "</head>\n<body>\n"
 
-        if self.fPlot:
+        if not self.fText:
             strResult += '<div style="text-align: center;margin: 40px;">' + self.toSVGGanttChart() + '</div>\n'
         else:
             strResult += '<pre>' + self.toHtmlTableOfContent() + '</pre>\n'
 
         strResult += self.toHtml()
 
-        if self.fPlot:
+        if not self.fText:
             strResult += '<section class="{}">'.format(__name__)
             strResult += '<div class="header">' + self.getTitleXML() + self.getDateString() + '</div>\n'
             strResult += '<div style="text-align: center;margin: 40px;">' + self.toSVGDiagram() + '</div>\n'
@@ -987,7 +997,7 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        diagram_height = len(self) * (config.diagram_bar_height * 2) + 100
+        diagram_height = self.getLength() * (config.diagram_bar_height * 2) + 100
         strResult = '<svg baseProfile="full" height="{}" version="1.1" width="{}" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, config.diagram_width)
 
         strResult += '<style type="text/css">svg { font-family: ' + config.font_family + '; font-size: ' + str(config.font_size) + 'pt; }</style>'

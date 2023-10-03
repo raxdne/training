@@ -431,7 +431,7 @@ class Plot():
             l = (self.dateEnd - self.dateBegin).days + 1
             flagVBar = len(self.child) < 1
         else:
-            print('error: ' + str(e), file=sys.stderr)
+            print('error: unknown type ' + str(type(self)), file=sys.stderr)
             return ''
 
         # TODO: make config.diagram_height configurable
