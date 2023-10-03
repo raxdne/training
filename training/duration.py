@@ -73,7 +73,9 @@ class Duration(timedelta):
         
         if seconds > 3599:        
             strResult = '{}:{:02} h'.format(int(seconds // 3600), int((seconds % 3600) // 60))
-        elif seconds > 120:        
+        elif seconds > 900:        
+            strResult = '{} min'.format(int((seconds % 3600) // 60))
+        elif seconds > 30:        
             strResult = '{}:{:02} min'.format(int((seconds % 3600) // 60), int(seconds % 60))
         elif seconds > 0:        
             strResult = '{} s'.format(int(seconds))
@@ -95,8 +97,8 @@ class Duration(timedelta):
         """  """
 
         s = self.total_seconds()
-        if s < 900.0:
-            return super().__new__(Duration,seconds=s * floatScale)
+        if s < 1800.0:
+            return super().__new__(Duration,seconds=round(s * floatScale))
         else:
             # round duration to 5:00 min
-            return super().__new__(Duration,seconds=(round(s * floatScale / 300.0) * 300.0))
+            return super().__new__(Duration,seconds=round(s * floatScale / 300.0) * 300.0)

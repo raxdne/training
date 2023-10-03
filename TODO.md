@@ -7,15 +7,15 @@ REQ: accumulated time chart ✔
 
 REQ: multi-user data, synchronized team
 
-REQ: append note/description as normal child in cycle and period ?? #scope
+REQ: append note/description as normal child in cycle and period  ✔
 
-REQ: report of current cycle should use the days between start and today #scope ✔
+REQ: report of current cycle should use the days between start and today  ✔
 
 BUG: report of time-only value cycle #scope ✔
 
 REQ: make colorcoding configurable ✔
 
-REQ: link some units of different types into one unit (e.g. Triathlon)
+REQ: link some units of different types into one unit (e.g. Triathlon) ✔
 
 DONE: configuration of significant chars of type string ('B' or 'Bic' or 'Bicycle') ✔
 
@@ -57,7 +57,7 @@ REQ: use Mindmap as input (`mm2py.xsl`)
 
 ### SVG
 
-REQ: accumulated Diagram for comparison of multiple periods
+REQ: accumulated Diagram for comparison of multiple periods ✔
 
 <https://pypi.org/project/svgwrite/>
 
