@@ -29,6 +29,7 @@ from suntime import Sun
 # location Berlin/Germany
 config.sun = Sun(52.5,13.5)
 config.twilight = 1800
+config.v_defaults = {'Biking Basics': 20.0}
 
 print('Module Test: ' + __file__ + '\n')
 
@@ -42,24 +43,26 @@ c.appendDescription('Running Blocks')
 c1 = c.dup()
 #c1.scale(2.0,r"^R")
 
-t.insert(1,c1)
+#t.insert(1,c1)
 #t.insert(3,[Unit('08:00;3.5;Running Basics;25:00'),
 #            Unit('18:00;3.5;Running Basics;25:00')])
 #t.insert([5,8],c)
-t.insert(6,Unit('06:00;30;Biking Basics;02:00:00'))
-t.insert(8,Unit(';FB;25:00'))
-t.insert(10,Unit(';FB;25:00'))
-t.insert(13,Unit('08:00;30;Biking Basics;02:00:00'))
+#t.insert(6,Unit('06:00;30;Biking Basics;02:00:00'))
+#t.insert(8,Unit(';FB;25:00'))
+#t.insert(10,Unit(';FB;25:00'))
+#t.insert(13,Unit('08:00;30;Biking Basics;02:00:00'))
 
 b = Cycle('Block',5)
-b.insert(0,Unit(';10;Biking Basics;02:00:00'))
-b.insert(2,Unit(';20;Biking Basics;02:00:00'))
-b.insert(4,Unit(';30;Biking Basics;02:00:00'))
-t.fill(b)
+b.insert(0,Unit(';;Biking Basics;02:00:00'))
+b.insert(2,Unit(';;Biking Basics;02:00:00'))
+b.insert(4,Unit(';;Biking Basics;02:00:00'))
+t.fill(b,1.1)
 #t.insert(5,b)
 #t.insert(9,b.scale(2),True)
 
 t.schedule(2023,1,1)
+
+t.cut(4)
 print(t)
 
 #t.postpone(3)

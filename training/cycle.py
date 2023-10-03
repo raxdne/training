@@ -372,6 +372,26 @@ class Cycle(Title,Description,Plot):
         return self
 
 
+    def cut(self,objArg=0):
+
+        """  """
+
+        if type(objArg) is date:
+            # 
+            if objArg <= self.dateEnd:
+                d = (objArg - self.dateBegin).days
+                if d > 0:
+                    self.cut(d)
+                else:
+                    print('info: ' + objArg.isoformat() + ' is not in this period', file=sys.stderr)
+        elif type(objArg) is int and objArg > 0 and len(self.day) > objArg:
+            #print('info: cut Cycle "' + self.getTitleString() + '" at ' + str(objArg-1), file=sys.stderr)
+            del self.day[objArg:]
+            self.dateEnd = self.dateBegin + timedelta(days = len(self.day) - 1)
+
+        return self
+
+
     def getCycleByDate(self,objDate=None):
 
         """  """
@@ -427,6 +447,13 @@ class Cycle(Title,Description,Plot):
                     intResult += 1
 
         return intResult
+
+
+    def getLength(self):
+
+        """ return length of cycle """
+
+        return len(self.day)
 
 
     def getDuration(self):

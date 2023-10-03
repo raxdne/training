@@ -17,6 +17,8 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
+from datetime import date
+
 from training.note import Note
 from training.unit import Unit
 from training.cycle import Cycle
@@ -30,20 +32,18 @@ t.appendDescription('Regeneration')
 t.append(Note('ABC'))
 
 #t.define(['3000;Bicycle;100h','100;Running;'])
-t.define(['2000;Bicycle;','100;Running;'])
-t.define(';Bicycle;100h')
-t.schedule(2025,3,4)
+#t.define(['2000;Bicycle;','100;Running;'])
+#t.define(';Bicycle;100h')
+#t.schedule(2025,3,4)
 #print(t.report())
 #
 
 #t = Period('General Basics',60).define(['2000;Bicycle;','100;Running;']).schedule(2025,3,4)
 #print(t.getNumberOfCycles())
-print(t.getTitleString())
+#print(t.getTitleString())
 
-print(t.toString())
-print(t.toHtml())
-
-quit()
+#print(t.toString())
+#print(t.toHtml())
 
 c = Cycle('General Endurance')
 c.insert(1,Unit('18:00;3.5;RB;25:00;;http://www.demo.com/'))
@@ -55,17 +55,23 @@ t.append(c)
 t.append(c)
 c.scale(1.2,r"FB")
 t.append(c)
+t.append(c)
+t.append(c)
 
 # c.appendDescription('Nutrition ABC')
 # f.appendDescription('Maximum')
 
-t.append(c)
+#t.append(c)
 # t.append(c)
 # f.setDescription()
 # t.append(c)
 
-#t.schedule(2025,3,4)
-#print(t)
+#t.fix(Date(2025,3,4))
+t.schedule(2025)
+#t.cut(140)
+#t.cut(date(2025,1,25))
+
+print(t)
 #print(t.report())
 #print(t.toHtml())
 #print(t.toXML())
@@ -73,13 +79,15 @@ t.append(c)
 #print(t.toSVG())
 #print(t.toSVGGanttChart())
 
+#quit()
+
 #t = Period('Plan').CalendarWeekPeriod(2022)
 #t = Period('Plan').CalendarYearPeriod(2023)
-t = Period('Report').CalendarLastWeeksPeriod(4)
+#t = Period('Report').CalendarLastWeeksPeriod(4)
 #t = Period('Plan').CalendarSeasonPeriod(2025)
 #t.insertByDate(Unit('2025-03-03T8:00:00+2;100;RG;5h'))
 #t1 = t.getPeriodByDate()
-t1 = t.getCycleByDate()
+#t1 = t.getCycleByDate()
 
-print(t1)
+#print(t1)
 #print(t.report())
