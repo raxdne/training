@@ -67,10 +67,11 @@ class Period(Title,Description,Plot):
 
         self.color = None
         self.child = []
+        self.data = []
+
         self.dateBegin = None
         self.dateEnd = None
         self.dateFixed = None
-        self.data = None
 
         self.setPlan()
         self.setPlot()
@@ -136,7 +137,7 @@ class Period(Title,Description,Plot):
             if type(c) is Cycle or type(c) is Period:
                 c.resetDistances()
 
-        self.data = []
+        self.data.clear()
         #super(Plot, self).__init__()
         #self.strPlotAccumulation = None
         Plot.__init__(self)
@@ -222,7 +223,7 @@ class Period(Title,Description,Plot):
         strResult = ''
 
         if type(self.dateBegin) is date and self.dateBegin != None and type(self.dateEnd) is date and self.dateEnd != None:
-            strResult = ' (' + str(len(self)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+            strResult = ' (' + str(self.getLength()) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
 
         return strResult
 
@@ -232,7 +233,7 @@ class Period(Title,Description,Plot):
         """  """
 
         # print(f'info: reset data collection of period "{self.getTitleStr()}"', file=sys.stderr)
-        self.data = None
+        self.data.clear()
 
         if objArg == None:
             print('error: ' + str(objArg), file=sys.stderr)
@@ -430,9 +431,18 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        for c in self.child:
-            if type(c) is Cycle or type(c) is Period:
-                c.remove(patternType=patternType)
+        if len(self.child) > 0:
+            for c in self.child:
+                if type(c) is Cycle or type(c) is Period:
+                    c.remove(patternType=patternType)
+        elif len(self.data) > 0:
+            l = []
+            for d in self.data:
+                if re.match(patternType,d[3]):
+                    pass
+                else:
+                    l.append(d)
+            self.data = l
 
         return self
 
@@ -484,7 +494,7 @@ class Period(Title,Description,Plot):
 
         if self.dateFixed != None:
             # keep fixed date and schedule childs
-            pass
+            self.dateBegin = self.dateFixed
         elif intYear != None and intYear > 2000 and intYear < 2100:
             if intMonth == None and intDay == None:
                 self.dateBegin = date(intYear, 1, 1)
@@ -514,7 +524,7 @@ class Period(Title,Description,Plot):
                     dt_i = self.dateEnd + timedelta(days=1)
                 elif type(c) is Note:
                     c.dt = dt_i
-
+            self.data.clear()
         return self
 
 
@@ -528,9 +538,7 @@ class Period(Title,Description,Plot):
         elif objArg != None and type(objArg) is date:
             self.dateFixed = objArg
 
-        self.dateBegin = self.dateFixed
-        self.periodInt = self.getLength()
-        self.dateEnd = self.dateBegin + timedelta(days = self.periodInt - 1)
+        self.schedule()
 
         return self
 
@@ -546,7 +554,7 @@ class Period(Title,Description,Plot):
         elif type(objArg) is str and len(objArg) > 0:
             return self.define([objArg])
         elif type(objArg) is list and len(objArg) > 0:
-            self.data = []
+            self.data.clear()
             u = Unit()
             for s in objArg:
                 #print('info: ' + s, file=sys.stderr)
@@ -568,13 +576,15 @@ class Period(Title,Description,Plot):
 
         listResult = []
 
-        if type(self.data) is list and len(self.data) > 0:
-            listResult = self.data
-        else:
+        if len(self.child) > 0:
             for c in self.child:
                 if type(c) is Cycle or type(c) is Period:
                     listResult.extend(c.stat())
             self.data = listResult
+        elif len(self.data) > 0:
+            for d in self.data:
+                d[0] = self.dateEnd.toordinal()
+            listResult = self.data
 
         return listResult
 
@@ -631,7 +641,7 @@ class Period(Title,Description,Plot):
 
         n = self.getNumberOfUnits()
         if True or n > 0 or (len(self.data) > 0 and len(self.child) < 1):
-            p = len(self)
+            p = self.getLength()
             strResult += "\n{} Units {:.2f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(n, round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
 
         return strResult
@@ -866,7 +876,7 @@ class Period(Title,Description,Plot):
                     strResult += c.plotAccumulation()
                     strResult += c.plotHist()
                     strResult += c.plotTimeDist()
-                    #strResult += c.toSVGGanttChart()
+                    strResult += c.toSVGGanttChart()
                     #strResult += c.toSVGDiagram()
                     strResult += '</div>'
 
@@ -970,15 +980,16 @@ class Period(Title,Description,Plot):
 
         """  """
 
+        l = self.getLength()
         strResult = '<g>'
 
-        if self.color != None and len(self) > 0:
-            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self))-2,x+config.diagram_width-4)
+        if self.color != None and l > 0:
+            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2) * l)-2,x+config.diagram_width-4)
 
         if len(self.child) < 1:
             strResult += '<text x="{}" y="{}" style="vertical-align:top"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleXML(), self.getDateString())
             strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+config.diagram_width,y)
-            for d in range(0,len(self)):
+            for d in range(0,l):
                 strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+config.diagram_bar_height)
                 y += config.diagram_bar_height * 2
         else:

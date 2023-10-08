@@ -43,13 +43,12 @@ REQ: different parser/generator modules for input formats
 
 ### SQLite dump
 
-
 ### iCal
 
 TEST: calendar output format in different applications
-+ Thunderbird Lightning ✔
-+ https://github.com/Etar-Group/Etar-Calendar
-+ https://github.com/SufficientlySecure/calendar-import-export
+1) Thunderbird Lightning ✔
+1) https://github.com/Etar-Group/Etar-Calendar
+1) https://github.com/SufficientlySecure/calendar-import-export
 
 ### Freemind XML
 
@@ -62,4 +61,3 @@ REQ: accumulated Diagram for comparison of multiple periods ✔
 <https://pypi.org/project/svgwrite/>
 
 <https://pypi.org/project/drawSvg/>
-

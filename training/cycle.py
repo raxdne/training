@@ -63,6 +63,7 @@ class Cycle(Title,Description,Plot):
         self.setPlan()
         self.setPlot()
 
+        self.data = []
         self.day = []
         for i in range(0,int(intArg)):
             self.day.append([])
@@ -70,7 +71,6 @@ class Cycle(Title,Description,Plot):
         self.dateBegin = None
         self.dateEnd = None
         self.dateFixed = None
-        self.data = None
 
         self.color = None
 
@@ -127,7 +127,7 @@ class Cycle(Title,Description,Plot):
         for i in range(len(self.day)):
             self.day[i] = []
 
-        self.data = []
+        self.data.clear()
         #super(Plot, self).__init__()
         Plot.__init__(self)
 
@@ -145,14 +145,18 @@ class Cycle(Title,Description,Plot):
 
     def remove(self,intIndexA=-1,patternType=None):
 
-        """  """
+        """ BUG: removal of matching units in Combination() """
 
         if intIndexA > -1 and intIndexA < len(self.day):
             if patternType != None:
                 # delete only matching elements in list of indexed day
                 dayNew = []
                 for u in self.day[intIndexA]:
-                    if u.type == None or re.match(patternType,u.type):
+                    if type(u) is Combination:
+                        c = u.remove(patternType)
+                        if c.getNumberOfUnits() > 0:
+                            daysNew.append(c)
+                    elif type(u) is Unit and u.match(patternType):
                         # to be ignored
                         pass
                     else:
@@ -160,7 +164,7 @@ class Cycle(Title,Description,Plot):
                 self.day[intIndexA] = copy.deepcopy(dayNew)
             else:
                 # delete whole list of indexed day
-                self.day[intIndexA] = []
+                self.day[intIndexA].clear()
         elif patternType != None:
             # whole cycle using pattern
             daysNew = []
@@ -171,7 +175,8 @@ class Cycle(Title,Description,Plot):
                         c = u.remove(patternType)
                         if c.getNumberOfUnits() > 0:
                             daysNew[i].append(c)
-                    elif type(u) is Unit and (u.type == None or re.match(patternType,u.type)):
+                    elif type(u) is Unit and u.match(patternType):
+                        # to be ignored
                         pass
                     else:
                         daysNew[i].append(u)
@@ -313,7 +318,7 @@ class Cycle(Title,Description,Plot):
                         for u in objArg.day[j]:
                             self.insert(i,u,flagReplace)
                     elif flagReplace:
-                        self.day[i] = []
+                        self.day[i].clear()
                     i += 1
                     j += 1
                 objArg.scale(floatProgression)
@@ -387,6 +392,7 @@ class Cycle(Title,Description,Plot):
         elif type(objArg) is int and objArg > 0 and len(self.day) > objArg:
             #print('info: cut Cycle "' + self.getTitleString() + '" at ' + str(objArg-1), file=sys.stderr)
             del self.day[objArg:]
+            self.data.clear()
             self.dateEnd = self.dateBegin + timedelta(days = len(self.day) - 1)
 
         return self
@@ -443,7 +449,7 @@ class Cycle(Title,Description,Plot):
             for u in v:
                 if type(u) is Combination:
                     intResult += u.getNumberOfUnits()
-                elif type(u) is Unit and u.type != None and len(u.type) > 0:
+                elif type(u) is Unit and u.isCountable():
                     intResult += 1
 
         return intResult
@@ -465,7 +471,7 @@ class Cycle(Title,Description,Plot):
         intResult = 0
         for v in self.day:
             for u in v:
-                if (type(u) is Unit or type(u) is Combination):
+                if (type(u) is Unit and u.isCountable()) or type(u) is Combination:
                     intResult += u.getDuration().total_seconds()
 
         return timedelta(seconds=intResult)
@@ -555,14 +561,14 @@ class Cycle(Title,Description,Plot):
 
         listResult = []
 
-        if type(self.data) is list and len(self.data) > 0 and self.getNumberOfUnits() > 0:
-            return self.data
-        else:
+        if len(self.day) > 0:
             for v in self.day:
                 for u in v:
-                    if type(u) is Unit or type(u) is Combination:
+                    if (type(u) is Unit and u.isCountable()) or type(u) is Combination:
                         listResult.extend(u.stat())
             self.data = listResult
+        elif len(self.data) > 0:
+            listResult = self.data
 
         return listResult
 

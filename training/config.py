@@ -42,7 +42,7 @@ max_length_type = 20
 
 # distance unit 'mi' or 'km'
 unit_distance = 'km'
-# default velocity for planning
+# default velocity, used in Unit()
 v_defaults = {'Bicycle': 25.0, 'Running': 10.0, 'Swimming': 2.0}
 
 #

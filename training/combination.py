@@ -133,7 +133,7 @@ class Combination(Title,Description):
             # whole combination using pattern
             childsNew = []
             for u in self.child:
-                if type(u) is Unit and (u.type == None or re.match(patternType,u.type)):
+                if type(u) is Unit and u.match(patternType):
                     pass
                 elif type(u) is Pause:
                     pass
@@ -163,7 +163,7 @@ class Combination(Title,Description):
         intResult = 0
 
         for u in self.child:
-            if type(u) is Unit and u.type != None and len(u.type) > 0:
+            if type(u) is Unit and u.isCountable():
                 intResult += 1
 
         return intResult
@@ -175,7 +175,7 @@ class Combination(Title,Description):
 
         intResult = 0
         for u in self.child:
-            if (type(u) is Unit or type(u) is Pause):
+            if ((type(u) is Unit and u.isCountable()) or type(u) is Pause):
                 intResult += u.getDuration().total_seconds()
 
         return Duration(intResult / 60)
@@ -199,7 +199,7 @@ class Combination(Title,Description):
         listResult = []
 
         for u in self.child:
-            if type(u) is Unit:
+            if type(u) is Unit and u.isCountable():
                 listResult.extend(u.stat())
 
         return listResult

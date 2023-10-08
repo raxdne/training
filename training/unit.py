@@ -217,6 +217,18 @@ class Unit(Note):
         return self.getDuration().toString()
 
 
+    def match(self,patternType=None):
+                            
+       return (self.type == None or patternType == None or re.match(patternType,self.type))
+
+
+    def isCountable(self):
+
+        """  """
+
+        return ((type(self.type) is str and len(self.type) > 0) and (type(self.dist) is float and self.dist > 0.0) and self.getDuration().total_seconds() > 0)
+
+
     def scale(self,floatScale,patternType=None):
 
         """  """

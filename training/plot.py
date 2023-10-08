@@ -111,12 +111,14 @@ class Plot():
                         if len(lx) < 1 or len(lx) != len(ly):
                             print(f'error: x and y are no matching data for "{k}"', file=sys.stderr)
                             continue
+                        elif lx[-1] > x_1:
+                            print(f'error: values in {lx} are out of range {x_0}:{x_1}', file=sys.stderr)
 
-                        if lx[0] != x_0:
+                        if lx[0] > x_0:
                             lx.insert(0,x_0)
                             ly.insert(0,0.0)
 
-                        if lx[-1] != x_1:
+                        if lx[-1] < x_1:
                             lx.append(x_1)
                             ly.append(0.0)
 
@@ -183,7 +185,7 @@ class Plot():
 
             if self.strPlotAccumulationDuration == None:
 
-                #print(f'info: new plot of "{self.getTitleString()}"', file=sys.stderr)
+                #print(f'info: new plot of "{self.getTitleString()} {self.dateBegin.toordinal()}"', file=sys.stderr)
                 self.stat()
                 # make data
                 x = np.array(list(map(lambda lst: lst[0], self.data)))
@@ -203,12 +205,14 @@ class Plot():
                     if len(lx) < 1 or len(lx) != len(ly):
                         print('error: x and y are no matching data', file=sys.stderr)
                         return strResult
+                    elif lx[-1] > x_1:
+                        print(f'error: values in {lx} are out of range {x_0}:{x_1}', file=sys.stderr)
 
-                    if lx[0] != x_0:
+                    if lx[0] > x_0:
                         lx.insert(0,x_0)
                         ly.insert(0,0.0)
 
-                    if lx[-1] != x_1:
+                    if lx[-1] < x_1:
                         lx.append(x_1)
                         ly.append(0.0)
 
