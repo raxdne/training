@@ -143,6 +143,13 @@ class Cycle(Title,Description,Plot):
         return self
 
 
+    def isPlan(self):
+
+        """  """
+
+        return self.fPlan
+
+
     def remove(self,intIndexA=-1,patternType=None):
 
         """ BUG: removal of matching units in Combination() """

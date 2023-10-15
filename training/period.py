@@ -120,6 +120,13 @@ class Period(Title,Description,Plot):
         return self
 
 
+    def isPlan(self):
+
+        """  """
+
+        return self.fPlan
+
+
     def setTextOnly(self,fText=True):
 
         """  """
@@ -495,7 +502,7 @@ class Period(Title,Description,Plot):
         if self.dateFixed != None:
             # keep fixed date and schedule childs
             self.dateBegin = self.dateFixed
-        elif intYear != None and intYear > 2000 and intYear < 2100:
+        elif intYear != None and intYear > 1970 and intYear < 2100:
             if intMonth == None and intDay == None:
                 self.dateBegin = date(intYear, 1, 1)
             elif intMonth != None and intMonth > 0 and intMonth < 13:
@@ -887,6 +894,104 @@ class Period(Title,Description,Plot):
         return strResult
 
 
+    def toComparisonHtmlTableFile(self, listArg=[]):
+
+        """ returns html/body + content """
+
+        strResult = '<!doctype html public "-//IETF//DTD HTML 4.0//EN">'
+
+        strResult += "<html>"
+
+        strResult += "<head>"
+
+        strResult += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
+
+        strResult += "<title></title>"
+
+        strResult += config.style
+
+        strResult += "</head>\n<body>\n"
+
+        if len(listArg) < 1:
+            l = self.child
+        else:
+            l = listArg
+
+        strResult += "<table style='border: none;'><thead/>\n<tbody>\n"
+
+        strResult += "<tr>\n"
+        
+        for c in l:
+            if type(c) is Period or type(c) is Cycle:
+                strResult += "<td class='graph'>\n"
+                #strResult += '<section class="{}" id="{}">'.format(__name__, str(id(c)))
+
+                strResult += '<div class="header">' + c.getTitleXML()
+                if c.dateBegin != None and c.dateEnd != None:
+                    strResult += c.getDateString()
+                strResult += '</div>\n'
+
+                strResult += '<pre>' + c.report() + '</pre>'
+                strResult += "</td>\n"
+
+        strResult += "</tr>\n"
+
+        strResult += "<tr>\n"
+
+        for c in l:
+            if type(c) is Period or type(c) is Cycle:
+                strResult += "<td class='graph'>\n"
+                strResult += c.plotAccumulationDuration()
+                strResult += "</td>\n"
+
+        strResult += "</tr>\n"
+
+        strResult += "<tr>\n"
+
+        for c in l:
+            if type(c) is Period or type(c) is Cycle:
+                strResult += "<td class='graph'>\n"
+                strResult += c.plotAccumulation()
+                strResult += "</td>\n"
+
+        strResult += "</tr>\n"
+
+        strResult += "<tr>\n"
+
+        for c in l:
+            if type(c) is Period or type(c) is Cycle:
+                strResult += "<td class='graph'>\n"
+                strResult += c.plotHist()
+                strResult += "</td>\n"
+
+        strResult += "</tr>\n"
+
+        strResult += "<tr>\n"
+
+        for c in l:
+            if type(c) is Period or type(c) is Cycle:
+                strResult += "<td class='graph'>\n"
+                strResult += c.plotTimeDist()
+                strResult += "</td>\n"
+
+        strResult += "</tr>\n"
+
+        strResult += "<tr>\n"
+
+        for c in l:
+            if type(c) is Period or type(c) is Cycle:
+                strResult += "<td class='graph'>\n"
+                strResult += c.toSVGGanttChart()
+                strResult += "</td>\n"
+
+        strResult += "</tr>\n"
+
+        strResult += "</tbody>\n</table>\n"
+        strResult += "</body>\n</html>"
+
+        return strResult
+
+
     def toCSV(self):
 
         """  """
@@ -1248,7 +1353,7 @@ class Period(Title,Description,Plot):
         if strArg != None and len(strArg) > 0:
             self.setTitleStr(strArg)
 
-        self.schedule(intYear,1,1)
+        self.schedule(intYear)
 
         return self
 
