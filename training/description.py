@@ -224,7 +224,7 @@ class Description:
             f = _flatten(self.listDescription)
             if len(f) == 1:
                 # only one item
-                strResult += ' ' + f[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
+                strResult += '<p>' + f[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;") + '</p>'
             elif len(f) > 1:
                 strResult += '<ul>' + self.getDescriptionHTML(self.listDescription) + '</ul>'
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:

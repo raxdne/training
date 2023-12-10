@@ -688,7 +688,7 @@ class Cycle(Title,Description,Plot):
 
         strResult += '><div class="header">' + self.getTitleXML() + ' ' + self.getDateString() + '</div>\n'
 
-        strResult += '<ul>' + self.getDescriptionHTML() + '</ul>'
+        strResult += self.getDescriptionHTML()
 
         if self.getNumberOfUnits() > 0:
             strResult += '<pre style="width: 80%;">' + self.report() + '</pre>'
@@ -719,7 +719,7 @@ class Cycle(Title,Description,Plot):
 
                 if not self.fPlan and len([u for u in v if type(u) is Unit]) > 0:
                     # TODO: make link portable/configurable
-                    strResult += '<a href="/cxproc/exe?research={}&xsl=fitx2html">'.format(dt_i.strftime("%Y-%m-%d.*fitx"))
+                    strResult += '<a href="/cxproc/exe?search={}&xsl=fitx2html">'.format(dt_i.strftime("%Y-%m-%d.*fitx"))
                     strResult += dt_i.strftime("%Y-%m-%d %a (%j)")
                     strResult += '</a>'
                 else:

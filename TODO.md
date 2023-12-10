@@ -3,6 +3,9 @@
 
 ## Requirements
 
+REQ: handle [Time Intervals and Repeating intervals](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
+- <https://github.com/gweis/isodate>
+
 REQ: accumulated time chart ✔
 
 REQ: multi-user data, synchronized team
