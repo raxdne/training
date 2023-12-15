@@ -73,6 +73,7 @@ class Cycle(Title,Description,Plot):
         self.dateFixed = None
 
         self.color = None
+        self.setVDefaults(config.v_defaults)
 
 
     def __len__(self):
@@ -116,6 +117,30 @@ class Cycle(Title,Description,Plot):
                 self.day[objArgA][0].appendDescription(objArgB)
             elif type(objArgB) is Description:
                 self.day[objArgA][0].appendDescription(objArgB)
+
+        return self
+
+
+    def setVDefaults(self,dictArg):
+
+        """  """
+
+        self.v_defaults = dictArg
+
+        return self
+
+
+    def updateValues(self,dictArg=None):
+
+        """  """
+
+        if dictArg != None:
+            self.setVDefaults(dictArg)
+
+        for v in self.day:
+            for u in v:
+                if type(u) is Unit or type(u) is Combination:
+                    u.updateValues(self.v_defaults)
 
         return self
 
@@ -719,7 +744,7 @@ class Cycle(Title,Description,Plot):
 
                 if not self.fPlan and len([u for u in v if type(u) is Unit]) > 0:
                     # TODO: make link portable/configurable
-                    strResult += '<a href="/cxproc/exe?search={}&xsl=fitx2html">'.format(dt_i.strftime("%Y-%m-%d.*fitx"))
+                    strResult += '<a href="/cxproc/exe?path={}&xsl=fitx2html">'.format(dt_i.strftime("%Y-%m-%d.*fitx"))
                     strResult += dt_i.strftime("%Y-%m-%d %a (%j)")
                     strResult += '</a>'
                 else:

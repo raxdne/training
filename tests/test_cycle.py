@@ -29,7 +29,6 @@ from suntime import Sun
 # location Berlin/Germany
 config.sun = Sun(52.5,13.5)
 config.twilight = 1800
-config.v_defaults = {'Biking Basics': 20.0}
 
 print('Module Test: ' + __file__ + '\n')
 
@@ -60,7 +59,7 @@ t.fill(b,1.1)
 #t.insert(5,b)
 #t.insert(9,b.scale(2),True)
 
-t.schedule(2023,1,1)
+t.schedule(2023,1,1).updateValues({'Biking Basics': 20.0})
 
 t.cut(4)
 print(t)

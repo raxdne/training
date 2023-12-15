@@ -141,14 +141,7 @@ class Unit(Note):
         """  """
 
         if strArg == None or len(strArg) < 1:
-            if self.type != None and self.type in config.v_defaults and config.v_defaults[self.type] > 1.0 and self.duration != None and self.duration > Duration(0):
-                # there is a defined default velocity
-                self.dist = config.v_defaults[self.type] * (self.duration.total_seconds() / 3600)
-                #print('info updating distance: ' + str(self), file=sys.stderr)
-            elif self.dist != None and self.dist > 0.1:
-                pass
-            else:
-                self.dist = None
+            self.dist = None
         else:
             try:
                 self.dist = float(strArg.replace(',','.'))
@@ -183,14 +176,7 @@ class Unit(Note):
         """  """
 
         if intArg == None or intArg == 0:
-            if self.type != None and self.type in config.v_defaults and config.v_defaults[self.type] > 1.0 and self.dist != None and self.dist > 0.1:
-                # there is a defined default velocity
-                self.duration = Duration(int(self.dist / config.v_defaults[self.type] * 60))
-                #print('info updating duration: ' + str(self), file=sys.stderr)
-            elif self.duration != None:
-                pass
-            else:
-                self.duration = Duration(0)
+            self.duration = Duration(0)
         else:
             self.duration = Duration(intArg)
 
@@ -217,6 +203,25 @@ class Unit(Note):
         return self.getDuration().toString()
 
 
+    def updateValues(self,dictArg=None):
+
+        """  """
+
+        if dictArg != None:
+            if self.type != None and self.type in dictArg and dictArg[self.type] > 1.0 and self.duration != None and self.duration > Duration(0):
+                if self.dist == None or self.dist < 0.1:
+                    # there is a defined default velocity
+                    self.dist = dictArg[self.type] * (self.duration.total_seconds() / 3600)
+                    #print('info updating distance: ' + str(self), file=sys.stderr)
+            elif self.type != None and self.type in dictArg and dictArg[self.type] > 1.0 and self.dist != None and self.dist > 0.1:
+                if self.duration == None or self.duration < Duration(1):
+                    # there is a defined default velocity
+                    self.duration = Duration(int(self.dist / dictArg[self.type] * 60))
+                    #print('info updating duration: ' + str(self), file=sys.stderr)
+
+        return self
+
+
     def match(self,patternType=None):
                             
        return (self.type == None or patternType == None or re.match(patternType,self.type))
@@ -236,7 +241,7 @@ class Unit(Note):
         if floatScale > 0.1 and (patternType == None or self.type == None or re.match(patternType,self.type)):
 
             if self.dist != None:
-                if self.dist < 15.0:
+                if self.dist < 20.0:
                     self.dist *= floatScale
                 else:
                     # round distance to 5.0
@@ -410,7 +415,7 @@ class Unit(Note):
         else:
             strResult += self.getDistString() + ' ' + self.type + ' ' + self.getDurationString()
 
-        strResult += self.getDescriptionHTML()
+        strResult += self.getDescriptionString()
         strResult += '</div>'
 
         return strResult

@@ -88,6 +88,7 @@ def getSettingsStr():
     strResult += '{}.colors = {}\n'.format(__name__, colors)
     strResult += '{}.max_length_type = {}\n'.format(__name__, max_length_type)
     strResult += '{}.unit_distance = \'{}\'\n'.format(__name__, unit_distance)
+    strResult += '{}.v_defaults = \'{}\'\n'.format(__name__, v_defaults)
 
     return strResult
 

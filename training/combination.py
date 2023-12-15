@@ -125,6 +125,18 @@ class Combination(Title,Description):
         return dt
 
 
+    def updateValues(self,dictArg=None):
+
+        """  """
+
+        if dictArg != None:
+            for c in self.child:
+                if type(c) is Unit:
+                    c.updateValues(dictArg)
+
+        return self
+
+
     def remove(self,patternType=None):
 
         """  """

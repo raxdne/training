@@ -16,9 +16,9 @@ import training.config as config
 
 def RegenerationGeneral():
     r = Cycle('General Regeneration')
-    r.insert(1,Unit('30;Bicycle;1:15:00'))
-    r.insert(3,Unit('3.5;Running;25:00'))
-    r.insert(6,Unit('30;Bicycle;1:15:00'))
+    r.insert(1,Unit(';Bicycle;1:15:00'))
+    r.insert(3,Unit(';Running;25:00'))
+    r.insert(6,Unit(';Bicycle;1:15:00'))
 
     return r
 
@@ -201,7 +201,8 @@ def PlanSimple(strArg):
 
 #print(config.getSettingsStr())
 
-s = PlanSimple('Season Simple').schedule(date.today().year,1,1)
+s = PlanSimple('Season Simple').schedule(date.today().year,1,1).updateValues()
+#s.updateValues({'Running': 6.0, 'Bicycle': 20.0})
 
 # patch some days using a scheduled cycle
 c = Cycle('Pause Running').insert([1,3,5],Unit('10;Running;3:00:00')).schedule(date.today().year,7,2)

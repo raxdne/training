@@ -223,7 +223,7 @@ class Note(Description):
         """  """
 
         strResult = '<div style="background-color: {}">'.format(self.getColor())
-        strResult += self.getDescriptionHTML()
+        strResult += self.getDescriptionString()
         strResult += '</div>'
 
         return strResult

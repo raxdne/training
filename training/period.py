@@ -76,6 +76,7 @@ class Period(Title,Description,Plot):
         self.setPlan()
         self.setPlot()
         self.setTextOnly(False)
+        self.setVDefaults()
 
 
     def __str__(self):
@@ -133,6 +134,42 @@ class Period(Title,Description,Plot):
 
         self.fText = fText
         
+        return self
+
+
+    def setVDefaults(self,dictArg=None):
+
+        """  """
+
+        if dictArg != None:
+            if config.max_length_type > 0:
+                self.v_defaults = {}
+                for k in dictArg:
+                    # BUG: shorted keys might not be unique
+                    self.v_defaults[k[0:config.max_length_type]] = dictArg[k]
+            else:
+                self.v_defaults = dictArg
+        else:
+            self.v_defaults = config.v_defaults
+
+        return self
+
+
+    def updateValues(self,dictArg=None):
+
+        """  """
+
+        if dictArg != None:
+            self.setVDefaults(dictArg)
+
+        if len(self.child) > 0:
+            for c in self.child:
+                if type(c) is Cycle or type(c) is Period:
+                    c.updateValues(self.v_defaults)
+        #elif len(self.data) > 0:
+        #    for d in self.data:
+        #        d.upateValues(self.v_defaults)
+
         return self
 
 
@@ -421,7 +458,7 @@ class Period(Title,Description,Plot):
             for d in self.data:
                 l.append([0,d[1]*floatScale,d[2]*floatScale,d[3]])
             self.data = l
-            
+
         return self
 
 
@@ -460,7 +497,7 @@ class Period(Title,Description,Plot):
 
         #print('info: cut "' + self.getTitleString() + '" at ' + str(objArg), file=sys.stderr)
         if type(objArg) is date:
-            # 
+            #
             if objArg <= self.dateEnd:
                 d = (objArg - self.dateBegin).days
                 if d > 0:
@@ -523,7 +560,7 @@ class Period(Title,Description,Plot):
         if len(self.child) < 1:
             if hasattr(self,'periodInt'):
                 self.dateEnd = self.dateBegin + timedelta(days = self.periodInt - 1)
-        else:
+        elif dt_i != None:
             for c in self.child:
                 if type(c) is Cycle or type(c) is Period:
                     c.schedule(dt_i.year, dt_i.month, dt_i.day)
@@ -532,6 +569,7 @@ class Period(Title,Description,Plot):
                 elif type(c) is Note:
                     c.dt = dt_i
             self.data.clear()
+
         return self
 
 
@@ -567,13 +605,14 @@ class Period(Title,Description,Plot):
                 #print('info: ' + s, file=sys.stderr)
                 if u.parse(s):
                     #print('info: ' + str(u.stat()), file=sys.stderr)
+                    u.updateValues(self.v_defaults)
                     self.data.extend(u.stat())
                 else:
                     print('error: parsing ' + s, file=sys.stderr)
             print('info: ' + str(list(map(lambda lst: lst[2], self.data))), file=sys.stderr)
         else:
             print('error: empty period initialization', file=sys.stderr)
-            
+
         return self
 
 
@@ -771,7 +810,7 @@ class Period(Title,Description,Plot):
 
         strResult += self.getDescriptionHTML()
 
-        if self.getNumberOfUnits() > 0:
+        if self.getNumberOfUnits() > 0 or len(self.data) > 0:
             strResult += '<pre style="width: 80%;">' + self.report() + '</pre>'
 
         if self.getNumberOfCycles() > 0 and self.fPlot:
@@ -997,7 +1036,11 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        strResult = '{};;;;Period "{}" {}\n\n'.format(self.dateBegin.strftime("%Y-%m-%d"), self.getTitleString(), self.getDateString())
+        strResult = ""
+        if self.dateBegin != None:
+            strResult += self.dateBegin.strftime("%Y-%m-%d")
+        strResult += ';;;;Period "{}" {}\n\n'.format(self.getTitleString(), self.getDateString())
+
         for c in self.child:
             strResult += c.toCSV()
         strResult += '\n'
@@ -1185,6 +1228,12 @@ class Period(Title,Description,Plot):
                 if d_1 == None:
                     d_1 = self.child[-1].dateEnd
 
+        if self.dateBegin == None:
+            self.dateBegin = d_0
+
+        if self.dateEnd == None:
+            self.dateEnd = d_1
+
         diagram_height = 40 * (config.diagram_bar_height * 2) + 100
         try:
             diagram_width = ((d_1 - d_0).days) * 2 + 100
@@ -1199,23 +1248,31 @@ class Period(Title,Description,Plot):
 
         strResult += '<g>'
 
-        m = round((d_1 - d_0).total_seconds() / (30 * 24 * 60 * 60))
-        for i in range(0,m+1):
-            d_i = date(d_0.year+round(i//12),i%12+1,1)
-            w = ((d_i - d_0).days + 1) * 2
-            if i % 12:
-                color = 'black'
-            else:
+        # marker date
+        d_i = date(d_0.year, d_0.month, 1)
+        m = round((d_1 - d_0).total_seconds() / (30 * 24 * 60 * 60)) + 1
+        for i in range(m):
+            if d_i.month == 1:
                 color = 'red'
+            else:
+                color = 'black'
 
+            # line marker
+            w = ((d_i - d_0).days + 1) * 2
             strResult += '<line stroke-dasharray="8" stroke="{}" stroke-width="1" opacity="0.25" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(color,w, 0, w, diagram_height)
             strResult += '<title>{}</title>\n'.format(d_i.strftime("%Y-%m-%d"))
             strResult += '</line>'
+
             strResult += '<g transform="translate({},{})">'.format(w+8, diagram_height - 105)
             strResult += '<g transform="rotate(-45)">'
             strResult += '<text x="{}" y="{}">{}</text>\n'.format(0, 0, d_i.strftime("%Y-%m-%d"))
             strResult += '</g>'
             strResult += '</g>'
+
+            if d_i.month > 11:
+                d_i = date(d_i.year + 1, 1, 1)
+            else:
+                d_i = date(d_i.year, d_i.month + 1, 1)
 
         w = ((date.today() - d_0).days + 1) * 2
         strResult += '<line stroke="red" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 0, w, diagram_height)
@@ -1225,6 +1282,7 @@ class Period(Title,Description,Plot):
             strResult += '<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0, diagram_height - 10 - i, diagram_width, diagram_height - 10 - i)
 
         strResult += self.toSVGGantt(d_0)
+
         strResult += '</g>'
         strResult += '</svg>\n'
 
