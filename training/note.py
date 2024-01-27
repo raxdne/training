@@ -252,6 +252,7 @@ class Note(Description):
         """  """
 
         strResult = self.getDescriptionFreemind()
+        # TODO: handle color properties (s. Unit)
 
         return strResult
 

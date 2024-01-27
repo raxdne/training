@@ -298,33 +298,61 @@ class Period(Title,Description,Plot):
 
         objResult = self
 
-        if objArg == None or objArg.dateBegin == None:
-            print('error: date begin', file=sys.stderr)
+        if objArg == None:
+            print('error: object', file=sys.stderr)
         elif self.dateBegin == None:
             print('error: date begin', file=sys.stderr)
         elif type(objArg) is Cycle or type(objArg) is Period:
-            p = self.getPeriodByDate(objArg.dateBegin,intLevel)
-            if p == None:
-                print('error: no according period found' + str(objArg), file=sys.stderr)
-            elif len(p.child) < 1:
-                p.child.append(objArg.dup())
+            if objArg.dateBegin == None:
+                print('error: date begin', file=sys.stderr)
             else:
-                i = 0
-                for i in range(len(p.child)):
-                    if type(p.child[i]) is Cycle or type(p.child[i]) is Period:
-                        if p.child[i].dateBegin == objArg.dateBegin:
-                            # begin is equal
-                            p.child.insert(i,objArg.dup())
-                            break
-                        elif p.child[i].dateEnd > objArg.dateBegin and p.child[i].dateBegin < objArg.dateBegin + timedelta(days=objArg.getLength()):
-                            # overlapping
-                            p.child[i].cut(objArg.dateBegin)
-                            p.child.insert(i+1,objArg.dup())
-                            break
-                        elif p.child[i] == p.child[-1]:
-                            p.child.append(objArg.dup())
-                    i += 1
-            self.schedule()
+                p = self.getPeriodByDate(objArg.dateBegin,intLevel)
+                if p == None:
+                    print('error: no according period found' + str(objArg), file=sys.stderr)
+                elif len(p.child) < 1:
+                    p.child.append(objArg.dup())
+                else:
+                    i = 0
+                    for i in range(len(p.child)):
+                        if type(p.child[i]) is Cycle or type(p.child[i]) is Period:
+                            if p.child[i].dateBegin == objArg.dateBegin:
+                                # begin is equal
+                                p.child.insert(i,objArg.dup())
+                                break
+                            elif p.child[i].dateEnd > objArg.dateBegin and p.child[i].dateBegin < objArg.dateBegin + timedelta(days=objArg.getLength()):
+                                # overlapping
+                                p.child[i].cut(objArg.dateBegin)
+                                p.child.insert(i+1,objArg.dup())
+                                break
+                            elif p.child[i] == p.child[-1]:
+                                p.child.append(objArg.dup())
+                        i += 1
+                self.schedule()
+        elif type(objArg) is Note or type(objArg) is Unit:
+            if objArg.dt == None:
+                print('error: date', file=sys.stderr)
+            else:
+                p = self.getPeriodByDate(objArg.dt,intLevel)
+                if p == None or len(p.child) < 1:
+                    self.child.append(objArg.dup())
+                else:
+                    i = 0
+                    for i in range(len(p.child)):
+                        if type(p.child[i]) is Period:
+                            if p.child[i].dateBegin <= objArg.dt.date() and objArg.dt.date() <= p.child[i].dateEnd:
+                                # is inside this Period
+                                p.child.insert(i,objArg.dup())
+                                break
+                            elif p.child[i] == p.child[-1]:
+                                p.child.append(objArg.dup())
+                        elif type(p.child[i]) is Cycle:
+                            if p.child[i].dateBegin <= objArg.dt.date() and objArg.dt.date() <= p.child[i].dateEnd:
+                                # is inside this Cycle
+                                j = round((objArg.dt.date() - p.child[i].dateBegin).total_seconds() / (24 * 60 * 60))
+                                p.child[i].insert(j,objArg.dup())
+                                break
+                        i += 1
+                self.schedule()
 
         return objResult
 
@@ -1301,8 +1329,25 @@ class Period(Title,Description,Plot):
             event.add('dtstamp', datetime.now().astimezone(None))
             cal.add_component(event)
 
-        for c in self.child:
-            c.to_ical(cal)
+        else:
+            if self.dateBegin != None and self.hasTitle():
+                event = Event()
+                event.add('summary', 'Begin Period:' + self.getTitleString())
+                event.add('dtstart', self.dateBegin)
+                event.add('dtend', self.dateBegin + timedelta(days=1))
+                event.add('dtstamp', datetime.now().astimezone(None))
+                cal.add_component(event)
+
+            if self.dateEnd != None and self.hasTitle():
+                event = Event()
+                event.add('summary', 'End Period:' + self.getTitleString())
+                event.add('dtstart', self.dateEnd)
+                event.add('dtend', self.dateEnd + timedelta(days=1))
+                event.add('dtstamp', datetime.now().astimezone(None))
+                cal.add_component(event)
+
+            for c in self.child:
+                c.to_ical(cal)
 
 
     def toVCalendar(self):
