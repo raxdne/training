@@ -1332,7 +1332,7 @@ class Period(Title,Description,Plot):
         else:
             if self.dateBegin != None and self.hasTitle():
                 event = Event()
-                event.add('summary', 'Begin Period:' + self.getTitleString())
+                event.add('summary', 'Begin Period: ' + self.getTitleString())
                 event.add('dtstart', self.dateBegin)
                 event.add('dtend', self.dateBegin + timedelta(days=1))
                 event.add('dtstamp', datetime.now().astimezone(None))
@@ -1340,7 +1340,7 @@ class Period(Title,Description,Plot):
 
             if self.dateEnd != None and self.hasTitle():
                 event = Event()
-                event.add('summary', 'End Period:' + self.getTitleString())
+                event.add('summary', 'End Period: ' + self.getTitleString())
                 event.add('dtstart', self.dateEnd)
                 event.add('dtend', self.dateEnd + timedelta(days=1))
                 event.add('dtstamp', datetime.now().astimezone(None))

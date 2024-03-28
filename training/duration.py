@@ -62,7 +62,10 @@ class Duration(timedelta):
 
         """  """
 
-        return self.toString()
+        hours, remainder = divmod(super().total_seconds(), 3600)
+        minutes, seconds = divmod(remainder, 60)
+
+        return '{:02}:{:02}:{:02}'.format(int(hours), int(minutes), int(seconds))
 
 
     def toString(self):

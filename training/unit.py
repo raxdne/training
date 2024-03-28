@@ -368,9 +368,9 @@ class Unit(Note):
             if self.type == None:
                 strResult = '{date};;;'.format(date=self.dt.strftime("%Y-%m-%d"))
             elif self.dist == None:
-                strResult = '{date};;{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), type=self.type, duration=self.getDurationString())
+                strResult = '{date};;{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), type=self.type, duration=self.getDuration())
             else:
-                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=self.getDurationString())
+                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=self.getDuration())
 
             strResult += ';' + self.getDescriptionString() + '\n'
 
@@ -385,7 +385,7 @@ class Unit(Note):
             # not significant for reports
             strResult = ''
         else:
-            strResult = "INSERT INTO 'units' VALUES ('{date}',{dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=self.getDurationString(), description=self.getDescriptionString())
+            strResult = "INSERT INTO 'units' VALUES ('{date}',{dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=self.getDuration(), description=self.getDescriptionString())
 
         return strResult
 
