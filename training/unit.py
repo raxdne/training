@@ -368,9 +368,9 @@ class Unit(Note):
             if s < 1:
                 pass
             else:
-                spk = s / self.dist
-                strResult += '{}:{:02} min/{} '.format(int(spk // 60), int(spk % 60), config.unit_distance)
-                strResult += '{:.0f} {}/h '.format(self.dist / (s / 3600), config.unit_distance)
+                min, sec = divmod(s / self.dist, 60)
+                strResult += f'{min:0.0f}:{sec:02.0f} min/{config.unit_distance} '
+                strResult += f'{self.dist / (s / 3600):.0f} {config.unit_distance}/h '
 
         return strResult
 

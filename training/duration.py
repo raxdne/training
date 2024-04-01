@@ -64,10 +64,11 @@ class Duration(timedelta):
 
         """  """
 
-        hours, remainder = divmod(super().total_seconds(), 3600)
-        minutes, seconds = divmod(remainder, 60)
-
-        return '{:02}:{:02}:{:02}'.format(int(hours), int(minutes), int(seconds))
+        seconds = super().total_seconds()
+        hour, remainder = divmod(seconds, 3600)
+        min, sec = divmod(remainder, 60)
+        
+        return f'{hour:02.0f}:{min:02.0f}:{sec:02.0f}'
 
 
     def toString(self):
@@ -75,18 +76,20 @@ class Duration(timedelta):
         """  """
 
         seconds = super().total_seconds()
-        
+        hour, remainder = divmod(seconds, 3600)
+        min, sec = divmod(remainder, 60)
+
         if seconds > 3599:        
-            strResult = '{}:{:02} h'.format(int(seconds // 3600), int((seconds % 3600) // 60))
+            strResult = f'{hour:.0f}:{min:02.0f} h'
         elif seconds > 900:        
-            strResult = '{} min'.format(int((seconds % 3600) // 60))
+            strResult = f'{min:.0f} min'
         elif seconds > 30:        
-            strResult = '{}:{:02} min'.format(int((seconds % 3600) // 60), int(seconds % 60))
+            strResult = f'{min:.0f}:{sec:02.0f} min'
         elif seconds > 0:        
-            strResult = '{} s'.format(int(seconds))
+            strResult = f'{sec:.0f} s'
         else:
-            strResult = ''
-            
+            strResult = '-:--'
+
         return strResult
 
 
