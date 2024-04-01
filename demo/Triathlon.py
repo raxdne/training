@@ -134,6 +134,8 @@ def BasicsCombination():
 def Highlight1():
     c = Cycle('Highlight Triathlon Olympic Distance')
 
+    c.insert(3,Combination([Unit('07:00;1.5;Swimming;1:00:00'),Unit('40;Cycling;1:40:00'),Unit('10;Running;1:30:00')],False))
+    
     c.insert(6,Combination([Unit('07:00;1.5;Swimming;1:00:00'),Unit('40;Cycling;1:40:00'),Unit('10;Running;1:30:00')]))
     
     return c

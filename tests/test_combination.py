@@ -52,14 +52,29 @@ t = Combination([Unit('sr;3.5;RB;25:00'),
                  Unit(';3.5;RB;25:00'),
                  Note('AAAA'),
                  Unit(';3.5;RB;25:00')])
+t.setDate(datetime(2023, 1, 7).astimezone(None))
+#t.setDate(date(2023,3,1))
+print(t)
+print(t.toStringShort())
+#print(t.toFreemindNode())
+print(t.toHtmlTable())
+
+t = Combination([Combination([Unit('sr;3.5;AB;25:00'), Pause('20min'), Unit(';3.5;BB;25:00')]),
+                 Unit(';3.5;RB;25:00')],
+                 False)
+
 #t.appendDescription('Running Blocks')
 #t.setTitleStr('My Combination')
 #t.remove(r'^R')
 #print(t.getDuration())
 
-t.setDate(datetime(2023, 1, 7).astimezone(None))
+t.setDate(datetime(2023, 1, 9).astimezone(None))
 #t.setDate(date(2023,3,1))
 print(t)
+print(t.toStringShort())
+#print(t.toFreemindNode())
+print(t.toHtmlTable())
+print(t.stat())
 
 #t1 = t.dup()
 #t1.setDate(date(2023,4,1))
@@ -71,4 +86,3 @@ print(t)
 
 #print(t.toSVG(0,0))
 
-print(t.stat())

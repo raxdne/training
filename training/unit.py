@@ -82,6 +82,23 @@ class Unit(Note):
         return strResult
 
 
+    def toStringShort(self):
+
+        """  """
+    
+        strResult = ''
+
+        if self.dist != None:
+            strResult += self.getDistString() + ' '
+        
+        if self.type != None:
+            strResult += self.type + ' '
+
+        strResult += self.getDurationString()
+
+        return strResult
+
+
     def setDate(self,dtArg=None,dt_0=None,dt_1=None):
 
         """ fix 'dt' according to sunrise dt_0 or sunset dt_1 """
@@ -390,35 +407,11 @@ class Unit(Note):
         return strResult
 
 
-    def toHtml(self):
-
-        """  """
-
-        strResult = '<p style="background-color: {}">'.format(self.getColor())
-        strResult += str(self) + ' ' + self.getDescriptionString()
-        strResult += '</p>'
-        
-        return strResult
-
-
     def toHtmlTable(self):
 
         """  """
 
-        strResult = '<div style="background-color: {}">'.format(self.getColor())
-        if self.type == None and self.dist == None and self.dt == None:
-            pass
-        elif self.type == None:
-            pass
-        elif self.dist == None:
-            strResult += self.type + ' ' + self.getDurationString()
-        else:
-            strResult += self.getDistString() + ' ' + self.type + ' ' + self.getDurationString()
-
-        strResult += self.getDescriptionString()
-        strResult += '</div>'
-
-        return strResult
+        return f'<div style="background-color: {self.getColor()}">{self.toStringShort()}{self.getDescriptionString()}</div>'
 
 
     def toSVG(self,x,y):
@@ -441,7 +434,7 @@ class Unit(Note):
             strResult += ' height="{}" stroke="black" stroke-width=".5" width="{:.0f}" x="{}" y="{}"'.format(config.diagram_bar_height, bar_width, x, y)
             strResult += '>'
 
-            strResult += '<title>{} {}</title>'.format(str(self), self.getDescriptionString())
+            strResult += '<title>{} {}</title>'.format(self.toStringShort(), self.getDescriptionString())
 
             strResult += '</rect>\n'
 
@@ -453,7 +446,7 @@ class Unit(Note):
         """  """
 
         strResult = '<node'
-        strResult += ' TEXT="' + str(self) + '"'
+        strResult += ' TEXT="' + self.toStringShort() + '"'
         strResult += ' BACKGROUND_COLOR="{}"'.format(self.getColor())
         strResult += '>'
 

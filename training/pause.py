@@ -65,6 +65,18 @@ class Pause(Note):
             return ''
 
 
+    def toStringShort(self):
+
+        """  """
+
+        strResult = ''
+
+        if self.getDuration().total_seconds() > 0:
+            strResult =  f'Pause {self.getDuration().toString()}'
+
+        return strResult
+
+
     def setDate(self,dtArg=None,dt_0=None,dt_1=None):
 
         """  """
@@ -112,24 +124,14 @@ class Pause(Note):
         return strResult
 
 
-    def toHtml(self):
-
-        """  """
-
-        strResult = '<p>'
-        strResult += str(self)
-        strResult += '</p>'
-        
-        return strResult
-
-
     def toHtmlTable(self):
 
         """  """
 
-        strResult = '<div style="background-color: {}">'.format(self.getColor())
-        strResult += 'Pause ' + self.getDuration().toString()
-        strResult += '</div>'
+        strResult = ''
+
+        if self.getDuration().total_seconds() > 0:
+            strResult =  f'<div style="background-color: {self.getColor()}">Pause {self.getDuration().toString()}</div>'
 
         return strResult
 
@@ -162,7 +164,7 @@ class Pause(Note):
 
         """  """
 
-        strResult = '<node TEXT="' + str(self) + '">'
+        strResult = '<node TEXT="' + self.toStringShort() + '">'
 
         strResult += '</node>\n'
 

@@ -853,7 +853,6 @@ class Period(Title,Description,Plot):
 
         for c in self.child:
             strResult += c.toHtmlTable() + '\n'
-            #strResult += c.toHtml() + '\n'
 
         strResult += '</section>\n'
 

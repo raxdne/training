@@ -678,30 +678,6 @@ class Cycle(Title,Description,Plot):
         return str(self)
 
 
-    def toHtml(self):
-
-        """  """
-
-        strResult = '<section class="{}" id="{}"'.format(__name__, str(id(self)))
-
-        if self.color != None:
-            strResult += ' style="background-color: {}"'.format(self.color)
-
-        strResult += '><div class="header">' + self.getTitleXML() + ' ' + self.getDateString() + '</div>\n'
-
-        strResult += '<ul>' + self.getDescriptionHTML() + '</ul>'
-
-        for v in self.day:
-            for u in v:
-                strResult += u.toHtml()
-
-        strResult += '<pre style="width: 80%;">' + self.report() + '</pre>'
-
-        strResult += '</section>'
-
-        return strResult
-
-
     def toHtmlTable(self):
 
         """  """
@@ -785,7 +761,7 @@ class Cycle(Title,Description,Plot):
 
         strResult += "</head>"
 
-        strResult += "<body>" + self.toHtml() + "</body>"
+        strResult += "<body>" + self.toHtmlTable() + "</body>"
 
         strResult += "</html>"
 
@@ -958,7 +934,7 @@ class Cycle(Title,Description,Plot):
         else:
             strResult += ' FOLDED="{}"'.format('true')
 
-        strResult += ' TEXT="' + self.getTitleXML() + '&#xa;' + self.getDateString() + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+        strResult += ' TEXT="' + self.getTitleXML() + '&#xa;' + self.getDateString() + '&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
         strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
 
         strResult += self.getDescriptionFreemind()

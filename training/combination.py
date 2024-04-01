@@ -19,13 +19,7 @@
 
 import sys
 
-import math
-
 import copy
-
-import re
-
-from statistics import mean
 
 from datetime import timedelta, date, datetime, time
 
@@ -45,7 +39,7 @@ from training.pause import Pause
 
 class Combination(Title,Description):
 
-    def __init__(self,listArg=[]):
+    def __init__(self,listArg=[],flagAnd=True):
 
         """  """
 
@@ -53,9 +47,10 @@ class Combination(Title,Description):
         Description.__init__(self)
         
         self.child = []
+        self.logicAnd = flagAnd
 
         for objArg in listArg:
-            if objArg == None or (type(objArg) != Unit and type(objArg) != Pause and type(objArg) != Note):
+            if objArg == None or (type(objArg) != Unit and type(objArg) != Pause and type(objArg) != Note and type(objArg) != Combination):
                 print('error: ' + str(objArg), file=sys.stderr)
             else:
                 self.child.append(objArg.dup())
@@ -65,12 +60,47 @@ class Combination(Title,Description):
 
         """  """
 
-        strResult = 'Combination: {} {} {}\n'.format(self.getDuration().toString(), self.getTitleString(), self.getDescriptionString())
+        if self.logicAnd:
+            strResult = 'Combination '
+        else:
+            strResult = 'Alternatives '
+
+        strResult += self.getDuration().toString() + ' ' + self.getTitleString() + ' ' + self.getDescriptionString() + '\n'
+
         for u in self.child:
             strResult += '\t + ' + str(u) + '\n'
         strResult += '\n'
 
         return strResult
+
+
+    def toStringShort(self):
+
+        """  """
+
+        # common date
+        strDate = ''
+
+        strResult = ''
+
+        for i in range(len(self.child)):
+            if type(self.child[i]) is Note:
+                pass
+            else:
+                if i < 1:
+                    pass
+                elif self.logicAnd:
+                    # Combination
+                    strResult += ' & '
+                else:
+                    # Alternatives
+                    strResult += ' | '
+                strResult += self.child[i].toStringShort()
+
+                if len(strDate) < 1 and type(self.child[i]) is Unit:
+                    strDate = self.child[i].dt.strftime("%Y-%m-%d ")
+
+        return f'({strDate} {strResult} {self.getTitleString()} {self.getDescriptionString()})'
 
 
     def setDate(self,dtArg=None,dt_0=None,dt_1=None):
@@ -89,6 +119,8 @@ class Combination(Title,Description):
             for u in self.child:
                 
                 if type(u) is Note:
+                    u.setDate(dt)
+                elif type(u) is Combination:
                     u.setDate(dt)
                 elif type(u) is Unit:
 
@@ -117,7 +149,7 @@ class Combination(Title,Description):
                     i += 1
                 elif type(u) is Pause:
                     if i == 0:
-                        print(__name__ + ': ignoring initial' + str(self), file=sys.stderr)
+                        print(__name__ + ': ignoring initial ' + str(self), file=sys.stderr)
                     else:
                         dt = u.setDate(dt)
                         i += 1
@@ -187,8 +219,11 @@ class Combination(Title,Description):
 
         intResult = 0
         for u in self.child:
-            if ((type(u) is Unit and u.isCountable()) or type(u) is Pause):
+            if type(u) is Unit or type(u) is Pause:
                 intResult += u.getDuration().total_seconds()
+            elif type(u) is Combination:
+                intResult = 0
+                break
 
         return Duration(intResult / 60)
 
@@ -211,8 +246,11 @@ class Combination(Title,Description):
         listResult = []
 
         for u in self.child:
-            if type(u) is Unit and u.isCountable():
+            if type(u) is Combination or (type(u) is Unit and u.isCountable()):
                 listResult.extend(u.stat())
+                if not self.logicAnd:
+                    # stat first unit of alternatives only
+                    break
 
         return listResult
 
@@ -224,34 +262,35 @@ class Combination(Title,Description):
         return copy.deepcopy(self)
 
 
-    def toHtml(self):
-
-        """  """
-        
-        strResult = '<section class="{}"'.format(__name__)
-
-        if self.color != None:
-            strResult += ' style="background-color: {}"'.format(self.color)
-
-        strResult += '>\n<ul>' + self.getDescriptionHTML() + '</ul>'
-
-        for u in self.child:
-            strResult += u.toHtml()
-        
-        strResult += '</section>'
-
-        return strResult
-
-
     def toHtmlTable(self):
 
         """  """
 
-        strResult = '<div>' + 'Combination: {} {}\n'.format(Duration(self.getDuration()), self.getDescriptionString()) + '</div>'
-        strResult += '<ol>'
-        for u in self.child:
-            strResult += '<li>' + u.toHtmlTable() + '</li>'
-        strResult += '</ol>'
+        strResult = ''
+
+        if len(self.child) > 1:
+            strResult = '<div'
+            if self.color != None:
+                strResult += ' style="background-color: {}"'.format(self.color)
+            strResult += '/>'
+
+            if self.logicAnd:
+                strResult += 'Combination: ' + self.getDuration().toString()
+            else:
+                strResult += 'Alternatives: '
+
+            strResult += self.getDescriptionString() + '</div>'
+
+            if self.logicAnd:
+                strResult += '<ol>'
+            else:
+                strResult += '<ol style="list-style-type: lower-latin">'
+
+            for u in self.child:
+                strResult += '<li>' + u.toHtmlTable() + '</li>'
+            strResult += '</ol>'
+        elif len(self.child) > 0:
+            strResult = '<div>' + self.child[0].toHtmlTable() + '</div>'
 
         return strResult
 
@@ -259,6 +298,8 @@ class Combination(Title,Description):
     def toCSV(self):
 
         """  """
+
+        # TODO: if self.logicAnd:
 
         strResult = ''
         for u in self.child:
@@ -272,6 +313,8 @@ class Combination(Title,Description):
         """  """
 
         strResult = '<g>'
+
+        # TODO: if self.logicAnd:
 
         x_i = x
         for u in self.child:
@@ -287,23 +330,32 @@ class Combination(Title,Description):
 
         """  """
 
-        strResult = '<node'
+        strResult = ''
 
-        if self.color != None:
-            strResult += ' BACKGROUND_COLOR="{}"'.format(self.color)
-        elif self.getNumberOfUnits() < 1:
-            strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')
-        else:
-            strResult += ' FOLDED="{}"'.format('true')
+        if len(self.child) > 1:
+            strResult = '<node'
+            if self.color != None:
+                strResult += f' BACKGROUND_COLOR="{self.color}"'
+            elif self.getNumberOfUnits() < 1:
+                strResult += f' BACKGROUND_COLOR="#ffaaaa"'
+            else:
+                strResult += f' FOLDED="true"'
 
-        strResult += ' TEXT="Combination">\n'
+            if self.logicAnd:
+                strResult += ' TEXT="Combination ' + self.getDuration().toString() + '"'
+            else:
+                strResult += ' TEXT="Alternatives"'
+            strResult += '>\n'
 
-        strResult += self.getDescriptionFreemind()
+            strResult += self.getDescriptionFreemind()
 
-        for u in self.child:
-            strResult += u.toFreemindNode()
-                        
-        strResult += '</node>\n'
+            for u in self.child:
+                strResult += u.toFreemindNode()
+                            
+            strResult += '</node>\n'
+        elif len(self.child) > 0:
+            # only a single child
+            strResult += self.child[0].toFreemindNode()
 
         return strResult
 
@@ -312,6 +364,8 @@ class Combination(Title,Description):
 
         """  """
         
+        # TODO: if self.logicAnd:
+
         for u in self.child:
             u.to_ical(cal)
 

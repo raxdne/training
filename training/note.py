@@ -207,26 +207,11 @@ class Note(Description):
         return str(self)
 
 
-    def toHtml(self):
-
-        """  """
-
-        strResult = '<div style="background-color: {}">'.format(self.getColor())
-        strResult += str(self).replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
-        strResult += '</div>'
-        
-        return strResult
-
-
     def toHtmlTable(self):
 
         """  """
 
-        strResult = '<div style="background-color: {}">'.format(self.getColor())
-        strResult += self.getDescriptionString()
-        strResult += '</div>'
-
-        return strResult
+        return f'<div style="background-color: {self.getColor()}">{self.getDescriptionString()}</div>'
 
 
     def toCSV(self):
