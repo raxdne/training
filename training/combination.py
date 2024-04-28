@@ -97,7 +97,7 @@ class Combination(Title,Description):
                     strResult += ' | '
                 strResult += self.child[i].toStringShort()
 
-                if len(strDate) < 1 and type(self.child[i]) is Unit:
+                if len(strDate) < 1 and type(self.child[i]) is Unit and self.child[i].dt != None:
                     strDate = self.child[i].dt.strftime("%Y-%m-%d ")
 
         return f'({strDate} {strResult} {self.getTitleString()} {self.getDescriptionString()})'
@@ -360,13 +360,70 @@ class Combination(Title,Description):
         return strResult
 
 
-    def to_ical(self,cal):
+    def to_ical2(self,cal=None):
 
         """  """
         
-        # TODO: if self.logicAnd:
+        if len(self.child) > 1:
+            if self.logicAnd:
+                for u in self.child:
+                    u.to_ical(cal)
+            else:
+                d = None
+                strSummary = f'Alternatives: {self.getTitleString()} {self.getDescriptionString()} '
+                for u in self.child:
+                    strSummary += u.toStringShort() + ' '
+                strSummary += self.getDescriptionString()
 
-        for u in self.child:
-            u.to_ical(cal)
+                for i in range(len(self.child)):
+                    if type(self.child[i]) is Note:
+                        pass
+                    else:
+                        strSummary += self.child[i].toStringShort() + ' '
 
+                        if d == None and type(self.child[i]) is Unit:
+                            d = self.child[i].dt
+
+                if d != None and cal != None:
+                    event = Event()
+                    event.add('summary', strSummary)
+                    # ignoring time for alternatives
+                    event.add('dtstart', d.date())
+                    event.add('dtend', d.date() + timedelta(days=1))
+                    event.add('dtstamp', datetime.now().astimezone(None))
+                    cal.add_component(event)
+
+        elif len(self.child) > 0:
+            # only a single child
+            self.child[0].to_ical(cal)
+
+
+    def to_ical(self,cal=None):
+
+        """  """
+        
+        if len(self.child) > 1:
+            if self.logicAnd:
+                for u in self.child:
+                    u.to_ical(cal)
+            else:
+                d = None
+                for u in self.child:
+                    if d == None and type(u) is Unit:
+                        d = u.dt
+
+                if d != None and cal != None:
+                    event = Event()
+                    event.add('summary', self.toStringShort())
+                    # ignoring time for alternatives
+                    event.add('dtstart', d.date())
+                    event.add('dtend', d.date() + timedelta(days=1))
+                    event.add('dtstamp', datetime.now().astimezone(None))
+                    cal.add_component(event)
+                else:
+                    print('Skipping ICAL: ' + self.toStringShort(), file=sys.stderr)
+
+        elif len(self.child) > 0:
+            # only a single child
+            self.child[0].to_ical(cal)
 

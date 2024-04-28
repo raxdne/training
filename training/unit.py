@@ -477,7 +477,7 @@ class Unit(Note):
         if event.is_empty():
             return
         elif self.dt == None:
-            print('error: no date ' + str(self), file=sys.stderr)
+            print('error ICAL: no date ' + str(self), file=sys.stderr)
             return
         elif self.dt.time() == time(0) or self.duration == None:
             # no time defined
@@ -488,10 +488,10 @@ class Unit(Note):
             event.add('dtend', self.dt + self.duration)
 
             # TODO: add reminder
-            alarm = Alarm()
-            alarm.add('action', 'DISPLAY')
-            alarm.add('trigger', self.dt - timedelta(minutes=15))
-            event.add_component(alarm)
+            #alarm = Alarm()
+            #alarm.add('action', 'DISPLAY')
+            #alarm.add('trigger', self.dt - timedelta(minutes=15))
+            #event.add_component(alarm)
         
         event.add('dtstamp', datetime.now().astimezone(None))
         cal.add_component(event)

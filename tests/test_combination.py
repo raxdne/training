@@ -85,4 +85,5 @@ print(t.stat())
 #print(t1.toXML())
 
 #print(t.toSVG(0,0))
+print(t.to_ical())
 
