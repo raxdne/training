@@ -189,6 +189,19 @@ class Period(Title,Description,Plot):
         return self
 
 
+    def resetDescription(self):
+
+        """  """
+
+        self.setDescription(None)
+
+        for c in self.child:
+            if type(c) is Cycle or type(c) is Period:
+                c.resetDescription()
+
+        return self
+
+
     def appendChildDescription(self,objArg):
 
         """  """

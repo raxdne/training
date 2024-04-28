@@ -27,11 +27,11 @@ from training.period import Period
 print('Module Test: ' + __file__ + '\n')
 
 t = Period('General Basics',30)
-t.appendDescription('Regeneration')
+#t.appendDescription('Regeneration')
 
-t.append(Note('ABC'))
+#t.append(Note('ABC'))
 
-#t.define(['3000;Bicycle;100h','100;Running;'])
+t.define(['3000;Bicycle;100h','100;Running;'])
 #t.define(['2000;Bicycle;','100;Running;'])
 #t.define(';Bicycle;100h')
 #t.schedule(2025,3,4)
@@ -70,7 +70,8 @@ t.append(c)
 t.schedule(2025)
 #t.cut(140)
 #t.cut(date(2025,1,25))
-t.insert(Note('2025-01-07;;;;NOTE'))
+#t.insert(Note('2025-01-07;;;;NOTE'))
+#t.resetDescription()
 
 print(t)
 #print(t.report())

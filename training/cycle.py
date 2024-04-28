@@ -121,6 +121,19 @@ class Cycle(Title,Description,Plot):
         return self
 
 
+    def resetDescription(self):
+
+        """  """
+
+        self.setDescription(None)
+
+        for v in self.day:
+            for u in v:
+                u.setDescription(None)
+
+        return self
+
+
     def setVDefaults(self,dictArg):
 
         """  """
