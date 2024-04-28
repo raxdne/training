@@ -87,6 +87,8 @@ class Period(Title,Description,Plot):
 
         strResult += self.getDescriptionString()
 
+        strResult += self.report()
+
         for c in self.child:
             strResult += str(c) + '\n'
 
@@ -159,6 +161,8 @@ class Period(Title,Description,Plot):
 
         """  """
 
+        # TODO: if len(dictArg) < 1: derive values from other units
+
         if dictArg != None:
             self.setVDefaults(dictArg)
 
@@ -166,9 +170,17 @@ class Period(Title,Description,Plot):
             for c in self.child:
                 if type(c) is Cycle or type(c) is Period:
                     c.updateValues(self.v_defaults)
-        #elif len(self.data) > 0:
-        #    for d in self.data:
-        #        d.upateValues(self.v_defaults)
+        elif len(self.data) > 0:
+            for d in self.data:
+                # see Unit.updateValues() but d is not an Unit() !
+                if d[3] != None and d[3] in self.v_defaults and self.v_defaults[d[3]] > 1.0 and d[2] != None and d[2] > 0.0:
+                    if d[1] == None or d[1] < 0.1:
+                        # there is a defined default velocity
+                        d[1] = self.v_defaults[d[3]] * (d[2] / 3600)
+                elif d[3] != None and d[3] in self.v_defaults and self.v_defaults[d[3]] > 1.0 and d[1] != None and d[1] > 0.1:
+                    if d[2] == None or d[2] < 1.0:
+                        # there is a defined default velocity
+                        d[2] = int(d[1] / self.v_defaults[d[3]] * 60)
 
         return self
 
@@ -300,7 +312,13 @@ class Period(Title,Description,Plot):
         elif objArg == None or (type(objArg) != Cycle and type(objArg) != Period and type(objArg) != Note):
             print('error: ' + str(objArg), file=sys.stderr)
         else:
-            self.child.append(objArg.dup())
+            # schedule if possible
+            c = objArg.dup()
+            if self.dateEnd != None:
+                c.schedule(self.dateEnd + timedelta(days=1))
+            if c.dateEnd != None:
+                self.dateEnd = c.dateEnd
+            self.child.append(c)
 
         return self
 
@@ -573,23 +591,25 @@ class Period(Title,Description,Plot):
         return self
 
 
-    def schedule(self, intYear=None, intMonth=None, intDay=None):
+    def schedule(self, argDateOrYear=None, intMonth=None, intDay=None):
 
         """  """
 
         if self.dateFixed != None:
             # keep fixed date and schedule childs
             self.dateBegin = self.dateFixed
-        elif intYear != None and intYear > 1970 and intYear < 2100:
+        elif type(argDateOrYear) is date:
+            self.dateBegin = argDateOrYear
+        elif argDateOrYear != None and type(argDateOrYear) is int and argDateOrYear > 1970 and argDateOrYear < 2100:
             if intMonth == None and intDay == None:
-                self.dateBegin = date(intYear, 1, 1)
+                self.dateBegin = date(argDateOrYear, 1, 1)
             elif intMonth != None and intMonth > 0 and intMonth < 13:
                 if intDay == None:
-                    self.dateBegin = date(intYear, intMonth, 1)
+                    self.dateBegin = date(argDateOrYear, intMonth, 1)
                 elif intDay > 0 and intDay < 32:
                     try:
                         # if mismatch intMonth and intDay
-                        self.dateBegin = date(intYear, intMonth, intDay)
+                        self.dateBegin = date(argDateOrYear, intMonth, intDay)
                     except ValueError as e:
                         print('error: ' + str(e), file=sys.stderr)
                         self.dateBegin = None
@@ -687,6 +707,9 @@ class Period(Title,Description,Plot):
         l = np.array(list(map(lambda lst: lst[2], self.data)))
         sum_h = l.sum() / 60
 
+        p = self.getLength()
+        n = self.getNumberOfUnits()
+
         if dictArg == None:
             dictArg = {}
 
@@ -702,34 +725,39 @@ class Period(Title,Description,Plot):
             # all kinds of units
             sum_k = sum(dictArg[k][1]) / 60.0
 
-            if sum_h < 0.01:
-                pass
-            elif len(dictArg[k][0]) < 1:
-                strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7}    {:7.01f} h {:.02f}\n").format(len(dictArg[k][0]),
-                                                                                                                   k,
-                                                                                                                   ' ',
-                                                                                                                   round(sum_k, 1),
-                                                                                                                   round(sum_k / sum_h, 2))
-            elif len(dictArg[k][0]) < 3:
-                strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f}\n").format(len(dictArg[k][0]), k, sum(dictArg[k][0]),
-                                                                                                                       config.unit_distance,
-                                                                                                                       round(sum_k,1),
-                                                                                                                       round(sum_k / sum_h, 2))
-            else:
-                strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f} {:5.01f} /{:5.01f} /{:5.01f}\n").format(len(dictArg[k][0]),
-                                                                                                                                                    k,
-                                                                                                                                                    sum(dictArg[k][0]),
-                                                                                                                                                    config.unit_distance,
-                                                                                                                                                    round(sum_k, 2),
-                                                                                                                                                    round(sum_k / sum_h, 2),
-                                                                                                                                                    min(dictArg[k][0]),
-                                                                                                                                                    mean(dictArg[k][0]),
-                                                                                                                                                    max(dictArg[k][0]))
+            if sum_h > 0.01:
+                if n > 0:
+                    strResult += f'{len(dictArg[k][0]):4} x '
+                else:
+                    strResult += '      '
 
-        n = self.getNumberOfUnits()
-        if True or n > 0 or (len(self.data) > 0 and len(self.child) < 1):
-            p = self.getLength()
-            strResult += "\n{} Units {:.2f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(n, round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
+                if len(dictArg[k][0]) < 1:
+                    strResult += ("{:" + str(config.max_length_type) + "} {:7}    {:7.01f} h {:.02f}\n").format(k,
+                                                                                                                    ' ',
+                                                                                                                    round(sum_k, 1),
+                                                                                                                    round(sum_k / sum_h, 2))
+                elif len(dictArg[k][0]) < 3:
+                    strResult += ("{:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f}\n").format(k, sum(dictArg[k][0]),
+                                                                                                                        config.unit_distance,
+                                                                                                                        round(sum_k,1),
+                                                                                                                        round(sum_k / sum_h, 2))
+                else:
+                    strResult += ("{:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f} {:5.01f} /{:5.01f} /{:5.01f}\n").format(k,
+                                                                                                                                                        sum(dictArg[k][0]),
+                                                                                                                                                        config.unit_distance,
+                                                                                                                                                        round(sum_k, 2),
+                                                                                                                                                        round(sum_k / sum_h, 2),
+                                                                                                                                                        min(dictArg[k][0]),
+                                                                                                                                                        mean(dictArg[k][0]),
+                                                                                                                                                        max(dictArg[k][0]))
+
+        if len(self.data) > 0:
+            if n > 0:
+                strResult += f'{n} Units '
+            else:
+                strResult += '\n      '
+
+            strResult += "{:.2f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
 
         return strResult
 
@@ -1228,10 +1256,13 @@ class Period(Title,Description,Plot):
 
         strResult = '<g>'
 
-        if self.color == None:
-            c = '#aaaaff'
-        else:
+        if self.color != None:
             c = self.color
+        elif len(self.child) < 1:
+            # high level definition period
+            c = '#aaffaa'
+        else:
+            c = '#aaaaff'
 
         strResult += '<a href="#{}">\n'.format(str(id(self)))
         strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
@@ -1259,20 +1290,26 @@ class Period(Title,Description,Plot):
 
         """ Gantt chart of periods and cycles """
 
-        d_0 = None
-        d_1 = None
-        for c in self.child:
-            if type(c) is Cycle or type(c) is Period:
-                if d_0 == None:
-                    d_0 = c.dateBegin
-                if d_1 == None:
-                    d_1 = self.child[-1].dateEnd
+        if len(self.child) > 0:
+            # detailed definition of period (Cycle and Period childs)
+            d_0 = None
+            d_1 = None
+            for c in self.child:
+                if type(c) is Cycle or type(c) is Period:
+                    if d_0 == None:
+                        d_0 = c.dateBegin
+                    if d_1 == None:
+                        d_1 = self.child[-1].dateEnd
 
-        if self.dateBegin == None:
-            self.dateBegin = d_0
+            if self.dateBegin == None:
+                self.dateBegin = d_0
 
-        if self.dateEnd == None:
-            self.dateEnd = d_1
+            if self.dateEnd == None:
+                self.dateEnd = d_1
+        else:
+            # high level definition of period (stat only)
+            d_0 = self.dateBegin
+            d_1 = self.dateEnd
 
         diagram_height = 40 * (config.diagram_bar_height * 2) + 100
         try:

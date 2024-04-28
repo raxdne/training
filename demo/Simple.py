@@ -109,7 +109,7 @@ def BicycleSimple():
     
     p.append(BasicsBicycle())
     p.append(BuildupBicycleSpeed())
-    p.append(Period('Buildup Bicycle Speed',21))
+    p.append(Period('Buildup Bicycle Speed',21).define([';Bicycle;10h']))
     p.append(BasicsBicycle())
     p.append(BuildupBicycleSpeed())
 
@@ -209,8 +209,11 @@ c = Cycle('Pause Running').insert([1,3,5],Unit('10;Running;3:00:00')).schedule(d
 print('info: ' + str(c), file=sys.stderr)
 #breakpoint()
 s.insertByDate(c,True)
-    
+
+#s.append(Period('Insert',14).define(';Swimming;10h'))   
+#s.append(Cycle('Insert'))
 #s.remove(patternType=r'^[^B]')
+#s.schedule(date.today().year,1,1).updateValues()
 
 print(s.report())
 

@@ -546,16 +546,19 @@ class Cycle(Title,Description,Plot):
         return self
 
 
-    def schedule(self, intYear, intMonth, intDay):
+    def schedule(self, argDateOrYear=None, intMonth=None, intDay=None):
 
         """  """
 
         if self.dateFixed != None:
-            # keep fixed date
-            pass
+            # keep fixed date and schedule childs
+            self.dateBegin = self.dateFixed
+        elif type(argDateOrYear) is date:
+            self.dateBegin = argDateOrYear
+            self.dateEnd = self.dateBegin + timedelta(days=(len(self.day) - 1))
         else:
             try:
-                self.dateBegin = date(intYear, intMonth, intDay)
+                self.dateBegin = date(argDateOrYear, intMonth, intDay)
             except ValueError as e:
                 print('error: ' + str(e), file=sys.stderr)
                 return self

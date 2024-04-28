@@ -449,10 +449,10 @@ class Plot():
             
             # horizontal bar
 
-            if self.color == None:
-                color = '#ffaaaa'
-            else:
+            if self.color != None:
                 color = self.color
+            else:
+                color = '#ffaaaa'
 
             strResult += '<a href="#{}">'.format(str(id(self)))
             strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, len(self) * 2)
