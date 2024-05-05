@@ -50,7 +50,7 @@ class Combination(Title,Description):
         self.logicAnd = flagAnd
 
         for objArg in listArg:
-            if objArg == None or (type(objArg) != Unit and type(objArg) != Pause and type(objArg) != Note and type(objArg) != Combination):
+            if objArg is None or (type(objArg) != Unit and type(objArg) != Pause and type(objArg) != Note and type(objArg) != Combination):
                 print('error: ' + str(objArg), file=sys.stderr)
             else:
                 self.child.append(objArg.dup())
@@ -97,7 +97,7 @@ class Combination(Title,Description):
                     strResult += ' | '
                 strResult += self.child[i].toStringShort()
 
-                if len(strDate) < 1 and type(self.child[i]) is Unit and self.child[i].dt != None:
+                if len(strDate) < 1 and type(self.child[i]) is Unit and self.child[i].dt is not None:
                     strDate = self.child[i].dt.strftime("%Y-%m-%d ")
 
         return f'({strDate} {strResult} {self.getTitleString()} {self.getDescriptionString()})'
@@ -109,7 +109,7 @@ class Combination(Title,Description):
 
         #print(__name__ + ': ' + str(self), file=sys.stderr)
 
-        if dtArg == None:
+        if dtArg is None:
             return None
         elif type(dtArg) is date:
             return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
@@ -126,14 +126,14 @@ class Combination(Title,Description):
 
                     if i == 0:
                         # initial unit
-                        if u.tPlan == None:
+                        if u.tPlan is None:
                             #dt = dt_0
                             pass
-                        elif type(u.tPlan) is str and u.tPlan == 'sunrise' and dt_0 != None:
+                        elif type(u.tPlan) is str and u.tPlan == 'sunrise' and dt_0 is not None:
                             # shift start time after twilight
                             dt = dt_0
                             dt += timedelta(minutes=(dt.minute % 15))
-                        elif type(u.tPlan) is str and u.tPlan == 'sunset' and dt_1 != None:
+                        elif type(u.tPlan) is str and u.tPlan == 'sunset' and dt_1 is not None:
                             # shift end time before twilight
                             dt = dt_1 - self.getDuration()
                             dt -= timedelta(minutes=(dt.minute % 15))
@@ -161,7 +161,7 @@ class Combination(Title,Description):
 
         """  """
 
-        if dictArg != None:
+        if dictArg is not None:
             for c in self.child:
                 if type(c) is Unit:
                     c.updateValues(dictArg)
@@ -173,7 +173,7 @@ class Combination(Title,Description):
 
         """  """
 
-        if patternType != None:
+        if patternType is not None:
             # whole combination using pattern
             childsNew = []
             for u in self.child:
@@ -270,7 +270,7 @@ class Combination(Title,Description):
 
         if len(self.child) > 1:
             strResult = '<div'
-            if self.color != None:
+            if self.color is not None:
                 strResult += ' style="background-color: {}"'.format(self.color)
             strResult += '/>'
 
@@ -334,7 +334,7 @@ class Combination(Title,Description):
 
         if len(self.child) > 1:
             strResult = '<node'
-            if self.color != None:
+            if self.color is not None:
                 strResult += f' BACKGROUND_COLOR="{self.color}"'
             elif self.getNumberOfUnits() < 1:
                 strResult += f' BACKGROUND_COLOR="#ffaaaa"'
@@ -381,10 +381,10 @@ class Combination(Title,Description):
                     else:
                         strSummary += self.child[i].toStringShort() + ' '
 
-                        if d == None and type(self.child[i]) is Unit:
+                        if d is None and type(self.child[i]) is Unit:
                             d = self.child[i].dt
 
-                if d != None and cal != None:
+                if d is not None and cal is not None:
                     event = Event()
                     event.add('summary', strSummary)
                     # ignoring time for alternatives
@@ -409,10 +409,10 @@ class Combination(Title,Description):
             else:
                 d = None
                 for u in self.child:
-                    if d == None and type(u) is Unit:
+                    if d is None and type(u) is Unit:
                         d = u.dt
 
-                if d != None and cal != None:
+                if d is not None and cal is not None:
                     event = Event()
                     event.add('summary', self.toStringShort())
                     # ignoring time for alternatives

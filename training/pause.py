@@ -47,9 +47,9 @@ class Pause(Note):
 
         self.setDuration()
 
-        if strArg != None:
+        if strArg is not None:
             self.setDuration(strArg)
-            if objArg != None:
+            if objArg is not None:
                 super().setDescription(objArg)
 
         #print('New Pause: ' + str(self), file=sys.stderr)
@@ -81,7 +81,7 @@ class Pause(Note):
 
         """  """
 
-        if dtArg == None:
+        if dtArg is None:
             self.dt = None
         elif type(dtArg) is date or dtArg.time() == time(0):
             print(__name__ + ': requires a complete datetime ' + str(self), file=sys.stderr)
@@ -97,7 +97,7 @@ class Pause(Note):
 
         """  """
 
-        if intArg == None:
+        if intArg is None:
             self.duration = Duration(0)
         else:
             self.duration = Duration(intArg)
@@ -109,7 +109,7 @@ class Pause(Note):
 
         """  """
         
-        if self.duration == None:
+        if self.duration is None:
             self.setDuration()
 
         return self.duration
@@ -142,7 +142,7 @@ class Pause(Note):
 
         strResult = ''
 
-        if self.duration == None or self.getDuration().total_seconds() < 60:
+        if self.duration is None or self.getDuration().total_seconds() < 60:
             strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.getDescriptionString(), str(self))
         else:
             strResult += '<rect '

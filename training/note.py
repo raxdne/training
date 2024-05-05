@@ -53,7 +53,7 @@ class Note(Description):
 
         """  """
 
-        if self.dt == None:
+        if self.dt is None:
             strResult = ''
         elif type(self.dt) is date or self.dt.time() == time(0):
             strResult = self.dt.strftime("%Y-%m-%d")
@@ -78,15 +78,15 @@ class Note(Description):
 
         """  """
 
-        if dtArg == None:
+        if dtArg is None:
             self.dt = None
         elif type(dtArg) is date:
-            if self.tPlan == None:
+            if self.tPlan is None:
                 return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
             else:
                 return self.setDate(datetime.combine(dtArg,self.tPlan).astimezone(None),dt_0,dt_1)
         elif type(dtArg) is datetime:
-            if self.tPlan != None and dtArg.time() == time(0):
+            if self.tPlan is not None and dtArg.time() == time(0):
                 return self.setDate(datetime.combine(dtArg.date(),self.tPlan).astimezone(None),dt_0,dt_1)
             else:
                 self.dt = dtArg
@@ -101,7 +101,7 @@ class Note(Description):
 
         """  """
 
-        if strArg == None or strArg == '':
+        if strArg is None or strArg == '':
             pass
         elif strArg == '+':
             # it's a combined unit (starts after its predecessor unit, same date)
@@ -113,7 +113,7 @@ class Note(Description):
         else:
             # canonical ISO Date+Time
             m = re.match(r"\s*([0-9]{4}-*[0-9]{2}-*[0-9]{2})[\sT]+([0-2][0-9]:[0-5][0-9])\s*",strArg)
-            if m != None:
+            if m is not None:
                 try:
                     self.dt = datetime.fromisoformat(m.group(0)).astimezone(None)
                 except ValueError as e:
@@ -122,7 +122,7 @@ class Note(Description):
             else:
                 # german Date
                 m = re.match(r"([0-9]{2})\.([0-9]{2})\.([0-9]{4})",strArg)
-                if m != None:
+                if m is not None:
                     try:
                         self.dt = datetime(int(m.group(3)), int(m.group(2)), int(m.group(1)),0,0,0).astimezone(None)
                     except ValueError as e:
@@ -131,7 +131,7 @@ class Note(Description):
                 else:
                     # canonical ISO Date
                     m = re.match(r"([0-9]{4})-*([0-9]{2})-*([0-9]{2})",strArg)
-                    if m != None:
+                    if m is not None:
                         try:
                             self.dt = datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)),0,0,0).astimezone(None)
                         except ValueError as e:
@@ -140,7 +140,7 @@ class Note(Description):
                     else:
                         # plan time only
                         m = re.match(r"([0-2][0-9]:[0-5][0-9])",strArg)
-                        if m != None:
+                        if m is not None:
                             #print("time: ",m.group(1), file=sys.stderr)
                             self.tPlan = time.fromisoformat("{}:00".format(m.group(1)))
                         else:
@@ -162,7 +162,7 @@ class Note(Description):
 
         #self.__init__()
         
-        if objArg == None or len(objArg) < 1:
+        if objArg is None or len(objArg) < 1:
             return False
         elif type(objArg) is str:
             entry = objArg.split(';')
@@ -194,7 +194,7 @@ class Note(Description):
         
         strResult = '#ffffff'
         
-        if self.color != None:
+        if self.color is not None:
             strResult = self.color
 
         return strResult
@@ -246,7 +246,7 @@ class Note(Description):
 
         """  """
 
-        if self.dt != None and type(self.dt) is datetime:
+        if self.dt is not None and type(self.dt) is datetime:
             event = Event()
 
             event.add('summary', self.getDescriptionString())

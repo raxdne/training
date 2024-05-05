@@ -101,7 +101,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        if objArgA == None or objArgB == None:
+        if objArgA is None or objArgB is None:
             pass
         elif type(objArgA) is list:
             if len(objArgA) == 1:
@@ -145,7 +145,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        if dictArg != None:
+        if dictArg is not None:
             self.setVDefaults(dictArg)
 
         for v in self.day:
@@ -191,7 +191,7 @@ class Cycle(Title,Description,Plot):
         """ BUG: removal of matching units in Combination() """
 
         if intIndexA > -1 and intIndexA < len(self.day):
-            if patternType != None:
+            if patternType is not None:
                 # delete only matching elements in list of indexed day
                 dayNew = []
                 for u in self.day[intIndexA]:
@@ -208,7 +208,7 @@ class Cycle(Title,Description,Plot):
             else:
                 # delete whole list of indexed day
                 self.day[intIndexA].clear()
-        elif patternType != None:
+        elif patternType is not None:
             # whole cycle using pattern
             daysNew = []
             for i in range(0,len(self.day)):
@@ -234,7 +234,7 @@ class Cycle(Title,Description,Plot):
 
         if type(intIndexA) != int:
             print('error: shift of a cycle requires an integer value', file=sys.stderr)
-        elif intIndexB == None:
+        elif intIndexB is None:
             # shift
             print('info: shift by ' + str(intIndexA), file=sys.stderr)
             if intIndexA > 0 and intIndexA < len(self.day):
@@ -289,7 +289,7 @@ class Cycle(Title,Description,Plot):
 
         objResult = self
 
-        if objArg == None:
+        if objArg is None:
 
             print('error: undefined object ' + str(objArg), file=sys.stderr)
 
@@ -332,7 +332,7 @@ class Cycle(Title,Description,Plot):
         flagReplace=False
         objResult = self
 
-        if objArg == None:
+        if objArg is None:
 
             print('error: undefined object ' + str(objArg), file=sys.stderr)
 
@@ -378,9 +378,9 @@ class Cycle(Title,Description,Plot):
 
         objResult = self
 
-        if objArg == None or objArg.dt == None:
+        if objArg is None or objArg.dt is None:
             print('error: undefined ' + str(objArg), file=sys.stderr)
-        elif self.dateBegin == None:
+        elif self.dateBegin is None:
             print('error: date begin', file=sys.stderr)
         elif type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note:
             delta = objArg.dt.date() - self.dateBegin
@@ -445,7 +445,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        if objDate == None:
+        if objDate is None:
             return self.getCycleByDate(datetime.now())
         elif type(objDate) is str:
             return self.getCycleByDate(datetime.fromisoformat(objDate))
@@ -463,7 +463,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        if strArg == None or strArg == '':
+        if strArg is None or strArg == '':
             pass
         elif len(self.day) > intIndex and len(self.day[intIndex]) > 0:
             self.day[intIndex][len(self.day[intIndex]) - 1].appendDescription(strArg)
@@ -475,7 +475,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        if self.fPlan == False and self.dateBegin != None and date.today() >= self.dateBegin and self.dateEnd != None and date.today() <= self.dateEnd:
+        if not self.fPlan and self.dateBegin is not None and date.today() >= self.dateBegin and self.dateEnd is not None and date.today() <= self.dateEnd:
             return (date.today() - self.dateBegin).days + 1
         else:
             return (self.dateEnd - self.dateBegin).days + 1
@@ -536,7 +536,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        if self.dateFixed != None:
+        if self.dateFixed is not None:
             # keep fixed date and schedule childs
             self.dateBegin = self.dateFixed
         elif type(argDateOrYear) is date:
@@ -551,7 +551,7 @@ class Cycle(Title,Description,Plot):
 
             self.dateEnd = self.dateBegin + timedelta(days=(len(self.day) - 1))
 
-        #if config.sun != None:
+        #if config.sun is not None:
         #    print('sunrise/sunset: ' + str(config.twilight), file=sys.stderr)
 
         dt_earliest = None
@@ -560,7 +560,7 @@ class Cycle(Title,Description,Plot):
 
         for d in self.day:
 
-            if config.sun != None:
+            if config.sun is not None:
                 # fix 't' according to sunrise/sunset
                 dt_earliest = config.sun.get_local_sunrise_time(dt_i) + timedelta(seconds=config.twilight)
                 dt_latest   = config.sun.get_local_sunset_time(dt_i)  - timedelta(seconds=config.twilight)
@@ -577,10 +577,10 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        if self.dateFixed != None:
+        if self.dateFixed is not None:
             # keep fixed date
             pass
-        elif objArg != None and type(objArg) is date:
+        elif objArg is not None and type(objArg) is date:
             self.dateFixed = objArg
 
         self.dateBegin = self.dateFixed
@@ -695,7 +695,7 @@ class Cycle(Title,Description,Plot):
 
         strResult = '<section class="{}" id="{}"'.format(__name__, str(id(self)))
 
-        if self.color != None:
+        if self.color is not None:
             strResult += ' style="background-color: {}"'.format(self.color)
 
         strResult += '><div class="header">' + self.getTitleXML() + ' ' + self.getDateString() + '</div>\n'
@@ -811,7 +811,7 @@ class Cycle(Title,Description,Plot):
 
         strResult = '<g>'
 
-        if self.color != None:
+        if self.color is not None:
             strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self.day))-2,x+config.diagram_width-4)
 
         strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleXML(), self.getDateString(), (self.getTitleXML() + self.getDateString() + '\n\n' + self.getDescriptionString() + '\n\n' + self.report()))
@@ -938,7 +938,7 @@ class Cycle(Title,Description,Plot):
 
         strResult = '<node'
 
-        if self.color != None:
+        if self.color is not None:
             strResult += ' BACKGROUND_COLOR="{}"'.format(self.color)
         elif self.getNumberOfUnits() < 1:
             strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')

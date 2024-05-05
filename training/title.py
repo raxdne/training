@@ -44,7 +44,7 @@ class Title:
 
         """  """
 
-        if strArg == None or type(strArg) is not str:
+        if strArg is None or type(strArg) is not str:
             self.strTitle = '-'
         else:
             self.strTitle = strArg
@@ -56,7 +56,7 @@ class Title:
 
         """  """
 
-        return self.strTitle != None and len(self.strTitle) > 0
+        return self.strTitle is not None and len(self.strTitle) > 0
 
 
     def getTitleString(self):
@@ -72,7 +72,7 @@ class Title:
 
         strResult = ''
 
-        if type(self.dateBegin) is date and self.dateBegin != None and type(self.dateEnd) is date and self.dateEnd != None:
+        if type(self.dateBegin) is date and self.dateBegin is not None and type(self.dateEnd) is date and self.dateEnd is not None:
             if hasattr(self,'day'):
                 strResult += '(' + str(len(self.day)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
             else:

@@ -62,7 +62,7 @@ def _flatten(objArg):
 
     listResult=[]
 
-    if objArg == None:
+    if objArg is None:
         pass
     elif type(objArg) is str and len(objArg) > 0:
         listResult = [objArg]
@@ -106,7 +106,7 @@ class Description:
 
         """  """
 
-        if objArg == None or len(objArg) < 1:
+        if objArg is None or len(objArg) < 1:
             self.listDescription = []
         elif type(objArg) is str:
             self.listDescription.append([objArg])
@@ -120,14 +120,14 @@ class Description:
 
         """  """
 
-        return self.listDescription != None and len(self.listDescription) > 0
+        return self.listDescription is not None and len(self.listDescription) > 0
 
 
     def appendDescription(self,objArg):
 
         """  """
 
-        if objArg == None or len(objArg) < 1:
+        if objArg is None or len(objArg) < 1:
             pass
         elif len(self.listDescription) < 1:
             self.setDescription(objArg)
@@ -177,7 +177,7 @@ class Description:
 
         """  """
 
-        if strColor != None and len(strColor) > 0:
+        if strColor is not None and len(strColor) > 0:
             self.color = strColor
         else:
             self.color = None
@@ -191,7 +191,7 @@ class Description:
 
         strResult = ''
 
-        if listArg == None:
+        if listArg is None:
             strResult += self.getDescriptionString(self.listDescription)
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
             strResult += ' {}'.format(listArg[0]) + self.getDescriptionString(listArg[1])
@@ -220,7 +220,7 @@ class Description:
 
         strResult = ''
 
-        if listArg == None:
+        if listArg is None:
             f = _flatten(self.listDescription)
             if len(f) == 1:
                 # only one item
@@ -258,7 +258,7 @@ class Description:
 
         strResult = ''
 
-        if listArg == None:
+        if listArg is None:
             strResult += self.getDescriptionFreemind(self.listDescription)
         elif type(listArg) is str and len(listArg) > 0:
             strResult += '<node TEXT="{}"'.format(listArg.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))

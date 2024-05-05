@@ -71,7 +71,7 @@ class Plot():
         s = []
 
         for u in self.data:
-            if (strArg == None or u[3] == strArg) and u[0] > 0 and u[1] > 0.0:
+            if (strArg is None or u[3] == strArg) and u[0] > 0 and u[1] > 0.0:
                 d.append(u[0])
                 s.append(u[1])
         
@@ -86,7 +86,7 @@ class Plot():
         
         if (hasattr(self,'child') and len(self.child) > 0) or (hasattr(self,'day') and len(self.day) > 0):
 
-            if self.strPlotAccumulation == None:
+            if self.strPlotAccumulation is None:
 
                 #print(f'info: new plot of "{self.getTitleString()}"', file=sys.stderr)
                 self.stat()
@@ -141,7 +141,7 @@ class Plot():
 
                     plt.legend()
 
-                    if fileNameOut == None:
+                    if fileNameOut is None:
                         f = io.StringIO()
                         plt.savefig(f, format = "svg")
                         plt.close()
@@ -153,7 +153,7 @@ class Plot():
             elif len(self.strPlotAccumulation) > 0:
                 print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
 
-            if self.strPlotAccumulation != None:
+            if self.strPlotAccumulation is not None:
                 strResult = self.strPlotAccumulation
                 # TODO: write self.strPlotAccumulation to fileNameOut
 
@@ -168,7 +168,7 @@ class Plot():
         s = []
 
         for u in self.data:
-            if (strArg == None or u[3] == strArg) and u[0] > 0 and u[2] > 0.0:
+            if (strArg is None or u[3] == strArg) and u[0] > 0 and u[2] > 0.0:
                 d.append(u[0])
                 s.append(u[2] / 60.0)
         
@@ -183,7 +183,7 @@ class Plot():
 
         if (hasattr(self,'child') and len(self.child) > 0) or (hasattr(self,'day') and len(self.day) > 0):
 
-            if self.strPlotAccumulationDuration == None:
+            if self.strPlotAccumulationDuration is None:
 
                 #print(f'info: new plot of "{self.getTitleString()} {self.dateBegin.toordinal()}"', file=sys.stderr)
                 self.stat()
@@ -235,7 +235,7 @@ class Plot():
 
                     plt.legend()
 
-                    if fileNameOut == None:
+                    if fileNameOut is None:
                         f = io.StringIO()
                         plt.savefig(f, format = "svg")
                         plt.close()
@@ -247,7 +247,7 @@ class Plot():
                 # use existing plot
                 print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
 
-            if self.strPlotAccumulationDuration != None:
+            if self.strPlotAccumulationDuration is not None:
                 strResult = self.strPlotAccumulationDuration
                 # TODO: write self.strPlotAccumulationDuration to fileNameOut
             
@@ -262,7 +262,7 @@ class Plot():
 
         if (hasattr(self,'child') and len(self.child) > 0) or (hasattr(self,'day') and len(self.day) > 0):
 
-            if self.strPlotHist == None:
+            if self.strPlotHist is None:
 
                 #print(f'info: new plot of "{self.getTitleString()}"', file=sys.stderr)
                 self.stat()
@@ -283,7 +283,7 @@ class Plot():
 
                     plt.legend()
 
-                    if fileNameOut == None:
+                    if fileNameOut is None:
                         f = io.StringIO()
                         plt.savefig(f, format = "svg")
                         plt.close()
@@ -295,7 +295,7 @@ class Plot():
                 # use existing plot
                 print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
 
-            if self.strPlotHist != None:
+            if self.strPlotHist is not None:
                 strResult = self.strPlotHist
                 # TODO: write self.strPlotHist to fileNameOut
 
@@ -311,7 +311,7 @@ class Plot():
         t = []
 
         for u in self.data:
-            if (strArg == None or u[3] == strArg) and u[1] > 0.0 and u[2] > 0.0:
+            if (strArg is None or u[3] == strArg) and u[1] > 0.0 and u[2] > 0.0:
                 s.append(u[1])
                 t.append(u[2])
 
@@ -328,7 +328,7 @@ class Plot():
 
         if (hasattr(self,'child') and len(self.child) > 0) or (hasattr(self,'day') and len(self.day) > 0):
 
-            if self.strPlotTimeDist == None:
+            if self.strPlotTimeDist is None:
 
                 #print(f'info: new plot of "{self.getTitleString()}"', file=sys.stderr)
                 self.stat()
@@ -393,7 +393,7 @@ class Plot():
 
                     #plt.show()
 
-                    if fileNameOut == None:
+                    if fileNameOut is None:
                         f = io.StringIO()
                         plt.savefig(f, format = "svg")
                         plt.close()
@@ -405,7 +405,7 @@ class Plot():
                 # use existing plot
                 print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
 
-            if self.strPlotTimeDist != None:
+            if self.strPlotTimeDist is not None:
                 strResult = self.strPlotTimeDist
                 # TODO: write self.strPlotTimeDist to fileNameOut
 
@@ -421,7 +421,7 @@ class Plot():
         
         if hasattr(self,'day'):
             # it's a Cycle
-            if self.day == None:
+            if self.day is None:
                 print('error: empty ' + str(type(self)), file=sys.stderr)
                 return ''
             elif len(self.day) > 0:
@@ -449,7 +449,7 @@ class Plot():
             
             # horizontal bar
 
-            if self.color != None:
+            if self.color is not None:
                 color = self.color
             else:
                 color = '#ffaaaa'
@@ -466,7 +466,7 @@ class Plot():
 
             h = round(self.getDuration().total_seconds() / 60 / l)
 
-            if self.color != None:
+            if self.color is not None:
                 scolor = 'red'
                 color = self.color
             elif h > 20:
