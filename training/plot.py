@@ -84,7 +84,7 @@ class Plot():
 
         strResult = '<pre>not enough data to plot</pre>'
         
-        if (hasattr(self,'child') and len(self.child) > 0) or (hasattr(self,'day') and len(self.day) > 0):
+        if (hasattr(self,'child') and self.child) or (hasattr(self,'day') and self.day):
 
             if self.strPlotAccumulation is None:
 
@@ -150,7 +150,7 @@ class Plot():
                     else:
                         plt.savefig(fileNameOut)
 
-            elif len(self.strPlotAccumulation) > 0:
+            elif self.strPlotAccumulation:
                 print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
 
             if self.strPlotAccumulation is not None:
@@ -181,7 +181,7 @@ class Plot():
 
         strResult = '<pre>not enough data to plot</pre>'
 
-        if (hasattr(self,'child') and len(self.child) > 0) or (hasattr(self,'day') and len(self.day) > 0):
+        if (hasattr(self,'child') and self.child) or (hasattr(self,'day') and self.day):
 
             if self.strPlotAccumulationDuration is None:
 
@@ -243,7 +243,7 @@ class Plot():
                         f.close()
                     else:
                         plt.savefig(fileNameOut)
-            elif len(self.strPlotAccumulationDuration) > 0:
+            elif self.strPlotAccumulationDuration:
                 # use existing plot
                 print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
 
@@ -260,7 +260,7 @@ class Plot():
 
         strResult = '<pre>not enough data to plot</pre>'
 
-        if (hasattr(self,'child') and len(self.child) > 0) or (hasattr(self,'day') and len(self.day) > 0):
+        if (hasattr(self,'child') and self.child) or (hasattr(self,'day') and self.day):
 
             if self.strPlotHist is None:
 
@@ -291,7 +291,7 @@ class Plot():
                         f.close()
                     else:
                         plt.savefig(fileNameOut)
-            elif len(self.strPlotHist) > 0:
+            elif self.strPlotHist:
                 # use existing plot
                 print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
 
@@ -326,7 +326,7 @@ class Plot():
 
         strResult = '<pre>not enough data to plot</pre>'
 
-        if (hasattr(self,'child') and len(self.child) > 0) or (hasattr(self,'day') and len(self.day) > 0):
+        if (hasattr(self,'child') and self.child) or (hasattr(self,'day') and self.day):
 
             if self.strPlotTimeDist is None:
 
@@ -401,7 +401,7 @@ class Plot():
                         f.close()
                     else:
                         plt.savefig(fileNameOut)
-            elif len(self.strPlotTimeDist) > 0:
+            elif self.strPlotTimeDist:
                 # use existing plot
                 print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
 
@@ -424,7 +424,7 @@ class Plot():
             if self.day is None:
                 print('error: empty ' + str(type(self)), file=sys.stderr)
                 return ''
-            elif len(self.day) > 0:
+            elif self.day:
                 l = self.getPeriodDone()
                 flagHBar = True
             else:
@@ -433,7 +433,7 @@ class Plot():
         elif hasattr(self,'child'):
             # it's a Period
             l = (self.dateEnd - self.dateBegin).days + 1
-            flagVBar = len(self.child) < 1
+            flagVBar = not self.child
         else:
             print('error: unknown type ' + str(type(self)), file=sys.stderr)
             return ''

@@ -293,12 +293,12 @@ class Cycle(Title,Description,Plot):
 
             print('error: undefined object ' + str(objArg), file=sys.stderr)
 
-        elif type(objIndex) is list and len(objIndex) > 0:
+        elif type(objIndex) is list and objIndex:
 
             for i in objIndex:
                 self.insert(i,objArg,flagReplace)
 
-        elif type(objArg) is list and len(objArg) > 0:
+        elif type(objArg) is list and objArg:
 
             for u in objArg:
                 self.insert(objIndex,u,flagReplace)
@@ -311,7 +311,7 @@ class Cycle(Title,Description,Plot):
             else:
                 self.day[objIndex].append(objArg.dup())
 
-        elif type(objIndex) is int and objIndex > -1 and objIndex < len(self.day) and type(objArg) is Cycle and len(objArg.day) > 0 and len(objArg.day) + objIndex <= len(self.day):
+        elif type(objIndex) is int and objIndex > -1 and objIndex < len(self.day) and type(objArg) is Cycle and objArg.day and len(objArg.day) + objIndex <= len(self.day):
 
             i = 0
             for v in objArg.day:
@@ -336,7 +336,7 @@ class Cycle(Title,Description,Plot):
 
             print('error: undefined object ' + str(objArg), file=sys.stderr)
 
-        elif type(objArg) is list and len(objArg) > 0:
+        elif type(objArg) is list and objArg:
 
             for u in objArg:
                 self.insert(u,flagReplace)
@@ -349,7 +349,7 @@ class Cycle(Title,Description,Plot):
                     self.insert(i,u,flagReplace)
                 i += 1
 
-        elif type(objArg) is Cycle and len(objArg.day) > 0:
+        elif type(objArg) is Cycle and objArg.day:
 
             i = 0
             d = len(self.day)
@@ -357,7 +357,7 @@ class Cycle(Title,Description,Plot):
             while i < d:
                 j = 0
                 while j < b and i < d:
-                    if len(objArg.day[j]) > 0:
+                    if objArg.day[j]:
                         for u in objArg.day[j]:
                             self.insert(i,u,flagReplace)
                     elif flagReplace:
@@ -465,7 +465,7 @@ class Cycle(Title,Description,Plot):
 
         if strArg is None or strArg == '':
             pass
-        elif len(self.day) > intIndex and len(self.day[intIndex]) > 0:
+        elif len(self.day) > intIndex and self.day[intIndex]:
             self.day[intIndex][len(self.day[intIndex]) - 1].appendDescription(strArg)
 
         return self
@@ -593,7 +593,7 @@ class Cycle(Title,Description,Plot):
 
         """ stat all descendant data to self.data and returns it as a nested list  """
 
-        if len(self.day) > 0:
+        if self.day:
             self.data.clear()
             for v in self.day:
                 for u in v:
@@ -630,7 +630,7 @@ class Cycle(Title,Description,Plot):
         strResult = ''
 
         n = self.getNumberOfUnits()
-        if len(self.data) < 1 and n > 0:
+        if not self.data and n > 0:
             self.stat()
 
         sum_h = self.sum() / 60
@@ -643,7 +643,7 @@ class Cycle(Title,Description,Plot):
 
             if sum_h < 0.01:
                 pass
-            elif len(self.summary[k][0]) < 1:
+            elif not self.summary[k][0]:
                 strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7}    {:7.01f} h {:.02f}\n").format(len(self.summary[k][0]),
                                                                                                                    k,
                                                                                                                    ' ',
@@ -740,7 +740,7 @@ class Cycle(Title,Description,Plot):
                 strResult += '</td>'
 
                 strResult += '<td>'
-                if len(v) > 0:
+                if v:
                     for u in v:
                         strResult += u.toHtmlTable()
                 strResult += '</td>'
@@ -816,7 +816,7 @@ class Cycle(Title,Description,Plot):
 
         strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleXML(), self.getDateString(), (self.getTitleXML() + self.getDateString() + '\n\n' + self.getDescriptionString() + '\n\n' + self.report()))
 
-        if len(self.day) < 1:
+        if not self.day:
             pass
         else:
             y += config.diagram_bar_height / 2
@@ -844,7 +844,7 @@ class Cycle(Title,Description,Plot):
                         if type(u) is Unit or type(u) is Combination:
                             x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist + 5
 
-                if len(n) > 0:
+                if n:
                     strResult += '<text x="{}" y="{}" style="">{}</text>\n'.format(x_i + 2,y + config.diagram_bar_height,n)
 
                 y += config.diagram_bar_height * 2

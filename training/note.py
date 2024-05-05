@@ -162,7 +162,7 @@ class Note(Description):
 
         #self.__init__()
         
-        if objArg is None or len(objArg) < 1:
+        if objArg is None or not objArg:
             return False
         elif type(objArg) is str:
             entry = objArg.split(';')
@@ -177,7 +177,7 @@ class Note(Description):
             else:
                 return self.parse(entry)
         elif type(objArg) is list and len(objArg) > 3:
-            if len(objArg[0]) > 0 and len(objArg[1]) == 0 and len(objArg[2]) == 0 and len(objArg[3]) == 0:
+            if objArg[0] and not objArg[1] and not objArg[2] and not objArg[3]:
                 self.setDateStr(objArg[0])
                 self.appendDescription(objArg[4:])
                 #print('Note {}'.format(str(self)), file=sys.stderr)

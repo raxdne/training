@@ -157,7 +157,7 @@ class Unit(Note):
 
         """  """
 
-        if strArg is None or len(strArg) < 1:
+        if strArg is None or not strArg:
             self.dist = None
         else:
             try:
@@ -207,7 +207,7 @@ class Unit(Note):
         if self.duration is None:
             self.setDuration()
 
-        if self.type is not None and len(self.type) > 0:
+        if self.type is not None and self.type:
             return self.duration
 
         return Duration(0)
@@ -248,7 +248,7 @@ class Unit(Note):
 
         """  """
 
-        return ((type(self.type) is str and len(self.type) > 0) and (type(self.dist) is float and self.dist > 0.0) and self.getDuration().total_seconds() > 0)
+        return ((type(self.type) is str and self.type) and (type(self.dist) is float and self.dist > 0.0) and self.getDuration().total_seconds() > 0)
 
 
     def scale(self,floatScale,patternType=None):
@@ -274,7 +274,7 @@ class Unit(Note):
 
         """  """
         
-        if objArg is None or len(objArg) < 1:
+        if objArg is None or not objArg:
             return False
         elif type(objArg) is str:
             entry = objArg.split(';')
@@ -320,7 +320,7 @@ class Unit(Note):
 
         listResult = []
         
-        if self.type is None or len(self.type) < 1:
+        if self.type is None or not self.type:
             #print('error: ' + 'no type', file=sys.stderr)
             pass
         elif self.dist is None or self.dist < 0.001:
@@ -343,7 +343,7 @@ class Unit(Note):
         
         strResult = ''
         
-        if self.type is None or len(self.type) < 1:
+        if self.type is None or not self.type:
             strResult = '#cccccc'
         elif self.type in config.colors:
             strResult = config.colors[self.type]

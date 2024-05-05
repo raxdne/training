@@ -162,16 +162,16 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        # TODO: if len(dictArg) < 1: derive values from other units
+        # TODO: if not dictArg: derive values from other units
 
         if dictArg is not None:
             self.setVDefaults(dictArg)
 
-        if len(self.child) > 0:
+        if self.child:
             for c in self.child:
                 if type(c) is Cycle or type(c) is Period:
                     c.updateValues(self.v_defaults)
-        elif len(self.data) > 0:
+        elif self.data:
             for d in self.data:
                 # see Unit.updateValues() but d is not an Unit() !
                     
@@ -225,7 +225,7 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        if len(self.child) > 0:
+        if self.child:
             self.child[-1].appendDescription(objArg)
 
 
@@ -243,11 +243,11 @@ class Period(Title,Description,Plot):
         # TODO: use self.data
 
         intResult = 0
-        if len(self.child) > 0:
+        if self.child:
             for u in self.child:
                 if type(u) is Cycle or type(u) is Period:
                     intResult += u.getDuration().total_seconds()
-        elif len(self.data) > 0:
+        elif self.data:
             for t in map(lambda lst: lst[2], self.data):
                 intResult += round(t * 60.0)
 
@@ -323,7 +323,7 @@ class Period(Title,Description,Plot):
                 p = self.getPeriodByDate(objArg.dateBegin,intLevel)
                 if p is None:
                     print('error: no according period found' + str(objArg), file=sys.stderr)
-                elif len(p.child) < 1:
+                elif not p.child:
                     p.child.append(objArg.dup())
                 else:
                     i = 0
@@ -347,7 +347,7 @@ class Period(Title,Description,Plot):
                 print('error: date', file=sys.stderr)
             else:
                 p = self.getPeriodByDate(objArg.dt,intLevel)
-                if p is None or len(p.child) < 1:
+                if p is None or not p.child:
                     self.child.append(objArg.dup())
                 else:
                     i = 0
@@ -384,7 +384,7 @@ class Period(Title,Description,Plot):
         elif type(objArg) is Cycle:
             d = 0
             for v in objArg.day:
-                if len(v) < 1:
+                if not v:
                     # day without elements
                     if flagReplace:
                         # create a scheduled empty unit to override
@@ -412,7 +412,7 @@ class Period(Title,Description,Plot):
                 # TODO: transfer color etc
 
         elif objArg is not None and objArg.dt is not None:
-            if len(self.child) < 1:
+            if not self.child:
                 # there is no child cycle yet
                 delta = objArg.dt.date() - self.dateBegin
                 if delta.days > -1 and objArg.dt.date() <= self.dateEnd:
@@ -464,7 +464,7 @@ class Period(Title,Description,Plot):
         elif type(objDate) is date:
             return self.getPeriodByDate(datetime.combine(objDate,time(0)),intLevel)
         elif type(objDate) is datetime:
-            if len(self.child) < 1 or intLevel < 1:
+            if not self.child or intLevel < 1:
                 if self.dateBegin <= objDate.date() and objDate.date() <= self.dateEnd:
                     return self
             else:
@@ -495,11 +495,11 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        if len(self.child) > 0:
+        if self.child:
             for c in self.child:
                 if type(c) is Cycle or type(c) is Period:
                     c.scale(floatScale,patternType)
-        elif len(self.data) > 0:
+        elif self.data:
             l = []
             for d in self.data:
                 l.append([0,d[1]*floatScale,d[2]*floatScale,d[3]])
@@ -523,11 +523,11 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        if len(self.child) > 0:
+        if self.child:
             for c in self.child:
                 if type(c) is Cycle or type(c) is Period:
                     c.remove(patternType=patternType)
-        elif len(self.data) > 0:
+        elif self.data:
             l = []
             for d in self.data:
                 if re.match(patternType,d[3]):
@@ -554,7 +554,7 @@ class Period(Title,Description,Plot):
                     self.cut(d)
                 else:
                     print('info: ' + objArg.isoformat() + ' is not in this period', file=sys.stderr)
-        elif type(objArg) is int and objArg > 0 and len(self.child) < 1:
+        elif type(objArg) is int and objArg > 0 and not self.child:
             # a period without childs
             self.setPeriod(objArg)
             self.schedule()
@@ -616,7 +616,7 @@ class Period(Title,Description,Plot):
         if self.periodInt > 0 and self.dateBegin is not None:
             self.dateEnd = self.dateBegin + timedelta(days = self.periodInt - 1)
 
-        if dt_i is not None and len(self.child) > 0:
+        if dt_i is not None and self.child:
             for c in self.child:
                 if type(c) is Cycle or type(c) is Period:
                     c.schedule(dt_i)
@@ -651,13 +651,13 @@ class Period(Title,Description,Plot):
         self.data.clear()
         self.summary.clear()
 
-        if self.data is not None and len(self.data) > 0:
+        if self.data is not None and self.data:
             print(f'error: cannot override existing data collection of period "{self.getTitleString()}"', file=sys.stderr)
         elif objArg is None:
             print('error: empty period initialization', file=sys.stderr)
-        elif type(objArg) is str and len(objArg) > 0:
+        elif type(objArg) is str and objArg:
             return self.define([objArg])
-        elif type(objArg) is list and len(objArg) > 0:
+        elif type(objArg) is list and objArg:
             u = Unit()
             for s in objArg:
                 #print('info: ' + s, file=sys.stderr)
@@ -678,7 +678,7 @@ class Period(Title,Description,Plot):
 
         """ stat all descendant data to self.data and returns it as a nested list  """
 
-        if len(self.child) > 0:
+        if self.child:
             self.data.clear()
             self.summary.clear()
             for c in self.child:
@@ -715,7 +715,7 @@ class Period(Title,Description,Plot):
         strResult = ''
 
         n = self.getNumberOfUnits()
-        if len(self.data) < 1 and n > 0:
+        if not self.data and n > 0:
             self.stat()
 
         sum_h = self.sum() / 60
@@ -732,7 +732,7 @@ class Period(Title,Description,Plot):
                 else:
                     strResult += '      '
 
-                if len(self.summary[k][0]) < 1:
+                if not self.summary[k][0]:
                     strResult += ("{:" + str(config.max_length_type) + "} {:7}    {:7.01f} h {:.02f}\n").format(k,
                                                                                                                 ' ',
                                                                                                                 round(sum_k, 1),
@@ -825,7 +825,7 @@ class Period(Title,Description,Plot):
         else:
             delta = d1 - d0
 
-            if len(self.child) > 0:
+            if self.child:
                 # there is a child list already
                 pass
             elif delta.days < 365:
@@ -897,7 +897,7 @@ class Period(Title,Description,Plot):
 
         strResult += self.getDescriptionHTML()
 
-        if self.getNumberOfUnits() > 0 or len(self.data) > 0:
+        if self.getNumberOfUnits() > 0 or self.data:
             strResult += '<pre style="width: 80%;">' + self.report() + '</pre>'
 
         if self.getNumberOfCycles() > 0 and self.fPlot:
@@ -987,7 +987,7 @@ class Period(Title,Description,Plot):
 
         strResult += "</head>\n<body>\n"
 
-        if len(listArg) < 1:
+        if not listArg:
             l = self.child
         else:
             l = listArg
@@ -1038,7 +1038,7 @@ class Period(Title,Description,Plot):
 
         strResult += "</head>\n<body>\n"
 
-        if len(listArg) < 1:
+        if not listArg:
             l = self.child
         else:
             l = listArg
@@ -1221,7 +1221,7 @@ class Period(Title,Description,Plot):
         if self.color is not None and l > 0:
             strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2) * l)-2,x+config.diagram_width-4)
 
-        if len(self.child) < 1:
+        if not self.child:
             strResult += '<text x="{}" y="{}" style="vertical-align:top"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleXML(), self.getDateString())
             strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+config.diagram_width,y)
             for d in range(0,l):
@@ -1276,7 +1276,7 @@ class Period(Title,Description,Plot):
 
         if self.color is not None:
             c = self.color
-        elif len(self.child) < 1:
+        elif not self.child:
             # high level definition period
             c = '#aaffaa'
         else:
@@ -1308,7 +1308,7 @@ class Period(Title,Description,Plot):
 
         """ Gantt chart of periods and cycles """
 
-        if len(self.child) > 0:
+        if self.child:
             # detailed definition of period (Cycle and Period childs)
             d_0 = None
             d_1 = None
@@ -1388,7 +1388,7 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        if len(self.child) < 1:
+        if not self.child:
             event = Event()
             event.add('summary', 'Period: {}'.format(self.getTitleString()))
             event.add('dtstart', self.dateBegin)
@@ -1438,7 +1438,7 @@ class Period(Title,Description,Plot):
         except ValueError:
             self.append(Cycle(str(intYear),365))
 
-        if strArg is not None and len(strArg) > 0:
+        if strArg is not None and strArg:
             self.setTitleStr(strArg)
 
         self.schedule(intYear,1,1)
@@ -1478,7 +1478,7 @@ class Period(Title,Description,Plot):
         d_5 = date(intYear+1,1,1)
         self.append(Period(s).append(Cycle(s, round((d_5 - d_4).total_seconds() / (24 * 60 * 60)))))
 
-        if strArg is not None and len(strArg) > 0:
+        if strArg is not None and strArg:
             self.setTitleStr(strArg)
 
         self.schedule(intYear,1,1)
@@ -1501,7 +1501,7 @@ class Period(Title,Description,Plot):
             # skip to previous monday
             d -= timedelta(days=(d.isoweekday() - 1))
 
-        if strArg is not None and len(strArg) > 0:
+        if strArg is not None and strArg:
             self.setTitleStr(strArg)
 
         self.schedule(d)
@@ -1521,7 +1521,7 @@ class Period(Title,Description,Plot):
 
             self.append(Cycle('{}.{}'.format(intYear,m), d.days))
 
-        if strArg is not None and len(strArg) > 0:
+        if strArg is not None and strArg:
             self.setTitleStr(strArg)
 
         self.schedule(intYear)
@@ -1541,7 +1541,7 @@ class Period(Title,Description,Plot):
             self.append(Cycle(dt_i.strftime("%Y-W%U")))
             dt_i += timedelta(weeks=1)
 
-        if strArg is not None and len(strArg) > 0:
+        if strArg is not None and strArg:
             self.setTitleStr(strArg)
 
         self.schedule()
@@ -1561,7 +1561,7 @@ class Period(Title,Description,Plot):
             self.append(Cycle(dt_i.strftime("%Y-M%m"),4*7))
             dt_i += timedelta(weeks=4)
 
-        if strArg is not None and len(strArg) > 0:
+        if strArg is not None and strArg:
             self.setTitleStr(strArg)
 
         self.schedule()

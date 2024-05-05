@@ -64,11 +64,11 @@ def _flatten(objArg):
 
     if objArg is None:
         pass
-    elif type(objArg) is str and len(objArg) > 0:
+    elif type(objArg) is str and objArg:
         listResult = [objArg]
-    elif type(objArg) is list and len(objArg) > 0:
+    elif type(objArg) is list and objArg:
         for c in objArg:
-            if len(c) < 1:
+            if not c:
                 pass
             elif type(c) is str:
                 listResult.append(c)
@@ -106,7 +106,7 @@ class Description:
 
         """  """
 
-        if objArg is None or len(objArg) < 1:
+        if objArg is None or not objArg:
             self.listDescription = []
         elif type(objArg) is str:
             self.listDescription.append([objArg])
@@ -120,16 +120,16 @@ class Description:
 
         """  """
 
-        return self.listDescription is not None and len(self.listDescription) > 0
+        return self.listDescription is not None and self.listDescription
 
 
     def appendDescription(self,objArg):
 
         """  """
 
-        if objArg is None or len(objArg) < 1:
+        if objArg is None or not objArg:
             pass
-        elif len(self.listDescription) < 1:
+        elif not self.listDescription:
             self.setDescription(objArg)
         elif type(objArg) is str:
             self.listDescription.append([objArg])
@@ -177,7 +177,7 @@ class Description:
 
         """  """
 
-        if strColor is not None and len(strColor) > 0:
+        if strColor is not None and strColor:
             self.color = strColor
         else:
             self.color = None
@@ -195,7 +195,7 @@ class Description:
             strResult += self.getDescriptionString(self.listDescription)
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
             strResult += ' {}'.format(listArg[0]) + self.getDescriptionString(listArg[1])
-        elif type(listArg) is list and len(listArg) > 0:
+        elif type(listArg) is list and listArg:
             for c in listArg:
                 if type(c) is str:
                     strResult += ' ' + c
@@ -236,10 +236,10 @@ class Description:
                 strResult += listArg[0]
             strResult += '</li>\n'
             strResult += '<ul>' + self.getDescriptionHTML(listArg[1]) + '</ul>\n'
-        elif type(listArg) is list and len(listArg) > 0:
+        elif type(listArg) is list and listArg:
             # list items
             for c in listArg:
-                if type(c) is str and len(c) > 0:
+                if type(c) is str and c:
                     strResult += '<li>'
                     if re.match(url_pattern, c):
                         strResult += '<a href="{url}">{url}</a>'.format(url=c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
@@ -260,7 +260,7 @@ class Description:
 
         if listArg is None:
             strResult += self.getDescriptionFreemind(self.listDescription)
-        elif type(listArg) is str and len(listArg) > 0:
+        elif type(listArg) is str and listArg:
             strResult += '<node TEXT="{}"'.format(listArg.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
             if re.match(url_pattern, listArg):
                 strResult += ' LINK="{}"'.format(listArg.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))

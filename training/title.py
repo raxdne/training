@@ -56,7 +56,7 @@ class Title:
 
         """  """
 
-        return self.strTitle is not None and len(self.strTitle) > 0
+        return self.strTitle is not None and self.strTitle
 
 
     def getTitleString(self):

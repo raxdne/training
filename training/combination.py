@@ -97,7 +97,7 @@ class Combination(Title,Description):
                     strResult += ' | '
                 strResult += self.child[i].toStringShort()
 
-                if len(strDate) < 1 and type(self.child[i]) is Unit and self.child[i].dt is not None:
+                if not strDate and type(self.child[i]) is Unit and self.child[i].dt is not None:
                     strDate = self.child[i].dt.strftime("%Y-%m-%d ")
 
         return f'({strDate} {strResult} {self.getTitleString()} {self.getDescriptionString()})'
@@ -289,7 +289,7 @@ class Combination(Title,Description):
             for u in self.child:
                 strResult += '<li>' + u.toHtmlTable() + '</li>'
             strResult += '</ol>'
-        elif len(self.child) > 0:
+        elif self.child:
             strResult = '<div>' + self.child[0].toHtmlTable() + '</div>'
 
         return strResult
@@ -353,7 +353,7 @@ class Combination(Title,Description):
                 strResult += u.toFreemindNode()
                             
             strResult += '</node>\n'
-        elif len(self.child) > 0:
+        elif self.child:
             # only a single child
             strResult += self.child[0].toFreemindNode()
 
@@ -393,7 +393,7 @@ class Combination(Title,Description):
                     event.add('dtstamp', datetime.now().astimezone(None))
                     cal.add_component(event)
 
-        elif len(self.child) > 0:
+        elif self.child:
             # only a single child
             self.child[0].to_ical(cal)
 
@@ -423,7 +423,7 @@ class Combination(Title,Description):
                 else:
                     print('Skipping ICAL: ' + self.toStringShort(), file=sys.stderr)
 
-        elif len(self.child) > 0:
+        elif self.child:
             # only a single child
             self.child[0].to_ical(cal)
 
