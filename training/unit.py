@@ -325,11 +325,10 @@ class Unit(Note):
             pass
         elif self.dist == None or self.dist < 0.001:
             #print('error: ' + 'no dist', file=sys.stderr)
-            #listResult = [[self.dt.toordinal(), 0.0, self.getDuration().total_seconds() / 60, self.type]]
-            pass
+            listResult = [[0, 0.0, self.getDuration().total_seconds() / 60, self.type]]
         elif self.duration == None:
             #print('error: ' + 'no duration', file=sys.stderr)
-            pass
+            listResult = [[0, self.dist, 0.0, self.type]]
         elif self.dt == None:
             listResult = [[0, self.dist, self.getDuration().total_seconds() / 60, self.type]]
         else:

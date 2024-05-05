@@ -13,6 +13,7 @@ from training.cycle import Cycle
 from training.period import Period
 import training.config as config
 
+#config.max_length_type = 3
 
 def RegenerationGeneral():
     r = Cycle('General Regeneration')
@@ -213,7 +214,7 @@ s.insertByDate(c,True)
 #s.append(Period('Insert',14).define(';Swimming;10h'))   
 #s.append(Cycle('Insert'))
 #s.remove(patternType=r'^[^B]')
-#s.schedule(date.today().year,1,1).updateValues()
+s.schedule(date.today().year,1,1).updateValues()
 
 print(s.report())
 

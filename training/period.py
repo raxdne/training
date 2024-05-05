@@ -68,6 +68,7 @@ class Period(Title,Description,Plot):
         self.color = None
         self.child = []
         self.data = []
+        self.summary = {}
 
         self.dateBegin = None
         self.dateEnd = None
@@ -83,7 +84,7 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleString() + ' (' + str(self.getLength()) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '\n\n'
+        strResult = '\n* ' + super().getTitleString() + ' ' + super().getDateString() + '\n\n'
 
         strResult += self.getDescriptionString()
 
@@ -173,14 +174,20 @@ class Period(Title,Description,Plot):
         elif len(self.data) > 0:
             for d in self.data:
                 # see Unit.updateValues() but d is not an Unit() !
-                if d[3] != None and d[3] in self.v_defaults and self.v_defaults[d[3]] > 1.0 and d[2] != None and d[2] > 0.0:
-                    if d[1] == None or d[1] < 0.1:
-                        # there is a defined default velocity
-                        d[1] = self.v_defaults[d[3]] * (d[2] / 3600)
-                elif d[3] != None and d[3] in self.v_defaults and self.v_defaults[d[3]] > 1.0 and d[1] != None and d[1] > 0.1:
-                    if d[2] == None or d[2] < 1.0:
-                        # there is a defined default velocity
-                        d[2] = int(d[1] / self.v_defaults[d[3]] * 60)
+                    
+                # TODO: use dictArg.keys() with config.max_length_type
+                if d[3] == None:
+                    pass
+                else:
+                    k = d[3][0:config.max_length_type]
+                    if k in self.v_defaults and self.v_defaults[k] > 1.0 and d[2] != None and d[2] > 0.0:
+                        if d[1] == None or d[1] < 0.1:
+                            # there is a defined default velocity
+                            d[1] = self.v_defaults[k] * (d[2] / 3600)
+                    elif k in self.v_defaults and self.v_defaults[k] > 1.0 and d[1] != None and d[1] > 0.1:
+                        if d[2] == None or d[2] < 1.0:
+                            # there is a defined default velocity
+                            d[2] = int(d[1] / self.v_defaults[k] * 60)
 
         return self
 
@@ -224,17 +231,9 @@ class Period(Title,Description,Plot):
 
     def getLength(self):
 
-        """ return length of cycle """
+        """ return length of period """
 
-        intResult = 0
-        if len(self.child) > 0:
-            for u in self.child:
-                if type(u) is Cycle or type(u) is Period:
-                    intResult += u.getLength()
-        elif self.periodInt > 0:
-            intResult += self.periodInt
-
-        return intResult
+        return len(self)
 
 
     def getDuration(self):
@@ -285,24 +284,13 @@ class Period(Title,Description,Plot):
         return intResult
 
 
-    def getDateString(self):
-
-        """  """
-
-        strResult = ''
-
-        if type(self.dateBegin) is date and self.dateBegin != None and type(self.dateEnd) is date and self.dateEnd != None:
-            strResult = ' (' + str(self.getLength()) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
-
-        return strResult
-
-
     def append(self,objArg):
 
         """  """
 
         # print(f'info: reset data collection of period "{self.getTitleStr()}"', file=sys.stderr)
         self.data.clear()
+        self.summary.clear()
 
         if objArg == None:
             print('error: ' + str(objArg), file=sys.stderr)
@@ -312,13 +300,8 @@ class Period(Title,Description,Plot):
         elif objArg == None or (type(objArg) != Cycle and type(objArg) != Period and type(objArg) != Note):
             print('error: ' + str(objArg), file=sys.stderr)
         else:
-            # schedule if possible
-            c = objArg.dup()
-            if self.dateEnd != None:
-                c.schedule(self.dateEnd + timedelta(days=1))
-            if c.dateEnd != None:
-                self.dateEnd = c.dateEnd
-            self.child.append(c)
+            self.child.append(objArg.dup())
+            self.schedule()
 
         return self
 
@@ -434,8 +417,9 @@ class Period(Title,Description,Plot):
                 delta = objArg.dt.date() - self.dateBegin
                 if delta.days > -1 and objArg.dt.date() <= self.dateEnd:
                     l = self.dateEnd - self.dateBegin
+                    #print(f'info: new Cycle("{self.getTitleString()}",{l.days + 1}) {self.dateBegin}', file=sys.stderr)
                     c = Cycle(self.getTitleString(), l.days + 1)
-                    c.schedule(self.dateBegin.year,self.dateBegin.month,self.dateBegin.day)
+                    c.schedule(self.dateBegin)
                     c.insertByDate(objArg,flagReplace)
                     self.append(c)
             else:
@@ -499,7 +483,10 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        self.periodInt = intArg
+        if intArg == None:
+            self.periodInt = 0
+        else:
+            self.periodInt = intArg
 
         return self
 
@@ -517,6 +504,8 @@ class Period(Title,Description,Plot):
             for d in self.data:
                 l.append([0,d[1]*floatScale,d[2]*floatScale,d[3]])
             self.data = l
+
+        self.summary.clear()
 
         return self
 
@@ -546,6 +535,8 @@ class Period(Title,Description,Plot):
                 else:
                     l.append(d)
             self.data = l
+
+        self.summary.clear()
 
         return self
 
@@ -584,9 +575,13 @@ class Period(Title,Description,Plot):
                         #print('info: keep "' + self.child[i].getTitleString() + '" length ' + str(self.child[i].getLength()), file=sys.stderr)
                         l += self.child[i].getLength()
 
+            self.setPeriod(objArg)
             self.schedule()
         else:
             print('error: wrong argument type ' + str(type(objArg)), file=sys.stderr)
+
+        self.data.clear()
+        self.summary.clear()
 
         return self
 
@@ -618,18 +613,18 @@ class Period(Title,Description,Plot):
 
         dt_i = self.dateBegin
 
-        if len(self.child) < 1:
-            if hasattr(self,'periodInt'):
-                self.dateEnd = self.dateBegin + timedelta(days = self.periodInt - 1)
-        elif dt_i != None:
+        if self.periodInt > 0 and self.dateBegin != None:
+            self.dateEnd = self.dateBegin + timedelta(days = self.periodInt - 1)
+
+        if dt_i != None and len(self.child) > 0:
             for c in self.child:
                 if type(c) is Cycle or type(c) is Period:
-                    c.schedule(dt_i.year, dt_i.month, dt_i.day)
-                    self.dateEnd = c.dateEnd
-                    dt_i = self.dateEnd + timedelta(days=1)
+                    c.schedule(dt_i)
+                    if self.dateEnd == None or c.dateEnd > self.dateEnd:
+                        self.dateEnd = c.dateEnd
+                    dt_i = c.dateEnd + timedelta(days=1)
                 elif type(c) is Note:
                     c.dt = dt_i
-            self.data.clear()
 
         return self
 
@@ -653,6 +648,9 @@ class Period(Title,Description,Plot):
 
         """  """
 
+        self.data.clear()
+        self.summary.clear()
+
         if self.data != None and len(self.data) > 0:
             print(f'error: cannot override existing data collection of period "{self.getTitleString()}"', file=sys.stderr)
         elif objArg == None:
@@ -660,7 +658,6 @@ class Period(Title,Description,Plot):
         elif type(objArg) is str and len(objArg) > 0:
             return self.define([objArg])
         elif type(objArg) is list and len(objArg) > 0:
-            self.data.clear()
             u = Unit()
             for s in objArg:
                 #print('info: ' + s, file=sys.stderr)
@@ -679,85 +676,91 @@ class Period(Title,Description,Plot):
 
     def stat(self):
 
-        """  """
-
-        listResult = []
+        """ stat all descendant data to self.data and returns it as a nested list  """
 
         if len(self.child) > 0:
+            self.data.clear()
+            self.summary.clear()
             for c in self.child:
                 if type(c) is Cycle or type(c) is Period:
-                    listResult.extend(c.stat())
-            self.data = listResult
-        elif len(self.data) > 0:
-            for d in self.data:
-                d[0] = self.dateEnd.toordinal()
-            listResult = self.data
+                    self.data.extend(c.stat())
 
-        return listResult
+        return self.data
 
 
-    def report(self, dictArg=None):
+    def sum(self):
+
+        """ summarize all self.data in self.summary and returns sum of durations in minutes """
+
+        floatResult = 0.0
+        self.summary.clear()
+
+        for u in self.data:
+
+            if u[3] not in self.summary:
+                self.summary[u[3]] = [[],[]]
+
+            self.summary[u[3]][0].append(u[1])
+            self.summary[u[3]][1].append(u[2])
+
+            floatResult += u[2]
+
+        return floatResult
+
+
+    def report(self):
 
         """  """
 
         strResult = ''
 
-        self.stat()
-
-        l = np.array(list(map(lambda lst: lst[2], self.data)))
-        sum_h = l.sum() / 60
-
-        p = self.getLength()
         n = self.getNumberOfUnits()
+        if len(self.data) < 1 and n > 0:
+            self.stat()
 
-        if dictArg == None:
-            dictArg = {}
+        sum_h = self.sum() / 60
+        if sum_h < 0.1:
+            return strResult
 
-        for u in self.data:
-
-            if u[3] not in dictArg:
-                dictArg[u[3]] = [[],[]]
-
-            dictArg[u[3]][0].append(u[1])
-            dictArg[u[3]][1].append(u[2])
-
-        for k in sorted(set(map(lambda lst: lst[3], self.data))):
+        for k in sorted(self.summary.keys()):
             # all kinds of units
-            sum_k = sum(dictArg[k][1]) / 60.0
+            sum_k = sum(self.summary[k][1]) / 60.0
 
             if sum_h > 0.01:
                 if n > 0:
-                    strResult += f'{len(dictArg[k][0]):4} x '
+                    strResult += f'{len(self.summary[k][0]):4} x '
                 else:
                     strResult += '      '
 
-                if len(dictArg[k][0]) < 1:
+                if len(self.summary[k][0]) < 1:
                     strResult += ("{:" + str(config.max_length_type) + "} {:7}    {:7.01f} h {:.02f}\n").format(k,
-                                                                                                                    ' ',
-                                                                                                                    round(sum_k, 1),
-                                                                                                                    round(sum_k / sum_h, 2))
-                elif len(dictArg[k][0]) < 3:
-                    strResult += ("{:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f}\n").format(k, sum(dictArg[k][0]),
-                                                                                                                        config.unit_distance,
-                                                                                                                        round(sum_k,1),
-                                                                                                                        round(sum_k / sum_h, 2))
+                                                                                                                ' ',
+                                                                                                                round(sum_k, 1),
+                                                                                                                round(sum_k / sum_h, 2))
+                elif len(self.summary[k][0]) < 3:
+                    strResult += ("{:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f}\n").format(k, 
+                                                                                                                       sum(self.summary[k][0]),
+                                                                                                                       config.unit_distance,
+                                                                                                                       round(sum_k,1),
+                                                                                                                       round(sum_k / sum_h, 2))
                 else:
                     strResult += ("{:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f} {:5.01f} /{:5.01f} /{:5.01f}\n").format(k,
-                                                                                                                                                        sum(dictArg[k][0]),
-                                                                                                                                                        config.unit_distance,
-                                                                                                                                                        round(sum_k, 2),
-                                                                                                                                                        round(sum_k / sum_h, 2),
-                                                                                                                                                        min(dictArg[k][0]),
-                                                                                                                                                        mean(dictArg[k][0]),
-                                                                                                                                                        max(dictArg[k][0]))
+                                                                                                                                                sum(self.summary[k][0]),
+                                                                                                                                                config.unit_distance,
+                                                                                                                                                round(sum_k, 2),
+                                                                                                                                                round(sum_k / sum_h, 2),
+                                                                                                                                                min(self.summary[k][0]),
+                                                                                                                                                mean(self.summary[k][0]),
+                                                                                                                                                max(self.summary[k][0]))
 
-        if len(self.data) > 0:
-            if n > 0:
-                strResult += f'{n} Units '
-            else:
-                strResult += '\n      '
+        if n > 0:
+            strResult += f'\n{n} Units '
+        else:
+            strResult += '\n      '
 
-            strResult += "{:.2f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
+        p = self.getLength()
+
+        strResult += "{:.1f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
 
         return strResult
 
@@ -854,6 +857,21 @@ class Period(Title,Description,Plot):
         """  """
 
         return str(self)
+
+
+    def toTemplate(self):
+
+        """ format this period and it's descendant periods to Python code for a high-level Plan Template """
+
+        strResult = f'p = Period("{self.getTitleString()}").define({str(self.data)})\n'
+
+        return strResult
+
+        for c in self.child:
+            if type(c) is Period:
+                strResult += c.toTemplate()
+
+        return strResult
 
 
     def toHtmlTable(self):
@@ -1486,7 +1504,7 @@ class Period(Title,Description,Plot):
         if strArg != None and len(strArg) > 0:
             self.setTitleStr(strArg)
 
-        self.schedule(d.year,d.month,d.day)
+        self.schedule(d)
 
         return self
 
@@ -1515,9 +1533,9 @@ class Period(Title,Description,Plot):
 
         """ returns a last weeks as periods """
 
-        dt_0 = datetime.now()
+        dt_0 = datetime.now().date()
         dt_i = dt_0 + timedelta(days=(7 - dt_0.weekday())) - timedelta(weeks=intWeek)
-        dt_1 = dt_i
+        self.dateFixed = dt_i
 
         for m in range(0,intWeek):
             self.append(Cycle(dt_i.strftime("%Y-W%U")))
@@ -1526,7 +1544,7 @@ class Period(Title,Description,Plot):
         if strArg != None and len(strArg) > 0:
             self.setTitleStr(strArg)
 
-        self.schedule(dt_1.year,dt_1.month,dt_1.day)
+        self.schedule()
 
         return self
 
@@ -1535,9 +1553,9 @@ class Period(Title,Description,Plot):
 
         """ returns a last months (= 4 weeks) as periods """
 
-        dt_0 = datetime.now()
+        dt_0 = datetime.now().date()
         dt_i = dt_0 + timedelta(days=(7 - dt_0.weekday())) - timedelta(weeks = intMonth * 4)
-        dt_1 = dt_i
+        self.dateFixed = dt_i
 
         for m in range(0,intMonth):
             self.append(Cycle(dt_i.strftime("%Y-M%m"),4*7))
@@ -1546,6 +1564,6 @@ class Period(Title,Description,Plot):
         if strArg != None and len(strArg) > 0:
             self.setTitleStr(strArg)
 
-        self.schedule(dt_1.year,dt_1.month,dt_1.day)
+        self.schedule()
 
         return self

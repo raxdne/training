@@ -61,7 +61,7 @@ t.fill(b,1.1)
 
 t.schedule(2023,1,1).updateValues({'Biking Basics': 20.0})
 
-t.cut(4)
+#t.cut(4)
 print(t)
 
 #t.postpone(3)
@@ -75,6 +75,7 @@ print(t)
 #print(t)
 
 #t.scale(2.0)
+#t.stat()
 #print(t)
 
 #print(t.toHtml())

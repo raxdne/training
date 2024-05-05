@@ -20,6 +20,7 @@
 #
 #
 #
+from datetime import date
 
 class Title:
 
@@ -63,6 +64,21 @@ class Title:
         """  """
 
         return self.strTitle
+
+
+    def getDateString(self):
+
+        """  """
+
+        strResult = ''
+
+        if type(self.dateBegin) is date and self.dateBegin != None and type(self.dateEnd) is date and self.dateEnd != None:
+            if hasattr(self,'day'):
+                strResult += '(' + str(len(self.day)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+            else:
+                strResult += '(' + str((self.dateEnd - self.dateBegin).days + 1) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+
+        return strResult
 
 
     def getTitleXML(self):
