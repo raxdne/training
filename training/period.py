@@ -1397,7 +1397,14 @@ class Period(Title,Description,Plot):
             cal.add_component(event)
 
         else:
-            if self.dateBegin is not None and self.hasTitle():
+            fOutput = False
+            for c in self.child:
+                c.to_ical(cal)
+                if type(c) is Cycle:
+                    # output only, if there is a Cycle child involved
+                    fOutput = True
+
+            if fOutput and self.dateBegin is not None and self.hasTitle():
                 event = Event()
                 event.add('summary', 'Begin Period: ' + self.getTitleString())
                 event.add('dtstart', self.dateBegin)
@@ -1405,16 +1412,13 @@ class Period(Title,Description,Plot):
                 event.add('dtstamp', datetime.now().astimezone(None))
                 cal.add_component(event)
 
-            if self.dateEnd is not None and self.hasTitle():
+            if fOutput and self.dateEnd is not None and self.hasTitle():
                 event = Event()
                 event.add('summary', 'End Period: ' + self.getTitleString())
                 event.add('dtstart', self.dateEnd)
                 event.add('dtend', self.dateEnd + timedelta(days=1))
                 event.add('dtstamp', datetime.now().astimezone(None))
                 cal.add_component(event)
-
-            for c in self.child:
-                c.to_ical(cal)
 
 
     def toVCalendar(self):

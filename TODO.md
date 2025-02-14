@@ -3,6 +3,12 @@
 
 ## Requirements
 
+REQ: Notes in Markdown format
+
+REQ: read data from CalDAV server
+- https://github.com/python-caldav/caldav/blob/master/examples/basic_usage_examples.py
+- https://github.com/python-caldav/caldav/blob/master/docs/source/index.rst
+
 REQ: handle [Time Intervals and Repeating intervals](https://en.wikipedia.org/wiki/ISO_8601#Time_intervals)
 - <https://github.com/gweis/isodate>
 

@@ -218,12 +218,17 @@ class Combination(Title,Description):
         """ return a timedelta """
 
         intResult = 0
-        for u in self.child:
-            if type(u) is Unit or type(u) is Pause:
-                intResult += u.getDuration().total_seconds()
-            elif type(u) is Combination:
-                intResult = 0
-                break
+        if self.logicAnd:
+            for u in self.child:
+                if type(u) is Combination or type(u) is Unit or type(u) is Pause:
+                    intResult += u.getDuration().total_seconds()
+        else:
+            # Alternatives
+            for u in self.child:
+                if type(u) is Combination or type(u) is Unit:
+                    s = u.getDuration().total_seconds()
+                    if s > intResult:
+                        intResult = s
 
         return Duration(intResult / 60)
 
@@ -245,12 +250,23 @@ class Combination(Title,Description):
 
         listResult = []
 
-        for u in self.child:
-            if type(u) is Combination or (type(u) is Unit and u.isCountable()):
-                listResult.extend(u.stat())
-                if not self.logicAnd:
-                    # stat first unit of alternatives only
-                    break
+        if self.logicAnd:
+            for u in self.child:
+                if type(u) is Combination or (type(u) is Unit and u.isCountable()):
+                    listResult.extend(u.stat())
+        else:
+            # stat longest unit of alternatives only
+            m = None
+            s_max = 0
+            for u in self.child:
+                if type(u) is Combination or type(u) is Unit:
+                    s = u.getDuration().total_seconds()
+                    if s > s_max:
+                        m = u
+                        s_max = s
+
+            if m is not None:
+                listResult.extend(m.stat())
 
         return listResult
 
@@ -277,7 +293,7 @@ class Combination(Title,Description):
             if self.logicAnd:
                 strResult += 'Combination: ' + self.getDuration().toString()
             else:
-                strResult += 'Alternatives: '
+                strResult += 'Alternatives: max. ' + self.getDuration().toString()
 
             strResult += self.getDescriptionString() + '</div>'
 
@@ -314,12 +330,25 @@ class Combination(Title,Description):
 
         strResult = '<g>'
 
-        # TODO: if self.logicAnd:
-
         x_i = x
-        for u in self.child:
-            strResult += u.toSVG(x_i,y)
-            x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
+        if self.logicAnd:
+            for u in self.child:
+                strResult += u.toSVG(x_i,y)
+                x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
+        else:
+            # stat longest unit of alternatives only
+            m = None
+            s_max = 0
+            for u in self.child:
+                if type(u) is Combination or type(u) is Unit:
+                    s = u.getDuration().total_seconds()
+                    if s > s_max:
+                        m = u
+                        s_max = s
+
+            if m is not None:
+                strResult += m.toSVG(x_i,y)
+                x_i += s_max / 3600 * 25 * config.diagram_scale_dist
              
         strResult += '</g>'
 

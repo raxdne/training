@@ -70,7 +70,7 @@ class Title:
 
         """  """
 
-        strResult = ''
+        strResult = ' '
 
         if type(self.dateBegin) is date and self.dateBegin is not None and type(self.dateEnd) is date and self.dateEnd is not None:
             if hasattr(self,'day'):
