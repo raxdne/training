@@ -122,6 +122,7 @@ class Combination(Title,Description):
                     u.setDate(dt)
                 elif type(u) is Combination:
                     u.setDate(dt)
+                    i += 1
                 elif type(u) is Unit:
 
                     if i == 0:
@@ -148,11 +149,8 @@ class Combination(Title,Description):
                     dt = u.setDate(dt)
                     i += 1
                 elif type(u) is Pause:
-                    if i == 0:
-                        print(__name__ + ': ignoring initial ' + str(self), file=sys.stderr)
-                    else:
-                        dt = u.setDate(dt)
-                        i += 1
+                    dt = u.setDate(dt)
+                    i += 1
                 
         return dt
 
@@ -213,6 +211,30 @@ class Combination(Title,Description):
         return intResult
 
 
+    def getRepresentativeAlternative(self):
+
+        """ return the representative Unit of this combination (longest duration) """
+
+        r = None
+
+        if not self.logicAnd:
+            s_max = 0
+            for u in self.child:
+                if type(u) is Unit:
+                    s = u.getDuration().total_seconds()
+                    if s > s_max:
+                        r = u
+                        s_max = s
+                elif type(u) is Combination:
+                    q = u.getRepresentativeAlternative()
+                    s = q.getDuration().total_seconds()
+                    if s > s_max:
+                        r = q
+                        s_max = s
+
+        return r
+
+
     def getDuration(self):
 
         """ return a timedelta """
@@ -220,15 +242,11 @@ class Combination(Title,Description):
         intResult = 0
         if self.logicAnd:
             for u in self.child:
-                if type(u) is Combination or type(u) is Unit or type(u) is Pause:
+                if type(u) is Combination or type(u) is Unit:
                     intResult += u.getDuration().total_seconds()
         else:
             # Alternatives
-            for u in self.child:
-                if type(u) is Combination or type(u) is Unit:
-                    s = u.getDuration().total_seconds()
-                    if s > intResult:
-                        intResult = s
+            intResult = self.getRepresentativeAlternative().getDuration().total_seconds()
 
         return Duration(intResult / 60)
 
@@ -256,15 +274,7 @@ class Combination(Title,Description):
                     listResult.extend(u.stat())
         else:
             # stat longest unit of alternatives only
-            m = None
-            s_max = 0
-            for u in self.child:
-                if type(u) is Combination or type(u) is Unit:
-                    s = u.getDuration().total_seconds()
-                    if s > s_max:
-                        m = u
-                        s_max = s
-
+            m = self.getRepresentativeAlternative()
             if m is not None:
                 listResult.extend(m.stat())
 
@@ -336,19 +346,10 @@ class Combination(Title,Description):
                 strResult += u.toSVG(x_i,y)
                 x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
         else:
-            # stat longest unit of alternatives only
-            m = None
-            s_max = 0
-            for u in self.child:
-                if type(u) is Combination or type(u) is Unit:
-                    s = u.getDuration().total_seconds()
-                    if s > s_max:
-                        m = u
-                        s_max = s
-
+            m = self.getRepresentativeAlternative()
             if m is not None:
                 strResult += m.toSVG(x_i,y)
-                x_i += s_max / 3600 * 25 * config.diagram_scale_dist
+                x_i += m.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
              
         strResult += '</g>'
 
@@ -398,22 +399,12 @@ class Combination(Title,Description):
                 for u in self.child:
                     u.to_ical(cal)
             else:
+                strSummary = f'Alternatives: {self.getTitleString()} {self.getDescriptionString()} {self.toStringShort()}'
                 d = None
-                strSummary = f'Alternatives: {self.getTitleString()} {self.getDescriptionString()} '
-                for u in self.child:
-                    strSummary += u.toStringShort() + ' '
-                strSummary += self.getDescriptionString()
+                m = self.getRepresentativeAlternative()
+                if m is not None and m.dt is not None and cal is not None:
+                    d = m.dt
 
-                for i in range(len(self.child)):
-                    if type(self.child[i]) is Note:
-                        pass
-                    else:
-                        strSummary += self.child[i].toStringShort() + ' '
-
-                        if d is None and type(self.child[i]) is Unit:
-                            d = self.child[i].dt
-
-                if d is not None and cal is not None:
                     event = Event()
                     event.add('summary', strSummary)
                     # ignoring time for alternatives

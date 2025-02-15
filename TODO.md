@@ -46,6 +46,12 @@ REQ: combination of units like `20211010;25RG+5LG+KG;3:00;`
 
 REQ: different parser/generator modules for input formats
 
+## Input
+
+### CSV
+
+REQ: define Combinations in CSV Report
+
 ## Output Formats
 
 ### Plain text
