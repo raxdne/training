@@ -343,14 +343,14 @@ class Unit(Note):
         
         strResult = ''
         
-        if self.type is None or not self.type:
+        if self.color is not None:
+            strResult = self.color
+        elif self.type is None or not self.type:
             strResult = '#cccccc'
         elif self.type in config.colors:
             strResult = config.colors[self.type]
         elif self.type[0] in config.colors:
             strResult = config.colors[self.type[0]]
-        elif self.color is not None:
-            strResult = self.color
 
         return strResult
 
