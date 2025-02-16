@@ -121,7 +121,7 @@ class Note(Description):
                     return False
             else:
                 # german Date
-                m = re.match(r"([0-9]{2})\.([0-9]{2})\.([0-9]{4})",strArg)
+                m = re.match(r"\b([0-9]{2})\.([0-9]{2})\.([0-9]{4})\b",strArg)
                 if m is not None:
                     try:
                         self.dt = datetime(int(m.group(3)), int(m.group(2)), int(m.group(1)),0,0,0).astimezone(None)
@@ -130,7 +130,7 @@ class Note(Description):
                         return False
                 else:
                     # canonical ISO Date
-                    m = re.match(r"([0-9]{4})-*([0-9]{2})-*([0-9]{2})",strArg)
+                    m = re.match(r"\b([0-9]{4})-*([0-9]{2})-*([0-9]{2})\b",strArg)
                     if m is not None:
                         try:
                             self.dt = datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)),0,0,0).astimezone(None)
@@ -139,10 +139,10 @@ class Note(Description):
                             return False
                     else:
                         # plan time only
-                        m = re.match(r"([0-2][0-9]:[0-5][0-9])",strArg)
+                        m = re.match(r"\b([0-2][0-9]:[0-5][0-9]:[0-5][0-9])\b",strArg)
                         if m is not None:
                             #print("time: ",m.group(1), file=sys.stderr)
-                            self.tPlan = time.fromisoformat("{}:00".format(m.group(1)))
+                            self.tPlan = time.fromisoformat(m.group(1))
                         else:
                             print('ignoring: ',strArg, file=sys.stderr)
 

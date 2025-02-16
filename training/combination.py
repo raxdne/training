@@ -100,7 +100,7 @@ class Combination(Title,Description):
                 if not strDate and type(self.child[i]) is Unit and self.child[i].dt is not None:
                     strDate = self.child[i].dt.strftime("%Y-%m-%d ")
 
-        return f'({strDate} {strResult} {self.getTitleString()} {self.getDescriptionString()})'
+        return f'({strResult} {self.getTitleString()} {self.getDescriptionString()})'
 
 
     def setDate(self,dtArg=None,dt_0=None,dt_1=None):
@@ -113,6 +113,10 @@ class Combination(Title,Description):
             return None
         elif type(dtArg) is date:
             return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
+        elif not self.logicAnd:
+            m = self.getRepresentativeAlternative()
+            if m is not None:
+                dt = m.setDate(dtArg)
         else:
             i = 0
             dt = dtArg
@@ -390,34 +394,6 @@ class Combination(Title,Description):
         return strResult
 
 
-    def to_ical2(self,cal=None):
-
-        """  """
-        
-        if len(self.child) > 1:
-            if self.logicAnd:
-                for u in self.child:
-                    u.to_ical(cal)
-            else:
-                strSummary = f'Alternatives: {self.getTitleString()} {self.getDescriptionString()} {self.toStringShort()}'
-                d = None
-                m = self.getRepresentativeAlternative()
-                if m is not None and m.dt is not None and cal is not None:
-                    d = m.dt
-
-                    event = Event()
-                    event.add('summary', strSummary)
-                    # ignoring time for alternatives
-                    event.add('dtstart', d.date())
-                    event.add('dtend', d.date() + timedelta(days=1))
-                    event.add('dtstamp', datetime.now().astimezone(None))
-                    cal.add_component(event)
-
-        elif self.child:
-            # only a single child
-            self.child[0].to_ical(cal)
-
-
     def to_ical(self,cal=None):
 
         """  """
@@ -427,22 +403,33 @@ class Combination(Title,Description):
                 for u in self.child:
                     u.to_ical(cal)
             else:
-                d = None
-                for u in self.child:
-                    if d is None and type(u) is Unit:
-                        d = u.dt
+                event = Event()
+                m = self.getRepresentativeAlternative()
 
-                if d is not None and cal is not None:
-                    event = Event()
-                    event.add('summary', self.toStringShort())
-                    # ignoring time for alternatives
-                    event.add('dtstart', d.date())
-                    event.add('dtend', d.date() + timedelta(days=1))
+                if m is not None and not (m.dt is None and m.tPlan is None) and cal is not None and event is not None:
+                    event.add('summary', f'Alternatives: {self.toStringShort()}')
                     event.add('dtstamp', datetime.now().astimezone(None))
+                    if m.dt is None and m.tPlan is not None:
+                        # no day defined
+                        dt = datetime.combine(date.today(), m.tPlan)
+                        event.add('dtstart', dt)
+                        event.add('dtend', dt + m.duration)
+                    elif m.tPlan is not None:
+                        # day defined
+                        dt = datetime.combine(m.dt, m.tPlan)
+                        event.add('dtstart', dt)
+                        event.add('dtend', dt + m.duration)
+                    elif m.dt.time() == time(0) or m.duration is None:
+                        # no time defined
+                        event.add('dtstart', m.dt.date())
+                        event.add('dtend', m.dt.date() + timedelta(days=1))
+                    else:
+                        event.add('dtstart', m.dt)
+                        event.add('dtend', m.dt + m.duration)
+
                     cal.add_component(event)
                 else:
-                    print('Skipping ICAL: ' + self.toStringShort(), file=sys.stderr)
-
+                    print('error: ' + 'not defined', file=sys.stderr)
         elif self.child:
             # only a single child
             self.child[0].to_ical(cal)
