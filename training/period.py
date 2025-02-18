@@ -333,39 +333,27 @@ class Period(Title,Description,Plot):
                                 # begin is equal
                                 p.child.insert(i,objArg.dup())
                                 break
-                            elif p.child[i].dateEnd > objArg.dateBegin and p.child[i].dateBegin < objArg.dateBegin + timedelta(days=objArg.getLength()):
-                                # overlapping
+                            elif p.child[i].dateEnd >= objArg.dateBegin:
+                                # objArg begins in p.child[i]
                                 p.child[i].cut(objArg.dateBegin)
                                 p.child.insert(i+1,objArg.dup())
                                 break
                             elif p.child[i] == p.child[-1]:
+                                print('error: no cycle found', file=sys.stderr)
                                 p.child.append(objArg.dup())
                         i += 1
                 self.schedule()
-        elif type(objArg) is Note or type(objArg) is Unit:
+        elif type(objArg) is Note or type(objArg) is Unit or type(objArg) is Combination:
             if objArg.dt is None:
                 print('error: date', file=sys.stderr)
             else:
-                p = self.getPeriodByDate(objArg.dt,intLevel)
-                if p is None or not p.child:
-                    self.child.append(objArg.dup())
+                c = self.getCycleByDate(objArg.dt)
+                if c is None or not c.day:
+                    print('error: no cycle found', file=sys.stderr)
                 else:
-                    i = 0
-                    for i in range(len(p.child)):
-                        if type(p.child[i]) is Period:
-                            if p.child[i].dateBegin <= objArg.dt.date() and objArg.dt.date() <= p.child[i].dateEnd:
-                                # is inside this Period
-                                p.child.insert(i,objArg.dup())
-                                break
-                            elif p.child[i] == p.child[-1]:
-                                p.child.append(objArg.dup())
-                        elif type(p.child[i]) is Cycle:
-                            if p.child[i].dateBegin <= objArg.dt.date() and objArg.dt.date() <= p.child[i].dateEnd:
-                                # is inside this Cycle
-                                j = round((objArg.dt.date() - p.child[i].dateBegin).total_seconds() / (24 * 60 * 60))
-                                p.child[i].insert(j,objArg.dup())
-                                break
-                        i += 1
+                    # is inside this Cycle
+                    j = round((objArg.dt.date() - c.dateBegin).total_seconds() / (24 * 60 * 60))
+                    c.insert(j,objArg.dup())
                 self.schedule()
 
         return objResult
