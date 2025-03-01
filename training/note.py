@@ -46,6 +46,7 @@ class Note(Description):
         
         self.dt = None
         self.tPlan = None
+        self.marker = False
         self.parse(strArg)
 
 
@@ -63,6 +64,22 @@ class Note(Description):
         strResult += ' ' + self.getDescriptionString()
 
         return strResult
+
+
+    def mark(self):
+
+        """  """
+
+        self.marker = True
+
+        return self
+
+
+    def isMarked(self):
+
+        """  """
+
+        return hasattr(self,'marker') and self.marker == True
 
 
     def setClock(self,timeArg=None):

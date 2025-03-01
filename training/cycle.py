@@ -805,6 +805,23 @@ class Cycle(Title,Description,Plot):
         return strResult
 
 
+    def toSVGGanttMarker(self,dateBase):
+
+        """  """
+
+        strResult = '<g>'
+
+        if self.day:
+            for v in self.day:
+                for u in v:
+                    if u.isMarked():
+                        x_i = (u.dt.date() - dateBase).days * 2
+                        strResult += '<line stroke="{}" stroke-width="2" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(u.getColor(), x_i, 0, x_i, config.diagram_width)
+        strResult += '</g>'
+
+        return strResult
+
+
     def toSVG(self, x = config.diagram_offset, y=0):
 
         """  """
@@ -843,7 +860,7 @@ class Cycle(Title,Description,Plot):
                         strResult += u.toSVG(x_i,y)
                         if type(u) is Unit or type(u) is Combination:
                             x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist + 5
-
+                    # TODO: add unit marker if u.isMarked()
                 if n:
                     strResult += '<text x="{}" y="{}" style="">{}</text>\n'.format(x_i + 2,y + config.diagram_bar_height,n)
 
@@ -926,6 +943,9 @@ class Cycle(Title,Description,Plot):
             strResult += '<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0, diagram_height - 10 - i, diagram_width, diagram_height - 10 - i)
 
         strResult += self.toSVGGanttBar(d_0)
+        
+        # TODO: add unit marker if u.isMarked()
+
         strResult += '</g>'
         strResult += '</svg>\n'
 

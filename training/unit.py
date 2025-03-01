@@ -79,6 +79,9 @@ class Unit(Note):
         else:
             strResult = f'{self.dt.strftime("%Y-%m-%d %H:%M:%S")} {self.getDistString():>7} {self.type} {self.getDurationString()}'
 
+        if self.isMarked():
+            strResult += '*'
+    
         return strResult
 
 
@@ -436,6 +439,9 @@ class Unit(Note):
             strResult += '<title>{} {}</title>'.format(self.toStringShort(), self.getDescriptionString())
 
             strResult += '</rect>\n'
+
+            if self.isMarked():
+                strResult += '<line stroke="red" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x, 0, x, config.diagram_bar_height)
 
         return strResult
 

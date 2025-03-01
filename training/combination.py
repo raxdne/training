@@ -37,7 +37,7 @@ from training.pause import Pause
 #
 #
 
-class Combination(Title,Description):
+class Combination(Title,Note):
 
     def __init__(self,listArg=[],flagAnd=True):
 

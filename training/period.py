@@ -1280,6 +1280,8 @@ class Period(Title,Description,Plot):
         y_i = y + config.diagram_bar_height * 3
         for c in self.child:
             if type(c) is Cycle or type(c) is Period:
+                if type(c) is Cycle:
+                    strResult += c.toSVGGanttMarker(dateBase)
                 strResult += c.toSVGGanttBar(dateBase,y_i)
                 if type(c) is Period:
                     strResult += c.toSVGGantt(dateBase,y_i)
