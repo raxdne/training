@@ -384,7 +384,10 @@ class Cycle(Title,Description,Plot):
             print('error: date begin', file=sys.stderr)
         elif type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note:
             delta = objArg.dt.date() - self.dateBegin
-            if delta.days > -1 and objArg.dt.date() <= self.dateEnd:
+            if delta.days < 0 or delta.days >= len(self.day):
+                print(f'error: inserting {type(objArg)} at position {delta.days} of {len(self.day)} {objArg}', file=sys.stderr)
+            elif objArg.dt.date() <= self.dateEnd:
+                #print(f'info: inserting {type(objArg)} at position {delta.days} of {len(self.day)} {objArg}', file=sys.stderr)
                 if flagReplace:
                     # override existing
                     self.day[delta.days] = [objArg.dup()]
@@ -420,21 +423,51 @@ class Cycle(Title,Description,Plot):
         return self
 
 
-    def cut(self,objArg=0):
+    def cut(self, objArgA=0, objArgB=None):
+
+        """  """
+
+        return self.cutBefore(objArgA).cutAfter(objArgB)
+
+
+    def cutBefore(self,objArg=0):
 
         """  """
 
         if type(objArg) is date:
             # 
-            if objArg <= self.dateEnd:
+            if objArg > self.dateBegin:
                 d = (objArg - self.dateBegin).days
                 if d > 0:
-                    self.cut(d)
+                    self.cutBefore(d)
+                    self.dateBegin = objArg
+                    self.dateEnd = self.dateBegin + timedelta(days = len(self.day) - 1)
                 else:
                     print('info: ' + objArg.isoformat() + ' is not in this period', file=sys.stderr)
         elif type(objArg) is int and objArg > 0 and len(self.day) > objArg:
             #print('info: cut Cycle "' + self.getTitleString() + '" at ' + str(objArg-1), file=sys.stderr)
-            del self.day[objArg:]
+            del self.day[0:objArg]
+            self.data.clear()
+            #self.dateBegin = self.dateEnd - timedelta(days = len(self.day) - 1)
+
+        return self
+
+
+    def cutAfter(self,objArg=0):
+
+        """  """
+
+        if type(objArg) is date:
+            # 
+            if objArg < self.dateEnd:
+                d = (objArg - self.dateBegin).days
+                if d > 0:
+                    self.cutAfter(d)
+                else:
+                    print('info: ' + objArg.isoformat() + ' is not in this period', file=sys.stderr)
+        elif type(objArg) is int and objArg > 0 and len(self.day) > objArg:
+            #print('info: cut Cycle "' + self.getTitleString() + '" at ' + str(objArg-1), file=sys.stderr)
+            del self.day[objArg+1:]
             self.data.clear()
             self.dateEnd = self.dateBegin + timedelta(days = len(self.day) - 1)
 
@@ -580,11 +613,12 @@ class Cycle(Title,Description,Plot):
         if self.dateFixed is not None:
             # keep fixed date
             pass
-        elif objArg is not None and type(objArg) is date:
+        elif self.dateBegin is None or self.dateEnd is None:
+            pass
+        elif objArg is not None and type(objArg) is date and self.dateBegin <= objArg and objArg <= self.dateEnd:
             self.dateFixed = objArg
-
-        self.dateBegin = self.dateFixed
-        self.dateEnd = self.dateBegin + timedelta(days = len(self.day) - 1)
+            self.dateBegin = self.dateFixed
+            self.dateEnd = self.dateBegin + timedelta(days = len(self.day) - 1)
 
         return self
 

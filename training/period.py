@@ -335,7 +335,7 @@ class Period(Title,Description,Plot):
                                 break
                             elif p.child[i].dateEnd >= objArg.dateBegin:
                                 # objArg begins in p.child[i]
-                                p.child[i].cut(objArg.dateBegin)
+                                p.child[i].cutAfter(objArg.dateBegin)
                                 p.child.insert(i+1,objArg.dup())
                                 break
                             elif p.child[i] == p.child[-1]:
@@ -529,17 +529,88 @@ class Period(Title,Description,Plot):
         return self
 
 
-    def cut(self,objArg=0):
+    def cut(self, objArgA=0, objArgB=None):
+
+        """  """
+
+        return self.cutBefore(objArgA).cutAfter(objArgB)
+
+
+    def cutBefore(self,objArg=0):
+
+        """  """
+
+        if type(objArg) is date:
+            #
+
+            while len(self.child) > 0:
+                if type(self.child[0]) is Cycle or type(self.child[0]) is Period:
+                    if self.child[0].dateEnd < objArg:
+                        del self.child[0]
+                    else:
+                        self.child[0].cutBefore(objArg)
+                        self.dateBegin = objArg
+                        #self.setPeriod(objArg)
+                        self.schedule()
+                        break
+
+            if False and objArg > self.dateBegin:
+                d = (objArg - self.dateBegin).days
+                if d > 0:
+                    self.cutBefore(d)
+                else:
+                    print('info: ' + objArg.isoformat() + ' is not in this period', file=sys.stderr)
+        elif type(objArg) is int and objArg > 0 and not self.child:
+            # a period without childs
+            self.setPeriod(objArg)
+            self.schedule()
+        elif type(objArg) is int and objArg > 0 and self.getLength() > objArg:
+
+            if False:            
+                l = 0
+                for i in range(len(self.child)):
+                    if type(self.child[i]) is Cycle or type(self.child[i]) is Period:
+                        
+                        if l + self.child[i].getLength() == objArg:
+                            del self.child[0:i]
+                            break
+                        elif l + self.child[i].getLength() > objArg:
+                            if i > 0:
+                                del self.child[0:i-1]
+                            self.child[0].cutBefore(objArg - l)
+                            break
+                        else:
+                            l += self.child[i].getLength()
+
+            self.setPeriod(self.getLength())
+
+            if self.dateFixed is not None:
+                self.dateFixed += timedelta(days = objArg)
+                self.dateBegin = self.dateFixed
+            else:
+                self.dateBegin += timedelta(days = objArg)
+                
+            self.schedule()
+        else:
+            print('error: wrong argument type ' + str(type(objArg)), file=sys.stderr)
+
+        self.data.clear()
+        self.summary.clear()
+
+        return self
+
+
+    def cutAfter(self,objArg=0):
 
         """  """
 
         #print('info: cut "' + self.getTitleString() + '" at ' + str(objArg), file=sys.stderr)
         if type(objArg) is date:
             #
-            if objArg <= self.dateEnd:
+            if objArg < self.dateEnd:
                 d = (objArg - self.dateBegin).days
                 if d > 0:
-                    self.cut(d)
+                    self.cutAfter(d)
                 else:
                     print('info: ' + objArg.isoformat() + ' is not in this period', file=sys.stderr)
         elif type(objArg) is int and objArg > 0 and not self.child:
@@ -551,16 +622,13 @@ class Period(Title,Description,Plot):
             for i in range(len(self.child)):
                 if type(self.child[i]) is Cycle or type(self.child[i]) is Period:
                     if l + self.child[i].getLength() == objArg:
-                        #print('info: keep "' + self.child[i].getTitleString() + '" at ' + str(self.child[i].getLength()), file=sys.stderr)
                         del self.child[i+1:]
                         break
                     elif l + self.child[i].getLength() > objArg:
-                        #print('info: cut "' + self.child[i].getTitleString() + '" at ' + str(objArg - l), file=sys.stderr)
                         del self.child[i+1:]
-                        self.child[i].cut(objArg - l)
+                        self.child[i].cutAfter(objArg - l)
                         break
                     else:
-                        #print('info: keep "' + self.child[i].getTitleString() + '" length ' + str(self.child[i].getLength()), file=sys.stderr)
                         l += self.child[i].getLength()
 
             self.setPeriod(objArg)
@@ -624,7 +692,9 @@ class Period(Title,Description,Plot):
         if self.dateFixed is not None:
             # keep fixed date
             pass
-        elif objArg is not None and type(objArg) is date:
+        elif self.dateBegin is None or self.dateEnd is None:
+            pass
+        elif objArg is not None and type(objArg) is date and self.dateBegin <= objArg and objArg <= self.dateEnd:
             self.dateFixed = objArg
 
         self.schedule()
@@ -701,6 +771,7 @@ class Period(Title,Description,Plot):
         """  """
 
         strResult = ''
+        #strResult += self.getTitleString() + ' ' + self.getDateString() + '\n\n'
 
         n = self.getNumberOfUnits()
         if not self.data and n > 0:
@@ -827,7 +898,9 @@ class Period(Title,Description,Plot):
                     self.append(Period('').CalendarYearPeriod(y))
 
             for t in a:
-                self.insertByDate(t)
+                c = self.getCycleByDate(t.dt)
+                if c is not None:
+                    c.insertByDate(t)
 
         self.setPlan(False)
         return self
