@@ -965,8 +965,8 @@ class Cycle(Title,Description,Plot):
         else:
             strResult += ' FOLDED="{}"'.format('true')
 
-        strResult += ' TEXT="' + self.getTitleXML() + '&#xa;' + self.getDateString() + '&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
-        strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
+        strResult += ' LOCALIZED_STYLE_REF="default" TEXT="' + self.getTitleXML() + ' ' + self.getDateString() + '&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+        #strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
 
         strResult += self.getDescriptionFreemind()
 

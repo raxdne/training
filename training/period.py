@@ -1134,12 +1134,12 @@ class Period(Title,Description,Plot):
         else:
             strResult += ' FOLDED="{}"'.format('false')
 
-        strResult += ' TEXT="' + self.getTitleXML()
+        strResult += ' LOCALIZED_STYLE_REF="default" TEXT="' + self.getTitleXML()
         if self.dateBegin is not None and self.dateEnd is not None:
-            strResult += '&#xa; ' + self.getDateString() + '&#xa;' + self.report().replace('\n','&#xa;')
+            strResult += ' ' + self.getDateString() + '&#xa;' + self.report().replace('\n','&#xa;')
         strResult += '">\n'
 
-        strResult += '<font BOLD="true" NAME="Monospaced" SIZE="12"/>'
+        #strResult += '<font BOLD="true" NAME="Monospaced" SIZE="12"/>'
 
         strResult += self.getDescriptionFreemind()
 
