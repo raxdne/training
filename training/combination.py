@@ -48,6 +48,7 @@ class Combination(Title,Note):
         
         self.child = []
         self.logicAnd = flagAnd
+        self.dt = None
 
         for objArg in listArg:
             if objArg is None or (type(objArg) != Unit and type(objArg) != Pause and type(objArg) != Note and type(objArg) != Combination):
@@ -119,7 +120,8 @@ class Combination(Title,Note):
                 dt = m.setDate(dtArg)
         else:
             i = 0
-            dt = dtArg
+            self.dt = dtArg
+            dt = self.dt
             for u in self.child:
                 
                 if type(u) is Note:
@@ -202,14 +204,17 @@ class Combination(Title,Note):
         return self
 
 
-    def getNumberOfUnits(self):
+    def getNumberOfUnits(self, dt0=None, dt1=None):
 
         """  """
 
         intResult = 0
 
         for u in self.child:
-            if type(u) is Unit and u.isCountable():
+            if u.dt is None or (dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date()):
+                # u is out of interval
+                pass 
+            elif type(u) is Unit and u.isCountable():
                 intResult += 1
 
         return intResult

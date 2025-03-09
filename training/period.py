@@ -270,7 +270,7 @@ class Period(Title,Description,Plot):
         return intResult
 
 
-    def getNumberOfUnits(self):
+    def getNumberOfUnits(self, dt0=None, dt1=None):
 
         """  """
 
@@ -279,7 +279,7 @@ class Period(Title,Description,Plot):
         intResult = 0
         for c in self.child:
             if type(c) is Cycle or type(c) is Period:
-                intResult += c.getNumberOfUnits()
+                intResult += c.getNumberOfUnits(dt0,dt1)
 
         return intResult
 
@@ -732,7 +732,7 @@ class Period(Title,Description,Plot):
         return self
 
 
-    def stat(self):
+    def stat(self, dt0=None, dt1=None):
 
         """ stat all descendant data to self.data and returns it as a nested list  """
 
@@ -741,7 +741,7 @@ class Period(Title,Description,Plot):
             self.summary.clear()
             for c in self.child:
                 if type(c) is Cycle or type(c) is Period:
-                    self.data.extend(c.stat())
+                    self.data.extend(c.stat(dt0,dt1))
 
         return self.data
 
@@ -766,16 +766,35 @@ class Period(Title,Description,Plot):
         return floatResult
 
 
-    def report(self):
+    def report(self, dt0=None, dt1=None):
 
         """  """
 
         strResult = ''
-        #strResult += self.getTitleString() + ' ' + self.getDateString() + '\n\n'
 
-        n = self.getNumberOfUnits()
-        if not self.data and n > 0:
-            self.stat()
+        if dt0 is not None and dt1 is None:
+            if type(dt0) is timedelta:
+                #
+                return self.report(date.today() - dt0, date.today())
+            elif type(dt0) is date:
+                #
+                return self.report(dt0, date.today())
+            else:
+                print(f'error: interval {dt0} and {dt1}', file=sys.stderr)
+                return strResult
+        elif dt0 is not None and dt1 is not None:
+            if dt1 < dt0:
+                print(f'error: interval {dt0} > {dt1}', file=sys.stderr)
+                return self.report(dt1, dt0)
+            else:
+                p = (dt1 - dt0).days
+                strResult += 'Interval (' + str(p) + ' ' + dt0.strftime("%Y-%m-%d") + ' .. ' + dt1.strftime("%Y-%m-%d") + ')\n\n'
+        else:
+            p = self.getLength()
+
+        n = self.getNumberOfUnits(dt0,dt1)
+        #if not self.data and n > 0:
+        self.stat(dt0,dt1)
 
         sum_h = self.sum() / 60
         if sum_h < 0.1:
@@ -816,8 +835,6 @@ class Period(Title,Description,Plot):
             strResult += f'\n{n} Units '
         else:
             strResult += '\n      '
-
-        p = self.getLength()
 
         strResult += "{:.1f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
 

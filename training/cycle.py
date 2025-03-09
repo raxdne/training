@@ -514,7 +514,7 @@ class Cycle(Title,Description,Plot):
             return (self.dateEnd - self.dateBegin).days + 1
 
 
-    def getNumberOfUnits(self):
+    def getNumberOfUnits(self, dt0=None, dt1=None):
 
         """  """
 
@@ -523,8 +523,11 @@ class Cycle(Title,Description,Plot):
         intResult = 0
         for v in self.day:
             for u in v:
-                if type(u) is Combination:
-                    intResult += u.getNumberOfUnits()
+                if u.dt is None or (dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date()):
+                    # u is out of interval
+                    pass 
+                elif type(u) is Combination:
+                    intResult += u.getNumberOfUnits(dt0,dt1)
                 elif type(u) is Unit and u.isCountable():
                     intResult += 1
 
@@ -623,7 +626,7 @@ class Cycle(Title,Description,Plot):
         return self
 
 
-    def stat(self):
+    def stat(self, dt0=None, dt1=None):
 
         """ stat all descendant data to self.data and returns it as a nested list  """
 
@@ -631,7 +634,10 @@ class Cycle(Title,Description,Plot):
             self.data.clear()
             for v in self.day:
                 for u in v:
-                    if (type(u) is Unit and u.isCountable()) or type(u) is Combination:
+                    if u.dt is None or (dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date()):
+                        # u is out of interval
+                        pass 
+                    elif (type(u) is Unit and u.isCountable()) or type(u) is Combination:
                         self.data.extend(u.stat())
 
         return self.data
@@ -657,15 +663,35 @@ class Cycle(Title,Description,Plot):
         return floatResult
 
 
-    def report(self, dictArg=None):
+    def report(self, dt0=None, dt1=None):
 
         """  """
 
         strResult = ''
 
-        n = self.getNumberOfUnits()
+        if dt0 is not None and dt1 is None:
+            if type(dt0) is timedelta:
+                #
+                return self.report(date.today() - dt0, date.today())
+            elif type(dt0) is date:
+                #
+                return self.report(dt0, date.today())
+            else:
+                print(f'error: interval {dt0} and {dt1}', file=sys.stderr)
+                return strResult
+        elif dt0 is not None and dt1 is not None:
+            if dt1 < dt0:
+                print(f'error: interval {dt0} > {dt1}', file=sys.stderr)
+                return self.report(dt1, dt0)
+            else:
+                p = (dt1 - dt0).days
+                strResult += 'Interval (' + str(p) + ' ' + dt0.strftime("%Y-%m-%d") + ' .. ' + dt1.strftime("%Y-%m-%d") + ')\n\n'
+        else:
+            p = len(self.day)
+
+        n = self.getNumberOfUnits(dt0,dt1)
         if not self.data and n > 0:
-            self.stat()
+            self.stat(dt0,dt1)
 
         sum_h = self.sum() / 60
         if sum_h < 0.1:
@@ -702,8 +728,6 @@ class Cycle(Title,Description,Plot):
                                                                                                                                                     max(self.summary[k][0]))
 
         if n > 0:
-            #p = self.getPeriodDone()
-            p = len(self.day)
             strResult += "\n{} Units {:.1f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(n, round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
 
         return strResult

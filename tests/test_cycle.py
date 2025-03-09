@@ -17,6 +17,10 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
+import sys
+
+from datetime import date, timedelta
+
 from training.note import Note
 from training.unit import Unit
 from training.pause import Pause
@@ -85,4 +89,4 @@ print(t)
 #print(t.toFreeMind())
 #print(t.toXML())
 
-print(t.report())
+print(t.report(date(2023,1,10),date(2023,1,10) + timedelta(days=7)))
