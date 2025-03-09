@@ -326,7 +326,6 @@ class Period(Title,Description,Plot):
                 elif not p.child:
                     p.child.append(objArg.dup())
                 else:
-                    i = 0
                     for i in range(len(p.child)):
                         if type(p.child[i]) is Cycle or type(p.child[i]) is Period:
                             if p.child[i].dateBegin == objArg.dateBegin:
@@ -341,7 +340,6 @@ class Period(Title,Description,Plot):
                             elif p.child[i] == p.child[-1]:
                                 print('error: no cycle found', file=sys.stderr)
                                 p.child.append(objArg.dup())
-                        i += 1
                 self.schedule()
         elif type(objArg) is Note or type(objArg) is Unit or type(objArg) is Combination:
             if objArg.dt is None:
@@ -541,55 +539,26 @@ class Period(Title,Description,Plot):
         """  """
 
         if type(objArg) is date:
-            #
-
             while len(self.child) > 0:
                 if type(self.child[0]) is Cycle or type(self.child[0]) is Period:
                     if self.child[0].dateEnd < objArg:
                         del self.child[0]
                     else:
                         self.child[0].cutBefore(objArg)
-                        self.dateBegin = objArg
+                        #self.dateFixed = objArg
                         #self.setPeriod(objArg)
                         self.schedule()
                         break
-
-            if False and objArg > self.dateBegin:
-                d = (objArg - self.dateBegin).days
-                if d > 0:
-                    self.cutBefore(d)
-                else:
-                    print('info: ' + objArg.isoformat() + ' is not in this period', file=sys.stderr)
         elif type(objArg) is int and objArg > 0 and not self.child:
             # a period without childs
             self.setPeriod(objArg)
             self.schedule()
         elif type(objArg) is int and objArg > 0 and self.getLength() > objArg:
 
-            if False:            
-                l = 0
-                for i in range(len(self.child)):
-                    if type(self.child[i]) is Cycle or type(self.child[i]) is Period:
-                        
-                        if l + self.child[i].getLength() == objArg:
-                            del self.child[0:i]
-                            break
-                        elif l + self.child[i].getLength() > objArg:
-                            if i > 0:
-                                del self.child[0:i-1]
-                            self.child[0].cutBefore(objArg - l)
-                            break
-                        else:
-                            l += self.child[i].getLength()
-
             self.setPeriod(self.getLength())
-
+            self.dateBegin += timedelta(days = objArg)
             if self.dateFixed is not None:
-                self.dateFixed += timedelta(days = objArg)
-                self.dateBegin = self.dateFixed
-            else:
-                self.dateBegin += timedelta(days = objArg)
-                
+                self.dateFixed = self.dateBegin
             self.schedule()
         else:
             print('error: wrong argument type ' + str(type(objArg)), file=sys.stderr)
@@ -604,9 +573,7 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        #print('info: cut "' + self.getTitleString() + '" at ' + str(objArg), file=sys.stderr)
         if type(objArg) is date:
-            #
             if objArg < self.dateEnd:
                 d = (objArg - self.dateBegin).days
                 if d > 0:
@@ -692,9 +659,10 @@ class Period(Title,Description,Plot):
         if self.dateFixed is not None:
             # keep fixed date
             pass
-        elif self.dateBegin is None or self.dateEnd is None:
-            pass
-        elif objArg is not None and type(objArg) is date and self.dateBegin <= objArg and objArg <= self.dateEnd:
+        #elif self.dateBegin is None or self.dateEnd is None:
+        #    pass
+        #elif objArg is not None and type(objArg) is date and self.dateBegin <= objArg and objArg <= self.dateEnd:
+        elif objArg is not None and type(objArg) is date:
             self.dateFixed = objArg
 
         self.schedule()

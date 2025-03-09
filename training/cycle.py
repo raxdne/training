@@ -441,6 +441,8 @@ class Cycle(Title,Description,Plot):
                 if d > 0:
                     self.cutBefore(d)
                     self.dateBegin = objArg
+                    #if self.dateFixed is None:
+                    self.dateFixed = self.dateBegin
                     self.dateEnd = self.dateBegin + timedelta(days = len(self.day) - 1)
                 else:
                     print('info: ' + objArg.isoformat() + ' is not in this period', file=sys.stderr)
@@ -616,9 +618,10 @@ class Cycle(Title,Description,Plot):
         if self.dateFixed is not None:
             # keep fixed date
             pass
-        elif self.dateBegin is None or self.dateEnd is None:
-            pass
-        elif objArg is not None and type(objArg) is date and self.dateBegin <= objArg and objArg <= self.dateEnd:
+        #elif self.dateBegin is None or self.dateEnd is None:
+        #    pass
+        #elif objArg is not None and type(objArg) is date and self.dateBegin <= objArg and objArg <= self.dateEnd:
+        elif objArg is not None and type(objArg) is date:
             self.dateFixed = objArg
             self.dateBegin = self.dateFixed
             self.dateEnd = self.dateBegin + timedelta(days = len(self.day) - 1)
@@ -874,7 +877,9 @@ class Cycle(Title,Description,Plot):
                 for u in v:
                     if u.isMarked():
                         x_i = (u.dt.date() - dateBase).days * 2
-                        strResult += '<line stroke="{}" stroke-width="2" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(u.getColor(), x_i, 0, x_i, config.diagram_width)
+                        strResult += '<line stroke="{}" stroke-width="2" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(u.getColor(), x_i, 0, x_i, config.diagram_width)
+                        strResult += f'<title>{u}</title>\n'
+                        strResult += '</line>'
         strResult += '</g>'
 
         return strResult
