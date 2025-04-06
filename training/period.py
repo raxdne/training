@@ -1329,10 +1329,10 @@ class Period(Title,Description,Plot):
             c = '#aaaaff'
 
         strResult += '<a href="#{}">\n'.format(str(id(self)))
-        strResult += '<rect fill="{}" opacity=".75" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
+        strResult += '<rect fill="{}" opacity=".75" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
         strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.getDescriptionSVG() + '\n\n' + self.report())
         strResult += '</rect>'
-        strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 10,self.getTitleXML())
+        strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 12,self.getTitleXML())
         strResult += '</a>\n'
 
         y_i = y + config.diagram_bar_height * 3
