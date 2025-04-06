@@ -71,6 +71,8 @@ REQ: use Mindmap as input (`mm2py.xsl`)
 
 ### SVG
 
+REQ: overlay plan and report Gantt chart (reuse SVG strings + opacity)
+
 REQ: accumulated Diagram for comparison of multiple periods ✔
 
 <https://pypi.org/project/svgwrite/>
