@@ -100,15 +100,7 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        l = 0
-        for c in self.child:
-            if type(c) is Cycle or type(c) is Period:
-                l += c.getLength()
-
-        if self.periodInt is None or l > self.periodInt:
-            self.setPeriod(l)
-
-        return self.periodInt
+        return self.getLength()
 
 
     def setPlan(self,fPlan=True):
@@ -233,7 +225,15 @@ class Period(Title,Description,Plot):
 
         """ return length of period """
 
-        return len(self)
+        l = 0
+        for c in self.child:
+            if type(c) is Cycle or type(c) is Period:
+                l += c.getLength()
+
+        if (self.periodInt is None or self.periodInt < 1) and l > 0:
+            self.setPeriod(l)
+
+        return self.periodInt
 
 
     def getDuration(self):
@@ -334,7 +334,7 @@ class Period(Title,Description,Plot):
                                 break
                             elif p.child[i].dateEnd >= objArg.dateBegin:
                                 # objArg begins in p.child[i]
-                                p.child[i].cutAfter(objArg.dateBegin)
+                                p.child[i].cutAfter(objArg.dateBegin - timedelta(days=1))
                                 p.child.insert(i+1,objArg.dup())
                                 break
                             elif p.child[i] == p.child[-1]:

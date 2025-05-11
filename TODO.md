@@ -78,3 +78,50 @@ REQ: accumulated Diagram for comparison of multiple periods ✔
 <https://pypi.org/project/svgwrite/>
 
 <https://pypi.org/project/drawSvg/>
+
+### [Streamlit](https://streamlit.io/)
+
+“Turn your data scripts into shareable web apps in minutes. All in pure Python. No front‑end experience required.”
+
+[Streamlit Crash Course: From Zero to Data App](https://www.youtube.com/watch?v=d7fnzDQ5qM8)
+
+https://docs.streamlit.io/
+
+https://github.com/streamlit/streamlit
+
+REQ: WebUI
+
+    python3 -m venv ~/python/streamlit
+    ~/python/streamlit/bin/pip3 install streamlit
+    ~/python/streamlit/streamlit hello
+
+use `app-starter-kit` on Github as Template
+
+    if __name__ == "__main__":
+        try:
+            # https://discuss.streamlit.io/t/how-to-check-if-code-is-run-inside-streamlit-and-not-e-g-ipython/23439/8
+            from streamlit.runtime.scriptrunner import get_script_run_ctx
+            if get_script_run_ctx():
+                    st.set_page_config(layout="wide")
+                    st.write("""
+                    # My first app
+                    Hello *world* ABC!
+                    """)
+
+                    
+                    # https://discuss.streamlit.io/t/adding-an-svg-image-and-listen-to-events-on-the-image/51006
+
+                    b64 = base64.b64encode(s.toSVGGanttChart().encode('utf-8')).decode("utf-8")
+                    html = r'<img src="data:image/svg+xml;base64,%s"/>' % b64
+
+                    c = st.container()
+                    c.write(html, unsafe_allow_html=True)
+                    c.write(config.style, unsafe_allow_html=True)
+                    #c.write(s.toHtmlTableOfContent(), unsafe_allow_html=True)
+                    c.html(s.toHtmlTableOfContent())
+                    #s.setPlot(True)
+                    c.html(s.toHtml())
+            else:
+                pass
+        except ModuleNotFoundError:
+            pass
