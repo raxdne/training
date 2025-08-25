@@ -19,6 +19,8 @@
 
 import io
 
+from pathlib import Path
+
 import sys
 
 import math
@@ -807,6 +809,42 @@ class Period(Title,Description,Plot):
         strResult += "{:.1f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
 
         return strResult
+
+
+    def writeFiles(self, strDirArg, strId):
+
+        Path(strDirArg).mkdir(parents=True,exist_ok=True)
+
+        #periodArg.plotHist(strDirArg + '/' + strId + '-hist.svg')
+        #periodArg.plotTimeDist(strDirArg + '/' + strId + '-ts.svg')
+
+        f = open(strDirArg + '/' + strId + '-gantt.svg', 'w')
+        f.write(self.toSVGGanttChart())
+        f.close()
+
+        f = open(strDirArg + '/' + strId + '.svg', 'w')
+        f.write(self.toSVGDiagram())
+        f.close()
+
+        f = open(strDirArg + '/' + strId + '.mm', 'w')
+        f.write(self.toFreeMind())
+        f.close()
+
+        f = open(strDirArg + '/' + strId + '.ics', 'wb')
+        f.write(self.toVCalendar())
+        f.close()
+
+        #f = open(strDirArg + '/' + strId + '.csv', 'w')
+        #f.write(periodArg.toCSV())
+        #f.close()
+
+        f = open(strDirArg + '/' + strId + '.html', 'w')
+        f.write(self.toHtmlFile())
+        f.close()
+
+        f = open(strDirArg + '/' + strId + '-dashboard.html', 'w')
+        f.write(self.toComparisonHtmlFile())
+        f.close()
 
 
     def parseFile(self,listFilename,fUpdater=None):
