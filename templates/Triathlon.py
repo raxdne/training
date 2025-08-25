@@ -141,7 +141,7 @@ def Highlight1():
     return c
 
 
-def PlanTriathlon(strArg):
+def Season(strArg):
 
     s = Period(strArg)
     s.appendDescription(['Targets', [['Same volume like last season'],['defined Highlights',['Cycling','Run']]]])
@@ -160,36 +160,8 @@ def PlanTriathlon(strArg):
     return s
 
 
+if __name__ == '__main__':
 
-s = PlanTriathlon('Season Triathlon Basics').schedule(date.today().year,3,1)
-
-print(s.report())
-
-f = open('TriathlonPlanGantt.svg', encoding='utf-8', mode='w')
-f.write(s.toSVGGanttChart())
-f.close()
-
-f = open('TriathlonPlan.svg', encoding='utf-8', mode='w')
-f.write(s.toSVGDiagram())
-f.close()
-
-f = open('TriathlonPlan.mm', encoding='utf-8', mode='w')
-f.write(s.toFreeMind())
-f.close()
-
-f = open('TriathlonPlan.ics', 'wb')
-f.write(s.toVCalendar())
-f.close()
-
-f = open('TriathlonPlan.txt', encoding='utf-8', mode='w')
-f.write(s.toString())
-f.close()
-
-f = open('TriathlonPlan.csv', encoding='utf-8', mode='w')
-f.write(s.toCSV())
-f.close()
-
-f = open('TriathlonPlan.html', encoding='utf-8', mode='w')
-f.write(s.toHtmlFile())
-f.close()
-
+    s = Season('Season Triathlon Basics').schedule(date.today().year,3,1)
+    print(s.report())
+    s.writeFiles('output','Triathlon')

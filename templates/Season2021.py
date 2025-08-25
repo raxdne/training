@@ -1,6 +1,7 @@
 #
 #
 #
+import datetime
 
 from training.note import Note
 from training.unit import Unit
@@ -314,7 +315,7 @@ def Running2021():
 
 
 
-def Plan2021(strArg):
+def Season(strArg):
 
     s = Period(strArg)
     s.appendDescription(['Targets', [['Same volume like last season'],['defined Highlights',['Bicycle','Run']]]])
@@ -335,39 +336,9 @@ def Plan2021(strArg):
     return s
 
 
-s = Plan2021('Season 2021')
+if __name__ == '__main__':
 
-print(s.report())
-
-f = open('Season2021Gantt.svg', encoding='utf-8', mode='w')
-f.write(s.toSVGGanttChart())
-f.close()
-
-f = open('Season2021.svg', encoding='utf-8', mode='w')
-f.write(s.toSVGDiagram())
-f.close()
-
-f = open('Season2021.mm', encoding='utf-8', mode='w')
-f.write(s.toFreeMind())
-f.close()
-
-f = open('Season2021.ics', 'wb')
-f.write(s.toVCalendar())
-f.close()
-
-f = open('Season2021.txt', encoding='utf-8', mode='w')
-f.write(s.toString())
-f.close()
-
-f = open('Season2021.csv', encoding='utf-8', mode='w')
-f.write(s.toCSV())
-f.close()
-
-f = open('Season2021.sqlite', encoding='utf-8', mode='w')
-f.write(s.toSqliteDump())
-f.close()
-
-f = open('Season2021.html', encoding='utf-8', mode='w')
-f.write(s.toHtmlFile())
-f.close()
+    s = Season('Season Basics').schedule(datetime.date.today().year,3,1)
+    print(s.report())
+    s.writeFiles('output','SeasonBasics')
 

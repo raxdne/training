@@ -117,7 +117,7 @@ def RunningSimple():
     return p
 
 
-def PlanSimple(strArg):
+def Season(strArg):
 
     s = Period(strArg)
     s.appendDescription(['Targets', [['Same volume like last season'],['defined Highlights',['Bicycle','Run']]]])
@@ -134,51 +134,11 @@ def PlanSimple(strArg):
     return s
 
 
+if __name__ == '__main__':
 
-config.colors = {'Bicycle': '#ffdddd', 'Running': '#ddffdd', 'K': '#aaffaa', 'Swimming': '#ddddff'}
-#print(config.getSettingsStr())
+    s = Season('Season Simple').schedule(datetime.date.today().year,3,1)
+    s.updateValues({'Running': 6.0, 'Bicycle': 20.0, 'Swimming': 2.0})
+    print(s.report())
+    s.writeFiles('output','SeasonSimple')
 
-s = PlanSimple('Season Simple').schedule(date.today()).updateValues({'Running': 6.0, 'Bicycle': 20.0, 'Swimming': 2.0})
-
-# patch some days using a scheduled cycle
-#c = Cycle('Pause Running').insert([1,3,5],Unit('10;Running;3:00:00')).schedule(date.today().year,7,2)
-#print('info: ' + str(c), file=sys.stderr)
-#s.insertByDate(c,True)
-
-#s.insert(Period('Sickness',14).fix(date.today() + timedelta(days=60)).setColor('#ff0000'),1)
-s.insert(Period('Sickness + Recovery').append([Period('Sickness',4).setColor('#ff0000'),Period('Recovery',10).define([';Running;3h'])]).fix(date.today() + timedelta(days=60)),1)
-
-print(s.report())
-#print(s.toTemplate())
-
-#quit()
-
-
-f = open('DraftPlanGantt.svg', encoding='utf-8', mode='w')
-f.write(s.toSVGGanttChart())
-f.close()
-
-f = open('DraftPlan.svg', encoding='utf-8', mode='w')
-f.write(s.toSVGDiagram())
-f.close()
-
-f = open('DraftPlan.mm', encoding='utf-8', mode='w')
-f.write(s.toFreeMind())
-f.close()
-
-f = open('DraftPlan.ics', 'wb')
-f.write(s.toVCalendar())
-f.close()
-
-f = open('DraftPlan.txt', encoding='utf-8', mode='w')
-f.write(s.toString())
-f.close()
-
-f = open('DraftPlan.csv', encoding='utf-8', mode='w')
-f.write(s.toCSV())
-f.close()
-
-f = open('DraftPlan.html', encoding='utf-8', mode='w')
-f.write(s.toHtmlFile())
-f.close()
 
