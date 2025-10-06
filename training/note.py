@@ -156,10 +156,10 @@ class Note(Description):
                             return False
                     else:
                         # plan time only
-                        m = re.match(r"\b([0-2][0-9]:[0-5][0-9]:[0-5][0-9])\b",strArg)
+                        m = re.match(r"\b([0-2][0-9]:[0-5][0-9])\b",strArg)
                         if m is not None:
                             #print("time: ",m.group(1), file=sys.stderr)
-                            self.tPlan = time.fromisoformat(m.group(1))
+                            self.tPlan = time.fromisoformat(m.group(1) + ':00')
                         else:
                             print('ignoring: ',strArg, file=sys.stderr)
 

@@ -483,17 +483,18 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        if self.child:
-            for c in self.child:
-                if type(c) is Cycle or type(c) is Period:
-                    c.scale(floatScale,patternType)
-        elif self.data:
-            l = []
-            for d in self.data:
-                l.append([0,d[1]*floatScale,d[2]*floatScale,d[3]])
-            self.data = l
+        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
+            if self.child:
+                for c in self.child:
+                    if type(c) is Cycle or type(c) is Period:
+                        c.scale(floatScale,patternType)
+            elif self.data:
+                l = []
+                for d in self.data:
+                    l.append([0,d[1]*floatScale,d[2]*floatScale,d[3]])
+                self.data = l
 
-        self.summary.clear()
+            self.summary.clear()
 
         return self
 

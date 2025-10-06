@@ -264,9 +264,10 @@ class Combination(Title,Note):
 
         """  """
 
-        for u in self.child:
-            if type(u) is Unit:
-                u.scale(floatScale,patternType)
+        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
+            for u in self.child:
+                if type(u) is Unit:
+                    u.scale(floatScale,patternType)
 
         return self
 
@@ -307,7 +308,7 @@ class Combination(Title,Note):
             strResult = '<div'
             if self.color is not None:
                 strResult += ' style="background-color: {}"'.format(self.color)
-            strResult += '/>'
+            strResult += '>'
 
             if self.logicAnd:
                 strResult += 'Combination: ' + self.getDuration().toString()
@@ -317,9 +318,9 @@ class Combination(Title,Note):
             strResult += self.getDescriptionString() + '</div>'
 
             if self.logicAnd:
-                strResult += '<ol>'
+                strResult += '<ol style="margin-block-start: 2px;">'
             else:
-                strResult += '<ol style="list-style-type: lower-latin">'
+                strResult += '<ol style="list-style-type: lower-latin; margin-block-start: 2px;">'
 
             for u in self.child:
                 strResult += '<li>' + u.toHtmlTable() + '</li>'
@@ -404,16 +405,36 @@ class Combination(Title,Note):
         """  """
         
         if len(self.child) > 1:
+            event = Event()
+            event.add('dtstamp', datetime.now().astimezone(None))
             if self.logicAnd:
-                for u in self.child:
-                    u.to_ical(cal)
+                m = self.child[0]
+                event.add('summary', f'Combination: {self.toStringShort()}')
+                if m.dt is None and m.tPlan is not None:
+                    # no day defined
+                    dt = datetime.combine(date.today(), m.tPlan)
+                    event.add('dtstart', dt)
+                    event.add('dtend', dt + self.getDuration())
+                elif type(m.tPlan) is datetime.time:
+                    # day defined
+                    dt = datetime.combine(m.dt, m.tPlan)
+                    event.add('dtstart', dt)
+                    event.add('dtend', dt + self.getDuration())
+                elif m.dt.time() == time(0) or self.getDuration() is None:
+                    # no time defined
+                    event.add('dtstart', m.dt.date())
+                    event.add('dtend', m.dt.date() + timedelta(days=1))
+                else:
+                    event.add('dtstart', m.dt)
+                    event.add('dtend', m.dt + self.getDuration())
+
+                cal.add_component(event)
+
             else:
-                event = Event()
                 m = self.getRepresentativeAlternative()
 
                 if m is not None and not (m.dt is None and m.tPlan is None) and cal is not None and event is not None:
                     event.add('summary', f'Alternatives: {self.toStringShort()}')
-                    event.add('dtstamp', datetime.now().astimezone(None))
                     if m.dt is None and m.tPlan is not None:
                         # no day defined
                         dt = datetime.combine(date.today(), m.tPlan)

@@ -562,10 +562,11 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        for v in self.day:
-            for u in v:
-                if type(u) is Unit or type(u) is Combination:
-                    u.scale(floatScale,patternType)
+        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
+            for v in self.day:
+                for u in v:
+                    if type(u) is Unit or type(u) is Combination:
+                        u.scale(floatScale,patternType)
 
         return self
 

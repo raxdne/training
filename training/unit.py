@@ -258,7 +258,7 @@ class Unit(Note):
 
         """  """
 
-        if floatScale > 0.1 and (patternType is None or self.type is None or re.match(patternType,self.type)):
+        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01 and (patternType is None or self.type is None or re.match(patternType,self.type)):
 
             if self.dist is not None:
                 if self.dist < 20.0:

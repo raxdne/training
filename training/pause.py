@@ -60,7 +60,7 @@ class Pause(Note):
         """  """
 
         if self.getDuration().total_seconds() > 0:
-            return '{} {} Pause'.format(str(super().__str__()), Duration(self.getDuration()))
+            return f'Pause {super().getDescriptionString()} {self.getDuration().toString()}'
         else:
             return ''
 
@@ -131,7 +131,7 @@ class Pause(Note):
         strResult = ''
 
         if self.getDuration().total_seconds() > 0:
-            strResult =  f'<div style="background-color: {self.getColor()}">Pause {self.getDuration().toString()}</div>'
+            strResult =  f'<div style="background-color: {self.getColor()}">{str(self)}</div>'
 
         return strResult
 
