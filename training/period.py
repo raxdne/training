@@ -579,29 +579,29 @@ class Period(Title,Description,Plot):
         if type(objArg) is date:
             if objArg < self.dateEnd:
                 d = (objArg - self.dateBegin).days
-                if d > 0:
-                    self.cutAfter(d)
+                if d > -1:
+                    self.cutAfter(d)  # d is the computed index in this period
                 else:
                     print('info: ' + objArg.isoformat() + ' is not in this period', file=sys.stderr)
-        elif type(objArg) is int and objArg > 0 and not self.child:
+        elif type(objArg) is int and objArg > -1 and not self.child:
             # a period without childs
-            self.setPeriod(objArg)
+            self.setPeriod(objArg + 1)
             self.schedule()
-        elif type(objArg) is int and objArg > 0 and self.getLength() > objArg:
+        elif type(objArg) is int and objArg > -1 and self.getLength() > objArg:
             l = 0
             for i in range(len(self.child)):
                 if type(self.child[i]) is Cycle or type(self.child[i]) is Period:
-                    if l + self.child[i].getLength() == objArg:
+                    if (l + self.child[i].getLength() - 1) == objArg:
                         del self.child[i+1:]
                         break
-                    elif l + self.child[i].getLength() > objArg:
+                    elif (l + self.child[i].getLength() - 1) > objArg:
                         del self.child[i+1:]
                         self.child[i].cutAfter(objArg - l)
                         break
                     else:
                         l += self.child[i].getLength()
 
-            self.setPeriod(objArg)
+            self.setPeriod(objArg + 1)
             self.schedule()
         else:
             print('error: wrong argument type ' + str(type(objArg)), file=sys.stderr)

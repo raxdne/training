@@ -455,7 +455,7 @@ class Cycle(Title,Description,Plot):
         return self
 
 
-    def cutAfter(self,objArg=0):
+    def cutAfter(self,objArg=-1):
 
         """  """
 
@@ -463,12 +463,12 @@ class Cycle(Title,Description,Plot):
             # 
             if objArg < self.dateEnd:
                 d = (objArg - self.dateBegin).days
-                if d > 0:
+                if d > -1:
                     self.cutAfter(d)
                 else:
                     print('info: ' + objArg.isoformat() + ' is not in this period', file=sys.stderr)
-        elif type(objArg) is int and objArg > 0 and len(self.day) > objArg:
-            #print('info: cut Cycle "' + self.getTitleString() + '" at ' + str(objArg-1), file=sys.stderr)
+        elif type(objArg) is int and objArg > -1 and len(self.day) > objArg:
+            #print('info: cut Cycle "' + self.getTitleString() + '" after ' + str(objArg), file=sys.stderr)
             del self.day[objArg+1:]
             self.data.clear()
             self.dateEnd = self.dateBegin + timedelta(days = len(self.day) - 1)
