@@ -82,9 +82,12 @@ class Period(Title,Description,Plot):
         self.setVDefaults()
 
 
-    def __str__(self):
+    def __repr__(self):
 
-        """  """
+        return __name__ + '("' + super().getTitleString() + '", ' + len(self) + ')'
+
+
+    def __str__(self):
 
         strResult = '\n* ' + super().getTitleString() + ' ' + super().getDateString() + '\n\n'
 
@@ -99,8 +102,6 @@ class Period(Title,Description,Plot):
 
 
     def __len__(self):
-
-        """  """
 
         return self.getLength()
 
@@ -590,6 +591,16 @@ class Period(Title,Description,Plot):
     def schedule(self, argDateOrYear=None, intMonth=None, intDay=None):
 
         """  """
+
+        if type(argDateOrYear) is bool and argDateOrYear is False:
+            # delete all dates
+            for c in self.child:
+                if type(c) is Cycle or type(c) is Period:
+                    c.schedule(False)
+            self.dateFixed = None
+            self.dateBegin = None
+            self.dateEnd = None
+            return self
 
         if self.dateFixed is not None:
             # keep fixed date and schedule childs

@@ -28,14 +28,15 @@ class Title:
 
     def __init__(self,strArg=None):
 
-        """  """
-
         self.setTitleStr(strArg)
 
 
-    def __str__(self):
+    def __repr__(self):
 
-        """  """
+        return __name__ + '("' + super().getTitleString() + '")'
+
+
+    def __str__(self):
 
         return str(self.strTitle)
 

@@ -77,16 +77,17 @@ class Cycle(Title,Description,Plot):
         self.setVDefaults(config.v_defaults)
 
 
-    def __len__(self):
+    def __repr__(self):
 
-        """  """
+        return __name__ + '("' + super().getTitleString() + '", ' + self.getLength() + ')'
+
+
+    def __len__(self):
 
         return len(self.day)
 
 
     def __str__(self):
-
-        """  """
 
         strResult = '\n** ' + super().getTitleString() + ' ' + super().getDateString() + '\n\n'
 
@@ -560,6 +561,13 @@ class Cycle(Title,Description,Plot):
     def schedule(self, argDateOrYear=None, intMonth=None, intDay=None):
 
         """  """
+
+        if type(argDateOrYear) is bool and argDateOrYear is False:
+            # delete all dates
+            self.dateFixed = None
+            self.dateBegin = None
+            self.dateEnd = None
+            return self
 
         if self.dateFixed is not None:
             # keep fixed date and schedule childs
