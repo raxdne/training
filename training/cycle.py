@@ -423,55 +423,41 @@ class Cycle(Title,Description,Plot):
         return self
 
 
-    def cut(self, objArgA=0, objArgB=None):
+    def cut(self, d0, d1):
 
         """  """
 
-        return self.cutBefore(objArgA).cutAfter(objArgB)
+        return self.cutBefore(d0).cutAfter(d1)
 
 
-    def cutBefore(self,objArg=0):
+    def cutBefore(self,d):
 
         """  """
 
-        if type(objArg) is date:
-            # 
-            if objArg > self.dateBegin:
-                d = (objArg - self.dateBegin).days
-                if d > 0:
-                    self.cutBefore(d)
-                    self.dateBegin = objArg
-                    #if self.dateFixed is None:
-                    self.dateFixed = self.dateBegin
-                    self.dateEnd = self.dateBegin + timedelta(days = len(self.day) - 1)
-                else:
-                    print('info: ' + objArg.isoformat() + ' is not in this period', file=sys.stderr)
-        elif type(objArg) is int and objArg > 0 and len(self.day) > objArg:
-            #print('info: cut Cycle "' + self.getTitleString() + '" at ' + str(objArg-1), file=sys.stderr)
-            del self.day[0:objArg]
-            self.data.clear()
-            #self.dateBegin = self.dateEnd - timedelta(days = len(self.day) - 1)
+        assert type(d) is date
+
+        if self.dateBegin < d and d <= self.dateEnd:
+            delta = (d - self.dateBegin).days
+            if delta > 0:
+                del self.day[:delta]
+                self.data.clear()
+                self.schedule(d)
 
         return self
 
 
-    def cutAfter(self,objArg=-1):
+    def cutAfter(self,d):
 
         """  """
 
-        if type(objArg) is date:
-            # 
-            if objArg < self.dateEnd:
-                d = (objArg - self.dateBegin).days
-                if d > -1:
-                    self.cutAfter(d)
-                else:
-                    print('info: ' + objArg.isoformat() + ' is not in this period', file=sys.stderr)
-        elif type(objArg) is int and objArg > -1 and len(self.day) > objArg:
-            #print('info: cut Cycle "' + self.getTitleString() + '" after ' + str(objArg), file=sys.stderr)
-            del self.day[objArg+1:]
-            self.data.clear()
-            self.dateEnd = self.dateBegin + timedelta(days = len(self.day) - 1)
+        assert type(d) is date
+
+        if self.dateBegin <= d and d < self.dateEnd:
+            delta = (d - self.dateBegin).days
+            if delta > -1:
+                self.data.clear()
+                del self.day[delta+1:]
+                self.schedule(self.dateBegin)
 
         return self
 

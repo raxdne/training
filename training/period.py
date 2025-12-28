@@ -530,84 +530,59 @@ class Period(Title,Description,Plot):
         return self
 
 
-    def cut(self, objArgA=0, objArgB=None):
+    def cut(self, d0, d1):
 
         """  """
 
-        return self.cutBefore(objArgA).cutAfter(objArgB)
+        return self.cutBefore(d0).cutAfter(d1)
 
 
-    def cutBefore(self,objArg=0):
+    def cutBefore(self,d):
 
         """  """
 
-        if type(objArg) is date:
-            while len(self.child) > 0:
-                if type(self.child[0]) is Cycle or type(self.child[0]) is Period:
-                    if self.child[0].dateEnd < objArg:
-                        del self.child[0]
-                    else:
-                        self.child[0].cutBefore(objArg)
-                        #self.dateFixed = objArg
-                        #self.setPeriod(objArg)
-                        self.schedule()
+        assert type(d) is date
+
+        if self.dateBegin < d and d <= self.dateEnd:
+            for i in range(len(self.child)):
+                if type(self.child[i]) is Cycle or type(self.child[i]) is Period:
+                    if d == self.child[i].dateBegin:
+                        del self.child[:i]
                         break
-        elif type(objArg) is int and objArg > 0 and not self.child:
-            # a period without childs
-            self.setPeriod(objArg)
-            self.schedule()
-        elif type(objArg) is int and objArg > 0 and self.getLength() > objArg:
+                    elif self.child[i].dateBegin < d and d <= self.child[i].dateEnd:
+                        self.child[i].cutBefore(d)
+                        del self.child[:i]
+                        break
 
-            self.setPeriod(self.getLength())
-            self.dateBegin += timedelta(days = objArg)
-            if self.dateFixed is not None:
-                self.dateFixed = self.dateBegin
-            self.schedule()
-        else:
-            print('error: wrong argument type ' + str(type(objArg)), file=sys.stderr)
-
-        self.data.clear()
-        self.summary.clear()
+            self.setPeriod((self.dateEnd - d).days + 1)
+            self.schedule(d)
+            self.data.clear()
+            self.summary.clear()
 
         return self
 
 
-    def cutAfter(self,objArg=0):
+    def cutAfter(self,d):
 
         """  """
 
-        if type(objArg) is date:
-            if objArg < self.dateEnd:
-                d = (objArg - self.dateBegin).days
-                if d > -1:
-                    self.cutAfter(d)  # d is the computed index in this period
-                else:
-                    print('info: ' + objArg.isoformat() + ' is not in this period', file=sys.stderr)
-        elif type(objArg) is int and objArg > -1 and not self.child:
-            # a period without childs
-            self.setPeriod(objArg + 1)
-            self.schedule()
-        elif type(objArg) is int and objArg > -1 and self.getLength() > objArg:
-            l = 0
+        assert type(d) is date
+
+        if self.dateBegin <= d and d < self.dateEnd:
             for i in range(len(self.child)):
                 if type(self.child[i]) is Cycle or type(self.child[i]) is Period:
-                    if (l + self.child[i].getLength() - 1) == objArg:
+                    if d == self.child[i].dateEnd:
                         del self.child[i+1:]
                         break
-                    elif (l + self.child[i].getLength() - 1) > objArg:
+                    elif self.child[i].dateBegin <= d and d < self.child[i].dateEnd:
+                        self.child[i].cutAfter(d)
                         del self.child[i+1:]
-                        self.child[i].cutAfter(objArg - l)
                         break
-                    else:
-                        l += self.child[i].getLength()
 
-            self.setPeriod(objArg + 1)
-            self.schedule()
-        else:
-            print('error: wrong argument type ' + str(type(objArg)), file=sys.stderr)
-
-        self.data.clear()
-        self.summary.clear()
+            self.setPeriod((d - self.dateBegin).days + 1)
+            self.schedule(self.dateBegin)
+            self.data.clear()
+            self.summary.clear()
 
         return self
 
