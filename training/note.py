@@ -182,6 +182,7 @@ class Note(Description):
         if objArg is None or not objArg:
             return False
         elif type(objArg) is str:
+            self.color = "#ffff00"
             entry = objArg.split(';')
             #print('Note {}'.format(str(entry)), file=sys.stderr)
             if len(entry) == 1:

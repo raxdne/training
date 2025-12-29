@@ -865,17 +865,18 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        strResult = '<g>'
+        strResult = ''
 
         if self.day:
+            strResult += '<g>'
             for v in self.day:
                 for u in v:
                     if u.isMarked():
                         x_i = (u.dt.date() - dateBase).days * 2
-                        strResult += '<line stroke="{}" stroke-width="2" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(u.getColor(), x_i, 0, x_i, config.diagram_width)
+                        strResult += '<line stroke="red" stroke-width="1" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(x_i, 0, x_i, config.diagram_width)
                         strResult += f'<title>{u}</title>\n'
                         strResult += '</line>'
-        strResult += '</g>'
+            strResult += '</g>'
 
         return strResult
 

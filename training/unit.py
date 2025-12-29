@@ -433,7 +433,12 @@ class Unit(Note):
             else:
                 bar_width = self.dist * config.diagram_scale_dist
 
-            strResult += ' height="{}" stroke="black" stroke-width=".5" width="{:.0f}" x="{}" y="{}"'.format(config.diagram_bar_height, bar_width, x, y)
+            if self.isMarked():
+                strResult += ' stroke="red" stroke-width="1"'
+            else:
+                strResult += ' stroke="black" stroke-width=".5"'
+
+            strResult += ' height="{}" width="{:.0f}" x="{}" y="{}"'.format(config.diagram_bar_height, bar_width, x, y)
             strResult += '>'
 
             strResult += '<title>{} {}</title>'.format(self.toStringShort(), self.getDescriptionString())
@@ -441,7 +446,7 @@ class Unit(Note):
             strResult += '</rect>\n'
 
             if self.isMarked():
-                strResult += '<line stroke="red" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x, 0, x, config.diagram_bar_height)
+                strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2 + bar_width, y + config.diagram_bar_height, self.getDescriptionString(), str(self))
 
         return strResult
 
