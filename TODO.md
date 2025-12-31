@@ -3,6 +3,12 @@
 
 ## Requirements
 
+REQ: cut(b,a) to skip an interval
+- cut(a,b) to delete out-of-interval elements
+
+REQ: merge(a,b)
+- cut(a).append(cut(b))
+
 REQ: Notes in Markdown format
 
 REQ: read data from CalDAV server

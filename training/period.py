@@ -47,6 +47,7 @@ from training.unit import Unit
 from training.cycle import Cycle
 from training.combination import Combination
 from training.plot import Plot
+from training.phase import Phase
 
 #
 #
@@ -69,6 +70,7 @@ class Period(Title,Description,Plot):
 
         self.color = None
         self.child = []
+        self.tag = []
         self.data = []
         self.summary = {}
 
@@ -659,6 +661,18 @@ class Period(Title,Description,Plot):
         return self
 
 
+    def addTags(self, objArg=None):
+
+        """  """
+
+        if type(objArg) is list:
+            self.tag.extend(objArg)
+        elif type(objArg) is Phase:
+            self.tag.append(objArg)
+
+        return self
+
+
     def define(self, objArg=None):
 
         """  """
@@ -805,18 +819,6 @@ class Period(Title,Description,Plot):
         #periodArg.plotHist(strDirArg + '/' + strId + '-hist.svg')
         #periodArg.plotTimeDist(strDirArg + '/' + strId + '-ts.svg')
 
-        f = open(strDirArg + '/' + strId + '-gantt.svg', 'w')
-        f.write(self.toSVGGanttChart())
-        f.close()
-
-        f = open(strDirArg + '/' + strId + '.svg', 'w')
-        f.write(self.toSVGDiagram())
-        f.close()
-
-        f = open(strDirArg + '/' + strId + '.mm', 'w')
-        f.write(self.toFreeMind())
-        f.close()
-
         f = open(strDirArg + '/' + strId + '.ics', 'wb')
         f.write(self.toVCalendar())
         f.close()
@@ -831,6 +833,18 @@ class Period(Title,Description,Plot):
 
         f = open(strDirArg + '/' + strId + '-dashboard.html', 'w')
         f.write(self.toComparisonHtmlFile())
+        f.close()
+
+        f = open(strDirArg + '/' + strId + '-gantt.svg', 'w')
+        f.write(self.toSVGGanttChart())
+        f.close()
+
+        f = open(strDirArg + '/' + strId + '.svg', 'w')
+        f.write(self.toSVGDiagram())
+        f.close()
+
+        f = open(strDirArg + '/' + strId + '.mm', 'w')
+        f.write(self.toFreeMind())
         f.close()
 
 
@@ -1326,6 +1340,15 @@ class Period(Title,Description,Plot):
             w = i / 3600 * 25 * config.diagram_scale_dist
             strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( config.diagram_offset + w, 20, config.diagram_offset + w, diagram_height)
 
+        strResult += '<g>'
+        for t in self.tag:
+            if type(t) is Phase:
+                y_i = ((t.date - self.dateBegin).days + 1) * config.diagram_bar_height * 2
+                strResult += '<rect fill="{}" opacity=".25" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, 0, y_i, t.duration * config.diagram_bar_height * 2, config.diagram_width)
+                strResult += f'<title>{t.title} ({t.duration} {t.date.strftime("%Y-%m-%d")} {(t.date + timedelta(days=t.duration - 1)).strftime("%Y-%m-%d")})</title>\n'
+                strResult += '</rect>'
+        strResult += '</g>'
+
         strResult += self.toSVG()
         #strResult += '</g>'
         strResult += '</svg>\n'
@@ -1377,6 +1400,57 @@ class Period(Title,Description,Plot):
         return strResult
 
 
+    def toSVGGanttSheet(self,d_0, d_1, diagram_height, diagram_width):
+
+        """ Calendar """
+
+        strResult = '<g id="months">'
+        # marker date
+        d_i = date(d_0.year, d_0.month, 1)
+        m = round((d_1 - d_0).total_seconds() / (30 * 24 * 60 * 60)) + 1
+        for i in range(m):
+            if d_i.month == 1:
+                color = 'red'
+            else:
+                color = 'black'
+
+            # line marker
+            w = ((d_i - d_0).days + 1) * 2
+            strResult += '<line stroke-dasharray="8" stroke="{}" stroke-width="1" opacity="0.25" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(color,w, 0, w, diagram_height)
+            strResult += '<title>{}</title>\n'.format(d_i.strftime("%Y-%m-%d"))
+            strResult += '</line>'
+
+            strResult += '<g transform="translate({},{})">'.format(w+8, diagram_height - 105)
+            strResult += '<g transform="rotate(-45)">'
+            strResult += '<text x="{}" y="{}">{}</text>\n'.format(0, 0, d_i.strftime("%Y-%m-%d"))
+            strResult += '</g>'
+            strResult += '</g>'
+
+            if d_i.month > 11:
+                d_i = date(d_i.year + 1, 1, 1)
+            else:
+                d_i = date(d_i.year, d_i.month + 1, 1)
+
+        w = ((date.today() - d_0).days + 1) * 2
+        strResult += '<line stroke="red" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 0, w, diagram_height)
+        strResult += '</g>'
+
+        strResult += '<g id="tags">'
+        for t in self.tag:
+            if type(t) is Phase:
+                strResult += '<rect fill="{}" opacity=".25" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, ((t.date - d_0).days + 1) * 2, 0, diagram_height - 10, t.duration * 2)
+                strResult += f'<title>{t.title} ({t.duration} {t.date.strftime("%Y-%m-%d")} {(t.date + timedelta(days=t.duration - 1)).strftime("%Y-%m-%d")})</title>\n'
+                strResult += '</rect>'
+        strResult += '</g>'
+
+        strResult += '<g id="minutes">'
+        for i in [0,30,45,60,90]:
+            strResult += '<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0, diagram_height - 10 - i, diagram_width, diagram_height - 10 - i)
+        strResult += '</g>'
+
+        return strResult
+
+
     def toSVGGanttChart(self):
 
         """ Gantt chart of periods and cycles """
@@ -1414,42 +1488,13 @@ class Period(Title,Description,Plot):
 
         strResult += '<g transform="translate(10,10)">'
 
-        strResult += '<g>'
-
-        # marker date
-        d_i = date(d_0.year, d_0.month, 1)
-        m = round((d_1 - d_0).total_seconds() / (30 * 24 * 60 * 60)) + 1
-        for i in range(m):
-            if d_i.month == 1:
-                color = 'red'
-            else:
-                color = 'black'
-
-            # line marker
-            w = ((d_i - d_0).days + 1) * 2
-            strResult += '<line stroke-dasharray="8" stroke="{}" stroke-width="1" opacity="0.25" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(color,w, 0, w, diagram_height)
-            strResult += '<title>{}</title>\n'.format(d_i.strftime("%Y-%m-%d"))
-            strResult += '</line>'
-
-            strResult += '<g transform="translate({},{})">'.format(w+8, diagram_height - 105)
-            strResult += '<g transform="rotate(-45)">'
-            strResult += '<text x="{}" y="{}">{}</text>\n'.format(0, 0, d_i.strftime("%Y-%m-%d"))
-            strResult += '</g>'
-            strResult += '</g>'
-
-            if d_i.month > 11:
-                d_i = date(d_i.year + 1, 1, 1)
-            else:
-                d_i = date(d_i.year, d_i.month + 1, 1)
-
-        w = ((date.today() - d_0).days + 1) * 2
-        strResult += '<line stroke="red" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 0, w, diagram_height)
+        strResult += '<g id="sheet">'
+        strResult += self.toSVGGanttSheet(d_0,d_1,diagram_height,diagram_width)
         strResult += '</g>'
-
-        for i in [0,30,45,60,90]:
-            strResult += '<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0, diagram_height - 10 - i, diagram_width, diagram_height - 10 - i)
-
+        
+        strResult += '<g id="periods">'
         strResult += self.toSVGGantt(d_0)
+        strResult += '</g>'
 
         strResult += '</g>'
         strResult += '</svg>\n'
