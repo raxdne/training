@@ -1304,7 +1304,7 @@ class Period(Title,Description,Plot):
         strResult = '<g>'
 
         if self.color is not None and l > 0:
-            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2) * l)-2,x+config.diagram_width-4)
+            strResult += '<rect fill="{}" opacity=".5" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2) * l)-2,x+config.diagram_width-4)
 
         if not self.child:
             strResult += '<text x="{}" y="{}" style="vertical-align:top"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan></text>\n'.format(0,y,self.getTitleXML(), self.getDateString())
@@ -1344,7 +1344,7 @@ class Period(Title,Description,Plot):
         for t in self.tag:
             if type(t) is Phase:
                 y_i = ((t.date - self.dateBegin).days + 1) * config.diagram_bar_height * 2
-                strResult += '<rect fill="{}" opacity=".25" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, 0, y_i, t.duration * config.diagram_bar_height * 2, config.diagram_width)
+                strResult += '<rect fill="{}" opacity=".5" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, 0, y_i, t.duration * config.diagram_bar_height * 2, config.diagram_width)
                 strResult += f'<title>{t.title} ({t.duration} {t.date.strftime("%Y-%m-%d")} {(t.date + timedelta(days=t.duration - 1)).strftime("%Y-%m-%d")})</title>\n'
                 strResult += '</rect>'
         strResult += '</g>'
@@ -1377,7 +1377,7 @@ class Period(Title,Description,Plot):
             c = '#aaaaff'
 
         strResult += '<a href="#{}">\n'.format(str(id(self)))
-        strResult += '<rect fill="{}" opacity=".75" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
+        strResult += '<rect fill="{}" opacity=".5" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
         strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.getDescriptionSVG() + '\n\n' + self.report())
         strResult += '</rect>'
         strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 12,self.getTitleXML())
@@ -1438,7 +1438,7 @@ class Period(Title,Description,Plot):
         strResult += '<g id="tags">'
         for t in self.tag:
             if type(t) is Phase:
-                strResult += '<rect fill="{}" opacity=".25" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, ((t.date - d_0).days + 1) * 2, 0, diagram_height - 10, t.duration * 2)
+                strResult += '<rect fill="{}" opacity=".5" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, ((t.date - d_0).days + 1) * 2, 0, diagram_height - 10, t.duration * 2)
                 strResult += f'<title>{t.title} ({t.duration} {t.date.strftime("%Y-%m-%d")} {(t.date + timedelta(days=t.duration - 1)).strftime("%Y-%m-%d")})</title>\n'
                 strResult += '</rect>'
         strResult += '</g>'
