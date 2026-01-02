@@ -557,6 +557,11 @@ class Period(Title,Description,Plot):
                         del self.child[:i]
                         break
 
+            #for i in range(len(self.tag)):
+            #    if d <= self.tag[i].dateBegin or self.tag[i].dateEnd <= d:
+            #        del self.tag[i]
+            #        i -= 1
+
             self.setPeriod((self.dateEnd - d).days + 1)
             self.schedule(d)
             self.data.clear()
@@ -1374,10 +1379,10 @@ class Period(Title,Description,Plot):
             # high level definition period
             c = '#aaffaa'
         else:
-            c = '#aaaaff'
+            c = "#c7c7fc"
 
         strResult += '<a href="#{}">\n'.format(str(id(self)))
-        strResult += '<rect fill="{}" opacity=".5" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
+        strResult += '<rect fill="{}" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(c, x_i, y, config.diagram_bar_height*2, (l.days + 1) * 2)
         strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.getDescriptionSVG() + '\n\n' + self.report())
         strResult += '</rect>'
         strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i + 2, y + 12,self.getTitleXML())
