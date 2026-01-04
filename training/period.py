@@ -511,7 +511,22 @@ class Period(Title,Description,Plot):
         return self
 
 
-    def remove(self,patternType=None):
+    def removeCycles(self):
+
+        """  """
+
+        for i in range(len(self.child)-1,-1,-1):
+            if type(self.child[i]) is Period:
+                self.child[i].removeCycles()
+            elif type(self.child[i]) is Cycle:
+                del self.child[i]
+
+        self.data = []
+
+        return self
+
+
+    def remove(self,patternType=r'.+'):
 
         """  """
 
@@ -1349,7 +1364,7 @@ class Period(Title,Description,Plot):
         for t in self.tag:
             if type(t) is Phase:
                 y_i = ((t.date - self.dateBegin).days + 1) * config.diagram_bar_height * 2
-                strResult += '<rect fill="{}" opacity=".5" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, 0, y_i, t.duration * config.diagram_bar_height * 2, config.diagram_width)
+                strResult += '<rect id="{}" fill="{}" opacity=".5" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(str(id(t)), t.color, 0, y_i + 3, t.duration * config.diagram_bar_height * 2 + 2, config.diagram_width)
                 strResult += f'<title>{t.title} ({t.duration} {t.date.strftime("%Y-%m-%d")} {(t.date + timedelta(days=t.duration - 1)).strftime("%Y-%m-%d")})</title>\n'
                 strResult += '</rect>'
         strResult += '</g>'
@@ -1436,16 +1451,20 @@ class Period(Title,Description,Plot):
             else:
                 d_i = date(d_i.year, d_i.month + 1, 1)
 
-        w = ((date.today() - d_0).days + 1) * 2
-        strResult += '<line stroke="red" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 0, w, diagram_height)
+        w = ((date.today() - d_0).days) * 2 + 1
+        strResult += '<line stroke="red" stroke-width="2" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(w, 0, w, diagram_height)
+        strResult += '<title>{}</title>\n'.format(date.today().strftime("%Y-%m-%d"))
+        strResult += '</line>'
         strResult += '</g>'
 
         strResult += '<g id="tags">'
         for t in self.tag:
             if type(t) is Phase:
-                strResult += '<rect fill="{}" opacity=".5" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, ((t.date - d_0).days + 1) * 2, 0, diagram_height - 10, t.duration * 2)
+                strResult += '<a href="#{}">\n'.format(str(id(t)))
+                strResult += '<rect fill="{}" opacity=".5" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, ((t.date - d_0).days) * 2 - 1, 0, diagram_height - 10, t.duration * 2 + 1)
                 strResult += f'<title>{t.title} ({t.duration} {t.date.strftime("%Y-%m-%d")} {(t.date + timedelta(days=t.duration - 1)).strftime("%Y-%m-%d")})</title>\n'
                 strResult += '</rect>'
+                strResult += '</a>'
         strResult += '</g>'
 
         strResult += '<g id="minutes">'
