@@ -1451,17 +1451,17 @@ class Period(Title,Description,Plot):
             else:
                 d_i = date(d_i.year, d_i.month + 1, 1)
 
-        w = ((date.today() - d_0).days) * 2 + 1
-        strResult += '<line stroke="red" stroke-width="2" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(w, 0, w, diagram_height)
-        strResult += '<title>{}</title>\n'.format(date.today().strftime("%Y-%m-%d"))
-        strResult += '</line>'
+        w = ((date.today() - d_0).days) * 2
+        strResult += '<rect fill="red" opacity=".5" stroke="red" stroke-width=".5" x="{}" y="{}" width="{}" height="{}">\n'.format(w, 0, 2, diagram_height)
+        strResult += '<title>Today {}</title>\n'.format(date.today().strftime("%Y-%m-%d"))
+        strResult += '</rect>'
         strResult += '</g>'
 
         strResult += '<g id="tags">'
         for t in self.tag:
             if type(t) is Phase:
                 strResult += '<a href="#{}">\n'.format(str(id(t)))
-                strResult += '<rect fill="{}" opacity=".5" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, ((t.date - d_0).days) * 2 - 1, 0, diagram_height - 10, t.duration * 2 + 1)
+                strResult += '<rect fill="{}" opacity=".5" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, ((t.date - d_0).days) * 2, 0, diagram_height - 10, t.duration * 2)
                 strResult += f'<title>{t.title} ({t.duration} {t.date.strftime("%Y-%m-%d")} {(t.date + timedelta(days=t.duration - 1)).strftime("%Y-%m-%d")})</title>\n'
                 strResult += '</rect>'
                 strResult += '</a>'
