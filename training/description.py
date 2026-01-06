@@ -95,6 +95,11 @@ class Description:
         self.setDescription(strArg)
 
 
+    def __repr__(self):
+
+        return f'{self.__class__.__name__}({self.listDescription!r},{self.color!r})'
+
+
     def __str__(self):
 
         """ returns a string of nested self.listDescription """

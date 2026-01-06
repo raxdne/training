@@ -54,6 +54,15 @@ class Unit(Note):
         self.parse(strArg)
 
 
+    def __repr__(self):
+
+        strResult = f'{self.__class__.__name__}([{self.dt!r},{self.dist!r},{self.type!r},{self.duration!r}])'
+        if self.hasDescription():
+            strResult += f'.appendDescription({self.listDescription!r})'
+
+        return strResult
+
+
     def __str__(self):
 
         """  """

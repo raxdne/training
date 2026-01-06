@@ -33,7 +33,7 @@ class Title:
 
     def __repr__(self):
 
-        return __name__ + '("' + super().getTitleString() + '")'
+        return f'{self.__class__.__name__}({self.strTitle!r})'
 
 
     def __str__(self):

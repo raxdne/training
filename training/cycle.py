@@ -79,7 +79,11 @@ class Cycle(Title,Description,Plot):
 
     def __repr__(self):
 
-        return __name__ + '("' + super().getTitleString() + '", ' + self.getLength() + ')'
+        strResult = f'{self.__class__.__name__}({self.strTitle!r},{self.getLength()},{self.dateBegin!r},{self.dateEnd!r},{self.color!r},{self.day!r},{self.data!r})'
+        if self.hasDescription():
+            strResult += f'.appendDescription({self.listDescription!r})'
+
+        return strResult
 
 
     def __len__(self):

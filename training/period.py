@@ -86,7 +86,11 @@ class Period(Title,Description,Plot):
 
     def __repr__(self):
 
-        return __name__ + '("' + super().getTitleString() + '", ' + len(self) + ')'
+        strResult = f'{self.__class__.__name__}([{self.dateBegin!r},{self.dateEnd!r},{self.child!r},{self.periodInt!r}])'
+        if self.hasDescription():
+            strResult += f'.appendDescription({self.listDescription!r})'
+            
+        return strResult
 
 
     def __str__(self):
@@ -866,6 +870,10 @@ class Period(Title,Description,Plot):
         f = open(strDirArg + '/' + strId + '.mm', 'w')
         f.write(self.toFreeMind())
         f.close()
+
+        #f = open(strDirArg + '/' + strId + '.py', 'w')
+        #f.write(repr(self))
+        #f.close()
 
 
     def parseFile(self,listFilename,fUpdater=None):

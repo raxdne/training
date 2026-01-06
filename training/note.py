@@ -50,6 +50,15 @@ class Note(Description):
         self.parse(strArg)
 
 
+    def __repr__(self):
+
+        strResult = f'{self.__class__.__name__}({self.dt!r})'
+        if self.hasDescription():
+            strResult += f'.appendDescription({self.listDescription!r})'
+
+        return strResult
+
+
     def __str__(self):
 
         """  """
