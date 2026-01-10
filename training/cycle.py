@@ -759,7 +759,7 @@ class Cycle(Title,Description,Plot):
         if self.color is not None:
             strResult += ' style="background-color: {}"'.format(self.color)
 
-        strResult += '><div class="header">' + self.getTitleXML() + ' ' + self.getDateString() + '</div>\n'
+        strResult += '><div class="header" ondblclick="removeDetails(this)">' + self.getTitleXML() + ' ' + self.getDateString() + '</div>\n'
 
         strResult += self.getDescriptionHTML()
 

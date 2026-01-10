@@ -1003,7 +1003,7 @@ class Period(Title,Description,Plot):
         if self.color is not None:
             strResult += ' style="background-color: {}"'.format(self.color)
 
-        strResult += '><div class="header">' + self.getTitleXML()
+        strResult += '><div class="header" ondblclick="removeDetails(this)">' + self.getTitleXML()
         if self.dateBegin is not None and self.dateEnd is not None:
             strResult += self.getDateString()
         strResult += '</div>\n'
@@ -1061,6 +1061,8 @@ class Period(Title,Description,Plot):
         strResult += "<title></title>"
 
         strResult += config.style
+
+        strResult += "<script>\nfunction removeDetails(elem) {\nvar c = Array.from(elem.parentNode.getElementsByTagName('table'));\nfor (i in c) {c[i].remove();}\n}\n</script>\n"
 
         strResult += "</head>\n<body>\n"
 
