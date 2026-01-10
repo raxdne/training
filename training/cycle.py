@@ -576,6 +576,7 @@ class Cycle(Title,Description,Plot):
         if self.dateFixed is not None:
             # keep fixed date and schedule childs
             self.dateBegin = self.dateFixed
+            self.dateEnd = self.dateBegin + timedelta(days=(len(self.day) - 1))
         elif type(argDateOrYear) is date:
             self.dateBegin = argDateOrYear
             self.dateEnd = self.dateBegin + timedelta(days=(len(self.day) - 1))
