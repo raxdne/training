@@ -1011,7 +1011,7 @@ class Period(Title,Description,Plot):
         strResult += self.getDescriptionHTML()
 
         if self.getNumberOfUnits() > 0 or self.data:
-            strResult += '<pre style="width: 80%;">' + self.report() + '</pre>'
+            strResult += '<pre>' + self.report() + '</pre>'
 
         if self.getNumberOfCycles() > 0 and self.fPlot:
             strResult += '<div style="text-align: center;margin: 0px;">'
@@ -1062,7 +1062,7 @@ class Period(Title,Description,Plot):
 
         strResult += config.style
 
-        strResult += "<script>\nfunction removeDetails(elem) {\nvar c = Array.from(elem.parentNode.getElementsByTagName('table'));\nfor (i in c) {c[i].remove();}\n}\n</script>\n"
+        strResult += config.script
 
         strResult += "</head>\n<body>\n"
 

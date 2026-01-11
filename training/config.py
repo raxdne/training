@@ -55,22 +55,33 @@ plot_min = 1
 style = """
 <style>
     body {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}
-    section {border-left: 1px dotted #aaaaaa;}
-    section > * {margin: 0px 0px 0px 2px;}
-    section > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}
+    section {padding: 3px;}
+    section > * {margin: 0.1em 0.5em 0.5em 0.1em;}
+    section > *:not(.header) {margin: 0.5em 2em 0.5em 2em;}
     div.header {font-weight:bold;}
     div:has(svg) {display: inline-block; white-space: nowrap;}
-    table {border-collapse: collapse; empty-cells:show; margin-left:auto; margin-right:auto; border: 1px solid grey;}
+    pre {padding: 6px;}
+    table {border-collapse: collapse; empty-cells:show; margin-left:0px; margin-right:0px;}
     table.graph {border: none; vertical-align:top;}
     th, td {padding: 3px}
-    td { border: 1px solid grey; vertical-align:top;}
-    td.graph {border: none; vertical-align:top;}
+    td { vertical-align:top;}
     td.we {background-color: #eeeeee;}
-    pre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}
+    td.graph {border: none; vertical-align:top;}
     ul, ol {padding: 0px 0px 0px 2em;}
     div > ul {margin-top: 2px; margin-bottom: 3px;}
     a:link {text-decoration:none;}
+    section, td { border: 1px solid #c7c7c7;}
 </style>
+"""
+
+script = """
+<script>
+  function removeDetails(elem) {
+      var c = Array.from(elem.parentNode.getElementsByTagName('table'));
+      for (i in c) {
+          c[i].remove();}
+      }
+</script>
 """
 
 def getSettingsStr():

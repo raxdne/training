@@ -19,6 +19,8 @@
 
 import sys
 
+from pathlib import Path
+
 import math
 
 import copy
@@ -750,6 +752,34 @@ class Cycle(Title,Description,Plot):
         return str(self)
 
 
+    def writeFiles(self, strDirArg, strId):
+
+        Path(strDirArg).mkdir(parents=True,exist_ok=True)
+
+        #periodArg.plotHist(strDirArg + '/' + strId + '-hist.svg')
+        #periodArg.plotTimeDist(strDirArg + '/' + strId + '-ts.svg')
+
+        f = open(strDirArg + '/' + strId + '.ics', 'wb')
+        f.write(self.toVCalendar())
+        f.close()
+
+        f = open(strDirArg + '/' + strId + '.html', 'w')
+        f.write(self.toHtmlFile())
+        f.close()
+
+        f = open(strDirArg + '/' + strId + '.svg', 'w')
+        f.write(self.toSVGDiagram())
+        f.close()
+
+        f = open(strDirArg + '/' + strId + '.mm', 'w')
+        f.write(self.toFreeMind())
+        f.close()
+
+        #f = open(strDirArg + '/' + strId + '.py', 'w')
+        #f.write(repr(self))
+        #f.close()
+
+
     def toHtmlTable(self):
 
         """  """
@@ -764,7 +794,7 @@ class Cycle(Title,Description,Plot):
         strResult += self.getDescriptionHTML()
 
         if self.getNumberOfUnits() > 0:
-            strResult += '<pre style="width: 80%;">' + self.report() + '</pre>'
+            strResult += '<pre>' + self.report() + '</pre>'
 
         if False and self.fPlot:
             strResult += '<div style="text-align: center;margin: 0px;">'
@@ -776,7 +806,7 @@ class Cycle(Title,Description,Plot):
             strResult += '</div>'
             strResult += self.toSVGDiagram()
         else:
-            strResult += '<table style="width: 80%">\n'
+            strResult += '<table>\n'
 
             strResult += '<colgroup><col span="1" style="width: 10%;"><col span="1" style="width: 90%;"></colgroup>\n'
 
@@ -830,6 +860,8 @@ class Cycle(Title,Description,Plot):
         strResult += "<title></title>"
 
         strResult += config.style
+
+        strResult += config.script
 
         strResult += "</head>"
 
