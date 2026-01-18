@@ -260,7 +260,7 @@ class Unit(Note):
 
         """  """
 
-        return ((type(self.type) is str and self.type) and (type(self.dist) is float and self.dist > 0.0) and self.getDuration().total_seconds() > 0)
+        return ((type(self.type) is str and self.type) and ((type(self.dist) is float and self.dist > 0.0) or self.getDuration().total_seconds() > 0))
 
 
     def scale(self,floatScale,patternType=None):

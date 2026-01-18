@@ -518,7 +518,7 @@ class Cycle(Title,Description,Plot):
         intResult = 0
         for v in self.day:
             for u in v:
-                if u.dt is None or (dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date()):
+                if u.dt is not None and ((dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date())):
                     # u is out of interval
                     pass 
                 elif type(u) is Combination:
