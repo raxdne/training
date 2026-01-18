@@ -798,40 +798,33 @@ class Period(Title,Description,Plot):
         for k in sorted(self.summary.keys()):
             # all kinds of units
             sum_k = sum(self.summary[k][1]) / 60.0
+            sum_d = sum(self.summary[k][0])
 
-            if sum_h > 0.01:
-                if n > 0:
-                    strResult += f'{len(self.summary[k][0]):4} x '
-                else:
-                    strResult += '      '
+            if sum_k > 0.01:
+                strResult += ("{:4} x {:" + str(config.max_length_type) + "} ").format(len(self.summary[k][0]), k)
 
                 if not self.summary[k][0]:
-                    strResult += ("{:" + str(config.max_length_type) + "} {:7}    {:7.01f} h {:.02f}\n").format(k,
-                                                                                                                ' ',
-                                                                                                                round(sum_k, 1),
-                                                                                                                round(sum_k / sum_h, 2))
+                    strResult += ("{:7}    {:7.01f} h {:.02f}\n").format(' ',
+                                                                         sum_k,
+                                                                         sum_k / sum_h)
                 elif len(self.summary[k][0]) < 3:
-                    strResult += ("{:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f}\n").format(k, 
-                                                                                                                       sum(self.summary[k][0]),
-                                                                                                                       config.unit_distance,
-                                                                                                                       round(sum_k,1),
-                                                                                                                       round(sum_k / sum_h, 2))
+                    strResult += ("{:7.01f} {} {:7.01f} h {:.02f}\n").format(sum_d,
+                                                                             config.unit_distance,
+                                                                             sum_k,
+                                                                             sum_k / sum_h)
                 else:
-                    strResult += ("{:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f} {:5.01f} /{:5.01f} /{:5.01f}\n").format(k,
-                                                                                                                                                sum(self.summary[k][0]),
-                                                                                                                                                config.unit_distance,
-                                                                                                                                                round(sum_k, 2),
-                                                                                                                                                round(sum_k / sum_h, 2),
-                                                                                                                                                min(self.summary[k][0]),
-                                                                                                                                                mean(self.summary[k][0]),
-                                                                                                                                                max(self.summary[k][0]))
+                    strResult += ("{:7.01f} {} {:7.02f} {} {:7.01f} h {:.02f} {:5.01f} /{:5.01f} /{:5.01f}\n").format(sum_d,
+                                                                                                                      config.unit_distance,
+                                                                                                                      sum_d / p * 7.0,
+                                                                                                                      config.unit_distance + '/Week',
+                                                                                                                      sum_k,
+                                                                                                                      sum_k / sum_h,
+                                                                                                                      min(self.summary[k][0]),
+                                                                                                                      mean(self.summary[k][0]),
+                                                                                                                      max(self.summary[k][0]))
 
         if n > 0:
-            strResult += f'\n{n} Units '
-        else:
-            strResult += '\n      '
-
-        strResult += "{:.1f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
+            strResult += "\n{} Units {:.1f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(n, sum_h, p, sum_h * 7.0 / p, sum_h * 60 / p)
 
         return strResult
 
