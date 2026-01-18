@@ -690,7 +690,7 @@ class Cycle(Title,Description,Plot):
                 return self.report(dt1, dt0)
             else:
                 p = (dt1 - dt0).days
-                strResult += 'Interval (' + str(p) + ' ' + dt0.strftime("%Y-%m-%d") + ' .. ' + dt1.strftime("%Y-%m-%d") + ')\n\n'
+                strResult += 'Interval (' + str(p) + ' ' + dt0.strftime("%Y-%m-%d") + '/' + dt1.strftime("%Y-%m-%d") + ')\n\n'
         else:
             p = len(self.day)
 

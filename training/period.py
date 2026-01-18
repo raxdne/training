@@ -783,7 +783,7 @@ class Period(Title,Description,Plot):
                 return self.report(dt1, dt0)
             else:
                 p = (dt1 - dt0).days
-                strResult += 'Interval (' + str(p) + ' ' + dt0.strftime("%Y-%m-%d") + ' .. ' + dt1.strftime("%Y-%m-%d") + ')\n\n'
+                strResult += 'Interval (' + str(p) + ' ' + dt0.strftime("%Y-%m-%d") + '/' + dt1.strftime("%Y-%m-%d") + ')\n\n'
         else:
             p = self.getLength()
 
@@ -1463,8 +1463,24 @@ class Period(Title,Description,Plot):
         strResult += '<g id="tags">'
         for t in self.tag:
             if type(t) is Phase:
+                if (t.date + timedelta(days=t.duration) < d_0) or (t.date >= d_1):
+                    # out of interval
+                    continue
+                elif d_0 < t.date and d_1 < t.date + timedelta(days=t.duration):
+                    # only start is inside interval
+                    x_i = (t.date - d_0).days
+                    w_i = (d_1 - t.date).days + 1
+                elif t.date < d_0 and t.date + timedelta(days=t.duration) < d_1:
+                    # only end is inside interval
+                    x_i = 0
+                    w_i = (t.date + timedelta(days=t.duration) - d_0).days + 1
+                else:
+                    # is in interval
+                    x_i = (t.date - d_0).days
+                    w_i = t.duration
+
                 strResult += '<a href="#{}">\n'.format(str(id(t)))
-                strResult += '<rect fill="{}" opacity=".5" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, ((t.date - d_0).days) * 2, 0, diagram_height - 10, t.duration * 2)
+                strResult += '<rect fill="{}" opacity=".5" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, x_i * 2, 0, diagram_height - 10, w_i * 2)
                 strResult += f'<title>{t.title} ({t.duration} {t.date.strftime("%Y-%m-%d")} {(t.date + timedelta(days=t.duration - 1)).strftime("%Y-%m-%d")})</title>\n'
                 strResult += '</rect>'
                 strResult += '</a>'
