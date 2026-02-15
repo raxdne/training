@@ -84,6 +84,9 @@ script = """
 </script>
 """
 
+footer = '<hr/><p align="right">Created using <a target="_blank" href="https://github.com/raxdne/training">training</a></p>\n'
+
+
 def getSettingsStr():
 
     """ returns a Python string containing all module settings """

@@ -870,19 +870,26 @@ class Period(Title,Description,Plot):
 
         index = '<!doctype html public "-//IETF//DTD HTML 4.0//EN">'
 
-        index += "<html><head><title></title>"
+        index += f'<html><head><title>{strId}: {self.getTitleXML()}</title>'
 
         index += config.style
+        #index += config.script
 
-        index += config.script
+        index += f'<h1>{self.getTitleXML()}</h1>'
 
         index += f'<p><img src="{strId}-gantt.svg"/></p>\n'
 
         index += "<ul>\n"
-        index += f'<li><a href="{strId}-periods.html">{strId} period</a></li>'
+        index += f'<li><a href=".">..</a></li>'
+        index += f'<li><a href="{strId}-periods.html">{strId} page</a></li>'
         index += f'<li><a href="{strId}-dashboard.html">{strId} dashboard</a></li>'
-        index += f'<li><a href="{strId}.svg">{strId} Gantt</a></li>'
+        index += f'<li><a href="{strId}-gantt.svg">{strId} Gantt</a> (can be edited in <a target="_blank" href="https://inkscape.org/">Inkscape</a>)</li>'
+        index += f'<li><a href="{strId}.svg">{strId} Timeline</a></li>'
+        index += f'<li><a href="{strId}.ics">{strId} Calendar file</a> (for use in <a target="_blank" href="https://www.thunderbird.net/">Thunderbird</a> etc.)</li>'
+        index += f'<li><a href="{strId}.mm">{strId} Mindmap file</a> (for use in <a target="_blank" href="https://docs.freeplane.org/">Freemind/Freeplan</a>)</li>'
         index += '</ul>'
+        
+        index += config.footer
 
         index += '</body></html>'
 
@@ -1018,7 +1025,7 @@ class Period(Title,Description,Plot):
         if self.color is not None:
             strResult += ' style="background-color: {}"'.format(self.color)
 
-        strResult += '><div class="header" ondblclick="removeDetails(this)">' + self.getTitleXML()
+        strResult += '><div class="header" ondblclick="removeDetails(this);" title="Double Click to hide the details">' + self.getTitleXML()
         if self.dateBegin is not None and self.dateEnd is not None:
             strResult += self.getDateString()
         strResult += '</div>\n'
@@ -1073,13 +1080,15 @@ class Period(Title,Description,Plot):
 
         strResult += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
 
-        strResult += "<title></title>"
+        strResult += f'<title>{self.getTitleXML()}</title>'
 
         strResult += config.style
 
         strResult += config.script
 
         strResult += "</head>\n<body>\n"
+
+        strResult += f'<h1>{self.getTitleXML()}</h1>'
 
         if not self.fText:
             strResult += '<div style="text-align: center;margin: 40px;">' + self.toSVGGanttChart() + '</div>\n'
@@ -1093,6 +1102,8 @@ class Period(Title,Description,Plot):
             strResult += '<div class="header">' + self.getTitleXML() + self.getDateString() + '</div>\n'
             strResult += '<div style="text-align: center;margin: 40px;">' + self.toSVGDiagram() + '</div>\n'
             strResult += '</section>\n'
+
+        strResult += config.footer
 
         strResult += "</body>\n</html>"
 
@@ -1144,6 +1155,8 @@ class Period(Title,Description,Plot):
                     strResult += '</div>'
 
                 strResult += '</section>\n'
+
+        strResult += config.footer
 
         strResult += "</body>\n</html>"
 
@@ -1243,6 +1256,7 @@ class Period(Title,Description,Plot):
         strResult += "</tr>\n"
 
         strResult += "</tbody>\n</table>\n"
+        strResult += config.footer
         strResult += "</body>\n</html>"
 
         return strResult
