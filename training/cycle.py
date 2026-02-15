@@ -383,7 +383,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        objResult = self
+        objResult = None
 
         if objArg is None or objArg.dt is None:
             print('error: undefined ' + str(objArg), file=sys.stderr)
@@ -392,14 +392,15 @@ class Cycle(Title,Description,Plot):
         elif type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note:
             delta = objArg.dt.date() - self.dateBegin
             if delta.days < 0 or delta.days >= len(self.day):
-                print(f'error: inserting {type(objArg)} at position {delta.days} of {len(self.day)} {objArg}', file=sys.stderr)
+                pass
             elif objArg.dt.date() <= self.dateEnd:
-                #print(f'info: inserting {type(objArg)} at position {delta.days} of {len(self.day)} {objArg}', file=sys.stderr)
+                print(f'info: inserting {type(objArg)} at position {delta.days} of {len(self.day)} {objArg}', file=sys.stderr)
+                objResult = objArg.dup()
                 if flagReplace:
                     # override existing
-                    self.day[delta.days] = [objArg.dup()]
+                    self.day[delta.days] = [objResult]
                 else:
-                    self.day[delta.days].append(objArg.dup())
+                    self.day[delta.days].append(objResult)
 
         return objResult
 

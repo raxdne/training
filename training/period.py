@@ -382,7 +382,7 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        objResult = self
+        objResult = None
 
         if objArg is None:
             pass
@@ -427,12 +427,14 @@ class Period(Title,Description,Plot):
                     #print(f'info: new Cycle("{self.getTitleString()}",{l.days + 1}) {self.dateBegin}', file=sys.stderr)
                     c = Cycle(self.getTitleString(), l.days + 1)
                     c.schedule(self.dateBegin)
-                    c.insertByDate(objArg,flagReplace)
+                    objResult = c.insertByDate(objArg,flagReplace)
                     self.append(c)
             else:
                 for c in self.child:
                     if type(c) is Cycle or type(c) is Period:
-                        c.insertByDate(objArg,flagReplace)
+                        objResult = c.insertByDate(objArg,flagReplace)
+                        if objResult is not None:
+                            break
 
         return objResult
 
