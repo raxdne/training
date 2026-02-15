@@ -844,7 +844,7 @@ class Period(Title,Description,Plot):
         #f.write(periodArg.toCSV())
         #f.close()
 
-        f = open(strDirArg + '/' + strId + '.html', 'w')
+        f = open(strDirArg + '/' + strId + '-periods.html', 'w')
         f.write(self.toHtmlFile())
         f.close()
 
@@ -867,6 +867,28 @@ class Period(Title,Description,Plot):
         #f = open(strDirArg + '/' + strId + '.py', 'w')
         #f.write(repr(self))
         #f.close()
+
+        index = '<!doctype html public "-//IETF//DTD HTML 4.0//EN">'
+
+        index += "<html><head><title></title>"
+
+        index += config.style
+
+        index += config.script
+
+        index += f'<p><img src="{strId}-gantt.svg"/></p>\n'
+
+        index += "<ul>\n"
+        index += f'<li><a href="{strId}-periods.html">{strId} period</a></li>'
+        index += f'<li><a href="{strId}-dashboard.html">{strId} dashboard</a></li>'
+        index += f'<li><a href="{strId}.svg">{strId} Gantt</a></li>'
+        index += '</ul>'
+
+        index += '</body></html>'
+
+        f = open(strDirArg + '/' + strId + '.html', 'w')
+        f.write(index)
+        f.close()
 
 
     def parseFile(self,listFilename,fUpdater=None):
