@@ -1049,9 +1049,11 @@ class Period(Title,Description,Plot):
         if self.getNumberOfUnits() > 0 or self.data:
             strResult += '<pre>' + self.report() + '</pre>'
 
-            strResult += '<p>Marked Units</p>'
+        m = self.getMarkers()
+        if len(m) > 0:
+            strResult += '<p>Marked Units (Peaks)</p>'
             strResult += '<ol>'
-            for c in self.getMarkers():
+            for c in m:
                 strResult += f'<li>{c}</li>'
             strResult += '</ol>'
 
@@ -1423,7 +1425,7 @@ class Period(Title,Description,Plot):
         for t in self.tag:
             if type(t) is Phase:
                 y_i = ((t.date - self.dateBegin).days + 1) * config.diagram_bar_height * 2
-                strResult += '<rect id="{}" fill="{}" opacity=".5" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(str(id(t)), t.color, 0, y_i + 3, t.duration * config.diagram_bar_height * 2 + 2, config.diagram_width)
+                strResult += '<rect id="{}" fill="{}" opacity=".5" stroke="none" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(str(id(t)), t.color, 0, y_i + 3, t.duration * config.diagram_bar_height * 2 + 2, config.diagram_width)
                 strResult += f'<title>{t.title} ({t.duration} {t.date.strftime("%Y-%m-%d")} {(t.date + timedelta(days=t.duration - 1)).strftime("%Y-%m-%d")})</title>\n'
                 strResult += '</rect>'
         strResult += '</g>'
@@ -1536,7 +1538,7 @@ class Period(Title,Description,Plot):
                     w_i = t.duration
 
                 strResult += '<a href="#{}">\n'.format(str(id(t)))
-                strResult += '<rect fill="{}" opacity=".5" stroke="black" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, x_i * 2, 0, diagram_height - 10, w_i * 2)
+                strResult += '<rect fill="{}" opacity=".5" stroke="none" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(t.color, x_i * 2, 0, diagram_height - 10, w_i * 2)
                 strResult += f'<title>{t.title} ({t.duration} {t.date.strftime("%Y-%m-%d")} {(t.date + timedelta(days=t.duration - 1)).strftime("%Y-%m-%d")})</title>\n'
                 strResult += '</rect>'
                 strResult += '</a>'

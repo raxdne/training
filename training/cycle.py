@@ -394,7 +394,7 @@ class Cycle(Title,Description,Plot):
             if delta.days < 0 or delta.days >= len(self.day):
                 pass
             elif objArg.dt.date() <= self.dateEnd:
-                print(f'info: inserting {type(objArg)} at position {delta.days} of {len(self.day)} {objArg}', file=sys.stderr)
+                #print(f'info: inserting {type(objArg)} at position {delta.days} of {len(self.day)} {objArg}', file=sys.stderr)
                 objResult = objArg.dup()
                 if flagReplace:
                     # override existing
@@ -813,9 +813,11 @@ class Cycle(Title,Description,Plot):
         if self.getNumberOfUnits() > 0:
             strResult += '<pre>' + self.report() + '</pre>'
             
-            strResult += '<p>Marked Units</p>'
+        m = self.getMarkers()
+        if len(m) > 0:
+            strResult += '<p>Marked Units (Peaks)</p>'
             strResult += '<ol>'
-            for u in self.getMarkers():
+            for u in m:
                 strResult += f'<li>{u}</li>'
             strResult += '</ol>'
 
