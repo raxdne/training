@@ -279,6 +279,18 @@ class Period(Title,Description,Plot):
         return intResult
 
 
+    def getMarkers(self, dt0=None, dt1=None):
+
+        """  """
+
+        listResult = []
+        for c in self.child:
+            if type(c) is Cycle or type(c) is Period:
+                listResult.extend(c.getMarkers(dt0,dt1))
+
+        return listResult
+
+
     def getNumberOfUnits(self, dt0=None, dt1=None):
 
         """  """
@@ -1034,6 +1046,12 @@ class Period(Title,Description,Plot):
 
         if self.getNumberOfUnits() > 0 or self.data:
             strResult += '<pre>' + self.report() + '</pre>'
+
+            strResult += '<p>Marked Units</p>'
+            strResult += '<ol>'
+            for c in self.getMarkers():
+                strResult += f'<li>{c}</li>'
+            strResult += '</ol>'
 
         if self.getNumberOfCycles() > 0 and self.fPlot:
             strResult += '<div style="text-align: center;margin: 0px;">'

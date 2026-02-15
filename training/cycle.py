@@ -529,6 +529,24 @@ class Cycle(Title,Description,Plot):
         return intResult
 
 
+    def getMarkers(self, dt0=None, dt1=None):
+
+        """  """
+
+        listResult = []
+        for v in self.day:
+            for u in v:
+                if u.dt is not None and ((dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date())):
+                    # u is out of interval
+                    pass 
+                elif type(u) is Combination and u.isMarked():
+                    listResult.append(u)
+                elif type(u) is Unit and u.isMarked():
+                    listResult.append(u)
+
+        return listResult
+
+
     def getLength(self):
 
         """ return length of cycle """
@@ -793,6 +811,12 @@ class Cycle(Title,Description,Plot):
 
         if self.getNumberOfUnits() > 0:
             strResult += '<pre>' + self.report() + '</pre>'
+            
+            strResult += '<p>Marked Units</p>'
+            strResult += '<ol>'
+            for u in self.getMarkers():
+                strResult += f'<li>{u}</li>'
+            strResult += '</ol>'
 
         if False and self.fPlot:
             strResult += '<div style="text-align: center;margin: 0px;">'
