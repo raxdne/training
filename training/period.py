@@ -439,6 +439,28 @@ class Period(Title,Description,Plot):
         return objResult
 
 
+    def fill(self,objArg,floatProgression=1.0):
+
+        """  """
+
+        flagReplace=False
+        objResult = self
+
+        if objArg is None:
+            print('error: undefined object ' + str(objArg), file=sys.stderr)
+        elif type(objArg) is list and objArg:
+            for u in objArg:
+                self.insert(u,flagReplace)
+        elif type(objArg) is Cycle or type(objArg) is Unit or type(objArg) is Combination:
+            for c in self.child:
+                if type(c) is Cycle or type(c) is Period:
+                    c.fill(objArg,floatProgression)
+        else:
+            print(f'error: filling {type(objArg)} of {len(self.child)} {objArg}', file=sys.stderr)
+
+        return objResult
+
+
     def getCycleByDate(self,objDate=None):
 
         """  """
@@ -876,6 +898,10 @@ class Period(Title,Description,Plot):
 
         f = open(strDirArg + '/' + strId + '.mm', 'w')
         f.write(self.toFreeMind())
+        f.close()
+
+        f = open(strDirArg + '/' + strId + '.sqlite', 'w')
+        f.write(self.toSqliteDump())
         f.close()
 
         #f = open(strDirArg + '/' + strId + '.py', 'w')
