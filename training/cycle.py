@@ -650,7 +650,7 @@ class Cycle(Title,Description,Plot):
         return self
 
 
-    def stat(self, dt0=None, dt1=None):
+    def stat(self, dt0=None, dt1=None, skipType=None):
 
         """ stat all descendant data to self.data and returns it as a nested list  """
 
@@ -662,7 +662,7 @@ class Cycle(Title,Description,Plot):
                         # u is out of interval
                         pass 
                     elif (type(u) is Unit and u.isCountable()) or type(u) is Combination:
-                        self.data.extend(u.stat())
+                        self.data.extend(u.stat(skipType))
 
         return self.data
 

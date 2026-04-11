@@ -272,7 +272,7 @@ class Combination(Title,Note):
         return self
 
 
-    def stat(self):
+    def stat(self, skipType=None):
 
         """  """
 
@@ -281,12 +281,12 @@ class Combination(Title,Note):
         if self.logicAnd:
             for u in self.child:
                 if type(u) is Combination or (type(u) is Unit and u.isCountable()):
-                    listResult.extend(u.stat())
+                    listResult.extend(u.stat(skipType))
         else:
             # stat longest unit of alternatives only
             m = self.getRepresentativeAlternative()
             if m is not None:
-                listResult.extend(m.stat())
+                listResult.extend(m.stat(skipType))
 
         return listResult
 

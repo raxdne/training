@@ -82,6 +82,7 @@ class Period(Title,Description,Plot):
         self.setPlot()
         self.setTextOnly(False)
         self.setVDefaults()
+        self.setSkipPattern()
 
 
     def __repr__(self):
@@ -111,6 +112,15 @@ class Period(Title,Description,Plot):
 
         return self.getLength()
 
+
+    def setSkipPattern(self,skipType=None):
+
+        """  """
+
+        self.skipType = skipType
+
+        return self
+        
 
     def setPlan(self,fPlan=True):
 
@@ -763,7 +773,7 @@ class Period(Title,Description,Plot):
         return self
 
 
-    def stat(self, dt0=None, dt1=None):
+    def stat(self, dt0=None, dt1=None, skipType=None):
 
         """ stat all descendant data to self.data and returns it as a nested list  """
 
@@ -772,7 +782,7 @@ class Period(Title,Description,Plot):
             self.summary.clear()
             for c in self.child:
                 if type(c) is Cycle or type(c) is Period:
-                    self.data.extend(c.stat(dt0,dt1))
+                    self.data.extend(c.stat(dt0,dt1,skipType))
 
         return self.data
 
@@ -825,7 +835,7 @@ class Period(Title,Description,Plot):
 
         n = self.getNumberOfUnits(dt0,dt1)
         #if not self.data and n > 0:
-        self.stat(dt0,dt1)
+        self.stat(dt0,dt1,self.skipType)
 
         sum_h = self.sum() / 60
         if sum_h < 0.1:

@@ -326,14 +326,14 @@ class Unit(Note):
             return False
 
 
-    def stat(self):
+    def stat(self, skipType=None):
 
         """  """
 
         listResult = []
         
-        if self.type is None or not self.type:
-            #print('error: ' + 'no type', file=sys.stderr)
+        if self.type is None or not self.type or (skipType is not None and re.match(skipType,self.type)):
+            # ignoring no types and skip pattern matches
             pass
         elif self.dist is None or self.dist < 0.001:
             #print('error: ' + 'no dist', file=sys.stderr)
