@@ -77,6 +77,7 @@ class Cycle(Title,Description,Plot):
 
         self.color = None
         self.setVDefaults(config.v_defaults)
+        self.setSkipPattern()
 
 
     def __repr__(self):
@@ -138,6 +139,15 @@ class Cycle(Title,Description,Plot):
 
         return self
 
+
+    def setSkipPattern(self,skipType=None):
+
+        """  """
+
+        self.skipType = skipType
+
+        return self
+        
 
     def setVDefaults(self,dictArg):
 
@@ -555,17 +565,20 @@ class Cycle(Title,Description,Plot):
         return len(self.day)
 
 
-    def getDuration(self):
+    def getDuration(self, skipType=None):
 
         """ return a timedelta """
 
         # TODO: use self.data
 
+        if skipType is None:
+            skipType = self.skipType
+
         intResult = 0
         for v in self.day:
             for u in v:
                 if (type(u) is Unit and u.isCountable()) or type(u) is Combination:
-                    intResult += u.getDuration().total_seconds()
+                    intResult += u.getDuration(skipType).total_seconds()
 
         return timedelta(seconds=intResult)
 
@@ -655,6 +668,8 @@ class Cycle(Title,Description,Plot):
         """ stat all descendant data to self.data and returns it as a nested list  """
 
         if self.day:
+            if skipType is None:
+                skipType = self.skipType
             self.data.clear()
             for v in self.day:
                 for u in v:

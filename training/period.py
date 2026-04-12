@@ -117,6 +117,10 @@ class Period(Title,Description,Plot):
 
         """  """
 
+        for c in self.child:
+            if type(c) is Cycle or type(c) is Period:
+                c.setSkipPattern(skipType)
+
         self.skipType = skipType
 
         return self
@@ -255,17 +259,20 @@ class Period(Title,Description,Plot):
         return self.periodInt
 
 
-    def getDuration(self):
+    def getDuration(self, skipType=None):
 
         """ return a timedelta """
 
         # TODO: use self.data
 
+        if skipType is None:
+            skipType = self.skipType
+
         intResult = 0
         if self.child:
             for u in self.child:
                 if type(u) is Cycle or type(u) is Period:
-                    intResult += u.getDuration().total_seconds()
+                    intResult += u.getDuration(skipType).total_seconds()
         elif self.data:
             for t in map(lambda lst: lst[2], self.data):
                 intResult += round(t * 60.0)
@@ -778,6 +785,8 @@ class Period(Title,Description,Plot):
         """ stat all descendant data to self.data and returns it as a nested list  """
 
         if self.child:
+            if skipType is None:
+                skipType = self.skipType
             self.data.clear()
             self.summary.clear()
             for c in self.child:

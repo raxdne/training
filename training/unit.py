@@ -212,14 +212,17 @@ class Unit(Note):
         return (self.duration is not None and self.duration != Duration(0))
 
 
-    def getDuration(self):
+    def getDuration(self, skipType=None):
 
         """  """
         
         if self.duration is None:
             self.setDuration()
 
-        if self.type is not None and self.type:
+        if self.type is None or (skipType is not None and re.match(skipType,self.type)):
+            # ignoring no types and skip pattern matches
+            pass
+        elif self.type is not None and self.type:
             return self.duration
 
         return Duration(0)
@@ -332,7 +335,7 @@ class Unit(Note):
 
         listResult = []
         
-        if self.type is None or not self.type or (skipType is not None and re.match(skipType,self.type)):
+        if self.type is None or (skipType is not None and re.match(skipType,self.type)):
             # ignoring no types and skip pattern matches
             pass
         elif self.dist is None or self.dist < 0.001:

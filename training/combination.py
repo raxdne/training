@@ -220,7 +220,7 @@ class Combination(Title,Note):
         return intResult
 
 
-    def getRepresentativeAlternative(self):
+    def getRepresentativeAlternative(self, skipType=None):
 
         """ return the representative Unit of this combination (longest duration) """
 
@@ -230,12 +230,12 @@ class Combination(Title,Note):
             s_max = 0
             for u in self.child:
                 if type(u) is Unit:
-                    s = u.getDuration().total_seconds()
+                    s = u.getDuration(skipType).total_seconds()
                     if s > s_max:
                         r = u
                         s_max = s
                 elif type(u) is Combination:
-                    q = u.getRepresentativeAlternative()
+                    q = u.getRepresentativeAlternative(skipType)
                     s = q.getDuration().total_seconds()
                     if s > s_max:
                         r = q
@@ -244,7 +244,7 @@ class Combination(Title,Note):
         return r
 
 
-    def getDuration(self):
+    def getDuration(self, skipType=None):
 
         """ return a timedelta """
 
@@ -252,10 +252,10 @@ class Combination(Title,Note):
         if self.logicAnd:
             for u in self.child:
                 if type(u) is Combination or type(u) is Unit:
-                    intResult += u.getDuration().total_seconds()
+                    intResult += u.getDuration(skipType).total_seconds()
         else:
             # Alternatives
-            intResult = self.getRepresentativeAlternative().getDuration().total_seconds()
+            intResult = self.getRepresentativeAlternative(skipType).getDuration().total_seconds()
 
         return Duration(intResult / 60)
 
