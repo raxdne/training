@@ -86,6 +86,14 @@ class Description:
 
     """ abstract class to handle (nested) description list """
 
+
+    def __new__(cls, *args, **kwargs):
+
+        if cls is Description:
+            raise TypeError("Cannot instantiate abstract class")
+        return super().__new__(cls)
+
+
     def __init__(self,strArg=None):
 
         """  """

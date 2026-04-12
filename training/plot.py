@@ -36,6 +36,12 @@ from training import config as config
 
 class Plot():
 
+    def __new__(cls, *args, **kwargs):
+        if cls is Plot:
+            raise TypeError("Cannot instantiate abstract class")
+        return super().__new__(cls)
+
+
     def __init__(self):
 
         """  """

@@ -17,22 +17,15 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
-from training.title import Title
+import json
+import sys
+sys.path.insert(0,'/home/developer/src/training')
+
+from training.note import Note
+from training.unit import Unit
+from training.period import Plot
 
 print('Module Test: ' + __file__ + '\n')
 
-#
-#
-#
-
-t = Title()
-print(t)
-
-t = Title(1.0)
-print(t)
-
-t = Title('AAA & "BB" C')
-print(repr(t))
-print(t.getTitleString())
-print(t.getTitleXML())
+t = Plot()
 
