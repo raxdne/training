@@ -77,7 +77,11 @@ style = """
 script = """
 <script>
   function removeDetails(elem) {
-      var c = Array.from(elem.parentNode.getElementsByTagName('table'));
+      var c = Array.from(elem.parentNode.getElementsByTagName('section'));
+      if (c.length < 1) {
+        c = Array.from(elem.parentNode.getElementsByTagName('table'));
+      }
+
       for (i in c) {
           c[i].remove();}
       }

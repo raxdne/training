@@ -527,6 +527,16 @@ class Period(Title,Description,Plot):
         return None
 
 
+    def getChildIndexByTitle(self,strArg):
+
+        """  """
+
+        for i in range(len(self.child)):
+            if (type(self.child[i]) is Cycle or type(self.child[i]) is Period) and self.child[i].getTitleString() == strArg:
+                return i
+        return -1
+
+
     def setPeriod(self, intArg):
 
         """  """
@@ -559,11 +569,29 @@ class Period(Title,Description,Plot):
         return self
 
 
-    def swap(self,intA,intB):
+    def swap(self,argA,argB):
+
+        """ swap childs """
+
+        if type(argA) is int and type(argB) is int:
+            if argA > -1 and argA < len(self.child) and argB > -1 and argB < len(self.child):
+                self.child[argA], self.child[argB] = self.child[argB], self.child[argA]
+        elif type(argA) is str and type(argB) is str:
+            self.swap(self.getChildIndexByTitle(argA),self.getChildIndexByTitle(argB))
+        
+        return self
+
+
+    def removeChilds(self,l):
 
         """  """
 
-        # TODO: swap childs
+        l.sort(reverse=True)
+        for i in l:
+            if type(self.child[i]) is Period or type(self.child[i]) is Cycle:
+                del self.child[i]
+
+        self.data = []
 
         return self
 
