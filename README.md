@@ -3,7 +3,7 @@
 
 ## AUTHOR and HOMEPAGE
 
-Copyright (C) 2021,2022,2023 by Alexander Tenbusch <https://github.com/raxdne/training>
+Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch <https://github.com/raxdne/training>
 
 ## DESCRIPTION
 

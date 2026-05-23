@@ -424,19 +424,30 @@ class Cycle(Title,Description,Plot):
         return self
 
 
-    def stretch(self,n=2):
+    def stretch(self,n=1,m=1):
 
-        """  """
+        """ insert every n-th day m extra days """
 
         if type(n) is int and n > 0 and len(self.day) > n:
 
             d = []
-            for i in range(0,len(self.day)):
+            for i in range(len(self.day)):
                 d.append(self.day[i])
-                for j in range(0,n-1):
-                    d.append([])
+                if i % n == 0:
+                    for j in range(m):
+                        d.append([])
 
             self.day = d
+
+        return self
+
+
+    def extend(self,n):
+
+        """ append last n days at the end """
+
+        if type(n) is int and n > 0 and len(self.day) > n:
+            self.day.extend(self.day[-n:])
 
         return self
 

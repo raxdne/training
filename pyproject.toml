@@ -18,9 +18,6 @@ keywords = ["endurance","training"]
 [project.urls]
 Repository = "https://github.com/raxdne/training"
 
-[project.scripts]
-cli = "report.py"
-
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
