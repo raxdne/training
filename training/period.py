@@ -259,6 +259,21 @@ class Period(Title,Description,Plot):
         return self.periodInt
 
 
+    def getItem(self,index):
+
+        """ return item of index in period """
+
+        if type(index) is int:
+            return self.child[index]
+        elif type(index) is list:
+            if len(index) == 1:
+                return self.child[index[0]]
+            elif len(index) > 1:
+                return self.child[index[0]].getItem(index[1:])
+    
+        return None
+
+
     def getDuration(self, skipType=None):
 
         """ return a timedelta """

@@ -576,6 +576,28 @@ class Cycle(Title,Description,Plot):
         return len(self.day)
 
 
+    def getItem(self,index):
+
+        """ return item of index in cycle """
+
+        if type(index) is int:
+            if index < len(self.day):
+                return self.day[index]
+            else:
+                return self.day[-1]
+        elif type(index) is list:
+            if len(index) == 1:
+                return self.getItem(index[0])
+            elif len(index) > 1:
+                if index[0] < len(self.day):
+                    if index[1] < len(self.day[index[0]]):
+                        return self.day[index[0]][index[1]]
+                    elif len(self.day[index[0]]) > 0:
+                        return self.day[index[0]][-1]
+    
+        return None
+
+
     def getDuration(self, skipType=None):
 
         """ return a timedelta """
