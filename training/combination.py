@@ -318,9 +318,9 @@ class Combination(Title,Note):
             strResult += self.getDescriptionString() + '</div>'
 
             if self.logicAnd:
-                strResult += '<ol style="margin-block-start: 2px;">'
+                strResult += '<ol style="margin-block-start: 2px; margin-block-end: 2px;">'
             else:
-                strResult += '<ol style="list-style-type: lower-latin; margin-block-start: 2px;">'
+                strResult += '<ol style="list-style-type: lower-latin; margin-block-start: 2px; margin-block-end: 2px;">'
 
             for u in self.child:
                 strResult += '<li>' + u.toHtmlTable() + '</li>'

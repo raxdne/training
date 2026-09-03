@@ -237,7 +237,10 @@ class Description:
             f = _flatten(self.listDescription)
             if len(f) == 1:
                 # only one item
-                strResult += '<p>' + f[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;") + '</p>'
+                if re.match(url_pattern, f[0]):
+                    strResult += ' <a href="{url}">{url}</a>'.format(url=f[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+                else:
+                    strResult += ' <span>' + f[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;") + '</span>'
             elif len(f) > 1:
                 strResult += '<ul>' + self.getDescriptionHTML(self.listDescription) + '</ul>'
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:

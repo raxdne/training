@@ -425,7 +425,7 @@ class Unit(Note):
 
         """  """
 
-        return f'<div style="background-color: {self.getColor()}">{self.toStringShort()}{self.getDescriptionString()}</div>'
+        return f'<div style="background-color: {self.getColor()}">{self.toStringShort()}{self.getDescriptionHTML()}</div>'
 
 
     def toSVG(self,x,y):
