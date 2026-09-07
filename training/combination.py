@@ -31,6 +31,7 @@ from training.description import Description
 from training.title import Title
 from training.note import Note
 from training.unit import Unit
+from training.exerciseset import ExerciseSet
 from training.pause import Pause
 
 #
@@ -51,7 +52,7 @@ class Combination(Title,Note):
         self.dt = None
 
         for objArg in listArg:
-            if objArg is None or (type(objArg) != Unit and type(objArg) != Pause and type(objArg) != Note and type(objArg) != Combination):
+            if objArg is None or (type(objArg) != Unit and type(objArg) != ExerciseSet and type(objArg) != Pause and type(objArg) != Note and type(objArg) != Combination):
                 print('error: ' + str(objArg), file=sys.stderr)
             else:
                 self.child.append(objArg.dup())
@@ -73,6 +74,19 @@ class Combination(Title,Note):
         strResult += '\n'
 
         return strResult
+
+
+    def isCircuit(self):
+
+        """  """
+
+        for i in range(len(self.child)):
+            if type(self.child[i]) is Combination or type(self.child[i]) is ExerciseSet or type(self.child[i]) is Pause:
+                pass
+            else:
+                return False
+            
+        return True
 
 
     def toStringShort(self):
@@ -251,7 +265,7 @@ class Combination(Title,Note):
         intResult = 0
         if self.logicAnd:
             for u in self.child:
-                if type(u) is Combination or type(u) is Unit:
+                if type(u) is Combination or type(u) is Unit or type(u) is ExerciseSet or type(u) is Pause:
                     intResult += u.getDuration(skipType).total_seconds()
         else:
             # Alternatives
@@ -280,7 +294,7 @@ class Combination(Title,Note):
 
         if self.logicAnd:
             for u in self.child:
-                if type(u) is Combination or (type(u) is Unit and u.isCountable()):
+                if type(u) is Combination or type(u) is ExerciseSet or (type(u) is Unit and u.isCountable()):
                     listResult.extend(u.stat(skipType))
         else:
             # stat longest unit of alternatives only
@@ -310,12 +324,16 @@ class Combination(Title,Note):
                 strResult += ' style="background-color: {}"'.format(self.color)
             strResult += '>'
 
-            if self.logicAnd:
+            if self.hasTitle():
+                strResult += self.getTitleString()
+            elif self.isCircuit():
+                strResult += 'Circuit: ' + self.getDuration().toString()
+            elif self.logicAnd:
                 strResult += 'Combination: ' + self.getDuration().toString()
             else:
                 strResult += 'Alternatives: max. ' + self.getDuration().toString()
 
-            strResult += self.getDescriptionString() + '</div>'
+            strResult += self.getDescriptionHTML()
 
             if self.logicAnd:
                 strResult += '<ol style="margin-block-start: 2px; margin-block-end: 2px;">'
@@ -324,9 +342,66 @@ class Combination(Title,Note):
 
             for u in self.child:
                 strResult += '<li>' + u.toHtmlTable() + '</li>'
-            strResult += '</ol>'
+            strResult += '</ol>' + '</div>'
         elif self.child:
             strResult = '<div>' + self.child[0].toHtmlTable() + '</div>'
+
+        return strResult
+
+
+    def toHtmlSheet(self):
+
+        """  """
+
+        strResult = ''
+
+        if len(self.child) > 1:
+            strResult = '<table'
+            if self.color is not None:
+                strResult += ' style="background-color: {}"'.format(self.color)
+            strResult += '>'
+
+            if self.hasTitle():
+                strResult += self.getTitleString()
+
+            strResult += self.getDescriptionHTML()
+
+            for u in self.child:
+                if type(u) is Combination or type(u) is ExerciseSet:
+                    strResult += u.toHtmlSheet()
+                else:
+                    strResult += '<tr><td>' + u.toHtmlTable() + '</td></tr>'
+                
+            strResult += '</table>'
+        elif self.child:
+            strResult = '<div>' + self.child[0].toHtmlTable() + '</div>'
+
+        return strResult
+
+
+    def toHtmlFile(self):
+
+        """ returns html/body + content """
+
+        strResult = '<!doctype html public "-//IETF//DTD HTML 4.0//EN">'
+
+        strResult += "<html>"
+
+        strResult += "<head>"
+
+        strResult += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
+
+        strResult += "<title></title>"
+
+        strResult += config.style
+
+        strResult += config.script
+
+        strResult += "</head>"
+
+        strResult += "<body>" + self.toHtmlSheet() + "</body>"
+
+        strResult += "</html>"
 
         return strResult
 
@@ -353,8 +428,9 @@ class Combination(Title,Note):
         x_i = x
         if self.logicAnd:
             for u in self.child:
-                strResult += u.toSVG(x_i,y)
-                x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
+                if type(u) is Unit or type(u) is Pause:
+                    strResult += u.toSVG(x_i,y)
+                    x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
         else:
             m = self.getRepresentativeAlternative()
             if m is not None:
@@ -415,6 +491,9 @@ class Combination(Title,Note):
                     dt = datetime.combine(date.today(), m.tPlan)
                     event.add('dtstart', dt)
                     event.add('dtend', dt + self.getDuration())
+                elif m.dt is None:
+                    # no day defined
+                    pass
                 elif type(m.tPlan) is datetime.time:
                     # day defined
                     dt = datetime.combine(m.dt, m.tPlan)

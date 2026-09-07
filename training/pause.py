@@ -105,7 +105,7 @@ class Pause(Note):
         return True
 
 
-    def getDuration(self):
+    def getDuration(self, skipType=None):
 
         """  """
         
