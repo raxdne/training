@@ -64,14 +64,17 @@ class Title:
 
         """  """
 
-        return self.strTitle is not None and len(self.strTitle) > 1
+        return hasattr(self,'strTitle') and self.strTitle is not None and len(self.strTitle) > 1
 
 
     def getTitleString(self):
 
         """  """
 
-        return self.strTitle
+        if self.hasTitle():
+            return self.strTitle
+        else:
+            return ''
 
 
     def getDateString(self):

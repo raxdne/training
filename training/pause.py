@@ -60,7 +60,10 @@ class Pause(Note):
         """  """
 
         if self.getDuration().total_seconds() > 0:
-            return f'Pause {super().getDescriptionString()} {self.getDuration().toString()}'
+            if self.hasDescription():
+                return f'{super().getDescriptionString()} {self.getDuration().toString()}'
+            else:
+                return f'Pause {self.getDuration().toString()}'
         else:
             return ''
 

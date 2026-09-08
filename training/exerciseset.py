@@ -53,12 +53,12 @@ class ExerciseSet(Title,Note):
         """  """
 
         super(Title, self).__init__()
-        super(Description, self).__init__()
+        super(Note, self).__init__()
 
-        self.tChild = (iArg,strArg)
-
+        self.count = iArg
         self.setTitleStr(strArg)
         self.setDescription()
+        self.img = []
 
         self.color = None
 
@@ -79,14 +79,39 @@ class ExerciseSet(Title,Note):
 
     def __str__(self):
 
-        return f'(ExerciseSet {self.tChild[0]} x {self.tChild[1]})'
+        return f'{self.count} x {self.strTitle}'
 
 
     def getDuration(self, skipType=None):
 
         """  """
         
-        return timedelta(seconds=self.tChild[0]*2)
+        return timedelta(seconds=self.count*2)
+
+
+    def getImageRef(self):
+
+        """  """
+        
+        strResult = ''
+        
+        for i in self.img:
+            strResult += f'<img src="{i}"/>'
+            
+        return strResult
+
+
+    def setImageRef(self,objArg):
+
+        """  """
+        
+        if type(objArg) is list:
+            for i in objArg:
+                self.img.append(i)
+        else:
+            self.img.append(objArg)
+        
+        return self
 
 
     def dup(self):
@@ -116,7 +141,7 @@ class ExerciseSet(Title,Note):
 
         strResult = ''
 
-        if len(self.tChild) > 1:
+        if self.count > 1:
             strResult = '<div'
             if self.color is not None:
                 strResult += ' style="background-color: {}"'.format(self.color)
@@ -131,11 +156,11 @@ class ExerciseSet(Title,Note):
 
         strResult = ''
 
-        if len(self.tChild) > 1:
+        if self.count > 0:
             strResult = '<tr'
             if self.color is not None:
                 strResult += ' style="background-color: {}"'.format(self.color)
-            strResult += '><td>' + str(self.tChild[0]) + '</td><td>' + self.tChild[1] + '</td><td>' + self.tChild[1] + '</td><td>' + self.tChild[1] + '</td></tr>'
+            strResult += '><td>' + self.strTitle + '</td><td>' + str(self.count) + '</td><td>' + self.getDescriptionHTML() + '</td><td>' + self.getImageRef() + '</td></tr>'
 
         return strResult
 
@@ -156,8 +181,6 @@ class ExerciseSet(Title,Note):
         """  """
 
         if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
-
-            n, s = self.tChild
-            self.tChild = (round(n * floatScale), s)
+            self.count = round(self.count * floatScale)
 
         return self

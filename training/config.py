@@ -54,12 +54,13 @@ plot_min = 1
 
 style = """
 <style>
-    body {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}
+    /* body {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;} */
     section {padding: 3px;}
     section > * {margin: 0.1em 0.5em 0.5em 0.1em;}
     section > *:not(.header) {margin: 0.5em 2em 0.5em 2em;}
     div.header {font-weight:bold;}
     div:has(svg) {display: inline-block; white-space: nowrap;}
+    img {max-width:100%; max-height:100%;}
     pre {padding: 6px;}
     table {border-collapse: collapse; empty-cells:show; margin-left:0px; margin-right:0px;}
     table.graph {border: none; vertical-align:top;}

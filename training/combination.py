@@ -44,8 +44,10 @@ class Combination(Title,Note):
 
         """  """
 
-        Title.__init__(self)
-        Description.__init__(self)
+        super(Title, self).__init__()
+        super(Note, self).__init__()
+
+        self.setDescription()
         
         self.child = []
         self.logicAnd = flagAnd
@@ -62,7 +64,9 @@ class Combination(Title,Note):
 
         """  """
 
-        if self.logicAnd:
+        if self.isCircuit():
+            strResult = 'Circuit '
+        elif self.logicAnd:
             strResult = 'Combination '
         else:
             strResult = 'Alternatives '
@@ -143,6 +147,9 @@ class Combination(Title,Note):
                 elif type(u) is Combination:
                     u.setDate(dt)
                     i += 1
+                elif type(u) is ExerciseSet:
+                    u.setDate(dt)
+                    i += 1
                 elif type(u) is Unit:
 
                     if i == 0:
@@ -204,6 +211,19 @@ class Combination(Title,Note):
                     
             self.child = childsNew
             
+        return self
+
+
+    def append(self,objArg):
+
+        """  """
+        
+        if type(objArg) is list:
+            for e in objArg:
+                self.child.append(e)
+        else:
+            self.child.append(objArg)
+        
         return self
 
 
@@ -280,7 +300,7 @@ class Combination(Title,Note):
 
         if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
             for u in self.child:
-                if type(u) is Unit:
+                if type(u) is Unit or type(u) is ExerciseSet:
                     u.scale(floatScale,patternType)
 
         return self
@@ -355,26 +375,33 @@ class Combination(Title,Note):
 
         strResult = ''
 
-        if len(self.child) > 1:
+        if len(self.child) > 0:
             strResult = '<table'
             if self.color is not None:
                 strResult += ' style="background-color: {}"'.format(self.color)
             strResult += '>'
 
-            if self.hasTitle():
-                strResult += self.getTitleString()
+            #strResult += '<thead><tr><th>#</th><th>Name</th><th>Count</th><th>Description</th><th>Picture</th></tr></thead>'
 
-            strResult += self.getDescriptionHTML()
+            strResult += '<tbody>'
+
+            if self.hasTitle():
+                strResult += '<tr><th colspan="4">' + self.getTitleString() + '</th></tr>'
+
+            #strResult += self.getDescriptionHTML()
 
             for u in self.child:
-                if type(u) is Combination or type(u) is ExerciseSet:
+                if type(u) is Combination:
+                    strResult += '<tr><td>' + u.toHtmlSheet() + '</td></tr>'
+                elif type(u) is ExerciseSet:
                     strResult += u.toHtmlSheet()
                 else:
                     strResult += '<tr><td>' + u.toHtmlTable() + '</td></tr>'
                 
+            strResult += '</tbody>'
             strResult += '</table>'
-        elif self.child:
-            strResult = '<div>' + self.child[0].toHtmlTable() + '</div>'
+        #elif self.child:
+        #    strResult = '<div>' + self.child[0].toHtmlTable() + '</div>'
 
         return strResult
 

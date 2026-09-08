@@ -42,11 +42,13 @@ class Note(Description):
 
         """  """
 
-        super().__init__()
+        super(Description, self).__init__()
+        self.setDescription()
         
         self.dt = None
         self.tPlan = None
         self.marker = False
+        self.color = None
         self.parse(strArg)
 
 
@@ -219,7 +221,7 @@ class Note(Description):
 
         """  """
         
-        strResult = '#ffffff'
+        strResult = ''
         
         if self.color is not None:
             strResult = self.color

@@ -358,7 +358,9 @@ class Unit(Note):
         
         strResult = ''
         
-        if self.color is not None:
+        if not hasattr(self,'color'):
+            pass
+        elif self.color is not None:
             strResult = self.color
         elif self.type is None or not self.type:
             strResult = '#cccccc'
