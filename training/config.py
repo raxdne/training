@@ -54,16 +54,24 @@ plot_min = 1
 
 style = """
 <style>
-    /* body {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;} */
+    /* body {font-family: Arial,sans-serif; font-size:12px;} */
     section {padding: 3px;}
     section > * {margin: 0.1em 0.5em 0.5em 0.1em;}
     section > *:not(.header) {margin: 0.5em 2em 0.5em 2em;}
     div.header {font-weight:bold;}
     div:has(svg) {display: inline-block; white-space: nowrap;}
+    div.training-unit {margin: 2px 1px 2px 1px;}
+    div.training-cycle {margin: 5px 5px 5px 5px;}
+    div.training-period {margin: 5px 5px 5px 5px;}
+    div.training-combination {margin: 5px 5px 5px 5px;}
+    div.training-exerciseset {}
     img {max-width:100%; max-height:100%;}
     pre {padding: 6px;}
     table {border-collapse: collapse; empty-cells:show; margin-left:0px; margin-right:0px;}
     table.graph {border: none; vertical-align:top;}
+    table.training-combination {margin: 5px 5px 5px 5px;}
+    tr.training-exerciseset {}
+    /* tr:nth-of-type(odd) {background-color: #eeeeee;} */
     th, td {padding: 3px}
     td { vertical-align:top;}
     td.we {background-color: #eeeeee;}
@@ -74,6 +82,14 @@ style = """
     section, td { border: 1px solid #c7c7c7;}
 </style>
 """
+
+
+def getClass(strArg):
+    
+    """ """
+
+    return 'class="' + strArg.replace('.','-') + '"'
+
 
 script = """
 <script>

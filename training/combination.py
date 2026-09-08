@@ -340,7 +340,7 @@ class Combination(Title,Note):
         strResult = ''
 
         if len(self.child) > 1:
-            strResult = '<div'
+            strResult = f'<div {config.getClass(__name__)}'
             if self.color is not None:
                 strResult += ' style="background-color: {}"'.format(self.color)
             strResult += '>'
@@ -377,7 +377,7 @@ class Combination(Title,Note):
         strResult = ''
 
         if len(self.child) > 0:
-            strResult = '<table'
+            strResult = f'<table {config.getClass(__name__)}'
             if self.color is not None:
                 strResult += ' style="background-color: {}"'.format(self.color)
             strResult += '>'

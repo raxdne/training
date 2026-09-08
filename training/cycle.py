@@ -849,7 +849,7 @@ class Cycle(Title,Description,Plot):
 
         """  """
 
-        strResult = '<section class="{}" id="{}"'.format(__name__, str(id(self)))
+        strResult = f'<section {config.getClass(__name__)} id="{str(id(self))}"'
 
         if self.color is not None:
             strResult += ' style="background-color: {}"'.format(self.color)
@@ -859,7 +859,7 @@ class Cycle(Title,Description,Plot):
         strResult += self.getDescriptionHTML()
 
         if self.getNumberOfUnits() > 0:
-            strResult += '<pre>' + self.report() + '</pre>'
+            strResult += f'<pre {config.getClass(__name__)}>' + self.report() + '</pre>'
             
         m = self.getMarkers()
         if len(m) > 0:

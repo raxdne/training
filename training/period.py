@@ -1122,7 +1122,7 @@ class Period(Title,Description,Plot):
 
         """  """
 
-        strResult = '<section class="{}" id="{}"'.format(__name__, str(id(self)))
+        strResult = f'<section {config.getClass(__name__)} id="{str(id(self))}"'
 
         if self.color is not None:
             strResult += ' style="background-color: {}"'.format(self.color)
@@ -1135,7 +1135,7 @@ class Period(Title,Description,Plot):
         strResult += self.getDescriptionHTML()
 
         if self.getNumberOfUnits() > 0 or self.data:
-            strResult += '<pre>' + self.report() + '</pre>'
+            strResult += f'<pre {config.getClass(__name__)}>' + self.report() + '</pre>'
 
         m = self.getMarkers()
         if len(m) > 0:
@@ -1208,7 +1208,7 @@ class Period(Title,Description,Plot):
         strResult += self.toHtml()
 
         if not self.fText:
-            strResult += '<section class="{}">'.format(__name__)
+            strResult += f'<section {config.getClass(__name__)}>'
             strResult += '<div class="header">' + self.getTitleXML() + self.getDateString() + '</div>\n'
             strResult += '<div style="text-align: center;margin: 40px;">' + self.toSVGDiagram() + '</div>\n'
             strResult += '</section>\n'
@@ -1245,7 +1245,7 @@ class Period(Title,Description,Plot):
 
         for c in l:
             if type(c) is Period or type(c) is Cycle:
-                strResult += '<section class="{}" id="{}">'.format(__name__, str(id(c)))
+                strResult += f'<section {config.getClass(__name__)} id="{str(id(c))}"'
 
                 strResult += '<div class="header">' + c.getTitleXML()
                 if c.dateBegin is not None and c.dateEnd is not None:

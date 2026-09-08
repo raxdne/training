@@ -134,7 +134,7 @@ class Pause(Note):
         strResult = ''
 
         if self.getDuration().total_seconds() > 0:
-            strResult =  f'<div style="background-color: {self.getColor()}">{str(self)}</div>'
+            strResult =  f'<div {config.getClass(__name__)} style="background-color: {self.getColor()}">{str(self)}</div>'
 
         return strResult
 

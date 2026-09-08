@@ -142,7 +142,7 @@ class ExerciseSet(Title,Note):
         strResult = ''
 
         if self.count > 1:
-            strResult = '<div'
+            strResult = f'<div {config.getClass(__name__)}'
             if self.color is not None:
                 strResult += ' style="background-color: {}"'.format(self.color)
             strResult += '>' + str(self) + '</div>'
@@ -157,7 +157,7 @@ class ExerciseSet(Title,Note):
         strResult = ''
 
         if self.count > 0:
-            strResult = '<tr'
+            strResult = f'<tr {config.getClass(__name__)}'
             if self.color is not None:
                 strResult += ' style="background-color: {}"'.format(self.color)
             strResult += '><td>' + self.strTitle + '</td><td>' + str(self.count) + '</td><td>' + self.getDescriptionHTML() + '</td>'

@@ -240,7 +240,7 @@ class Note(Description):
 
         """  """
 
-        return f'<div style="background-color: {self.getColor()}">{self.getDescriptionString()}</div>'
+        return f'<div {config.getClass(__name__)} style="background-color: {self.getColor()}">{self.getDescriptionString()}</div>'
 
 
     def toCSV(self):
