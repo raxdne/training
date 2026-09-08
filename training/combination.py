@@ -298,12 +298,13 @@ class Combination(Title,Note):
 
         """  """
 
+        r = self.dup()
         if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
-            for u in self.child:
+            for u in r.child:
                 if type(u) is Unit or type(u) is ExerciseSet:
                     u.scale(floatScale,patternType)
 
-        return self
+        return r
 
 
     def stat(self, skipType=None):
@@ -345,7 +346,7 @@ class Combination(Title,Note):
             strResult += '>'
 
             if self.hasTitle():
-                strResult += self.getTitleString()
+                strResult += self.getTitleString() + ' ' + self.getDuration().toString()
             elif self.isCircuit():
                 strResult += 'Circuit: ' + self.getDuration().toString()
             elif self.logicAnd:
@@ -369,7 +370,7 @@ class Combination(Title,Note):
         return strResult
 
 
-    def toHtmlSheet(self):
+    def toHtmlSheet(self,fImages=False):
 
         """  """
 
@@ -392,9 +393,9 @@ class Combination(Title,Note):
 
             for u in self.child:
                 if type(u) is Combination:
-                    strResult += '<tr><td>' + u.toHtmlSheet() + '</td></tr>'
+                    strResult += '<tr><td>' + u.toHtmlSheet(fImages) + '</td></tr>'
                 elif type(u) is ExerciseSet:
-                    strResult += u.toHtmlSheet()
+                    strResult += u.toHtmlSheet(fImages)
                 else:
                     strResult += '<tr><td>' + u.toHtmlTable() + '</td></tr>'
                 
@@ -406,7 +407,7 @@ class Combination(Title,Note):
         return strResult
 
 
-    def toHtmlFile(self):
+    def toHtmlFile(self,fImages=False):
 
         """ returns html/body + content """
 
@@ -426,7 +427,7 @@ class Combination(Title,Note):
 
         strResult += "</head>"
 
-        strResult += "<body>" + self.toHtmlSheet() + "</body>"
+        strResult += "<body>" + self.toHtmlSheet(fImages) + "</body>"
 
         strResult += "</html>"
 
