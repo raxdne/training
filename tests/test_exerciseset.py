@@ -17,9 +17,6 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
-import sys
-#sys.path.insert(0,'/home/developer/src/training')
-
 from training.exerciseset import ExerciseSet
 
 print('Module Test: ' + __file__ + '\n')
@@ -27,6 +24,6 @@ print('Module Test: ' + __file__ + '\n')
 t = ExerciseSet('E1',24)
 t.appendDescription(['Step 1','Step 2','Step 3'])
 
-print(t)
-#c1.scale(2.0,r"^R")
+t.scale(2)
 
+print(t)

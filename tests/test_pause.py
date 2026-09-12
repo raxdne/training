@@ -32,8 +32,10 @@ print(t1)
 
 t = Pause()
 t.setDuration(3)
+t.setDescription(['AAA',['BBB','CCC'],['DDD','EEE']])
 print(t)
 
+#t = Pause(11,'YYY')
 t.setClock(time(8,15,0))
 t.setDate(date(2025,1,1))
 t.setDescription('YYY')
@@ -41,7 +43,7 @@ print(t)
 
 t.setDuration('30min')
 t.setDescription(['AAA',['BBB','CCC'],['DDD','EEE']])
-print(t)
+print(t.toHtmlTable())
 
 t.setDuration('3:30:00')
 print(t)

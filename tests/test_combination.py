@@ -37,6 +37,7 @@ from training.title import Title
 from training.note import Note
 from training.unit import Unit
 from training.pause import Pause
+from training.exerciseset import ExerciseSet
 from training.combination import Combination
 
 from suntime import Sun
@@ -47,12 +48,28 @@ print('Module Test: ' + __file__ + '\n')
 config.sun = Sun(52.5,13.5)
 config.twilight = 1800
 
-t = Combination([Unit('sr;3.5;RB;25:00'),
+def Liegestütz(n=1):
+
+    return ExerciseSet('Liegestütz',n).appendDescription('flach')
+
+c = Combination([Liegestütz(12),ExerciseSet('E1',24),Pause('10min','Halt'),ExerciseSet('E2',24),ExerciseSet('E3',24)]).setTitleStr('My Circle')
+
+t = Combination([Unit('08:11:00;3.5;RB;25:00'),
                  Pause('20min'),
-                 Unit(';3.5;RB;25:00'),
+                 Unit(';3.5;RB aa;20:30'),
                  Note('AAAA'),
-                 Unit(';3.5;RB;25:00')])
-t.setDate(datetime(2023, 1, 7).astimezone(None))
+                 Unit(';3.5;RB;25:00'),
+                 Pause('10min','Halt'),
+                 c])
+
+s = Combination([c,c.scale(1.333),c])
+t = Combination([s,s.scale(1.333),s])
+#t = Combination()
+#t.append(c)
+#t.append(c.scale(2.0))
+#t.append(c)
+
+#t.setDate(datetime(2025, 1, 7, 8, 11).astimezone(None))
 #t.setDate(date(2023,3,1))
 print(t)
 print(t.toStringShort())
@@ -67,14 +84,23 @@ t = Combination([Combination([Unit('sr;3.5;AB;25:00'), Pause('20min'), Unit(';3.
 #t.setTitleStr('My Combination')
 #t.remove(r'^R')
 #print(t.getDuration())
+#print(t.getRepresentativeAlternative())
 
-t.setDate(datetime(2023, 1, 9).astimezone(None))
-#t.setDate(date(2023,3,1))
+#t.setDate(datetime(2023, 1, 9).astimezone(None))
+t.setDate(date(2023,3,1))
+#t.mark()
+#t.scale(0.009)
+#print(t.isMarked())
 print(t)
-print(t.toStringShort())
-#print(t.toFreemindNode())
-print(t.toHtmlTable())
 print(t.stat())
+#print(t.toStringShort())
+#print(t.toFreemindNode())
+#print(t.toHtmlTable())
+#print(t.stat())
+
+f = open('plan.html', 'w')
+f.write(t.toHtmlFile(True))
+f.close()
 
 #t1 = t.dup()
 #t1.setDate(date(2023,4,1))
@@ -85,5 +111,13 @@ print(t.stat())
 #print(t1.toXML())
 
 #print(t.toSVG(0,0))
-print(t.to_ical())
+
+cal = Calendar()
+#cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleString()))
+cal.add('version', '2.0')
+t.to_ical(cal)
+
+f = open('plan.ics', 'wb')
+f.write(cal.to_ical())
+f.close()
 

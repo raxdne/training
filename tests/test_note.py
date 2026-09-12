@@ -26,10 +26,10 @@ from training.note import Note
 print('Module Test: ' + __file__ + '\n')
 
 t = Note()
-print(t)
 
 t.setDateStr('2020-04-04')
 t.appendDescription(['TEST','AAA & "BBB"'])
+print(repr(t))
 print(t.toString())
 
 t1 = t.dup()

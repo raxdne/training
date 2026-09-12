@@ -19,7 +19,6 @@
 
 import json
 import sys
-sys.path.insert(0,'/home/developer/src/training')
 
 from training.note import Note
 from training.unit import Unit
