@@ -102,22 +102,25 @@ class Combination(Title,Note):
 
         strResult = ''
 
-        for i in range(len(self.child)):
-            if type(self.child[i]) is Note:
-                pass
-            else:
-                if i < 1:
+        if self.isCircuit():
+            strResult += 'Circuit'
+        else:
+            for i in range(len(self.child)):
+                if type(self.child[i]) is Note:
                     pass
-                elif self.logicAnd:
-                    # Combination
-                    strResult += ' & '
                 else:
-                    # Alternatives
-                    strResult += ' | '
-                strResult += self.child[i].toStringShort()
+                    if i < 1:
+                        pass
+                    elif self.logicAnd:
+                        # Combination
+                        strResult += ' & '
+                    else:
+                        # Alternatives
+                        strResult += ' | '
+                    strResult += self.child[i].toStringShort()
 
-                if not strDate and type(self.child[i]) is Unit and self.child[i].dt is not None:
-                    strDate = self.child[i].dt.strftime("%Y-%m-%d ")
+                    if not strDate and type(self.child[i]) is Unit and self.child[i].dt is not None:
+                        strDate = self.child[i].dt.strftime("%Y-%m-%d ")
 
         return f'({strResult} {self.getTitleString()} {self.getDescriptionString()})'
 
@@ -270,10 +273,11 @@ class Combination(Title,Note):
                         s_max = s
                 elif type(u) is Combination:
                     q = u.getRepresentativeAlternative(skipType)
-                    s = q.getDuration().total_seconds()
-                    if s > s_max:
-                        r = q
-                        s_max = s
+                    if q is not None:
+                        s = q.getDuration().total_seconds()
+                        if s > s_max:
+                            r = q
+                            s_max = s
 
         return r
 
