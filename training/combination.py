@@ -85,7 +85,9 @@ class Combination(Title,Note):
         """  """
 
         for i in range(len(self.child)):
-            if type(self.child[i]) is Combination or type(self.child[i]) is ExerciseSet or type(self.child[i]) is Pause:
+            if type(self.child[i]) is Combination and self.child[i].isCircuit():
+                pass
+            elif type(self.child[i]) is ExerciseSet or type(self.child[i]) is Pause:
                 pass
             else:
                 return False
