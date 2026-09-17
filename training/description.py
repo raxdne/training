@@ -23,6 +23,8 @@ import re
 # https://uibakery.io/regex-library/url-regex-python
 url_pattern = "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$"
 
+re_garmin = re.compile('^garmin:([0-9]+)')
+
 def _fixIt(listArg=[]):
 
     """ fix nesting """
@@ -99,7 +101,6 @@ class Description:
         """  """
         
         self.color = None
-        self.re_garmin = re.compile('^garmin:([0-9]+)')
         self.setDescription(strArg)
 
 
@@ -237,8 +238,8 @@ class Description:
             f = _flatten(self.listDescription)
             if len(f) == 1:
                 # only one item
-                if re.match(self.re_garmin, f[0]):
-                    strResult += f' <a href="https://www.garmin.com/app/activity/{re.match(self.re_garmin, f[0]).group(1)}">Garmin</a>'
+                if re.match(re_garmin, f[0]):
+                    strResult += f' <a href="https://www.garmin.com/app/activity/{re.match(re_garmin, f[0]).group(1)}">Garmin</a>'
                 elif re.match(url_pattern, f[0]):
                     strResult += ' <a href="{url}">{url}</a>'.format(url=f[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
                 else:
@@ -248,8 +249,8 @@ class Description:
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
             # list item + childs
             strResult += '<li>'
-            if re.match(self.re_garmin, listArg[0]):
-                strResult += f'<a href="https://www.garmin.com/app/activity/{re.match(self.re_garmin, listArg[0]).group(1)}">Garmin</a>'
+            if re.match(re_garmin, listArg[0]):
+                strResult += f'<a href="https://www.garmin.com/app/activity/{re.match(re_garmin, listArg[0]).group(1)}">Garmin</a>'
             elif re.match(url_pattern, listArg[0]):
                 strResult += '<a href="{url}">{url}</a>'.format(url=listArg[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
             else:
@@ -261,8 +262,8 @@ class Description:
             for c in listArg:
                 if type(c) is str and c:
                     strResult += '<li>'
-                    if re.match(self.re_garmin, c):
-                        strResult += f'<a href="https://www.garmin.com/app/activity/{re.match(self.re_garmin, c).group(1)}">Garmin</a>'
+                    if re.match(re_garmin, c):
+                        strResult += f'<a href="https://www.garmin.com/app/activity/{re.match(re_garmin, c).group(1)}">Garmin</a>'
                     elif re.match(url_pattern, c):
                         strResult += '<a href="{url}">{url}</a>'.format(url=c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
                     else:
