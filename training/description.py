@@ -240,9 +240,9 @@ class Description:
             if len(f) == 1:
                 # only one item
                 if re.match(re_garmin, f[0]):
-                    strResult += f' <a href="{prefix_garmin}{re.match(re_garmin, f[0]).group(1)}">Garmin</a>'
+                    strResult += f' <a target="_blank" href="{prefix_garmin}{re.match(re_garmin, f[0]).group(1)}">Garmin</a>'
                 elif re.match(url_pattern, f[0]):
-                    strResult += ' <a href="{url}">{url}</a>'.format(url=f[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+                    strResult += ' <a target="_blank" href="{url}">{url}</a>'.format(url=f[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
                 else:
                     strResult += ' <span>' + f[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;") + '</span>'
             elif len(f) > 1:
@@ -251,9 +251,9 @@ class Description:
             # list item + childs
             strResult += '<li>'
             if re.match(re_garmin, listArg[0]):
-                strResult += f'<a href="{prefix_garmin}{re.match(re_garmin, listArg[0]).group(1)}">Garmin</a>'
+                strResult += f'<a target="_blank" href="{prefix_garmin}{re.match(re_garmin, listArg[0]).group(1)}">Garmin</a>'
             elif re.match(url_pattern, listArg[0]):
-                strResult += '<a href="{url}">{url}</a>'.format(url=listArg[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+                strResult += '<a target="_blank" href="{url}">{url}</a>'.format(url=listArg[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
             else:
                 strResult += listArg[0]
             strResult += '</li>\n'
@@ -264,9 +264,9 @@ class Description:
                 if type(c) is str and c:
                     strResult += '<li>'
                     if re.match(re_garmin, c):
-                        strResult += f'<a href="{prefix_garmin}{re.match(re_garmin, c).group(1)}">Garmin</a>'
+                        strResult += f'<a target="_blank" href="{prefix_garmin}{re.match(re_garmin, c).group(1)}">Garmin</a>'
                     elif re.match(url_pattern, c):
-                        strResult += '<a href="{url}">{url}</a>'.format(url=c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+                        strResult += '<a target="_blank" href="{url}">{url}</a>'.format(url=c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
                     else:
                         strResult += c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
                     strResult += '</li>\n'
