@@ -26,6 +26,7 @@ print(repr(d))
 print(d)
 
 d.appendDescription(['WWW',['YYY','ZZZ','http://www.demo.org/']])
+d.appendDescription('garmin:12345678')
 
 print(d.getDescriptionString())
 
