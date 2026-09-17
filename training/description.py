@@ -24,6 +24,7 @@ import re
 url_pattern = "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$"
 
 re_garmin = re.compile('^garmin:([0-9]+)')
+prefix_garmin = 'https://connect.garmin.com/app/activity/'
 
 def _fixIt(listArg=[]):
 
@@ -239,7 +240,7 @@ class Description:
             if len(f) == 1:
                 # only one item
                 if re.match(re_garmin, f[0]):
-                    strResult += f' <a href="https://www.garmin.com/app/activity/{re.match(re_garmin, f[0]).group(1)}">Garmin</a>'
+                    strResult += f' <a href="{prefix_garmin}{re.match(re_garmin, f[0]).group(1)}">Garmin</a>'
                 elif re.match(url_pattern, f[0]):
                     strResult += ' <a href="{url}">{url}</a>'.format(url=f[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
                 else:
@@ -250,7 +251,7 @@ class Description:
             # list item + childs
             strResult += '<li>'
             if re.match(re_garmin, listArg[0]):
-                strResult += f'<a href="https://www.garmin.com/app/activity/{re.match(re_garmin, listArg[0]).group(1)}">Garmin</a>'
+                strResult += f'<a href="{prefix_garmin}{re.match(re_garmin, listArg[0]).group(1)}">Garmin</a>'
             elif re.match(url_pattern, listArg[0]):
                 strResult += '<a href="{url}">{url}</a>'.format(url=listArg[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
             else:
@@ -263,7 +264,7 @@ class Description:
                 if type(c) is str and c:
                     strResult += '<li>'
                     if re.match(re_garmin, c):
-                        strResult += f'<a href="https://www.garmin.com/app/activity/{re.match(re_garmin, c).group(1)}">Garmin</a>'
+                        strResult += f'<a href="{prefix_garmin}{re.match(re_garmin, c).group(1)}">Garmin</a>'
                     elif re.match(url_pattern, c):
                         strResult += '<a href="{url}">{url}</a>'.format(url=c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
                     else:
