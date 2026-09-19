@@ -58,6 +58,7 @@ class ExerciseSet(Title,Note):
         self.count = iArg
         self.setTitleStr(strArg)
         self.setDescription()
+        self.setShortNote()
         self.img = []
 
         self.color = None
@@ -79,14 +80,14 @@ class ExerciseSet(Title,Note):
 
     def __str__(self):
 
-        return f'{self.count} x {self.strTitle}'
+        return f'{self.count} x {self.strTitle} {self.strNote}'
 
 
     def getDuration(self, skipType=None):
 
         """  """
         
-        return timedelta(seconds=self.count*2)
+        return timedelta(seconds=self.count*3)
 
 
     def getImageRef(self):
@@ -111,6 +112,22 @@ class ExerciseSet(Title,Note):
         else:
             self.img.append(objArg)
         
+        return self
+
+
+    def getShortNote(self):
+
+        """  """
+        
+        return self.strNote
+
+
+    def setShortNote(self,strArg=''):
+
+        """  """
+        
+        self.strNote = strArg
+                
         return self
 
 
@@ -144,7 +161,7 @@ class ExerciseSet(Title,Note):
         if self.count > 1:
             strResult = f'<div {config.getClass(__name__)}'
             if self.color is not None:
-                strResult += ' style="background-color: {}"'.format(self.color)
+                strResult += f' style="background-color: {self.color}"'
             strResult += '>' + str(self) + '</div>'
 
         return strResult
@@ -159,7 +176,7 @@ class ExerciseSet(Title,Note):
         if self.count > 0:
             strResult = f'<tr {config.getClass(__name__)}'
             if self.color is not None:
-                strResult += ' style="background-color: {}"'.format(self.color)
+                strResult += f' style="background-color: {self.color}"'
             strResult += '><td>' + self.strTitle + '</td><td>' + str(self.count) + '</td><td>' + self.getDescriptionHTML() + '</td>'
             if fImages:
                 strResult += '<td>' + self.getImageRef() + '</td>'
