@@ -362,14 +362,17 @@ class Combination(Title,Note):
 
             strResult += self.getDescriptionHTML()
 
-            if self.logicAnd:
-                strResult += '<ol style="margin-block-start: 2px; margin-block-end: 2px;">'
-            else:
-                strResult += '<ol style="list-style-type: lower-latin; margin-block-start: 2px; margin-block-end: 2px;">'
+            if not self.isCircuit():
+		# append the details if it is not a Curcuit
+                if self.logicAnd:
+                    strResult += '<ol style="margin-block-start: 2px; margin-block-end: 2px;">'
+                else:
+                    strResult += '<ol style="list-style-type: lower-latin; margin-block-start: 2px; margin-block-end: 2px;">'
 
-            for u in self.child:
-                strResult += '<li>' + u.toHtmlTable() + '</li>'
-            strResult += '</ol>' + '</div>'
+                for u in self.child:
+                    strResult += '<li>' + u.toHtmlTable() + '</li>'
+                strResult += '</ol>' + '</div>'
+
         elif self.child:
             strResult = '<div>' + self.child[0].toHtmlTable() + '</div>'
 
