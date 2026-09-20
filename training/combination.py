@@ -80,6 +80,19 @@ class Combination(Title,Note):
         return strResult
 
 
+    def getRepetitions(self):
+
+        """  """
+
+        n = 0
+                
+        for c in self.child:
+            if type(c) is Combination or type(c) is ExerciseSet:
+                n += c.getRepetitions()
+                
+        return n
+
+
     def isCircuit(self):
 
         """  """
@@ -305,7 +318,7 @@ class Combination(Title,Note):
         """  """
 
         r = self.dup()
-        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
+        if floatScale > 0.01 and abs(floatScale - 1.0) > 0.01:
             for u in r.child:
                 if type(u) is Unit or type(u) is ExerciseSet or type(u) is Combination:
                     u.scale(floatScale,patternType)
@@ -354,7 +367,7 @@ class Combination(Title,Note):
             if self.hasTitle():
                 strResult += self.getTitleString() + ' ' + self.getDuration().toString()
             elif self.isCircuit():
-                strResult += 'Circuit: ' + self.getDuration().toString()
+                strResult += 'Circuit: ' + str(self.getRepetitions()) + ' Repetitions in ' + self.getDuration().toString()
             elif self.logicAnd:
                 strResult += 'Combination: ' + self.getDuration().toString()
             else:
@@ -363,7 +376,7 @@ class Combination(Title,Note):
             strResult += self.getDescriptionHTML()
 
             if not self.isCircuit():
-		# append the details if it is not a Curcuit
+                # append the details if it is not a Circuit
                 if self.logicAnd:
                     strResult += '<ol style="margin-block-start: 2px; margin-block-end: 2px;">'
                 else:
@@ -371,7 +384,9 @@ class Combination(Title,Note):
 
                 for u in self.child:
                     strResult += '<li>' + u.toHtmlTable() + '</li>'
-                strResult += '</ol>' + '</div>'
+                strResult += '</ol>'
+
+            strResult += '</div>'
 
         elif self.child:
             strResult = '<div>' + self.child[0].toHtmlTable() + '</div>'
@@ -383,35 +398,28 @@ class Combination(Title,Note):
 
         """  """
 
-        strResult = ''
+        strResult = f'<table {config.getClass(__name__)}'
+        if self.color is not None:
+            strResult += ' style="background-color: {}"'.format(self.color)
+        strResult += '>'
 
-        if len(self.child) > 0:
-            strResult = f'<table {config.getClass(__name__)}'
-            if self.color is not None:
-                strResult += ' style="background-color: {}"'.format(self.color)
-            strResult += '>'
+        strResult += '<tbody>'
 
-            #strResult += '<thead><tr><th>#</th><th>Name</th><th>Count</th><th>Description</th><th>Picture</th></tr></thead>'
+        if self.hasTitle():
+            strResult += '<tr><th colspan="4">' + self.getTitleString() + '</th></tr>'
 
-            strResult += '<tbody>'
+        #strResult += self.getDescriptionHTML()
 
-            if self.hasTitle():
-                strResult += '<tr><th colspan="4">' + self.getTitleString() + '</th></tr>'
-
-            #strResult += self.getDescriptionHTML()
-
-            for u in self.child:
-                if type(u) is Combination:
-                    strResult += '<tr><td>' + u.toHtmlSheet(fImages,fDescription) + '</td></tr>'
-                elif type(u) is ExerciseSet:
-                    strResult += u.toHtmlSheet(fImages,fDescription)
-                else:
-                    strResult += '<tr><td>' + u.toHtmlTable() + '</td></tr>'
-                
-            strResult += '</tbody>'
-            strResult += '</table>'
-        #elif self.child:
-        #    strResult = '<div>' + self.child[0].toHtmlTable() + '</div>'
+        for u in self.child:
+            if type(u) is Combination:
+                strResult += '<tr><td>' + u.toHtmlSheet(fImages,fDescription) + '</td></tr>'
+            elif type(u) is ExerciseSet:
+                strResult += u.toHtmlSheet(fImages,fDescription)
+            else:
+                strResult += '<tr><td>' + u.toHtmlTable() + '</td></tr>'
+                    
+        strResult += '</tbody>'
+        strResult += '</table>'
 
         return strResult
 

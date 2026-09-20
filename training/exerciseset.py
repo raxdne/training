@@ -55,13 +55,12 @@ class ExerciseSet(Title,Note):
         super(Title, self).__init__()
         super(Note, self).__init__()
 
-        self.count = iArg
+        self.repetitions = iArg
+        self.img = []
+        self.color = None
         self.setTitleStr(strArg)
         self.setDescription()
         self.setShortNote()
-        self.img = []
-
-        self.color = None
 
 
     def __repr__(self):
@@ -80,14 +79,21 @@ class ExerciseSet(Title,Note):
 
     def __str__(self):
 
-        return f'{self.count} x {self.strTitle} {self.strNote}'
+        return f'{self.repetitions} x {self.strTitle} {self.strNote}'
+
+
+    def getRepetitions(self):
+
+        """  """
+        
+        return self.repetitions
 
 
     def getDuration(self, skipType=None):
 
         """  """
         
-        return timedelta(seconds=self.count*3)
+        return timedelta(seconds=self.repetitions*3)
 
 
     def getImageRef(self):
@@ -158,7 +164,7 @@ class ExerciseSet(Title,Note):
 
         strResult = ''
 
-        if self.count > 1:
+        if self.repetitions > 1:
             strResult = f'<div {config.getClass(__name__)}'
             if self.color is not None:
                 strResult += f' style="background-color: {self.color}"'
@@ -173,11 +179,11 @@ class ExerciseSet(Title,Note):
 
         strResult = ''
 
-        if self.count > 0:
+        if self.repetitions > 0:
             strResult = f'<tr {config.getClass(__name__)}'
             if self.color is not None:
                 strResult += f' style="background-color: {self.color}"'
-            strResult += '><td>' + self.strTitle + ' ' + self.strNote + '</td><td>' + str(self.count) + '</td>'
+            strResult += '><td>' + self.strTitle + ' ' + self.strNote + '</td><td>' + str(self.repetitions) + '</td>'
             if fDescription:
                 strResult += '<td>' + self.getDescriptionHTML() + '</td>'
             if fImages:
@@ -203,6 +209,6 @@ class ExerciseSet(Title,Note):
         """  """
 
         if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
-            self.count = round(self.count * floatScale)
+            self.repetitions = round(self.repetitions * floatScale)
 
         return self
