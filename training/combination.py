@@ -402,9 +402,9 @@ class Combination(Title,Note):
 
             for u in self.child:
                 if type(u) is Combination:
-                    strResult += '<tr><td>' + u.toHtmlSheet(fImages) + '</td></tr>'
+                    strResult += '<tr><td>' + u.toHtmlSheet(fImages,fDescription) + '</td></tr>'
                 elif type(u) is ExerciseSet:
-                    strResult += u.toHtmlSheet(fImages)
+                    strResult += u.toHtmlSheet(fImages,fDescription)
                 else:
                     strResult += '<tr><td>' + u.toHtmlTable() + '</td></tr>'
                 
