@@ -307,7 +307,7 @@ class Combination(Title,Note):
         r = self.dup()
         if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
             for u in r.child:
-                if type(u) is Unit or type(u) is ExerciseSet:
+                if type(u) is Unit or type(u) is ExerciseSet or type(u) is Combination:
                     u.scale(floatScale,patternType)
 
         return r
@@ -379,7 +379,7 @@ class Combination(Title,Note):
         return strResult
 
 
-    def toHtmlSheet(self,fImages=False):
+    def toHtmlSheet(self,fImages=True,fDescription=True):
 
         """  """
 
@@ -416,7 +416,7 @@ class Combination(Title,Note):
         return strResult
 
 
-    def toHtmlFile(self,fImages=False):
+    def toHtmlFile(self,fImages=True,fDescription=True):
 
         """ returns html/body + content """
 
@@ -436,7 +436,7 @@ class Combination(Title,Note):
 
         strResult += "</head>"
 
-        strResult += "<body>" + self.toHtmlSheet(fImages) + "</body>"
+        strResult += "<body>" + self.toHtmlSheet(fImages,fDescription) + "</body>"
 
         strResult += "</html>"
 

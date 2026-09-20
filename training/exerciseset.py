@@ -167,7 +167,7 @@ class ExerciseSet(Title,Note):
         return strResult
 
 
-    def toHtmlSheet(self,fImages=True,fDesciption=True):
+    def toHtmlSheet(self,fImages=True,fDescription=True):
 
         """  """
 
@@ -178,7 +178,7 @@ class ExerciseSet(Title,Note):
             if self.color is not None:
                 strResult += f' style="background-color: {self.color}"'
             strResult += '><td>' + self.strTitle + ' ' + self.strNote + '</td><td>' + str(self.count) + '</td>'
-            if fDesciption:
+            if fDescription:
                 strResult += '<td>' + self.getDescriptionHTML() + '</td>'
             if fImages:
                 strResult += '<td>' + self.getImageRef() + '</td>'
