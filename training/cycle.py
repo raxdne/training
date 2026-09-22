@@ -305,6 +305,7 @@ class Cycle(Title,Description,Plot):
         """  """
 
         objResult = self
+        j = len(self.day)
 
         if objArg is None:
 
@@ -320,7 +321,7 @@ class Cycle(Title,Description,Plot):
             for u in objArg:
                 self.insert(objIndex,u,flagReplace)
 
-        elif type(objIndex) is int and objIndex > -1 and objIndex < len(self.day) and (type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note):
+        elif type(objIndex) is int and objIndex > -1 and objIndex < j and (type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note):
 
             if flagReplace:
                 # override existing
@@ -328,16 +329,21 @@ class Cycle(Title,Description,Plot):
             else:
                 self.day[objIndex].append(objArg.dup())
 
-        elif type(objIndex) is int and objIndex > -1 and objIndex < len(self.day) and type(objArg) is Cycle and objArg.day and len(objArg.day) + objIndex <= len(self.day):
+        elif type(objIndex) is int and objIndex > -1 and objIndex < j and type(objArg) is Cycle and len(objArg.day) > 0:
 
-            i = 0
-            for v in objArg.day:
-                for u in v:
-                    self.insert(objIndex + i,u,flagReplace)
+            for i in range(objArg.getLength()):
+                k = objIndex + i
+                if k == j:
+                    break
+                elif len(objArg.day[i]) < 1:
+                    self.day[k].clear()
+                else:
+                    for u in objArg.day[i]:
+                        self.insert(k,u,flagReplace)
                 i += 1
 
         else:
-            print(f'error: inserting {type(objArg)} at position {objIndex} of {len(self.day)} {objArg}', file=sys.stderr)
+            print(f'error: inserting {type(objArg)} at position {objIndex} of {j} {objArg}', file=sys.stderr)
 
         return objResult
 

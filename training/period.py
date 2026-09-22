@@ -584,6 +584,17 @@ class Period(Title,Description,Plot):
         return self
 
 
+    def override(self,argCycle,argDate=None):
+
+        """ override the descendant cycle sequence by argCycle """
+
+        c = self.getCycleByDate(argDate)
+        if type(c) is Cycle:
+            c.insert(2,argCycle,True)
+
+        return self
+
+
     def swap(self,argA,argB):
 
         """ swap childs """
