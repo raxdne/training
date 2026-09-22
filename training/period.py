@@ -588,9 +588,17 @@ class Period(Title,Description,Plot):
 
         """ override the descendant cycle sequence by argCycle """
 
-        c = self.getCycleByDate(argDate)
-        if type(c) is Cycle:
-            c.insert(2,argCycle,True)
+        if type(argCycle) is Cycle:
+            if argDate:
+                c = self.getCycleByDate(argDate)
+                if type(c) is Cycle:
+                    c.insert((argDate - c.dateBegin).days,argCycle,True)
+            elif argCycle.dateBegin:
+                self.override(argCycle,argCycle.dateBegin)
+            else:
+                self.override(argCycle, self.dateBegin)
+        else:
+            print(f'error: inserting {type(argCycle)} at date {argDate}', file=sys.stderr)
 
         return self
 
