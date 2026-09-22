@@ -426,7 +426,7 @@ class Period(Title,Description,Plot):
                 if not v:
                     # day without elements
                     if flagReplace:
-                        # create a scheduled empty unit to override
+                        # create a scheduled empty unit to overwrite
                         u = Unit()
                         u.setDate(objArg.dateBegin + timedelta(days=d))
                         self.insertByDate(u,True)
@@ -584,9 +584,9 @@ class Period(Title,Description,Plot):
         return self
 
 
-    def override(self,argCycle,argDate=None):
+    def overwrite(self,argCycle,argDate=None):
 
-        """ override the descendant cycle sequence by argCycle """
+        """ overwrite the descendant cycle sequence by argCycle """
 
         if type(argCycle) is Cycle:
             if argDate:
@@ -594,9 +594,9 @@ class Period(Title,Description,Plot):
                 if type(c) is Cycle:
                     c.insert((argDate - c.dateBegin).days,argCycle,True)
             elif argCycle.dateBegin:
-                self.override(argCycle,argCycle.dateBegin)
+                self.overwrite(argCycle,argCycle.dateBegin)
             else:
-                self.override(argCycle, self.dateBegin)
+                self.overwrite(argCycle, self.dateBegin)
         else:
             print(f'error: inserting {type(argCycle)} at date {argDate}', file=sys.stderr)
 
@@ -820,7 +820,7 @@ class Period(Title,Description,Plot):
         self.summary.clear()
 
         if self.data is not None and self.data:
-            print(f'error: cannot override existing data collection of period "{self.getTitleString()}"', file=sys.stderr)
+            print(f'error: cannot overwrite existing data collection of period "{self.getTitleString()}"', file=sys.stderr)
         elif objArg is None:
             print('error: empty period initialization', file=sys.stderr)
         elif type(objArg) is str and objArg:

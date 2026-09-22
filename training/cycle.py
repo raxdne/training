@@ -280,7 +280,7 @@ class Cycle(Title,Description,Plot):
         if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.day) and intIndexB < len(self.day) and intIndexA != intIndexB:
             objCopy = copy.deepcopy(self.day[intIndexA])
             if flagReplace:
-                # override existing
+                # overwrite existing
                 self.day[intIndexB] = objCopy
             else:
                 self.day[intIndexB] += objCopy
@@ -324,7 +324,7 @@ class Cycle(Title,Description,Plot):
         elif type(objIndex) is int and objIndex > -1 and objIndex < j and (type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note):
 
             if flagReplace:
-                # override existing
+                # overwrite existing
                 self.day[objIndex] = [objArg.dup()]
             else:
                 self.day[objIndex].append(objArg.dup())
@@ -413,7 +413,7 @@ class Cycle(Title,Description,Plot):
                 #print(f'info: inserting {type(objArg)} at position {delta.days} of {len(self.day)} {objArg}', file=sys.stderr)
                 objResult = objArg.dup()
                 if flagReplace:
-                    # override existing
+                    # overwrite existing
                     self.day[delta.days] = [objResult]
                 else:
                     self.day[delta.days].append(objResult)
