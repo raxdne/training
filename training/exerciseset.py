@@ -93,7 +93,7 @@ class ExerciseSet(Title,Note):
 
         """  """
         
-        return timedelta(seconds=self.repetitions*3)
+        return timedelta(seconds=self.repetitions * 3)
 
 
     def getImageRef(self):

@@ -410,13 +410,17 @@ class Combination(Title,Note):
 
         #strResult += self.getDescriptionHTML()
         t = timedelta(seconds=0)
-        
+
         for u in self.child:
             if type(u) is Combination:
+                # nested Combination
                 strResult += '<tr><td>' + u.toHtmlSheet(fImages,fDescription) + '</td></tr>'
             elif type(u) is ExerciseSet:
-                t += u.getDuration() + timedelta(seconds=15)
                 strResult += '<tr><td>' + str(t) + '</td>' + u.toHtmlSheet(fImages,fDescription) + '</tr>'
+                t += u.getDuration() + timedelta(seconds=15)
+            elif type(u) is Pause:
+                strResult += '<tr><td>' + str(t) + '</td><td>' + u.toHtmlTable() + '</td></tr>'
+                t += u.getDuration() + timedelta(seconds=15)
             else:
                 strResult += '<tr><td>' + u.toHtmlTable() + '</td></tr>'
                     
