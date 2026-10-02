@@ -894,14 +894,14 @@ class Cycle(Title,Description,Plot):
             for v in self.day:
                 strResult += '<tr>'
 
-                strResult += '<td '
+                strResult += '<td'
                 if dt_i.weekday() == 5 or dt_i.weekday() == 6:
-                    strResult += 'class="we"'
+                    strResult += ' class="we"'
                 strResult += '>'
 
                 if not self.fPlan and len([u for u in v if type(u) is Unit]) > 0:
                     # TODO: make link portable/configurable
-                    strResult += '<a href="/cxproc/exe?path={}&xsl=fitx2html">'.format(dt_i.strftime("%Y-%m-%d.*fitx"))
+                    strResult += '<a href="' + config.getURL(dt_i.strftime("%Y-%m-%d.*fitx")) + '">'
                     strResult += dt_i.strftime("%Y-%m-%d %a (%j)")
                     strResult += '</a>'
                 else:

@@ -180,15 +180,17 @@ class ExerciseSet(Title,Note):
         strResult = ''
 
         if self.repetitions > 0:
-            strResult = f'<tr {config.getClass(__name__)}'
-            if self.color is not None:
-                strResult += f' style="background-color: {self.color}"'
-            strResult += '><td>' + self.strTitle + ' ' + self.strNote + '</td><td>' + str(self.repetitions) + '</td>'
+            #strResult = f'<tr {config.getClass(__name__)}'
+            #if self.color is not None:
+            #    strResult += f' style="background-color: {self.color}"'
+            #strResult += '>'
+            #strResult += '<td>' + str(self.getDuration()) + '</td>'
+            strResult += '<td>' + self.strTitle + ' ' + self.strNote + '</td><td>' + str(self.repetitions) + '</td>'
             if fDescription:
                 strResult += '<td>' + self.getDescriptionHTML() + '</td>'
             if fImages:
                 strResult += '<td>' + self.getImageRef() + '</td>'
-            strResult += '</tr>'
+            #strResult += '</tr>'
 
         return strResult
 

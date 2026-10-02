@@ -83,7 +83,13 @@ style = """
 </style>
 """
 
+def getURL(strArg):
+    
+    """ generates an URL for strArg """
 
+    return 'https://www.demo.com/url?id=' + strArg.replace('.','-')
+    
+    
 def getClass(strArg):
     
     """ """

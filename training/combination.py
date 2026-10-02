@@ -409,12 +409,14 @@ class Combination(Title,Note):
             strResult += '<tr><th colspan="4">' + self.getTitleString() + '</th></tr>'
 
         #strResult += self.getDescriptionHTML()
-
+        t = timedelta(seconds=0)
+        
         for u in self.child:
             if type(u) is Combination:
                 strResult += '<tr><td>' + u.toHtmlSheet(fImages,fDescription) + '</td></tr>'
             elif type(u) is ExerciseSet:
-                strResult += u.toHtmlSheet(fImages,fDescription)
+                t += u.getDuration() + timedelta(seconds=15)
+                strResult += '<tr><td>' + str(t) + '</td>' + u.toHtmlSheet(fImages,fDescription) + '</tr>'
             else:
                 strResult += '<tr><td>' + u.toHtmlTable() + '</td></tr>'
                     
