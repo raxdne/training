@@ -419,10 +419,12 @@ class Combination(Title,Note):
                 strResult += '<tr><td>' + str(t) + '</td>' + u.toHtmlSheet(fImages,fDescription) + '</tr>'
                 t += u.getDuration() + timedelta(seconds=15)
             elif type(u) is Pause:
-                strResult += '<tr><td>' + str(t) + '</td><td>' + u.toHtmlTable() + '</td></tr>'
+                strResult += '<tr><td>' + str(t) + '</td><td>' + u.toHtmlTable() + '</td><td></td></tr>'
                 t += u.getDuration() + timedelta(seconds=15)
             else:
                 strResult += '<tr><td>' + u.toHtmlTable() + '</td></tr>'
+
+        strResult += '<tr><td>' + str(t) + '</td><td>Duration</td><td></td></tr>'
                     
         strResult += '</tbody>'
         strResult += '</table>'
