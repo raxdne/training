@@ -64,7 +64,9 @@ t.fill(b,1.1)
 #t.insert(5,b)
 #t.insert(9,b.scale(2),True)
 
-#t.schedule(2023,1,1).updateValues({'Biking Basics': 20.0})
+t.insert(3,Cycle('C1.1'),True)
+
+t.schedule(2023,1,1).updateValues({'Biking Basics': 20.0})
 
 #print(repr(t))
 
@@ -86,7 +88,7 @@ print(t)
 #t.stat()
 #print(t)
 
-#print(t.toHtml())
+print(t.toHtmlFile())
 #print(t.toSVG())
 #print(t.toSVGDiagram())
 #print(t.toSVGGanttChart())

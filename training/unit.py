@@ -29,13 +29,13 @@ from icalendar import Calendar, Event, Alarm
 
 from training import config as config
 from training.duration import Duration
-from training.note import Note
+from training.titem import TItem
 
 #
 #
 #
 
-class Unit(Note):
+class Unit(TItem):
 
     """ class for training units """
 
@@ -520,3 +520,12 @@ class Unit(Note):
         event.add('dtstamp', datetime.now().astimezone(None))
         cal.add_component(event)
 
+
+if __name__ == '__main__':
+
+    print('Module Test: ' + __file__ + '\n')
+    
+    t = Unit(';;RB;0:30:00').appendDescription('First Test')
+    t.setDate(date(2023,11,22))
+
+    print(t)

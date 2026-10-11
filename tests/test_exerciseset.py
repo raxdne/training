@@ -22,8 +22,10 @@ from training.exerciseset import ExerciseSet
 print('Module Test: ' + __file__ + '\n')
 
 t = ExerciseSet('E1',24)
+t.setShortNote('15kg')
 t.appendDescription(['Step 1','Step 2','Step 3'])
 
 t.scale(2)
 
 print(t)
+print(t.toHtmlSheet())

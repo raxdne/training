@@ -38,27 +38,22 @@ import numpy as np
 from suntime import Sun
 
 from training import config as config
-from training.description import Description
-from training.note import Note
-from training.title import Title
+from training.titem import TItem
 
 #
 #
 #
 
-class ExerciseSet(Title,Note):
+class ExerciseSet(TItem):
 
     def __init__(self,strArg=None,iArg=1):
 
         """  """
 
-        super(Title, self).__init__()
-        super(Note, self).__init__()
+        super().__init__(strArg)
 
         self.repetitions = iArg
         self.img = []
-        self.color = None
-        self.setTitleStr(strArg)
         self.setDescription()
         self.setShortNote()
 
@@ -74,7 +69,7 @@ class ExerciseSet(Title,Note):
 
     def __len__(self):
 
-        return len(self.day)
+        return len(self.child)
 
 
     def __str__(self):
@@ -214,3 +209,16 @@ class ExerciseSet(Title,Note):
             self.repetitions = round(self.repetitions * floatScale)
 
         return self
+
+
+if __name__ == '__main__':
+
+    print('Module Test: ' + __file__ + '\n')
+    
+    t = ExerciseSet('E1',24)
+    t.setShortNote('15kg')
+    t.appendDescription(['Step 1','Step 2','Step 3'])
+
+    t.scale(2)
+
+    print(t)

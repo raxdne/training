@@ -26,9 +26,8 @@ from datetime import timedelta, date, datetime, time
 from icalendar import Calendar, Event, Alarm
 
 from training import config as config
+from training.titem import TItem
 from training.duration import Duration
-from training.description import Description
-from training.title import Title
 from training.note import Note
 from training.unit import Unit
 from training.exerciseset import ExerciseSet
@@ -38,20 +37,18 @@ from training.pause import Pause
 #
 #
 
-class Combination(Title,Note):
+class Combination(TItem):
 
     def __init__(self,listArg=[],flagAnd=True):
 
         """  """
 
-        super(Title, self).__init__()
-        super(Note, self).__init__()
+        super().__init__()
 
         self.setDescription()
         
         self.child = []
         self.logicAnd = flagAnd
-        self.dt = None
 
         for objArg in listArg:
             if objArg is None or (type(objArg) != Unit and type(objArg) != ExerciseSet and type(objArg) != Pause and type(objArg) != Note and type(objArg) != Combination):
@@ -315,7 +312,7 @@ class Combination(Title,Note):
 
     def scale(self,floatScale,patternType=None):
 
-        """  """
+        """ BUG: """
 
         r = self.dup()
         if floatScale > 0.01 and abs(floatScale - 1.0) > 0.01:
@@ -343,13 +340,6 @@ class Combination(Title,Note):
                 listResult.extend(m.stat(skipType))
 
         return listResult
-
-
-    def dup(self):
-
-        """  """
-
-        return copy.deepcopy(self)
 
 
     def toHtmlTable(self):
@@ -592,3 +582,21 @@ class Combination(Title,Note):
             # only a single child
             self.child[0].to_ical(cal)
 
+
+if __name__ == '__main__':
+
+    print('Module Test: ' + __file__ + '\n')
+    
+    t = Combination([Unit('08:11:00;3.5;RB;25:00'),
+                     Pause('20min'),
+                     Unit(';3.5;RB aa;20:30'),
+                     Note('AAAA'),
+                     Unit(';3.5;RB;25:00'),
+                     Pause('10min','Halt')])
+
+    t.scale(2.0)
+    t.append(Unit(';3.5;RY;25:00'))
+
+    #t.setDate(datetime(2025, 1, 7, 8, 11).astimezone(None))
+
+    print(t)

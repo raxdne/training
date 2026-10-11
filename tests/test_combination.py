@@ -52,7 +52,15 @@ def Liegestütz(n=1):
 
     return ExerciseSet('Liegestütz',n).appendDescription('flach')
 
-c = Combination([Liegestütz(12),ExerciseSet('E1',24),Pause('10min','Halt'),ExerciseSet('E2',24),ExerciseSet('E3',24)]).setTitleStr('My Circle')
+#c = Combination([Liegestütz(12),ExerciseSet('E1',24).appendDescription(['AAA','BBB']),Pause('10min','Halt'),ExerciseSet('E2',24),ExerciseSet('E3',24)]).setTitleStr('My Circle')
+c = Combination([Liegestütz(12),ExerciseSet('E1',24),ExerciseSet('E2',24),Pause('10min','Halt'),ExerciseSet('E3',24)]).setTitleStr('My Circle')
+s = Combination([c,c.scale(2),c])
+#s.append([c,c.scale(2),c])
+
+t = Combination([s,s.scale(1.1),s])
+
+print(t)
+print(t.toHtmlSheet())
 
 t = Combination([Unit('08:11:00;3.5;RB;25:00'),
                  Pause('20min'),
@@ -62,8 +70,7 @@ t = Combination([Unit('08:11:00;3.5;RB;25:00'),
                  Pause('10min','Halt'),
                  c])
 
-s = Combination([c,c.scale(1.333),c])
-t = Combination([s,s.scale(1.333),s])
+#t = Combination([s,s.scale(1.333),s])
 #t = Combination()
 #t.append(c)
 #t.append(c.scale(2.0))
@@ -71,8 +78,8 @@ t = Combination([s,s.scale(1.333),s])
 
 #t.setDate(datetime(2025, 1, 7, 8, 11).astimezone(None))
 #t.setDate(date(2023,3,1))
-print(t)
-print(t.toStringShort())
+#print(t)
+#print(t.toStringShort())
 #print(t.toFreemindNode())
 print(t.toHtmlTable())
 

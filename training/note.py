@@ -28,29 +28,15 @@ from datetime import timedelta, date, datetime, time, timezone
 from icalendar import Calendar, Event, Alarm
 
 from training import config as config
-from training.description import Description
+from training.titem import TItem
 
 #
 #
 #
 
-class Note(Description):
+class Note(TItem):
 
     """ basis class for standalone notes and for training units """
-
-    def __init__(self,strArg=None):
-
-        """  """
-
-        super(Description, self).__init__()
-        self.setDescription()
-        
-        self.dt = None
-        self.tPlan = None
-        self.marker = False
-        self.color = None
-        self.parse(strArg)
-
 
     def __repr__(self):
 
@@ -77,163 +63,11 @@ class Note(Description):
         return strResult
 
 
-    def mark(self):
+    def stat(self, skipType=None):
 
         """  """
-
-        self.marker = True
-
+        
         return self
-
-
-    def isMarked(self):
-
-        """  """
-
-        return hasattr(self,'marker') and self.marker == True
-
-
-    def setClock(self,timeArg=None):
-
-        """  """
-
-        self.tPlan = timeArg
-
-        return True
-
-
-    def setDate(self,dtArg=None,dt_0=None,dt_1=None):
-
-        """  """
-
-        if dtArg is None:
-            self.dt = None
-        elif type(dtArg) is date:
-            if self.tPlan is None:
-                return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
-            else:
-                return self.setDate(datetime.combine(dtArg,self.tPlan).astimezone(None),dt_0,dt_1)
-        elif type(dtArg) is datetime:
-            if self.tPlan is not None and dtArg.time() == time(0):
-                return self.setDate(datetime.combine(dtArg.date(),self.tPlan).astimezone(None),dt_0,dt_1)
-            else:
-                self.dt = dtArg
-                return self.dt
-        else:
-            print('error: date ' + str(dtArg), file=sys.stderr)
-
-        return None
-
-
-    def setDateStr(self,strArg):
-
-        """  """
-
-        if strArg is None or strArg == '':
-            pass
-        elif strArg == '+':
-            # it's a combined unit (starts after its predecessor unit, same date)
-            pass
-        elif strArg == 'sr':
-            self.tPlan = 'sunrise'
-        elif strArg == 'ss':
-            self.tPlan = 'sunset'
-        else:
-            # canonical ISO Date+Time
-            m = re.match(r"\s*([0-9]{4}-*[0-9]{2}-*[0-9]{2})[\sT]+([0-2][0-9]:[0-5][0-9])\s*",strArg)
-            if m is not None:
-                try:
-                    self.dt = datetime.fromisoformat(m.group(0)).astimezone(None)
-                except ValueError as e:
-                    print('error: ' + str(e), file=sys.stderr)
-                    return False
-            else:
-                # german Date
-                m = re.match(r"\b([0-9]{2})\.([0-9]{2})\.([0-9]{4})\b",strArg)
-                if m is not None:
-                    try:
-                        self.dt = datetime(int(m.group(3)), int(m.group(2)), int(m.group(1)),0,0,0).astimezone(None)
-                    except ValueError as e:
-                        print('error: ' + str(e), file=sys.stderr)
-                        return False
-                else:
-                    # canonical ISO Date
-                    m = re.match(r"\b([0-9]{4})-*([0-9]{2})-*([0-9]{2})\b",strArg)
-                    if m is not None:
-                        try:
-                            self.dt = datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)),0,0,0).astimezone(None)
-                        except ValueError as e:
-                            print('error: ' + str(e), file=sys.stderr)
-                            return False
-                    else:
-                        # plan time only
-                        m = re.match(r"\b([0-2][0-9]:[0-5][0-9])\b",strArg)
-                        if m is not None:
-                            #print("time: ",m.group(1), file=sys.stderr)
-                            self.tPlan = time.fromisoformat(m.group(1) + ':00')
-                        else:
-                            print('ignoring: ',strArg, file=sys.stderr)
-
-        return True
-
-
-    def dup(self):
-
-        """  """
-
-        return copy.deepcopy(self)
-
-
-    def parse(self,objArg):
-
-        """  """
-
-        #self.__init__()
-        
-        if objArg is None or not objArg:
-            return False
-        elif type(objArg) is str:
-            self.color = "#ffff00"
-            entry = objArg.split(';')
-            #print('Note {}'.format(str(entry)), file=sys.stderr)
-            if len(entry) == 1:
-                self.appendDescription(objArg)
-                return True
-            elif len(entry) == 2:
-                self.setDateStr(entry[0])
-                self.appendDescription(entry[1:])
-                return True
-            else:
-                return self.parse(entry)
-        elif type(objArg) is list and len(objArg) > 3:
-            if objArg[0] and not objArg[1] and not objArg[2] and not objArg[3]:
-                self.setDateStr(objArg[0])
-                self.appendDescription(objArg[4:])
-                #print('Note {}'.format(str(self)), file=sys.stderr)
-                return True
-            else:
-                return False
-        else:
-            return False
-
-
-    def getColor(self):
-
-        """  """
-        
-        strResult = ''
-        
-        if self.color is not None:
-            strResult = self.color
-
-        return strResult
-
-
-    def toString(self):
-
-        """  """
-
-        return str(self)
 
 
     def toHtmlTable(self):
@@ -291,3 +125,11 @@ class Note(Description):
             cal.add_component(event)
 
 
+if __name__ == '__main__':
+
+    print('Module Test: ' + __file__ + '\n')
+    
+    t = Note('TEST').appendDescription('First Test')
+    t.setDate(date(2023,11,22))
+
+    print(t)

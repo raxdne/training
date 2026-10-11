@@ -19,6 +19,7 @@
 
 import sys
 import re
+from abc import ABC, abstractmethod
 
 # https://uibakery.io/regex-library/url-regex-python
 url_pattern = "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$"
@@ -85,17 +86,9 @@ def _flatten(objArg):
 #
 #
 
-class Description:
+class TDescription(ABC):
 
     """ abstract class to handle (nested) description list """
-
-
-    def __new__(cls, *args, **kwargs):
-
-        if cls is Description:
-            raise TypeError("Cannot instantiate abstract class")
-        return super().__new__(cls)
-
 
     def __init__(self,strArg=None):
 
@@ -124,7 +117,7 @@ class Description:
         if objArg is None or not objArg:
             self.listDescription = []
         elif type(objArg) is str:
-            self.listDescription.append([objArg])
+            self.listDescription = [objArg]
         elif type(objArg) is list:
             self.listDescription = [objArg]
         else:

@@ -20,30 +20,31 @@
 #
 #
 #
+from abc import ABC, abstractmethod
 from datetime import date
 
-class Title:
+class TTitle(ABC):
 
     """ abstract class to handle title """
 
-    def __new__(cls, *args, **kwargs):
-
-        if cls is Title:
-            raise TypeError("Cannot instantiate abstract class")
-        return super().__new__(cls)
-
-
+    @abstractmethod
     def __init__(self,strArg=None):
+
+        """  """
 
         self.setTitleStr(strArg)
 
 
     def __repr__(self):
 
+        """  """
+
         return f'{self.__class__.__name__}({self.strTitle!r})'
 
 
     def __str__(self):
+
+        """  """
 
         return str(self.strTitle)
 
@@ -84,8 +85,8 @@ class Title:
         strResult = ' '
 
         if type(self.dateBegin) is date and self.dateBegin is not None and type(self.dateEnd) is date and self.dateEnd is not None:
-            if hasattr(self,'day'):
-                strResult += '(' + str(len(self.day)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + '/' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+            if hasattr(self,'child'):
+                strResult += '(' + str(len(self.child)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + '/' + self.dateEnd.strftime("%Y-%m-%d") + ')'
             else:
                 strResult += '(' + str((self.dateEnd - self.dateBegin).days + 1) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + '/' + self.dateEnd.strftime("%Y-%m-%d") + ')'
 

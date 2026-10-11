@@ -29,13 +29,13 @@ from icalendar import Calendar, Event, Alarm
 
 from training import config as config
 from training.duration import Duration
-from training.note import Note
+from training.titem import TItem
 
 #
 #
 #
 
-class Pause(Note):
+class Pause(TItem):
 
     """ class for training pauses """
 
@@ -118,6 +118,44 @@ class Pause(Note):
         return self.duration
 
 
+    def stat(self, skipType=None):
+
+        """  """
+        
+        return self
+
+
+    def parse(self,objArg):
+
+        """  """
+        
+        if objArg is None or not objArg:
+            return False
+        elif type(objArg) is str:
+            self.color = "#ffff00"
+            entry = objArg.split(';')
+            #print('Note {}'.format(str(entry)), file=sys.stderr)
+            if len(entry) == 1:
+                self.appendDescription(objArg)
+                return True
+            elif len(entry) == 2:
+                self.setDateStr(entry[0])
+                self.appendDescription(entry[1:])
+                return True
+            else:
+                return self.parse(entry)
+        elif type(objArg) is list and len(objArg) > 3:
+            if objArg[0] and not objArg[1] and not objArg[2] and not objArg[3]:
+                self.setDateStr(objArg[0])
+                self.appendDescription(objArg[4:])
+                #print('Note {}'.format(str(self)), file=sys.stderr)
+                return True
+            else:
+                return False
+        else:
+            return False
+
+
     def toCSV(self):
 
         """  """
@@ -178,3 +216,12 @@ class Pause(Note):
 
         """  """
 
+if __name__ == '__main__':
+
+    print('Module Test: ' + __file__ + '\n')
+    
+    t = Pause('TEST').appendDescription('First Test')
+    t.setDate(datetime(2023,11,22,12,9,11))
+    t.setDuration(22)
+
+    print(t)

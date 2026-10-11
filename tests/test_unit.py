@@ -52,10 +52,10 @@ t = Unit('2020-03-03T17:00:00+1:00;10;Biking;20min').appendDescription(['WWW',['
 #print(t.toSqlite())
 print(t)
 
-t = Unit(';;Biking;45min').updateValues({'Biking': 25.0})
-print(t)
-t = Unit(';45;Biking;').updateValues({'Biking': 25.0})
-print(t)
+#t = Unit(';;Biking;45min').updateValues({'Biking': 25.0})
+#print(t)
+#t = Unit(';45;Biking;').updateValues({'Biking': 25.0})
+#print(t)
 
 #quit()
 

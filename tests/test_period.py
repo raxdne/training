@@ -22,24 +22,28 @@ from datetime import date, timedelta
 from training.note import Note
 from training.unit import Unit
 from training.cycle import Cycle
+from training.bunch import Bunch
 from training.period import Period
 
 print('Module Test: ' + __file__ + '\n')
 
-#t = Period('Plan',360)
+t = Period('Plan',360)
 #t = Period('Plan').CalendarWeekPeriod(2025)
 #t = Period('Plan').CalendarYearPeriod(2023)
 #t = Period('Report').CalendarLastWeeksPeriod(4)
-t = Period('Report').CalendarLastMonthsPeriod()
+#t = Period('Report').CalendarLastMonthsPeriod()
 #t = Period('Plan').CalendarSeasonPeriod(2025)
 #t.appendDescription('Regeneration')
 
-#t.append(Note('ABC'))
-t.append([Period('General Basics',36),Cycle('General Endurance'),Period('General Basics II',36).append([Period('General Basics IIa',36),Period('General Basics IIb',36)]),Period('General Basics III',36)])
+t.append(Cycle('General Endurance'))
+t.append(Note('ABC'))
+t.append(Period('General Basics',36))
+#t.append([Period('General Basics',36),Cycle('General Endurance'),Period('General Basics II',36).append([Period('General Basics IIa',36),Period('General Basics IIb',36)]),Period('General Basics III',36)])
 
-t.define(['3000;Bicycle;100h','100;Running;'])
-#t.define(['2000;Bicycle;','100;Running;'])
-#t.define(';Bicycle;100h')
+t.schedule(2025,3,4)
+print(t)
+print(t.report())
+
 #t.schedule(2025,3,4)
 #t.schedule(date.today())
 #t.cutBefore(date.today())
@@ -53,17 +57,21 @@ t.define(['3000;Bicycle;100h','100;Running;'])
 #print(t.toString())
 #print(t.toHtml())
 
-#c = Cycle('General Endurance')
-#c.insert(1,Unit('18:00;3.5;RB;25:00;;http://www.demo.com/'))
-#c.insert(3,Unit('18:00;3.5;RB;25:00'))
-#c.insert(5,Unit(';FB;25:00'))
-#c.insert(6,Unit('08:00;30;BB;02:00:00'))
+c = Block('General Endurance',4*7)
+c.insert(1,Unit('18:00;3.5;RB;25:00;;http://www.demo.com/'))
+c.insert(3,Unit('18:00;3.5;RB;25:00'))
+c.insert(5,Unit(';FB;25:00'))
+c.insert(6,Unit('08:00;30;BB;02:00:00'))
 
-#t.append(c)
-#t.append(c)
+t.append(c)
+t.append(c)
+
 #t.removeChilds([2,3])
 #t.swap(1,3)
 #t.swap('Special Endurance','General Endurance')
+t.schedule(2025,3,4)
+print(t)
+print(t.report())
 
 # c.appendDescription('Nutrition ABC')
 # f.appendDescription('Maximum')
@@ -78,8 +86,11 @@ b.insert(0,Unit(';;Biking Basics;1h'))
 b.insert(2,Unit(';;Biking Basics;1h').mark())
 t.fill(b,1.1)
 
-print(t.getItem(2))
-print(t.getItem([2,0]))
+#t.overwrite(Cycle('C1.1'),date(2025,3,7))
+t.overwrite(Cycle('C1.1'))
+
+#print(t.getItem(2))
+#print(t.getItem([2,0]))
 
 #t.fix(date(2025,3,4))
 #t.schedule(2025,1,1)
@@ -105,9 +116,9 @@ print(t.report())
 
 #print(t.toHtml())
 #print(t.toHtmlFile())
-f = open('Period.html', encoding='utf-8', mode='w')
-f.write(t.toHtmlFile())
-f.close()
+#f = open('Period.html', encoding='utf-8', mode='w')
+#f.write(t.toHtmlFile())
+#f.close()
 
 #print(t.toXML())
 #print(t.toVCalendar())
