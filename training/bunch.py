@@ -41,6 +41,8 @@ from suntime import Sun
 
 from training import config as config
 from training.tcontainer import TContainer
+
+from training.titem import TItem
 from training.note import Note
 from training.unit import Unit
 from training.pause import Pause
@@ -125,7 +127,7 @@ class Bunch(TContainer):
         for v in self.child:
             u = v[1]
             if (type(u) is Unit and u.isCountable()) or type(u) is Combination:
-                intResult += u.getDuration(skipType).total_seconds()
+                intResult += v[0] * u.getDuration(skipType).total_seconds()
 
         return timedelta(seconds=intResult)
 
@@ -295,11 +297,10 @@ class Bunch(TContainer):
         elif type(objArg) is list and objArg:
             for u in objArg:
                 self.insert(u,flagReplace)
-        elif isinstance(c,TContainer) or type(objArg) is Unit or type(objArg) is Combination:
-            if hasattr(self,'child'):
-                for c in self.child: # TODO:
-                    if isinstance(c,TContainer):
-                        c.fill(objArg,floatProgression)
+        elif isinstance(objArg,TContainer) or type(objArg) is Unit or type(objArg) is Combination:
+            for c in self.child: # TODO:
+                if isinstance(c,TContainer):
+                    c.fill(objArg,floatProgression)
         else:
             print(f'error: filling {type(objArg)} of {len(self.child)} {objArg}', file=sys.stderr)
 
@@ -412,7 +413,7 @@ class Bunch(TContainer):
 
     def toSVG(self, x = config.diagram_offset, y=0):
 
-        """  """
+        """ returns SVG code for Bunch 'self' in a vertical Timeline """
 
         strResult = '<g>'
 
@@ -421,72 +422,14 @@ class Bunch(TContainer):
 
         strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleXML(), self.getDateString(), (self.getTitleXML() + self.getDateString() + '\n\n' + self.getDescriptionString() + '\n\n' + self.report()))
 
-        if not self.child:
-            pass
-        else:
-            y += config.diagram_bar_height / 2
-            t = date.today()
-            d = self.dateBegin
-            for v in self.child: # TODO:
-                strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(x,y,x,y+config.diagram_bar_height)
-
-                if d.month == t.month and d.day == t.day:
-                    strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format('#ffaaaa',x,y-1,config.diagram_bar_height+2,config.diagram_width - config.diagram_offset)
-                    #if d.year == t.year:
-                    #    strResult +=  '<foreignObject x="{}" y="{}" height="{}" width="{}"><a xmlns="http://www.w3.org/1999/xhtml" name="today"/></foreignObject>\n'.format(x,y-1,config.diagram_bar_height+2,config.diagram_width - config.diagram_offset)
-                elif d.isoweekday() == 6 or d.isoweekday() == 7:
-                    strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format('#eeeeee',x,y-1,config.diagram_bar_height+2,config.diagram_width - config.diagram_offset)
-                d += timedelta(days=1)
-
-                n = ''
-                x_i = x
-                for u in v:
-                    if type(u) is Note:
-                        # collect all notes of day v
-                        n += u.getDescriptionString() + ' '
-                    else:
-                        strResult += u.toSVG(x_i,y)
-                        if type(u) is Unit or type(u) is Combination:
-                            x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist + 5
-                    # TODO: add unit marker if u.isMarked()
-                if n:
-                    strResult += '<text x="{}" y="{}" style="">{}</text>\n'.format(x_i + 2,y + config.diagram_bar_height,n)
-
-                y += config.diagram_bar_height * 2
-
         strResult += '</g>'
-
-        return strResult
-
-
-    def toSVGDiagram(self):
-
-        """  """
-
-        diagram_height = len(self.child) * (config.diagram_bar_height * 2) + 0
-
-        strResult = '<svg baseProfile="full" height="{}" version="1.1" width="{}" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, config.diagram_width)
-
-        strResult += '<style type="text/css">svg { font-family: ' + config.font_family + '; font-size: ' + str(config.font_size) + 'pt; }</style>'
-        strResult += '<g>'
-
-        strResult += '<rect fill="transparent" stroke="{}" stroke-width="2" x="{}" y="{}" rx="3" ry="3" height="{}" width="{}"/>\n'.format('#aaaaaa', 0, 0, diagram_height, config.diagram_width)
-
-        for i in [3600/4,3600/2,3600,2*3600,3*3600,4*3600,5*3600,6*3600]:
-            w = config.diagram_offset + i / 3600 * 25 * config.diagram_scale_dist
-            strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 0, w, diagram_height)
-
-        strResult += self.toSVG()
-
-        strResult += '</g>'
-        strResult += '</svg>\n'
 
         return strResult
 
 
     def toSVGGanttChart(self):
 
-        """ Gantt chart of this cycle """
+        """ Gantt chart of this Bunch (horizontal timeline) """
 
         d_0 = self.dateBegin
         d_1 = self.dateEnd
@@ -540,6 +483,60 @@ class Bunch(TContainer):
         return strResult
 
 
+    def toSVGGanttBar(self,dateBase,y=0):
+
+        """ returns SVG string of vertical and horizontal bars in Gantt Chart """
+
+        # TODO: make config.diagram_height configurable
+        config.diagram_height = 40 * (config.diagram_bar_height * 2) + 100
+
+        x_i = (self.dateBegin - dateBase).days * 2
+
+        strResult = '<g>'
+
+        # horizontal bar
+
+        if self.color is not None:
+            color = self.color
+        else:
+            color = '#ffaaaa'
+
+        strResult += '<a href="#{}">'.format(str(id(self)))
+        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, len(self) * 2)
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + ' ' + self.getDescriptionString())
+        strResult += '</rect>'
+        strResult += '</a>'
+
+        # vertical bar
+
+        l = (self.dateEnd - self.dateBegin).days + 1
+        h = round(self.getDuration().total_seconds() / 60 / l)
+
+        if self.color is not None:
+            scolor = 'red'
+            color = self.color
+        elif h > 20:
+            scolor = 'green'
+            color = '#aaffaa'
+        elif h > 4:
+            scolor = 'red'
+            color = '#ffaaaa'
+        else:
+            h = 2
+            scolor = 'red'
+            color = 'red'
+
+        strResult += '<a href="#{}">'.format(str(id(self)))
+        strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, config.diagram_height - h - 10, h, l * 2 - 2)
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.getDescriptionString() + '\n\n' + self.report())
+        strResult += '</rect>'
+        strResult += '</a>'
+
+        strResult += '</g>'
+
+        return strResult
+
+
     def toFreemindNode(self):
 
         """  """
@@ -579,6 +576,7 @@ class Bunch(TContainer):
 
         """  """
 
+        return self
 
 
     def toVCalendar(self):

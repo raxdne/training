@@ -681,6 +681,9 @@ class Cycle(TContainer):
 
         return strResult
 
+    # define simple Alias
+    toHtml = toHtmlTable
+
 
     def toCSV(self):
 
@@ -858,6 +861,62 @@ class Cycle(TContainer):
         return strResult
 
 
+    def toSVGGanttBar(self,dateBase,y=0):
+
+        """ returns SVG string of vertical and horizontal bars in Gantt Chart """
+
+        l = self.getPeriodDone()
+
+        # TODO: make config.diagram_height configurable
+        config.diagram_height = 40 * (config.diagram_bar_height * 2) + 100
+
+        x_i = (self.dateBegin - dateBase).days * 2
+
+        strResult = '<g>'
+
+        # horizontal bar
+
+        if self.color is not None:
+            color = self.color
+        else:
+            color = '#ffaaaa'
+
+        strResult += '<a href="#{}">'.format(str(id(self)))
+        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, len(self) * 2)
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + ' ' + self.getDescriptionString())
+        strResult += '</rect>'
+        strResult += '</a>'
+
+        # vertical bar
+
+        h = round(self.getDuration().total_seconds() / 60 / l)
+
+        if self.color is not None:
+            scolor = 'red'
+            color = self.color
+        elif h > 20:
+            scolor = 'green'
+            color = '#aaffaa'
+        elif h > 4:
+            scolor = 'red'
+            color = '#ffaaaa'
+        else:
+            h = 2
+            scolor = 'red'
+            color = 'red'
+
+        strResult += '<a href="#{}">'.format(str(id(self)))
+        strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, config.diagram_height - h - 10, h, l * 2 - 2)
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + '\n\n' + self.getDescriptionString() + '\n\n' + self.report())
+        strResult += '</rect>'
+        strResult += '</a>'
+
+        #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i,y,self.getTitleXML())
+        strResult += '</g>'
+
+        return strResult
+
+    
     def toFreemindNode(self):
 
         """  """

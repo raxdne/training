@@ -66,7 +66,7 @@ t.fill(b,1.1)
 
 t.insert(3,Cycle('C1.1'),True)
 
-t.schedule(2023,1,1).updateValues({'Biking Basics': 20.0})
+t.schedule(2023,1,1).updateValues({'Biking Basics': 30.0})
 
 #print(repr(t))
 
@@ -88,7 +88,6 @@ print(t)
 #t.stat()
 #print(t)
 
-print(t.toHtmlFile())
 #print(t.toSVG())
 #print(t.toSVGDiagram())
 #print(t.toSVGGanttChart())
@@ -96,3 +95,9 @@ print(t.toHtmlFile())
 #print(t.toXML())
 
 #print(t.report(date(2023,1,10),date(2023,1,10) + timedelta(days=7)))
+t.setTextOnly(False)
+
+f = open('Output/test_cycle.html','w')
+f.write(t.toHtmlFile())
+f.close()
+

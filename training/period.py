@@ -204,6 +204,7 @@ class Period(TContainer):
                 self.append(a)
         elif isinstance(objArg,TContainer) or isinstance(objArg,Note):
             self.child.append(objArg.dup())
+            self.periodInt += objArg.getLength()
             #self.schedule()
         else:
             print('error: ' + str(objArg), file=sys.stderr)
@@ -264,7 +265,7 @@ class Period(TContainer):
 
     def insertByDate(self,objArg,flagReplace=False):
 
-        """  """
+        """ BUG: """
 
         objResult = None
 
@@ -335,11 +336,10 @@ class Period(TContainer):
         elif type(objArg) is list and objArg:
             for u in objArg:
                 self.insert(u,flagReplace)
-        elif isinstance(c,TContainer) or type(objArg) is Unit or type(objArg) is Combination:
-            if hasattr(self,'child'):
-                for c in self.child:
-                    if isinstance(c,TContainer):
-                        c.fill(objArg,floatProgression)
+        elif isinstance(objArg,TContainer) or type(objArg) is Unit or type(objArg) is Combination:
+            for c in self.child:
+                if isinstance(c,TContainer):
+                    c.fill(objArg,floatProgression)
         else:
             print(f'error: filling {type(objArg)} of {len(self.child)} {objArg}', file=sys.stderr)
 
@@ -687,13 +687,6 @@ class Period(TContainer):
 
         """  """
 
-        return self.toHtml()
-
-
-    def toHtml(self):
-
-        """  """
-
         strResult = f'<section {config.getClass(__name__)} id="{str(id(self))}"'
 
         if self.color is not None:
@@ -717,13 +710,13 @@ class Period(TContainer):
                 strResult += f'<li>{c}</li>'
             strResult += '</ol>'
 
-        if self.getNumberOfCycles() > 0 and self.fPlot:
+        if self.fPlot:
             strResult += '<div style="text-align: center;margin: 0px;">'
-            strResult += self.plotAccumulationDuration()
-            strResult += self.plotAccumulation()
-            strResult += self.plotHist()
-            strResult += self.plotTimeDist()
-            #strResult += self.toSVGGanttChart()
+            #strResult += self.plotAccumulationDuration()
+            #strResult += self.plotAccumulation()
+            #strResult += self.plotHist()
+            #strResult += self.plotTimeDist()
+            strResult += self.toSVGGanttChart()
             #strResult += self.toSVGDiagram()
             strResult += '</div>'
 
@@ -733,6 +726,10 @@ class Period(TContainer):
         strResult += '</section>\n'
 
         return strResult
+
+
+    # define simple Alias
+    toHtml = toHtmlTable
 
 
     def toHtmlTableOfContent(self,strIndent=''):
@@ -961,7 +958,7 @@ class Period(TContainer):
 
     def toSVG(self, x = config.diagram_offset, y=20):
 
-        """  """
+        """ returns SVG code for Period 'self' in a vertical Timeline """
 
         l = self.getLength()
         strResult = '<g>'
@@ -987,41 +984,9 @@ class Period(TContainer):
         return strResult
 
 
-    def toSVGDiagram(self):
-
-        """  """
-
-        diagram_height = self.getLength() * (config.diagram_bar_height * 2) + 100
-        strResult = '<svg baseProfile="full" height="{}" version="1.1" width="{}" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, config.diagram_width)
-
-        strResult += '<style type="text/css">svg { font-family: ' + config.font_family + '; font-size: ' + str(config.font_size) + 'pt; }</style>'
-
-        #strResult += '<g transform="rotate(90)">'
-        #'<text x="210" y="110">Period 2.2021</text>
-
-        for i in [3600/4,3600/2,3600,2*3600,3*3600,4*3600,5*3600,6*3600]:
-            w = i / 3600 * 25 * config.diagram_scale_dist
-            strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( config.diagram_offset + w, 20, config.diagram_offset + w, diagram_height)
-
-        strResult += '<g>'
-        for t in self.tag:
-            if type(t) is Phase:
-                y_i = ((t.date - self.dateBegin).days + 1) * config.diagram_bar_height * 2
-                strResult += '<rect id="{}" fill="{}" opacity=".5" stroke="none" stroke-width=".5" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(str(id(t)), t.color, 0, y_i + 3, t.duration * config.diagram_bar_height * 2 + 2, config.diagram_width)
-                strResult += f'<title>{t.title} ({t.duration} {t.date.strftime("%Y-%m-%d")} {(t.date + timedelta(days=t.duration - 1)).strftime("%Y-%m-%d")})</title>\n'
-                strResult += '</rect>'
-        strResult += '</g>'
-
-        strResult += self.toSVG()
-        #strResult += '</g>'
-        strResult += '</svg>\n'
-
-        return strResult
-
-
     def toSVGGantt(self,dateBase,y=0):
 
-        """  """
+        """ Gantt chart of this Bunch (horizontal timeline) """
 
         try:
             l = self.dateEnd - self.dateBegin
@@ -1049,11 +1014,11 @@ class Period(TContainer):
 
         y_i = y + config.diagram_bar_height * 3
         for c in self.child:
-            if type(c) is Cycle or type(c) is Period:
-                if type(c) is Cycle:
+            if isinstance(c,TContainer):
+                if isinstance(c,Cycle):
                     strResult += c.toSVGGanttMarker(dateBase)
                 strResult += c.toSVGGanttBar(dateBase,y_i)
-                if type(c) is Period:
+                if isinstance(c,Period):
                     strResult += c.toSVGGantt(dateBase,y_i)
                 y_i += config.diagram_bar_height * 3
                 
@@ -1182,6 +1147,35 @@ class Period(TContainer):
 
         strResult += '</g>'
         strResult += '</svg>\n'
+
+        return strResult
+
+
+    def toSVGGanttBar(self,dateBase,y=0):
+
+        """ returns SVG string of vertical and horizontal bars in Gantt Chart """
+
+        l = (self.dateEnd - self.dateBegin).days + 1
+
+        # TODO: make config.diagram_height configurable
+        config.diagram_height = 40 * (config.diagram_bar_height * 2) + 100
+
+        x_i = (self.dateBegin - dateBase).days * 2
+
+        strResult = '<g>'
+
+        if self.color is not None:
+            color = self.color
+        else:
+            color = '#ffaaaa'
+
+        strResult += '<a href="#{}">'.format(str(id(self)))
+        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, len(self) * 2)
+        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + self.getDateString() + ' ' + self.getDescriptionString())
+        strResult += '</rect>'
+        strResult += '</a>'
+
+        strResult += '</g>'
 
         return strResult
 

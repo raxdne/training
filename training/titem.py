@@ -157,16 +157,16 @@ class TItem(TTitle,TDescription):
             self.tPlan = 'sunset'
         else:
             # canonical ISO Date+Time
-            m = re.match(r"\s*([0-9]{4}-*[0-9]{2}-*[0-9]{2})[\sT]+([0-2][0-9]:[0-5][0-9])\s*",strArg)
+            m = re.match(r'\s*([0-9]{4}-*[0-9]{2}-*[0-9]{2})[\sT]+([0-2][0-9]:*[0-5][0-9]:*[0-5][0-9])(\+[0-1]*[0-9])*\s*',strArg)
             if m is not None:
                 try:
-                    self.dt = datetime.fromisoformat(m.group(0)).astimezone(None)
+                    self.dt = datetime.fromisoformat(m.group(1) + 'T' + m.group(2)).astimezone(None)
                 except ValueError as e:
                     print('error: ' + str(e), file=sys.stderr)
                     return False
             else:
                 # german Date
-                m = re.match(r"\b([0-9]{2})\.([0-9]{2})\.([0-9]{4})\b",strArg)
+                m = re.match(r'\b([0-9]{2})\.([0-9]{2})\.([0-9]{4})\b',strArg)
                 if m is not None:
                     try:
                         self.dt = datetime(int(m.group(3)), int(m.group(2)), int(m.group(1)),0,0,0).astimezone(None)
@@ -175,7 +175,7 @@ class TItem(TTitle,TDescription):
                         return False
                 else:
                     # canonical ISO Date
-                    m = re.match(r"\b([0-9]{4})-*([0-9]{2})-*([0-9]{2})\b",strArg)
+                    m = re.match(r'\b([0-9]{4})-*([0-9]{2})-*([0-9]{2})\b',strArg)
                     if m is not None:
                         try:
                             self.dt = datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)),0,0,0).astimezone(None)
@@ -184,7 +184,7 @@ class TItem(TTitle,TDescription):
                             return False
                     else:
                         # plan time only
-                        m = re.match(r"\b([0-2][0-9]:[0-5][0-9])\b",strArg)
+                        m = re.match(r'\b([0-2][0-9]:[0-5][0-9])\b',strArg)
                         if m is not None:
                             #print("time: ",m.group(1), file=sys.stderr)
                             self.tPlan = time.fromisoformat(m.group(1) + ':00')

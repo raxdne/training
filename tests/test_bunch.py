@@ -42,17 +42,34 @@ from training.exerciseset import ExerciseSet
 from training.phase import Phase
 from training.cycle import Cycle
 from training.bunch import Bunch
+from training.period import Period
 
 
 from suntime import Sun
 
 print('Module Test: ' + __file__ + '\n')
 
-t = Bunch('TEST',3*7).schedule(2023,12,8)
+t = Bunch('Bunch TEST',3*7)
+#t.schedule(2023,12,8)
 
 t.append((12,Unit(';30;BB;01:10:00')))
 t.append((7,Unit(';10;BR;01:00:00')))
 t.appendDescription('Running Blocks')
-t.scale(1.25)
+#t.scale(1.25)
     
 print(t)
+
+u = Period('Period TEST',3*7)
+v = Period('Period TEST 2')
+v.append([t,t,t.scale(1.25)])
+u.append([v,v,v.scale(1.25)])
+u.schedule(2023,12,8)
+u.setPlot()
+
+print(u)
+u.setTextOnly(False)
+
+f = open('Output/test_bunch.html','w')
+f.write(u.toHtmlFile())
+f.close()
+

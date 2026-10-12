@@ -85,10 +85,7 @@ class TTitle(ABC):
         strResult = ' '
 
         if type(self.dateBegin) is date and self.dateBegin is not None and type(self.dateEnd) is date and self.dateEnd is not None:
-            if hasattr(self,'child'):
-                strResult += '(' + str(len(self.child)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + '/' + self.dateEnd.strftime("%Y-%m-%d") + ')'
-            else:
-                strResult += '(' + str((self.dateEnd - self.dateBegin).days + 1) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + '/' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+            strResult += '(' + str((self.dateEnd - self.dateBegin).days + 1) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + '/' + self.dateEnd.strftime("%Y-%m-%d") + ')'
 
         return strResult
 

@@ -813,8 +813,7 @@ class TContainer(TTitle,TDescription):
         if not self.fText:
             strResult += f'<section {config.getClass(__name__)}>'
             strResult += '<div class="header">' + self.getTitleXML() + self.getDateString() + '</div>\n'
-            if len(self.child) < 1:
-                strResult += '<div style="text-align: center;margin: 40px;">' + self.toSVGDiagram() + '</div>\n'
+            strResult += '<div style="text-align: center;margin: 40px;">' + self.toSVGDiagram() + '</div>\n'
             strResult += '</section>\n'
 
         strResult += config.footer
@@ -893,7 +892,7 @@ class TContainer(TTitle,TDescription):
 
     def toSVGDiagram(self):
 
-        """  """
+        """ returns SVG code for a vertical timeline """
 
         diagram_height = self.getLength() * (config.diagram_bar_height * 2) + 100
         strResult = '<svg baseProfile="full" height="{}" version="1.1" width="{}" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, config.diagram_width)
