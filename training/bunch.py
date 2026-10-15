@@ -47,6 +47,7 @@ from training.note import Note
 from training.unit import Unit
 from training.pause import Pause
 from training.combination import Combination
+from training.exerciseset import ExerciseSet
 from training.cycle import Cycle
 #from training.plot import Plot
 
@@ -134,15 +135,17 @@ class Bunch(TContainer):
 
     def scale(self,floatScale,patternType=None):
 
-        """  """
+        """ returns a scaled copy of self """
 
-        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
-            for v in self.child:
-                u = v[1]
-                if type(u) is Unit or type(u) is Combination:
-                    u.scale(floatScale,patternType)
+        r = self.dup()
+        if floatScale > 0.01 and abs(floatScale - 1.0) > 0.01:
+            for i in range(len(r.child)):
+                if type(r.child[i][1]) is Unit or type(r.child[i][1]) is ExerciseSet or type(r.child[i][1]) is Combination:
+                    r.child[i] = (r.child[i][0], r.child[i][1].scale(floatScale,patternType))
 
-        return self
+        r.summary.clear()
+
+        return r
 
 
     def stat(self, dt0=None, dt1=None, skipType=None):
@@ -170,8 +173,7 @@ class Bunch(TContainer):
             self.setVDefaults(dictArg)
 
         for v in self.child:
-            u = v[1]
-            u.updateValues()
+            v[1].updateValues(dictArg)
 
         if False:
             for d in c:
@@ -602,3 +604,4 @@ if __name__ == '__main__':
     t.scale(1.25)
     
     print(t)
+    print(t.report())

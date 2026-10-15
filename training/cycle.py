@@ -43,6 +43,7 @@ from training.note import Note
 from training.unit import Unit
 from training.pause import Pause
 from training.combination import Combination
+from training.exerciseset import ExerciseSet
 from training.plot import Plot
 
 #
@@ -561,15 +562,18 @@ class Cycle(TContainer):
 
     def scale(self,floatScale,patternType=None):
 
-        """  """
+        """ returns a scaled copy of self """
 
-        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
-            for v in self.child:
-                for u in v:
-                    if type(u) is Unit or type(u) is Combination:
-                        u.scale(floatScale,patternType)
+        r = self.dup()
+        if floatScale > 0.01 and abs(floatScale - 1.0) > 0.01:
+            for j in range(len(r.child)):
+                for i in range(len(r.child[j])):
+                    if type(r.child[j][i]) is Unit or type(r.child[j][i]) is ExerciseSet or type(r.child[j][i]) is Combination:
+                        r.child[j][i] = r.child[j][i].scale(floatScale,patternType)
 
-        return self
+        r.summary.clear()
+
+        return r
 
 
     def fix(self, objArg):

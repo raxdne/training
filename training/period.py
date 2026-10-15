@@ -47,6 +47,7 @@ from training.tcontainer import TContainer
 from training.note import Note
 from training.unit import Unit
 from training.combination import Combination
+from training.exerciseset import ExerciseSet
 #from training.plot import Plot
 from training.phase import Phase
 from training.cycle import Cycle
@@ -81,7 +82,7 @@ class Period(TContainer):
 
         for c in self.child:
             if isinstance(c,TContainer):
-                c.updateValues(self.v_defaults)
+                c.updateValues(dictArg)
 
         return self
 
@@ -407,16 +408,17 @@ class Period(TContainer):
 
     def scale(self,floatScale,patternType=None):
 
-        """  """
+        """ returns a scaled copy of self """
 
-        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
-            for c in self.child:
-                if isinstance(c,TContainer):
-                    c.scale(floatScale,patternType)
+        r = self.dup()
+        if floatScale > 0.01 and abs(floatScale - 1.0) > 0.01:
+            for i in range(len(r.child)):
+                if isinstance(r.child[i],TContainer):
+                    r.child[i] = r.child[i].scale(floatScale,patternType)
 
-            self.summary.clear()
+        r.summary.clear()
 
-        return self
+        return r
 
 
     def overwrite(self,argCycle,argDate=None):

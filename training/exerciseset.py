@@ -203,12 +203,13 @@ class ExerciseSet(TItem):
 
     def scale(self,floatScale,patternType=None):
 
-        """  """
+        """ returns a scaled copy of self """
 
+        r = self.dup()
         if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
-            self.repetitions = round(self.repetitions * floatScale)
+            r.repetitions = round(r.repetitions * floatScale)
 
-        return self
+        return r
 
 
 if __name__ == '__main__':

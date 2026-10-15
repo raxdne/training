@@ -61,9 +61,7 @@ class Combination(TItem):
 
         """  """
 
-        if self.isCircuit():
-            strResult = 'Circuit '
-        elif self.logicAnd:
+        if self.logicAnd:
             strResult = 'Combination '
         else:
             strResult = 'Alternatives '
@@ -90,21 +88,6 @@ class Combination(TItem):
         return n
 
 
-    def isCircuit(self):
-
-        """  """
-
-        for i in range(len(self.child)):
-            if type(self.child[i]) is Combination and self.child[i].isCircuit():
-                pass
-            elif type(self.child[i]) is ExerciseSet or type(self.child[i]) is Pause:
-                pass
-            else:
-                return False
-            
-        return True
-
-
     def toStringShort(self):
 
         """  """
@@ -114,25 +97,22 @@ class Combination(TItem):
 
         strResult = ''
 
-        if self.isCircuit():
-            strResult += 'Circuit'
-        else:
-            for i in range(len(self.child)):
-                if type(self.child[i]) is Note:
+        for i in range(len(self.child)):
+            if type(self.child[i]) is Note:
+                pass
+            else:
+                if i < 1:
                     pass
+                elif self.logicAnd:
+                    # Combination
+                    strResult += ' & '
                 else:
-                    if i < 1:
-                        pass
-                    elif self.logicAnd:
-                        # Combination
-                        strResult += ' & '
-                    else:
-                        # Alternatives
-                        strResult += ' | '
-                    strResult += self.child[i].toStringShort()
+                    # Alternatives
+                    strResult += ' | '
+                strResult += self.child[i].toStringShort()
 
-                    if not strDate and type(self.child[i]) is Unit and self.child[i].dt is not None:
-                        strDate = self.child[i].dt.strftime("%Y-%m-%d ")
+                if not strDate and type(self.child[i]) is Unit and self.child[i].dt is not None:
+                    strDate = self.child[i].dt.strftime("%Y-%m-%d ")
 
         return f'({strResult} {self.getTitleString()} {self.getDescriptionString()})'
 
@@ -312,13 +292,13 @@ class Combination(TItem):
 
     def scale(self,floatScale,patternType=None):
 
-        """ BUG: """
+        """ returns a scaled copy of self """
 
         r = self.dup()
         if floatScale > 0.01 and abs(floatScale - 1.0) > 0.01:
-            for u in r.child:
-                if type(u) is Unit or type(u) is ExerciseSet or type(u) is Combination:
-                    u.scale(floatScale,patternType)
+            for i in range(len(r.child)):
+                if type(r.child[i]) is Unit or type(r.child[i]) is ExerciseSet or type(r.child[i]) is Combination:
+                    r.child[i] = r.child[i].scale(floatScale,patternType)
 
         return r
 
@@ -346,40 +326,30 @@ class Combination(TItem):
 
         """  """
 
-        strResult = ''
+        strResult = f'<div {config.getClass(__name__)}'
+        if self.color is not None:
+            strResult += ' style="background-color: {}"'.format(self.color)
+        strResult += '>'
 
-        if len(self.child) > 1:
-            strResult = f'<div {config.getClass(__name__)}'
-            if self.color is not None:
-                strResult += ' style="background-color: {}"'.format(self.color)
-            strResult += '>'
+        if self.hasTitle():
+            strResult += self.getTitleString() + ' ' + self.getDuration().toString()
+        elif self.logicAnd:
+            strResult += 'Combination: ' + self.getDuration().toString()
+        else:
+            strResult += 'Alternatives: max. ' + self.getDuration().toString()
 
-            if self.hasTitle():
-                strResult += self.getTitleString() + ' ' + self.getDuration().toString()
-            elif self.isCircuit():
-                strResult += 'Circuit: ' + str(self.getRepetitions()) + ' Repetitions in ' + self.getDuration().toString()
-            elif self.logicAnd:
-                strResult += 'Combination: ' + self.getDuration().toString()
-            else:
-                strResult += 'Alternatives: max. ' + self.getDuration().toString()
+        strResult += self.getDescriptionHTML()
 
-            strResult += self.getDescriptionHTML()
+        if self.logicAnd:
+            strResult += '<ol style="margin-block-start: 2px; margin-block-end: 2px;">'
+        else:
+            strResult += '<ol style="list-style-type: lower-latin; margin-block-start: 2px; margin-block-end: 2px;">'
 
-            if not self.isCircuit():
-                # append the details if it is not a Circuit
-                if self.logicAnd:
-                    strResult += '<ol style="margin-block-start: 2px; margin-block-end: 2px;">'
-                else:
-                    strResult += '<ol style="list-style-type: lower-latin; margin-block-start: 2px; margin-block-end: 2px;">'
+        for u in self.child:
+            strResult += '<li>' + u.toHtmlTable() + '</li>'
+        strResult += '</ol>'
 
-                for u in self.child:
-                    strResult += '<li>' + u.toHtmlTable() + '</li>'
-                strResult += '</ol>'
-
-            strResult += '</div>'
-
-        elif self.child:
-            strResult = '<div>' + self.child[0].toHtmlTable() + '</div>'
+        strResult += '</div>'
 
         return strResult
 
@@ -407,12 +377,11 @@ class Combination(TItem):
                 strResult += '<tr><td>' + u.toHtmlSheet(fImages,fDescription) + '</td></tr>'
             elif type(u) is ExerciseSet:
                 strResult += '<tr><td>' + str(t) + '</td>' + u.toHtmlSheet(fImages,fDescription) + '</tr>'
-                t += u.getDuration() + timedelta(seconds=15)
             elif type(u) is Pause:
                 strResult += '<tr><td>' + str(t) + '</td><td>' + u.toHtmlTable() + '</td><td></td></tr>'
-                t += u.getDuration() + timedelta(seconds=15)
             else:
                 strResult += '<tr><td>' + u.toHtmlTable() + '</td></tr>'
+            t += u.getDuration() + timedelta(seconds=15)
 
         strResult += '<tr><td>' + str(t) + '</td><td>Duration</td><td></td></tr>'
                     

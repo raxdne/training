@@ -268,21 +268,21 @@ class Unit(TItem):
 
     def scale(self,floatScale,patternType=None):
 
-        """  """
+        """ returns a scaled copy of self """
 
-        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01 and (patternType is None or self.type is None or re.match(patternType,self.type)):
-
-            if self.dist is not None:
-                if self.dist < 20.0:
-                    self.dist *= floatScale
+        r = self.dup()
+        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01 and (patternType is None or r.type is None or re.match(patternType,r.type)):
+            if r.dist is not None:
+                if r.dist < 20.0:
+                    r.dist *= floatScale
                 else:
                     # round distance to 5.0
-                    self.dist = round(self.dist * floatScale / 5.0) * 5.0
+                    r.dist = round(r.dist * floatScale / 5.0) * 5.0
 
-            if self.duration is not None:
-                self.duration = self.duration.scale(floatScale)
+            if r.duration is not None:
+                r.duration = r.duration.scale(floatScale)
 
-        return self
+        return r
 
 
     def parse(self,objArg):
