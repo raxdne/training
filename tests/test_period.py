@@ -41,7 +41,7 @@ c.append((2,Unit('18:00;3.5;RB;25:00')))
 c.append((3,Unit(';FB;25:00')))
 c.append((4,Unit('08:00;30;BB;02:00:00')))
 
-t.append([Period('General Basics I',36),Cycle('General Endurance'),c,Period('General Basics II',36).append([Period('General Basics IIa',36),Period('General Basics IIb',36)]),Period('General Basics III',36)])
+t.append([Period('General Basics I',36),Cycle('General Endurance'),c,Period('General Basics II',36).append([Period('General Basics IIa',36),c.scale(2),Period('General Basics IIb',36)]),Period('General Basics III',36)])
 
 #t.schedule(date.today())
 #t.cutBefore(date.today())

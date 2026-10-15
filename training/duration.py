@@ -36,9 +36,9 @@ class Duration(timedelta):
         if objArg == None:
             pass
         elif type(objArg) is timedelta or type(objArg) is Duration:
-            intMin = int(objArg.total_seconds() / 60.0)
+            intMin = round(objArg.total_seconds() / 60.0)
         elif type(objArg) is float:
-            intMin = int(objArg)
+            intMin = round(objArg)
         elif type(objArg) is int:
             intMin = objArg
         elif type(objArg) is str:
@@ -47,15 +47,15 @@ class Duration(timedelta):
                 # nothing to split
                 entry = objArg.split('min')
                 if len(entry) == 2:
-                    intMin = int(entry[0])
+                    intMin = round(float(entry[0]))
                 else:
                     entry = objArg.split('h')
                     if len(entry) == 2:
-                        intMin = int(float(entry[0]) * 60.0)
+                        intMin = round(float(entry[0]) * 60.0)
             elif len(entry) == 2:
-                intMin = int(entry[0]) + int(entry[1]) / 60.0
+                intMin = int(entry[0]) + round(int(entry[1]) / 60.0)
             elif len(entry) == 3:
-                intMin = int(float(entry[0]) * 60.0) + int(entry[1]) + int(entry[2]) / 60
+                intMin = int(entry[0]) * 60.0 + int(entry[1]) + int(entry[2]) / 60
             
         return super().__new__(cls,minutes=intMin)
 

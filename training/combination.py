@@ -282,7 +282,7 @@ class Combination(TItem):
         if self.logicAnd:
             for u in self.child:
                 if type(u) is Combination or type(u) is Unit or type(u) is ExerciseSet or type(u) is Pause:
-                    intResult += u.getDuration(skipType).total_seconds()
+                    intResult += u.getDuration(skipType).total_seconds() + 15
         else:
             # Alternatives
             intResult = self.getRepresentativeAlternative(skipType).getDuration().total_seconds()

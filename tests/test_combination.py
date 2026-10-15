@@ -32,13 +32,14 @@ from datetime import timedelta, date, datetime, time
 from icalendar import Calendar, Event, Alarm
 
 from training import config as config
-from training.description import Description
-from training.title import Title
 from training.note import Note
 from training.unit import Unit
 from training.pause import Pause
 from training.exerciseset import ExerciseSet
 from training.combination import Combination
+from training.cycle import Cycle
+from training.bunch import Bunch
+from training.period import Period
 
 from suntime import Sun
 
@@ -60,7 +61,10 @@ s = Combination([c,c.scale(2),c])
 t = Combination([s,s.scale(1.1),s])
 
 print(t)
-print(t.toHtmlSheet())
+#print(t.toHtmlSheet())
+f = open('Output/test_combination.html', 'w')
+f.write(t.toHtmlFile(True))
+f.close()
 
 t = Combination([Unit('08:11:00;3.5;RB;25:00'),
                  Pause('20min'),
