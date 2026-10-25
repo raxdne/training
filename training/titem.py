@@ -74,6 +74,20 @@ class TItem(TTitle,TDescription):
         pass
 
 
+    def __enter__(self):
+
+        """  """
+
+        return self
+
+
+    def __exit__(self, exc_type, exc_value, exc_tb):    
+
+        """  """
+
+        pass        
+
+
     @abstractmethod
     def stat(self, skipType=None):
 

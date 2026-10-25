@@ -39,7 +39,7 @@ from training.pause import Pause
 
 class Combination(TItem):
 
-    def __init__(self,listArg=[],flagAnd=True):
+    def __init__(self,listArg=[],f=True):
 
         """  """
 
@@ -48,7 +48,7 @@ class Combination(TItem):
         self.setDescription()
         
         self.child = []
-        self.logicAnd = flagAnd
+        self.logicAnd = f
 
         for objArg in listArg:
             if objArg is None or (type(objArg) != Unit and type(objArg) != ExerciseSet and type(objArg) != Pause and type(objArg) != Note and type(objArg) != Combination):
@@ -189,22 +189,22 @@ class Combination(TItem):
         return self
 
 
-    def remove(self,patternType=None):
+    def remove(self,p=None):
 
         """  """
 
-        if patternType is not None:
+        if p is not None:
             # whole combination using pattern
-            childsNew = []
+            l = []
             for u in self.child:
-                if type(u) is Unit and u.match(patternType):
+                if type(u) is Unit and u.match(p):
                     pass
                 elif type(u) is Pause:
                     pass
                 else:
-                    childsNew.append(u)
+                    l.append(u)
                     
-            self.child = childsNew
+            self.child = l
             
         return self
 
@@ -279,7 +279,9 @@ class Combination(TItem):
         """ return a timedelta """
 
         intResult = 0
-        if self.logicAnd:
+        if len(self.child) < 1:
+            pass
+        elif self.logicAnd:
             for u in self.child:
                 if type(u) is Combination or type(u) is Unit or type(u) is ExerciseSet or type(u) is Pause:
                     intResult += u.getDuration(skipType).total_seconds() + 15
@@ -290,7 +292,7 @@ class Combination(TItem):
         return Duration(intResult / 60)
 
 
-    def scale(self,floatScale,patternType=None):
+    def scale(self,floatScale,p=None):
 
         """ returns a scaled copy of self """
 
@@ -298,7 +300,7 @@ class Combination(TItem):
         if floatScale > 0.01 and abs(floatScale - 1.0) > 0.01:
             for i in range(len(r.child)):
                 if type(r.child[i]) is Unit or type(r.child[i]) is ExerciseSet or type(r.child[i]) is Combination:
-                    r.child[i] = r.child[i].scale(floatScale,patternType)
+                    r.child[i] = r.child[i].scale(floatScale,p)
 
         return r
 

@@ -41,16 +41,20 @@ from icalendar import Calendar, Event, Alarm
 
 import numpy as np
 
-from training import config as config
-from training.tcontainer import TContainer
+from training.ttitle import TTitle
+from training.tdescription import TDescription
 
 from training.note import Note
+from training.pause import Pause
 from training.unit import Unit
+from training.exerciseset import ExerciseSet
 from training.combination import Combination
-#from training.plot import Plot
-from training.phase import Phase
 from training.cycle import Cycle
+from training.period import Period
+from training.phase import Phase
 from training.bunch import Bunch
+
+from training import config as config
 
 #
 #
@@ -195,6 +199,93 @@ def CalendarLastMonthsPeriod(self,intMonth=6,strArg=None):
     self.schedule()
 
     return self
+
+
+def parseFile(objContainer, listFilename, fUpdater=None):
+
+    """  """
+
+    if type(listFilename) is str:
+        listFilename = [listFilename]
+
+    a = []
+    d0 = None
+    d1 = None
+    t = Unit()
+    n = Note()
+
+    for filename in listFilename:
+        print("* ", filename, file=sys.stderr)
+        with open(filename) as f:
+            content = f.read().splitlines()
+        f.close()
+
+        d_i = None
+        for l in content:
+            if l is None or l == '' or re.match(r"^sep", l) or re.match(r"^\*", l):
+                pass
+            elif (fUpdater is not None and t.parse(fUpdater(l))) or t.parse(l):
+                if t.dt is not None:
+                    d_i = t.dt
+                    if d0 is None or t.dt < d0:
+                        d0 = t.dt
+                    if d1 is None or t.dt > d1:
+                        d1 = t.dt
+                else:
+                    t.dt = d_i
+
+                a.append(t)
+                t = Unit()
+            elif (fUpdater is not None and n.parse(fUpdater(l))) or n.parse(l):
+                if n.dt is not None:
+                    d_i = n.dt
+                    if d0 is None or n.dt < d0:
+                        d0 = n.dt
+                    if d1 is None or n.dt > d1:
+                        d1 = n.dt
+                else:
+                    n.dt = d_i
+
+                a.append(n)
+                n = Note()
+            else:
+                print('error: ' + l, file=sys.stderr)
+
+            if d1 is None and d0 is not None:
+                d1 = d0
+
+    if d0 is None:
+        print('error: No start date found', file=sys.stderr)
+    elif d1 is None:
+        print('error: No end date found', file=sys.stderr)
+    else:
+        delta = d1 - d0
+
+        if objContainer is None:
+            objContainer = Period('')
+        elif len(objContainer.child) > 0:
+            # there is a child list already
+            pass
+        elif delta.days < 365:
+            for y in range(d0.year, d1.year+1):
+                objContainer.append(CalendarWeekPeriod(y))
+        elif delta.days < 3 * 365:
+            for y in range(d0.year, d1.year+1):
+                objContainer.append(CalendarMonthPeriod(y))
+        else:
+            for y in range(d0.year, d1.year+1):
+                objContainer.append(CalendarYearPeriod(y))
+
+        for t in a:
+            c = objContainer.getContainerByDate(t.dt)
+            if c is None:
+                print('error: out of date range ' + str(t), file=sys.stderr)
+            else:
+                c.insertByDate(t)
+
+    objContainer.setPlan(False)
+    
+    return objContainer
 
 
 if __name__ == '__main__':

@@ -46,10 +46,8 @@ import numpy as np
 from training import config as config
 from training.tdescription import TDescription
 from training.ttitle import TTitle
-from training.note import Note
-from training.unit import Unit
-from training.combination import Combination
-from training.plot import Plot
+from training.titem import TItem
+
 from training.phase import Phase
 
 #
@@ -58,7 +56,7 @@ from training.phase import Phase
 
 class TContainer(TTitle,TDescription):
 
-    def __init__(self,strArg=None,intArg=None):
+    def __init__(self,t=None,l=None):
 
         """  """
 
@@ -66,10 +64,10 @@ class TContainer(TTitle,TDescription):
         super(TDescription, self).__init__()
         #super(Plot, self).__init__()
 
-        self.setTitleStr(strArg)
+        self.setTitleStr(t)
         self.setDescription()
 
-        self.setPeriod(intArg)
+        self.setPeriod(l)
 
         self.summary = {}
         self.child = []
@@ -135,7 +133,41 @@ class TContainer(TTitle,TDescription):
 
 
     @abstractmethod
-    def append(self,objArg):
+    def append(self,o):
+
+        """ append objects to the list of childs """
+
+        pass
+
+
+    def reverse(self):
+
+        """  """
+
+        c = copy.deepcopy(self)
+        c.child.reverse()
+        
+        return c
+
+
+    @final
+    def cut(self, d0, d1):
+
+        """  """
+
+        return self.cutBefore(d0).cutAfter(d1)
+
+
+    @abstractmethod
+    def cutBefore(self,d):
+
+        """  """
+
+        pass
+
+
+    @abstractmethod
+    def cutAfter(self,d):
 
         """  """
 
@@ -159,9 +191,9 @@ class TContainer(TTitle,TDescription):
 
 
     @abstractmethod
-    def scale(self,floatScale,patternType=None):
+    def scale(self,f,p=None):
 
-        """  """
+        """ returns a copy of self, scaled by f and matching pattern p if not None """
 
         pass
 
@@ -187,13 +219,12 @@ class TContainer(TTitle,TDescription):
         return floatResult
 
 
-    def schedule(self, argDateOrYear=None, intMonth=None, intDay=None):
+    def schedule(self, argDateOrYear=None, intMonth=1, intDay=1):
 
         """  """
 
-        if type(argDateOrYear) is bool and argDateOrYear is False:
+        if argDateOrYear is None or (type(argDateOrYear) is bool and argDateOrYear is False):
             # delete all dates
-            self.dateFixed = None
             self.dateBegin = None
             self.dateEnd = None
             return self
@@ -222,6 +253,16 @@ class TContainer(TTitle,TDescription):
 
         return self
 
+
+    def clean(self):
+
+        """ resets all statistics """
+
+        self.data.clear()
+        self.summary.clear()
+
+        return self
+        
 
     def setSkipPattern(self,skipType=None):
 
@@ -300,17 +341,12 @@ class TContainer(TTitle,TDescription):
         return self
 
 
+    @abstractmethod
     def resetDistances(self):
 
         """  """
 
-        self.child.clear()
-        self.data.clear()
-        #super(Plot, self).__init__()
-        #self.strPlotAccumulation = None
-        #Plot.__init__(self)
-
-        return self
+        pass
 
 
     @final
@@ -327,11 +363,11 @@ class TContainer(TTitle,TDescription):
         return self
 
 
-    def appendChildDescription(self,objArg):
+    def _appendChildDescription(self,o):
 
         """  """
 
-        self.child[-1].appendDescription(objArg)
+        self.child[-1].appendDescription(o)
 
         return self
 
@@ -349,22 +385,6 @@ class TContainer(TTitle,TDescription):
                 return self.child[index[0]].getItem(index[1:])
     
         return None
-
-
-    def getNumberOfCycles(self):
-
-        """  """
-
-        # TODO: use self.data
-
-        intResult = 0
-
-        if hasattr(self,'child'):
-            for c in self.child:
-                if type(c) is TContainer:
-                    intResult += c.getNumberOfCycles()
-
-        return intResult
 
 
     def getMarkers(self, dt0=None, dt1=None):
@@ -400,144 +420,208 @@ class TContainer(TTitle,TDescription):
         return intResult
 
 
-    def insert(self,objArg,intLevel=-1):
+    def insert(self,o,intLevel=-1):
 
         """  """
 
         objResult = self
 
-        if objArg is None:
+        if o is None:
             print('error: object', file=sys.stderr)
         elif self.dateBegin is None:
             print('error: date begin', file=sys.stderr)
-        elif isinstance(objArg,TContainer):
-            if objArg.dateBegin is None:
+        elif isinstance(o,TContainer):
+            if o.dateBegin is None:
                 print('error: date begin', file=sys.stderr)
             else:
-                p = self.getPeriodByDate(objArg.dateBegin,intLevel)
+                p = self.getPeriodByDate(o.dateBegin,intLevel)
                 if p is None:
-                    print('error: no according TContainer found' + str(objArg), file=sys.stderr)
+                    print('error: no according TContainer found' + str(o), file=sys.stderr)
                 elif not p.child:
-                    p.child.append(objArg.dup())
+                    p.child.append(o.dup())
                 else:
                     for i in range(len(p.child)):
                         if isinstance(p.child[i],TContainer):
-                            if p.child[i].dateBegin == objArg.dateBegin:
+                            if p.child[i].dateBegin == o.dateBegin:
                                 # begin is equal
-                                p.child.insert(i,objArg.dup())
+                                p.child.insert(i,o.dup())
                                 break
-                            elif p.child[i].dateEnd >= objArg.dateBegin:
-                                # objArg begins in p.child[i]
-                                p.child[i].cutAfter(objArg.dateBegin - timedelta(days=1))
-                                p.child.insert(i+1,objArg.dup())
+                            elif p.child[i].dateEnd >= o.dateBegin:
+                                # o begins in p.child[i]
+                                p.child[i].cutAfter(o.dateBegin - timedelta(days=1))
+                                p.child.insert(i+1,o.dup())
                                 break
                             elif p.child[i] == p.child[-1]:
                                 print('error: no cycle found', file=sys.stderr)
-                                p.child.append(objArg.dup())
+                                p.child.append(o.dup())
                 self.schedule()
-        elif type(objArg) is Note or type(objArg) is Unit or type(objArg) is Combination:
-            if objArg.dt is None:
+        elif isinstance(o,TItem):
+            if o.dt is None:
                 print('error: date', file=sys.stderr)
             else:
-                c = self.getCycleByDate(objArg.dt)
+                c = self.getContainerByDate(o.dt)
                 if c is None or not c.child:
                     print('error: no cycle found', file=sys.stderr)
                 else:
                     # is inside this Cycle
-                    j = round((objArg.dt.date() - c.dateBegin).total_seconds() / (24 * 60 * 60))
-                    c.insert(j,objArg.dup())
+                    j = round((o.dt.date() - c.dateBegin).total_seconds() / (24 * 60 * 60))
+                    c.insert(j,o.dup())
                 self.schedule()
 
         return objResult
 
 
-    def insertByDate(self,objArg,flagReplace=False):
+    @abstractmethod
+    def insertByDate(self,o,f=False):
 
         """  """
 
-        objResult = None
+        pass
 
-        if objArg is None:
-            pass
-        elif self.dateBegin is None:
-            print('error: date begin', file=sys.stderr)
-        elif hasattr(objArg,'child'):
-            d = 0
-            for v in objArg.child:
-                if not v:
-                    # day without elements
-                    if flagReplace:
-                        # create a scheduled empty unit to overwrite
-                        u = Unit()
-                        u.setDate(objArg.dateBegin + timedelta(days=d))
-                        self.insertByDate(u,True)
+
+    @final
+    def isDateInContainer(self,dt=None):
+
+        """ returns True if dt is between self.dateBegin and self.dateEnd """
+
+        if type(dt) is datetime:
+            return self.isDateInContainer(dt.date())
+        
+        if not isinstance(dt,date):
+            return False
+
+        return (self.dateBegin is not None and self.dateEnd is not None and self.dateBegin <= dt and dt <= self.dateEnd)
+
+
+    @final
+    def query(self,**kwargs):
+        
+        """ """
+        
+        if 'level' not in kwargs:
+            kwargs['level'] = 1
+            return self.query(**kwargs)
+
+        if kwargs['level'] < 1:
+            return []
+        
+        kwargs['level'] -= 1
+        
+        r = []
+        for i in range(len(self.child)):
+            if ('date' not in kwargs or self.child[i].isDateInContainer(kwargs['date'])) and ('index' not in kwargs or (isinstance(kwargs['index'],int) and i == kwargs['index']) or (isinstance(kwargs['index'],list) and (i in kwargs['index']))):
+                if ('type' not in kwargs or isinstance(self.child[i],kwargs['type'])):
+                    r.append(self.child[i])
+                if isinstance(self.child[i],TContainer):
+                    l = self.child[i].query(**kwargs)
+                    if len(l) > 0:
+                        r.extend(l)
+        return r                    
+
+
+    @final
+    def qy_YYY(self,**kwargs):
+        
+        """ """
+        
+        #if 'level' not in kwargs:
+        #    kwargs['level'] = 16
+        #    yield from self.qy(**kwargs)
+
+        #if kwargs['level'] < 1:
+        #    return
+        
+        #kwargs['level'] -= 1
+        
+        for i in range(len(self.child)):
+            if isinstance(self.child[i],TContainer) \
+                    and ('date' not in kwargs or self.child[i].isDateInContainer(kwargs['date'])) \
+                        and ('index' not in kwargs or (isinstance(kwargs['index'],int) and i == kwargs['index']) or (isinstance(kwargs['index'],list) and (i in kwargs['index']))):
+                if ('type' not in kwargs or isinstance(self.child[i],kwargs['type'])):
+                    yield self.child[i]
+                yield from self.child[i].qy(**kwargs)
+
+
+    @final
+    def qy_OK(self,**kwargs):
+        
+        """ """
+        
+        if 'level' in kwargs:
+            if kwargs['level'] < 0:
+                return
+            else:
+                kwargs['level'] -= 1
+
+        for i in range(len(self.child)):
+            if isinstance(self.child[i],TContainer):
+                if 'date' in kwargs and self.child[i].isDateInContainer(kwargs['date']):
+                    if 'type' not in kwargs or isinstance(self.child[i],kwargs['type']):
+                        yield self.child[i]
+                elif 'index' in kwargs and ((isinstance(kwargs['index'],int) and i == kwargs['index']) or (isinstance(kwargs['index'],list) and (i in kwargs['index']))):
+                    if 'type' not in kwargs or isinstance(self.child[i],kwargs['type']):
+                        yield self.child[i]
+
+                yield from self.child[i].qy(**kwargs)
+
+
+    @final
+    def qy(self,**kwargs):
+        
+        """ flexible query method (index | date, type, level) """
+
+        if 'index' in kwargs:
+            # search using index
+            if isinstance(kwargs['index'],list):
+                if len(kwargs['index']) > 0:
+                    i = kwargs['index'].pop(0)
+
+                if len(kwargs['index']) > 0:
+                    yield from self.child[i].qy(**kwargs)
                 else:
-                    for u in v:
-                        if type(u) is Unit or type(u) is Combination:
-                            self.insertByDate(u,flagReplace)
-                        else:
-                            print('error: type ' + str(type(u)), file=sys.stderr)
-                d += 1
+                    yield self.child[i]
 
-            if flagReplace:
-                c = self.getCycleByDate(objArg.dateBegin)
-                if c is not None:
-                    if objArg.hasTitle():
-                        # copy title from objArg to c
-                        c.setTitleStr(objArg.getTitleString())
-                    if objArg.hasDescription():
-                        # copy description from objArg to c
-                        c.setDescription(objArg.getDescription())
-                # TODO: handle multiple affected cycles
-                # TODO: transfer color etc
+            elif isinstance(kwargs['index'],int):
+                yield self.child[kwargs['index']]
 
-        elif objArg is not None and objArg.dt is not None:
-            if hasattr(self,'set'):
-                # there is no child cycle yet
-                delta = objArg.dt.date() - self.dateBegin
-                if delta.days > -1 and objArg.dt.date() <= self.dateEnd:
-                    l = self.dateEnd - self.dateBegin
-                    #print(f'info: new Cycle("{self.getTitleString()}",{l.days + 1}) {self.dateBegin}', file=sys.stderr)
-                    c = Cycle(self.getTitleString(), l.days + 1)
-                    c.schedule(self.dateBegin)
-                    objResult = c.insertByDate(objArg,flagReplace)
-                    self.append(c)
-            elif hasattr(self,'child'):
-                for c in self.child:
-                    if isinstance(c,TContainer):
-                        objResult = c.insertByDate(objArg,flagReplace)
-                        if objResult is not None:
-                            break
+        else:
+            # search using date, level and type
+            if 'level' in kwargs:
+                if kwargs['level'] < 0:
+                    return
+                else:
+                    kwargs['level'] -= 1
 
-        return objResult
+            for i in range(len(self.child)):
+                if isinstance(self.child[i],TContainer):
+                    if 'date' not in kwargs or kwargs['date'] is None or self.child[i].isDateInContainer(kwargs['date']):
+                        if 'type' not in kwargs or isinstance(self.child[i],kwargs['type']):
+                            yield self.child[i]
+
+                    yield from self.child[i].qy(**kwargs)
 
 
-    def getCycleByDate(self,objDate=None):
+    @final
+    def getContainerByDate(self,objDate=None,intLevel=10):
 
-        """  """
-
-        return self.getPeriodByDate(objDate)
-
-
-    def getPeriodByDate(self,objDate=None,intLevel=0):
-
-        """  """
+        """ returns the TContainer where the objDate is in and intLevel """
 
         if objDate is None:
-            return self.getPeriodByDate(datetime.now(),intLevel)
+            return self.getContainerByDate(datetime.now(),intLevel)
         elif type(objDate) is str:
-            return self.getPeriodByDate(datetime.fromisoformat(objDate),intLevel)
+            return self.getContainerByDate(datetime.fromisoformat(objDate),intLevel)
         elif type(objDate) is date:
-            return self.getPeriodByDate(datetime.combine(objDate,time(0)),intLevel)
+            return self.getContainerByDate(datetime.combine(objDate,time(0)),intLevel)
         elif type(objDate) is datetime:
-            if not self.child or intLevel < 1:
-                if self.dateBegin <= objDate.date() and objDate.date() <= self.dateEnd:
-                    return self
-            elif hasattr(self,'child'):
-                for c in self.child:
-                    if type(c) is TContainer:
-                        if c.dateBegin <= objDate.date() and objDate.date() <= c.dateEnd:
-                            return c.getPeriodByDate(objDate,intLevel-1)
+            if self.isDateInContainer(objDate):
+                if intLevel < 1:
+                    pass
+                else:
+                    for c in self.child:
+                        if isinstance(c,TContainer):
+                            r = c.getContainerByDate(objDate,intLevel-1)
+                            if r is not None:
+                                return r
                 return self
         else:
             print('error: no according TContainer found' + str(objDate), file=sys.stderr)
@@ -545,57 +629,35 @@ class TContainer(TTitle,TDescription):
         return None
 
 
-    def getChildIndexByTitle(self,strArg):
+    def getChildIndexByTitle(self,t):
 
         """  """
 
         for i in range(len(self.child)):
-            if isinstance(self.child[i],TContainer) and self.child[i].getTitleString() == strArg:
+            if isinstance(self.child[i],TContainer) and self.child[i].getTitleString() == t:
                 return i
         return -1
 
 
-    def setPeriod(self, intArg):
+    def setPeriod(self, l=None):
 
         """  """
 
-        if intArg is None:
+        if l is None:
             self.periodInt = 0
         else:
-            self.periodInt = intArg
+            self.periodInt = l
 
         return self
 
 
-    def overwrite(self,argCycle,argDate=None):
+    def swap(self,a,b):
 
-        """ overwrite the descendant cycle sequence by argCycle """
+        """  """
 
-        if type(argCycle) is Cycle:
-            if argDate:
-                c = self.getCycleByDate(argDate)
-                if type(c) is Cycle:
-                    c.insert((argDate - c.dateBegin).days,argCycle,True)
-            elif argCycle.dateBegin:
-                self.overwrite(argCycle,argCycle.dateBegin)
-            else:
-                self.overwrite(argCycle, self.dateBegin)
-        else:
-            print(f'error: inserting {type(argCycle)} at date {argDate}', file=sys.stderr)
+        if a > -1 and b > -1 and a < len(self.child) and b < len(self.child) and a != b:
+            self.child[b], self.child[a] = self.child[a], self.child[b]
 
-        return self
-
-
-    def swap(self,argA,argB):
-
-        """ swap childs """
-
-        if type(argA) is int and type(argB) is int:
-            if argA > -1 and argA < len(self.child) and argB > -1 and argB < len(self.child):
-                self.child[argA], self.child[argB] = self.child[argB], self.child[argA]
-        elif type(argA) is str and type(argB) is str:
-            self.swap(self.getChildIndexByTitle(argA),self.getChildIndexByTitle(argB))
-        
         return self
 
 
@@ -628,57 +690,22 @@ class TContainer(TTitle,TDescription):
         return self
 
 
-    def remove(self,patternType=r'.+'):
+    @abstractmethod
+    def remove(self,p=None):
 
         """  """
 
-        if hasattr(self,'set'):
-            for c in self.child:
-                del c
-        elif hasattr(self,'child'):
-            for c in self.child:
-                if isinstance(c,TContainer):
-                    c.remove(patternType=patternType)
-        elif hasattr(self,'data'):
-            l = []
-            for d in self.data:
-                if re.match(patternType,d[3]):
-                    pass
-                else:
-                    l.append(d)
-            self.data = l
-
-        self.summary.clear()
-
-        return self
+        pass
 
 
-    def fix(self, objArg):
+    def addTags(self, o=None):
 
         """  """
 
-        if self.dateFixed is not None:
-            # keep fixed date
-            pass
-        #elif self.dateBegin is None or self.dateEnd is None:
-        #    pass
-        #elif objArg is not None and type(objArg) is date and self.dateBegin <= objArg and objArg <= self.dateEnd:
-        elif objArg is not None and type(objArg) is date:
-            self.dateFixed = objArg
-
-        self.schedule()
-
-        return self
-
-
-    def addTags(self, objArg=None):
-
-        """  """
-
-        if type(objArg) is list:
-            self.tag.extend(objArg)
-        elif type(objArg) is Phase:
-            self.tag.append(objArg)
+        if type(o) is list:
+            self.tag.extend(o)
+        elif type(o) is Phase:
+            self.tag.append(o)
 
         return self
 
@@ -767,20 +794,29 @@ class TContainer(TTitle,TDescription):
         return str(self)
 
 
+    @abstractmethod
+    def toHtmlTable(self):
+
+        """  """
+        
+        pass
+
+
+    @final
     def toHtmlTableOfContent(self,strIndent=''):
 
         """  """
 
         strResult = self.getTitleLineTableOfContent(strIndent) + self.getDateString() + '\n'
 
-        if hasattr(self,'child'):
-            for c in self.child:
-                if type(c) is TContainer:
-                    strResult += c.toHtmlTableOfContent(strIndent + '    ')
+        for c in self.child:
+            if isinstance(c,TContainer):
+                strResult += c.toHtmlTableOfContent(strIndent + '    ')
 
         return strResult
 
 
+    @final
     def toHtmlFile(self):
 
         """ returns html/body + content """
@@ -823,6 +859,158 @@ class TContainer(TTitle,TDescription):
         return strResult
 
 
+    def toComparisonHtmlFile(self, listArg=[]):
+
+        """ returns html/body + content """
+
+        strResult = '<!doctype html public "-//IETF//DTD HTML 4.0//EN">'
+
+        strResult += "<html>"
+
+        strResult += "<head>"
+
+        strResult += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
+
+        strResult += "<title></title>"
+
+        strResult += config.style
+
+        strResult += "</head>\n<body>\n"
+
+        if not listArg:
+            l = self.child
+        else:
+            l = listArg
+
+        for c in l:
+            if isinstance(c,TContainer):
+                strResult += f'<section {config.getClass(__name__)} id="{str(id(c))}"'
+
+                strResult += '<div class="header">' + c.getTitleXML()
+                if c.dateBegin is not None and c.dateEnd is not None:
+                    strResult += c.getDateString()
+                strResult += '</div>\n'
+
+                strResult += '<pre>' + c.report() + '</pre>'
+
+                if c.fPlot and (isinstance(c,TContainer) and c.getNumberOfCycles() > 0):
+                    strResult += '<div>'
+                    strResult += c.plotAccumulationDuration()
+                    strResult += c.plotAccumulation()
+                    strResult += c.plotHist()
+                    strResult += c.plotTimeDist()
+                    strResult += c.toSVGGanttChart()
+                    #strResult += c.toSVGDiagram()
+                    strResult += '</div>'
+
+                strResult += '</section>\n'
+
+        strResult += config.footer
+
+        strResult += "</body>\n</html>"
+
+        return strResult
+
+
+    def toComparisonHtmlTableFile(self, listArg=[]):
+
+        """ returns html/body + content """
+
+        strResult = '<!doctype html public "-//IETF//DTD HTML 4.0//EN">'
+
+        strResult += "<html>"
+
+        strResult += "<head>"
+
+        strResult += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
+
+        strResult += "<title></title>"
+
+        strResult += config.style
+
+        strResult += "</head>\n<body>\n"
+
+        if not listArg:
+            l = self.child
+        else:
+            l = listArg
+
+        strResult += "<table style='border: none;'><thead/>\n<tbody>\n"
+
+        strResult += "<tr>\n"
+        
+        for c in l:
+            if isinstance(c,TContainer):
+                strResult += "<td class='graph'>\n"
+                #strResult += '<section class="{}" id="{}">'.format(__name__, str(id(c)))
+
+                strResult += '<div class="header">' + c.getTitleXML()
+                if c.dateBegin is not None and c.dateEnd is not None:
+                    strResult += c.getDateString()
+                strResult += '</div>\n'
+
+                strResult += '<pre>' + c.report() + '</pre>'
+                strResult += "</td>\n"
+
+        strResult += "</tr>\n"
+
+        strResult += "<tr>\n"
+
+        for c in l:
+            if isinstance(c,TContainer):
+                strResult += "<td class='graph'>\n"
+                strResult += c.plotAccumulationDuration()
+                strResult += "</td>\n"
+
+        strResult += "</tr>\n"
+
+        strResult += "<tr>\n"
+
+        for c in l:
+            if isinstance(c,TContainer):
+                strResult += "<td class='graph'>\n"
+                strResult += c.plotAccumulation()
+                strResult += "</td>\n"
+
+        strResult += "</tr>\n"
+
+        strResult += "<tr>\n"
+
+        for c in l:
+            if isinstance(c,TContainer):
+                strResult += "<td class='graph'>\n"
+                strResult += c.plotHist()
+                strResult += "</td>\n"
+
+        strResult += "</tr>\n"
+
+        strResult += "<tr>\n"
+
+        for c in l:
+            if isinstance(c,TContainer):
+                strResult += "<td class='graph'>\n"
+                strResult += c.plotTimeDist()
+                strResult += "</td>\n"
+
+        strResult += "</tr>\n"
+
+        strResult += "<tr>\n"
+
+        for c in l:
+            if isinstance(c,TContainer):
+                strResult += "<td class='graph'>\n"
+                strResult += c.toSVGGanttChart()
+                strResult += "</td>\n"
+
+        strResult += "</tr>\n"
+
+        strResult += "</tbody>\n</table>\n"
+        strResult += config.footer
+        strResult += "</body>\n</html>"
+
+        return strResult
+
+
     def toCSV(self):
 
         """  """
@@ -840,6 +1028,25 @@ class TContainer(TTitle,TDescription):
         return strResult
 
 
+    def toFreemindNodeAttr(self):
+
+        """  """
+
+        strResult = ''
+
+        if self.color is not None:
+            strResult += f' BACKGROUND_COLOR="{self.color}"'
+        elif self.getNumberOfUnits() < 1:
+            strResult += ' BACKGROUND_COLOR="#ffaaaa"'
+        else:
+            strResult += ' FOLDED="true"'
+
+        strResult += ' LOCALIZED_STYLE_REF="default" TEXT="' + self.getTitleXML() + ' ' + self.getDateString() + '&#xa;' + self.report().replace('\n','&#xa;') + '"'
+
+        return strResult
+
+
+    @final
     def toFreeMind(self):
 
         """  """
@@ -948,9 +1155,14 @@ class TContainer(TTitle,TDescription):
         #f.write(periodArg.toCSV())
         #f.close()
 
+        f = open(strDirArg + '/' + strId + '.mm', 'w')
+        f.write(self.toFreeMind())
+        f.close()
+
         f = open(strDirArg + '/' + strId + '-periods.html', 'w')
         f.write(self.toHtmlFile())
         f.close()
+
         return
         f = open(strDirArg + '/' + strId + '-dashboard.html', 'w')
         f.write(self.toComparisonHtmlFile())
@@ -962,10 +1174,6 @@ class TContainer(TTitle,TDescription):
 
         f = open(strDirArg + '/' + strId + '.svg', 'w')
         f.write(self.toSVGDiagram())
-        f.close()
-
-        f = open(strDirArg + '/' + strId + '.mm', 'w')
-        f.write(self.toFreeMind())
         f.close()
 
         f = open(strDirArg + '/' + strId + '.sqlite', 'w')

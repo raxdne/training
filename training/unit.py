@@ -151,6 +151,9 @@ class Unit(TItem):
         return self.dt + self.duration
         
 
+    schedule = setDate
+
+
     def setTypeStr(self,strArg):
 
         """  """
@@ -469,16 +472,10 @@ class Unit(TItem):
 
         """  """
 
-        strResult = '<node'
-        strResult += ' TEXT="' + self.toStringShort() + '"'
-        strResult += ' BACKGROUND_COLOR="{}"'.format(self.getColor())
-        strResult += '>'
-
+        strResult = f'<node BACKGROUND_COLOR="{self.getColor()}" TEXT="{self.toStringShort()}">'
         if self.dist is not None:
-            strResult += '<node TEXT="' + self.getSpeedStr() + '"/>'
-
+            strResult += f'<node TEXT="{self.getSpeedStr()}"/>'
         strResult += self.getDescriptionFreemind()
-
         strResult += '</node>\n'
 
         return strResult

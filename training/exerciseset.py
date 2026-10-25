@@ -190,6 +190,18 @@ class ExerciseSet(TItem):
         return strResult
 
 
+    def toFreemindNode(self):
+
+        """  """
+
+        strResult = '<node LOCALIZED_STYLE_REF="default"'
+        if self.color is not None:
+            strResult += f' BACKGROUND_COLOR="{self.color}"'
+        strResult += ' TEXT="' + self.getTitleXML() + ' x ' + str(self.repetitions) + '"/>'
+
+        return strResult
+
+
     def stat(self, skipType=None):
 
         """  """

@@ -64,11 +64,11 @@ class Bunch(TContainer):
 
     """ block-oriented alternative of Cycle() """
 
-    def __init__(self,strArg=None,intArg=7):
+    def __init__(self,t=None,l=7):
 
         """  """
 
-        super().__init__(strArg,intArg)
+        super().__init__(t,l)
 
 
     def __str__(self):
@@ -85,7 +85,8 @@ class Bunch(TContainer):
 
         """  """
 
-        super().resetDistances()
+        self.clean()
+        self.child = []
 
         return self
 
@@ -103,13 +104,7 @@ class Bunch(TContainer):
 
         intResult = 0
         for v in self.child:
-            u = v[1]
-            if u.dt is not None and ((dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date())):
-                # u is out of interval
-                pass 
-            elif type(u) is Combination:
-                intResult += u.getNumberOfUnits(dt0,dt1)
-            elif type(u) is Unit and u.isCountable():
+            if isinstance(v[1],TItem):
                 intResult += v[0]
 
         return intResult
@@ -133,17 +128,17 @@ class Bunch(TContainer):
         return timedelta(seconds=intResult)
 
 
-    def scale(self,floatScale,patternType=None):
+    def scale(self,f,p=None):
 
-        """ returns a scaled copy of self """
+        """ returns a copy of self, scaled by f and matching pattern p if not None """
 
         r = self.dup()
-        if floatScale > 0.01 and abs(floatScale - 1.0) > 0.01:
+        if f > 0.01 and abs(f - 1.0) > 0.01:
             for i in range(len(r.child)):
                 if type(r.child[i][1]) is Unit or type(r.child[i][1]) is ExerciseSet or type(r.child[i][1]) is Combination:
-                    r.child[i] = (r.child[i][0], r.child[i][1].scale(floatScale,patternType))
+                    r.child[i] = (r.child[i][0], r.child[i][1].scale(f,p))
 
-        r.summary.clear()
+        r.clean()
 
         return r
 
@@ -155,7 +150,7 @@ class Bunch(TContainer):
         if skipType is None:
             skipType = self.skipType
 
-        self.data.clear()
+        self.clean()
 
         for v in self.child:
             u = v[1]
@@ -173,63 +168,115 @@ class Bunch(TContainer):
             self.setVDefaults(dictArg)
 
         for v in self.child:
-            v[1].updateValues(dictArg)
-
-        if False:
-            for d in c:
-                if d[3] is None:
-                    pass
-                else:
-                    k = d[3][0:config.max_length_type]
-                    if k in self.v_defaults and self.v_defaults[k] > 1.0 and d[2] is not None and d[2] > 0.0:
-                        if d[1] is None or d[1] < 0.1:
-                            # there is a defined default velocity
-                            d[1] = self.v_defaults[k] * (d[2] / 3600)
-                    elif k in self.v_defaults and self.v_defaults[k] > 1.0 and d[1] is not None and d[1] > 0.1:
-                        if d[2] is None or d[2] < 1.0:
-                            # there is a defined default velocity
-                            d[2] = int(d[1] / self.v_defaults[k] * 60)
+            u = v[1]
+            if (type(u) is Unit and u.isCountable()) or type(u) is Combination:
+                u.updateValues(dictArg)
 
         return self
 
 
-    def append(self, objArg=None):
+    def append(self,o):
+
+        """ append objects to the list of childs """
+
+        self.clean()
+
+        if o is None:
+            print('error: empty period initialization', file=sys.stderr)
+        elif isinstance(o,list):
+            for b in o:
+                self.append(b)
+        elif isinstance(o,str):
+            u = Unit(o)
+            if u is not None:
+                u.updateValues(self.v_defaults)
+                self.child.append((1,u))
+            else:
+                print('error: ignoring ' + o, file=sys.stderr)
+        elif isinstance(o,Bunch):
+            if len(o.child) > 0:
+                self.child.append(o.child)
+            self.setPeriod(self.periodInt + o.periodInt)
+        elif isinstance(o,tuple):
+            self.child.extend([o])
+
+        return self
+
+
+    def remove(self,p=None):
 
         """  """
 
-        self.data.clear()
-        self.summary.clear()
+        l = []
 
-        if objArg is None:
-            print('error: empty period initialization', file=sys.stderr)
-        elif type(objArg) is str and objArg:
-            return self.append([objArg])
-        elif type(objArg) is tuple:
-            self.child.extend([objArg])
-        elif type(objArg) is list and type(objArg[0]) is tuple:
-            self.child.extend(objArg)
-        elif type(objArg) is list and objArg:
-            u = Unit()
-            for s in objArg:
-                #print('info: ' + s, file=sys.stderr)
-                if u.parse(s):
-                    #print('info: ' + str(u.stat()), file=sys.stderr)
-                    u.updateValues(self.v_defaults)
-                    self.data.extend(u.stat())
-                else:
-                    print('error: parsing ' + s, file=sys.stderr)
-            print('info: ' + str(list(map(lambda lst: lst[2], self.data))), file=sys.stderr)
+        for c in self.child:
+            if isinstance(c[1],Combination):
+                l.append((c[0],c[1].remove(p)))
+            elif isinstance(c[1],Unit) and c[1].match(p):
+                pass
+            else:
+                l.append(c)
+
+        self.clean()
+        self.child = l
+
+        return self
+
+
+    def stretch(self,n=1,m=1):
+
+        """ insert every n-th day m extra days """
+
+        if type(n) is int and n > 0 and len(self.child) > n:
+            self.periodInt = self.periodInt * (n - 1) * m
+
+        return self
+
+
+    def extend(self,n=7):
+
+        """ append last n days at the end """
+
+        if type(n) is int and n > 0 and self.periodInt >= n:
+            self.scale((self.periodInt + n) / self.periodInt)
+            self.setPeriod(self.periodInt + n)
+
+        return self
+
+
+    def overwrite(self,c,d=None):
+
+        """ overwrite sequence by c """
+
+        if isinstance(c,Cycle):
+            self.child.clear()
+            for v in c.child:
+                self.append(v)
         else:
-            print('error: empty period initialization', file=sys.stderr)
+            print(f'error: inserting {type(c)} at date {d}', file=sys.stderr)
 
         return self
 
 
-    def cut(self, d0, d1):
+    def insertByDate(self,o,f=False):
 
         """  """
 
-        return self.cutBefore(d0).cutAfter(d1)
+        objResult = None
+
+        if o is None:
+            pass
+        elif self.dateBegin is None:
+            print('error: date begin', file=sys.stderr)
+        elif type(o) is Cycle:
+            pass
+        elif isinstance(o,TItem):
+            objResult = o.dup()
+            self.child.append((1,objResult))
+        else:
+            print('error: type ' + str(type(u)), file=sys.stderr)
+
+        return objResult
 
 
     def cutBefore(self,d):
@@ -256,8 +303,7 @@ class Bunch(TContainer):
 
             self.setPeriod((self.dateEnd - d).days + 1)
             self.schedule(d)
-            self.data.clear()
-            self.summary.clear()
+            self.clean()
 
         return self
 
@@ -269,44 +315,17 @@ class Bunch(TContainer):
         assert type(d) is date
 
         if self.dateBegin <= d and d < self.dateEnd:
+            f = (d - self.dateBegin).days / self.periodInt
             for i in range(len(self.child)):
-                if isinstance(self.child[i],TContainer):
-                    if d == self.child[i].dateEnd:
-                        del self.child[i+1:]
-                        break
-                    elif self.child[i].dateBegin <= d and d < self.child[i].dateEnd:
-                        self.child[i].cutAfter(d)
-                        del self.child[i+1:]
-                        break
+                r = round(self.child[i][0] * f)
+                if r > 0:
+                    self.child[i] = (r, self.child[i][1])
 
             self.setPeriod((d - self.dateBegin).days + 1)
             self.schedule(self.dateBegin)
-            self.data.clear()
-            self.summary.clear()
+            self.clean()
 
         return self
-
-
-    def fill(self,objArg,floatProgression=1.0):
-
-        """  """
-
-        flagReplace=False
-        objResult = self
-
-        if objArg is None:
-            print('error: undefined object ' + str(objArg), file=sys.stderr)
-        elif type(objArg) is list and objArg:
-            for u in objArg:
-                self.insert(u,flagReplace)
-        elif isinstance(objArg,TContainer) or type(objArg) is Unit or type(objArg) is Combination:
-            for c in self.child: # TODO:
-                if isinstance(c,TContainer):
-                    c.fill(objArg,floatProgression)
-        else:
-            print(f'error: filling {type(objArg)} of {len(self.child)} {objArg}', file=sys.stderr)
-
-        return objResult
 
 
     def toHtmlTable(self):
@@ -543,30 +562,16 @@ class Bunch(TContainer):
 
         """  """
 
-        strResult = '<node'
-
-        if self.color is not None:
-            strResult += ' BACKGROUND_COLOR="{}"'.format(self.color)
-        elif self.getNumberOfUnits() < 1:
-            strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')
-        else:
-            strResult += ' FOLDED="{}"'.format('true')
-
-        strResult += ' LOCALIZED_STYLE_REF="default" TEXT="' + self.getTitleXML() + ' ' + self.getDateString() + '&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+        strResult = '<node' + self.toFreemindNodeAttr() + '>\n'
         #strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
-
         strResult += self.getDescriptionFreemind()
 
         d_i = self.dateBegin
-        for v in self.child:
-            u = v[1]
+        for d in range(self.periodInt):
             strResult += '<node TEXT="' + d_i.strftime("%Y-%m-%d %a") + '"'
             if d_i.isoweekday() == 6 or d_i.isoweekday() == 7:
-                strResult += ' BACKGROUND_COLOR="{}"'.format('#eeeeee')
-            strResult += '>'
-            for i in range(v[9]):
-                strResult += u.toFreemindNode()
-            strResult += '</node>\n'
+                strResult += ' BACKGROUND_COLOR="#eeeeee"'
+            strResult += '/>\n'
             d_i += timedelta(days=1)
 
         strResult += '</node>\n'

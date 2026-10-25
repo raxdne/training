@@ -40,7 +40,7 @@ class Note(TItem):
 
     def __repr__(self):
 
-        strResult = f'{self.__class__.__name__}({self.dt!r})'
+        strResult = f'{self.__class__.__name__}{self.strTitle}({self.dt!r})'
         if self.hasDescription():
             strResult += f'.appendDescription({self.listDescription!r})'
 
@@ -58,9 +58,41 @@ class Note(TItem):
         else:
             strResult = self.dt.strftime("%Y-%m-%d %H:%M:%S")
             
-        strResult += ' ' + self.getDescriptionString()
+        strResult += self.strTitle + ' ' + self.getDescriptionString()
 
         return strResult
+
+
+    def parse(self,objArg):
+
+        """  """
+        
+        if objArg is None or not objArg:
+            return False
+        elif type(objArg) is str:
+            entry = objArg.split(';')
+            # TODO: test elements of entry
+            if len(entry) == 1:
+                # note only
+                entry.insert(0,'')
+                entry.insert(0,'')
+                entry.append('')
+                entry.append('')
+            elif len(entry) == 2:
+                # type + time only
+                entry.insert(0,'')
+                entry.insert(0,'')
+                entry.append('')
+            elif len(entry) == 3:
+                # dist + type + time
+                entry.insert(0,'')
+            return self.parse(entry)
+        elif type(objArg) is list and len(objArg) > 3:
+            self.setDateStr(objArg[0])
+            self.appendDescription(objArg[4:])
+            return True
+        else:
+            return False
 
 
     def stat(self, skipType=None):
@@ -74,33 +106,33 @@ class Note(TItem):
 
         """  """
 
-        return f'<div {config.getClass(__name__)} style="background-color: {self.getColor()}">{self.getDescriptionString()}</div>'
+        return f'<div {config.getClass(__name__)} style="background-color: {self.getColor()}">{self.getTitleXML()}{self.getDescriptionString()}</div>'
 
 
     def toCSV(self):
 
         """  """
 
-        strResult = '{};;;;{}\n'.format(self.dt.strftime("%Y-%m-%d"), self.getDescriptionString())
-
-        return strResult
+        return f'{self.dt.strftime("%Y-%m-%d")};;;;{self.strTitle}{self.getDescriptionString()}\n'
 
 
     def toSVG(self,x,y):
 
         """  """
 
-        strResult = '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.getDescriptionString(), str(self))
-
-        return strResult
+        return f'<text x="{x + config.diagram_bar_height / 2}" y="{y + config.diagram_bar_height}">{self.getDescriptionString()}<title>{str(self)}</title></text>\n'
 
 
     def toFreemindNode(self):
 
         """  """
 
-        strResult = self.getDescriptionFreemind()
-        # TODO: handle color properties (s. Unit)
+        strResult = '<node FOLDED="true" LOCALIZED_STYLE_REF="default"'
+        if self.color is not None:
+            strResult += f' BACKGROUND_COLOR="{self.color}"'
+        strResult += ' TEXT="' + self.getTitleXML() + '">'
+        strResult += self.getDescriptionFreemind()
+        strResult += '</node>'
 
         return strResult
 

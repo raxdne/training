@@ -39,6 +39,8 @@ from suntime import Sun
 
 from training import config as config
 from training.tcontainer import TContainer
+from training.titem import TItem
+
 from training.note import Note
 from training.unit import Unit
 from training.pause import Pause
@@ -52,13 +54,13 @@ from training.plot import Plot
 
 class Cycle(TContainer):
 
-    def __init__(self,strArg=None,intArg=7):
+    def __init__(self,t=None,l=7):
 
         """  """
 
-        super().__init__(strArg,intArg)
+        super().__init__(t,l)
 
-        for i in range(0,int(intArg)):
+        for i in range(int(l)):
             self.child.append([]) # to get independant instances
 
         return
@@ -83,27 +85,26 @@ class Cycle(TContainer):
         return len(self.child)
 
 
-    def append(self,objArg):
+    def append(self,o):
 
-        """ reset data collection of period  """
+        """ append objects to the list of childs """
 
-        self.data.clear()
-        self.summary.clear()
+        self.clean()
 
-        if objArg is None:
-            print('error: ' + str(objArg), file=sys.stderr)
-        elif isinstance(objArg,Cycle):
-            self.child.extend(objArg.child)
-        elif type(objArg) is list:
-            self.child.extend([[]])
-            for a in objArg:
+        if o is None:
+            print('error: ' + str(o), file=sys.stderr)
+        elif isinstance(o,list):
+            for a in o:
                 self.append(a)
-        elif isinstance(objArg,Unit) or isinstance(objArg,Note):
+        elif isinstance(o,Cycle):
+            self.child.extend(o.child)
+            self.setPeriod(len(self.child))
+        elif isinstance(o,Unit) or isinstance(o,Note):
             self.child.extend([[]])
-            self.child[-1].append(objArg.dup())
-            #self.schedule()
+            self.child[-1].append(o.dup())
+            self.setPeriod(len(self.child))
         else:
-            print('error: ' + str(objArg), file=sys.stderr)
+            print('error: ' + str(o), file=sys.stderr)
 
         return self
 
@@ -152,7 +153,7 @@ class Cycle(TContainer):
 
         """  """
 
-        super().resetDistances()
+        self.clean()
 
         for i in range(len(self.child)):
             self.child[i] = []
@@ -160,39 +161,39 @@ class Cycle(TContainer):
         return self
 
 
-    def remove(self,intIndexA=-1,patternType=None):
+    def remove(self,a=-1,p=None):
 
         """ BUG: removal of matching units in Combination() """
 
-        if intIndexA > -1 and intIndexA < len(self.child):
-            if patternType is not None:
+        if a > -1 and a < len(self.child):
+            if p is not None:
                 # delete only matching elements in list of indexed day
                 dayNew = []
-                for u in self.child[intIndexA]:
+                for u in self.child[a]:
                     if type(u) is Combination:
-                        c = u.remove(patternType)
+                        c = u.remove(p)
                         if c.getNumberOfUnits() > 0:
                             daysNew.append(c)
-                    elif type(u) is Unit and u.match(patternType):
+                    elif type(u) is Unit and u.match(p):
                         # to be ignored
                         pass
                     else:
                         dayNew.append(u.dup())
-                self.child[intIndexA] = copy.deepcopy(dayNew)
+                self.child[a] = copy.deepcopy(dayNew)
             else:
                 # delete whole list of indexed day
-                self.child[intIndexA].clear()
-        elif patternType is not None:
+                self.child[a].clear()
+        elif p is not None:
             # whole cycle using pattern
             daysNew = []
             for i in range(0,len(self.child)):
                 daysNew.append([])
                 for u in self.child[i]:
                     if type(u) is Combination:
-                        c = u.remove(patternType)
+                        c = u.remove(p)
                         if c.getNumberOfUnits() > 0:
                             daysNew[i].append(c)
-                    elif type(u) is Unit and u.match(patternType):
+                    elif type(u) is Unit and u.match(p):
                         # to be ignored
                         pass
                     else:
@@ -202,189 +203,172 @@ class Cycle(TContainer):
         return self
 
 
-    def shift(self,intIndexA,intIndexB=None,flagReplace=False):
+    def shift(self,a,b=None,f=False):
 
         """  """
 
-        if type(intIndexA) != int:
+        if type(a) != int:
             print('error: shift of a cycle requires an integer value', file=sys.stderr)
-        elif intIndexB is None:
+        elif b is None:
             # shift
-            print('info: shift by ' + str(intIndexA), file=sys.stderr)
-            if intIndexA > 0 and intIndexA < len(self.child):
-                for i in range(0,intIndexA):
+            print('info: shift by ' + str(a), file=sys.stderr)
+            if a > 0 and a < len(self.child):
+                for i in range(0,a):
                     self.child.insert(0,[])
-                for i in range(0,intIndexA):
+                for i in range(0,a):
                     self.child.pop()
-            elif intIndexA < 0 and intIndexA > - len(self.child):
-                for i in range(0, - intIndexA):
+            elif a < 0 and a > - len(self.child):
+                for i in range(0, - a):
                     self.child.pop(0)
-                for i in range(0, - intIndexA):
+                for i in range(0, - a):
                     self.child.append([])
-        elif type(intIndexB) != int:
+        elif type(b) != int:
             print('error: shift of a cycle requires an integer value', file=sys.stderr)
-        elif intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.child) and intIndexB < len(self.child) and intIndexA != intIndexB:
-            self.copy(intIndexA,intIndexB,flagReplace)
-            self.remove(intIndexA)
+        elif a > -1 and b > -1 and a < len(self.child) and b < len(self.child) and a != b:
+            self.copy(a,b,f)
+            self.remove(a)
 
         return self
 
 
-    def copy(self,intIndexA,intIndexB,flagReplace=False):
-
-        """  """
-
-        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.child) and intIndexB < len(self.child) and intIndexA != intIndexB:
-            objCopy = copy.deepcopy(self.child[intIndexA])
-            if flagReplace:
-                # overwrite existing
-                self.child[intIndexB] = objCopy
-            else:
-                self.child[intIndexB] += objCopy
-
-        return self
-
-
-    def swap(self,intIndexA,intIndexB):
-
-        """  """
-
-        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.child) and intIndexB < len(self.child) and intIndexA != intIndexB:
-            t = self.child[intIndexB]
-            self.child[intIndexB] = self.child[intIndexA]
-            self.child[intIndexA] = t
-
-        return self
-
-
-    def insert(self,objIndex,objArg,flagReplace=False):
+    def insert(self,n,o,f=False):
 
         """  """
 
         objResult = self
         j = len(self.child)
 
-        if objArg is None:
+        if o is None:
 
-            print('error: undefined object ' + str(objArg), file=sys.stderr)
+            print('error: undefined object ' + str(o), file=sys.stderr)
 
-        elif type(objIndex) is list and objIndex:
+        elif type(n) is list and n:
 
-            for i in objIndex:
-                self.insert(i,objArg,flagReplace)
+            for i in n:
+                self.insert(i,o,f)
 
-        elif type(objArg) is list and objArg:
+        elif isinstance(o,list) and o:
 
-            for u in objArg:
-                self.insert(objIndex,u,flagReplace)
+            for u in o:
+                self.insert(n,u,f)
 
-        elif type(objIndex) is int and objIndex > -1 and objIndex < j and (type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note):
+        elif type(n) is int and n > -1 and n < j and isinstance(o,TItem):
 
-            if flagReplace:
+            if f:
                 # overwrite existing
-                self.child[objIndex] = [objArg.dup()]
+                self.child[n] = [o.dup()]
             else:
-                self.child[objIndex].append(objArg.dup())
+                self.child[n].append(o.dup())
 
-        elif type(objIndex) is int and objIndex > -1 and objIndex < j and type(objArg) is Cycle and len(objArg.child) > 0:
+            if self.dateBegin is not None:
+                self.schedule(self.dateBegin)
 
-            for i in range(objArg.getLength()):
-                k = objIndex + i
+        elif type(n) is int and n > -1 and n < j and isinstance(o,Cycle) and len(o.child) > 0:
+
+            for i in range(o.getLength()):
+                k = n + i
                 if k == j:
                     break
-                elif len(objArg.child[i]) < 1:
+                #elif isinstance(o.child[i],Note):
+                #    self.insert(k,u,f)
+                elif len(o.child[i]) < 1:
                     self.child[k].clear()
                 else:
-                    for u in objArg.child[i]:
-                        self.insert(k,u,flagReplace)
+                    for u in o.child[i]:
+                        self.insert(k,u,f)
                 i += 1
 
         else:
-            print(f'error: inserting {type(objArg)} at position {objIndex} of {j} {objArg}', file=sys.stderr)
+            print(f'error: inserting {type(o)} at position {n} of {j} {o}', file=sys.stderr)
 
         return objResult
 
 
-    def fill(self,objArg,floatProgression=1.0):
+    def fill(self,o,s=1.0):
 
-        """  """
+        """ progression s """
 
-        flagReplace=False
+        f=False
         objResult = self
 
-        if objArg is None:
+        if o is None:
 
-            print('error: undefined object ' + str(objArg), file=sys.stderr)
+            print('error: undefined object ' + str(o), file=sys.stderr)
 
-        elif type(objArg) is list and objArg:
+        elif type(o) is list and o:
 
-            for u in objArg:
-                self.insert(u,flagReplace)
+            for u in o:
+                self.insert(u,f)
 
-        elif type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note:
+        elif type(o) is Unit or type(o) is Combination or type(o) is Note:
 
             i = 0
-            for v in objArg.child:
+            for v in o.child:
                 for u in v:
-                    self.insert(i,u,flagReplace)
+                    self.insert(i,u,f)
                 i += 1
 
-        elif type(objArg) is Cycle and objArg.child:
+        elif type(o) is Cycle and o.child:
 
             i = 0
             d = len(self.child)
-            b = len(objArg.child)
+            b = len(o.child)
             while i < d:
                 j = 0
                 while j < b and i < d:
-                    if objArg.child[j]:
-                        for u in objArg.child[j]:
-                            self.insert(i,u,flagReplace)
-                    elif flagReplace:
+                    if o.child[j]:
+                        for u in o.child[j]:
+                            self.insert(i,u,f)
+                    elif f:
                         self.child[i].clear()
                     i += 1
                     j += 1
-                objArg.scale(floatProgression)
+                o.scale(s)
 
         else:
-            print(f'error: filling {type(objArg)} of {len(self.child)} {objArg}', file=sys.stderr)
+            print(f'error: filling {type(o)} of {len(self.child)} {o}', file=sys.stderr)
 
         return objResult
 
 
-    def insertByDate(self,objArg,flagReplace=False):
+    def overwrite(self,c,d=None):
 
-        """  """
+        """ overwrite the descendant cycle sequence by c """
+
+        if isinstance(c,Cycle) and d is not None and isinstance(d,date):
+            self.insert((d - self.dateBegin).days,c,True)
+        elif isinstance(c,Cycle) and c.dateBegin:
+            self.overwrite(c,c.dateBegin)
+        else:
+            print(f'error: inserting {type(c)} at date {d}', file=sys.stderr)
+
+        return self
+
+
+    def insertByDate(self,o,f=False):
+
+        """ returns a reference to an object which was inserted according its date """
 
         objResult = None
 
-        if objArg is None or objArg.dt is None:
-            print('error: undefined ' + str(objArg), file=sys.stderr)
+        if o is None or o.dt is None:
+            print('error: undefined ' + str(o), file=sys.stderr)
         elif self.dateBegin is None:
             print('error: date begin', file=sys.stderr)
-        elif type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note:
-            delta = objArg.dt.date() - self.dateBegin
+        elif isinstance(o,TItem):
+            delta = o.dt.date() - self.dateBegin
             if delta.days < 0 or delta.days >= len(self.child):
                 pass
-            elif objArg.dt.date() <= self.dateEnd:
-                #print(f'info: inserting {type(objArg)} at position {delta.days} of {len(self.child)} {objArg}', file=sys.stderr)
-                objResult = objArg.dup()
-                if flagReplace:
+            elif o.dt.date() <= self.dateEnd:
+                #print(f'info: inserting {type(o)} at position {delta.days} of {len(self.child)} {o}', file=sys.stderr)
+                objResult = o.dup()
+                if f:
                     # overwrite existing
                     self.child[delta.days] = [objResult]
                 else:
                     self.child[delta.days].append(objResult)
 
         return objResult
-
-
-    def reverse(self):
-
-        """  """
-
-        self.child.reverse()
-
-        return self
 
 
     def stretch(self,n=1,m=1):
@@ -405,7 +389,7 @@ class Cycle(TContainer):
         return self
 
 
-    def extend(self,n):
+    def extend(self,n=7):
 
         """ append last n days at the end """
 
@@ -413,13 +397,6 @@ class Cycle(TContainer):
             self.child.extend(copy.deepcopy(self.child[-n:]))
 
         return self
-
-
-    def cut(self, d0, d1):
-
-        """  """
-
-        return self.cutBefore(d0).cutAfter(d1)
 
 
     def cutBefore(self,d):
@@ -432,7 +409,7 @@ class Cycle(TContainer):
             delta = (d - self.dateBegin).days
             if delta > 0:
                 del self.child[:delta]
-                self.data.clear()
+                self.clean()
                 self.schedule(d)
 
         return self
@@ -447,29 +424,11 @@ class Cycle(TContainer):
         if self.dateBegin <= d and d < self.dateEnd:
             delta = (d - self.dateBegin).days
             if delta > -1:
-                self.data.clear()
+                self.clean()
                 del self.child[delta+1:]
                 self.schedule(self.dateBegin)
 
         return self
-
-
-    def getCycleByDate(self,objDate=None):
-
-        """  """
-
-        if objDate is None:
-            return self.getCycleByDate(datetime.now())
-        elif type(objDate) is str:
-            return self.getCycleByDate(datetime.fromisoformat(objDate))
-        elif type(objDate) is date:
-            return self.getCycleByDate(datetime.combine(objDate,time(0)))
-        elif type(objDate) is datetime:
-            for v in self.child:
-                if self.dateBegin <= objDate.date() and objDate.date() <= self.dateEnd:
-                    return self
-
-        return None
 
 
     def getPeriodDone(self):
@@ -560,23 +519,23 @@ class Cycle(TContainer):
         return timedelta(seconds=intResult)
 
 
-    def scale(self,floatScale,patternType=None):
+    def scale(self,f,p=None):
 
-        """ returns a scaled copy of self """
+        """ returns a copy of self, scaled by f and matching pattern p if not None """
 
         r = self.dup()
-        if floatScale > 0.01 and abs(floatScale - 1.0) > 0.01:
+        if f > 0.01 and abs(f - 1.0) > 0.01:
             for j in range(len(r.child)):
                 for i in range(len(r.child[j])):
                     if type(r.child[j][i]) is Unit or type(r.child[j][i]) is ExerciseSet or type(r.child[j][i]) is Combination:
-                        r.child[j][i] = r.child[j][i].scale(floatScale,patternType)
+                        r.child[j][i] = r.child[j][i].scale(f,p)
 
-        r.summary.clear()
+        r.clean()
 
         return r
 
 
-    def fix(self, objArg):
+    def fix(self, o):
 
         """  """
 
@@ -585,9 +544,9 @@ class Cycle(TContainer):
             pass
         #elif self.dateBegin is None or self.dateEnd is None:
         #    pass
-        #elif objArg is not None and type(objArg) is date and self.dateBegin <= objArg and objArg <= self.dateEnd:
-        elif objArg is not None and type(objArg) is date:
-            self.dateFixed = objArg
+        #elif o is not None and type(o) is date and self.dateBegin <= o and o <= self.dateEnd:
+        elif o is not None and type(o) is date:
+            self.dateFixed = o
             self.dateBegin = self.dateFixed
             self.dateEnd = self.dateBegin + timedelta(days = len(self.child) - 1)
 
@@ -601,7 +560,7 @@ class Cycle(TContainer):
         if self.child:
             if skipType is None:
                 skipType = self.skipType
-            self.data.clear()
+            self.clean()
             for v in self.child:
                 for u in v:
                     if u.dt is None or (dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date()):
@@ -925,16 +884,7 @@ class Cycle(TContainer):
 
         """  """
 
-        strResult = '<node'
-
-        if self.color is not None:
-            strResult += ' BACKGROUND_COLOR="{}"'.format(self.color)
-        elif self.getNumberOfUnits() < 1:
-            strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')
-        else:
-            strResult += ' FOLDED="{}"'.format('true')
-
-        strResult += ' LOCALIZED_STYLE_REF="default" TEXT="' + self.getTitleXML() + ' ' + self.getDateString() + '&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+        strResult = '<node' + self.toFreemindNodeAttr() + '>\n'
         #strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
 
         strResult += self.getDescriptionFreemind()
@@ -943,7 +893,7 @@ class Cycle(TContainer):
         for v in self.child:
             strResult += '<node TEXT="' + d_i.strftime("%Y-%m-%d %a") + '"'
             if d_i.isoweekday() == 6 or d_i.isoweekday() == 7:
-                strResult += ' BACKGROUND_COLOR="{}"'.format('#eeeeee')
+                strResult += ' BACKGROUND_COLOR="#eeeeee"'
             strResult += '>'
             for u in v:
                 strResult += u.toFreemindNode()
