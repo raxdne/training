@@ -122,7 +122,7 @@ class Bunch(TContainer):
         intResult = 0
         for v in self.child:
             u = v[1]
-            if (type(u) is Unit and u.isCountable()) or type(u) is Combination:
+            if (isinstance(u,Unit) and u.isCountable()) or isinstance(u,Combination):
                 intResult += v[0] * u.getDuration(skipType).total_seconds()
 
         return timedelta(seconds=intResult)
@@ -154,7 +154,7 @@ class Bunch(TContainer):
 
         for v in self.child:
             u = v[1]
-            if (type(u) is Unit and u.isCountable()) or type(u) is Combination:
+            if (isinstance(u,Unit) and u.isCountable()) or isinstance(u,Combination):
                 self.data.extend(v[0] * u.stat(skipType))
 
         return self.data
@@ -169,7 +169,7 @@ class Bunch(TContainer):
 
         for v in self.child:
             u = v[1]
-            if (type(u) is Unit and u.isCountable()) or type(u) is Combination:
+            if (isinstance(u,Unit) and u.isCountable()) or isinstance(u,Combination):
                 u.updateValues(dictArg)
 
         return self
@@ -268,7 +268,7 @@ class Bunch(TContainer):
             pass
         elif self.dateBegin is None:
             print('error: date begin', file=sys.stderr)
-        elif type(o) is Cycle:
+        elif isinstance(o,Cycle):
             pass
         elif isinstance(o,TItem):
             objResult = o.dup()
@@ -406,7 +406,7 @@ class Bunch(TContainer):
         strResult = ''
         for v in self.child:
             u = v[1]
-            if type(u) is Unit:
+            if isinstance(u,Unit):
                 strResult += u.toSqlite()
 
         return strResult

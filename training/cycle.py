@@ -72,7 +72,7 @@ class Cycle(TContainer):
 
         for v in self.child:
             for u in v:
-                if type(u) is Unit or type(u) is Combination:
+                if isinstance(u,Unit) or isinstance(u,Combination):
                     strResult += f'{u}\n'
 
         return strResult
@@ -143,7 +143,7 @@ class Cycle(TContainer):
 
         for v in self.child:
             for u in v:
-                if type(u) is Unit or type(u) is Combination:
+                if isinstance(u,Unit) or isinstance(u,Combination):
                     u.updateValues(self.v_defaults)
 
         return self
@@ -170,11 +170,11 @@ class Cycle(TContainer):
                 # delete only matching elements in list of indexed day
                 dayNew = []
                 for u in self.child[a]:
-                    if type(u) is Combination:
+                    if isinstance(u,Combination):
                         c = u.remove(p)
                         if c.getNumberOfUnits() > 0:
                             daysNew.append(c)
-                    elif type(u) is Unit and u.match(p):
+                    elif isinstance(u,Unit) and u.match(p):
                         # to be ignored
                         pass
                     else:
@@ -189,11 +189,11 @@ class Cycle(TContainer):
             for i in range(0,len(self.child)):
                 daysNew.append([])
                 for u in self.child[i]:
-                    if type(u) is Combination:
+                    if isinstance(u,Combination):
                         c = u.remove(p)
                         if c.getNumberOfUnits() > 0:
                             daysNew[i].append(c)
-                    elif type(u) is Unit and u.match(p):
+                    elif isinstance(u,Unit) and u.match(p):
                         # to be ignored
                         pass
                     else:
@@ -300,7 +300,7 @@ class Cycle(TContainer):
             for u in o:
                 self.insert(u,f)
 
-        elif type(o) is Unit or type(o) is Combination or type(o) is Note:
+        elif isinstance(o,Unit) or isinstance(o,Combination) or isinstance(o,Note):
 
             i = 0
             for v in o.child:
@@ -308,7 +308,7 @@ class Cycle(TContainer):
                     self.insert(i,u,f)
                 i += 1
 
-        elif type(o) is Cycle and o.child:
+        elif isinstance(o,Cycle) and o.child:
 
             i = 0
             d = len(self.child)
@@ -453,9 +453,9 @@ class Cycle(TContainer):
                 if u.dt is not None and ((dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date())):
                     # u is out of interval
                     pass 
-                elif type(u) is Combination:
+                elif isinstance(u,Combination):
                     intResult += u.getNumberOfUnits(dt0,dt1)
-                elif type(u) is Unit and u.isCountable():
+                elif isinstance(u,Unit) and u.isCountable():
                     intResult += 1
 
         return intResult
@@ -471,9 +471,9 @@ class Cycle(TContainer):
                 if u.dt is not None and ((dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date())):
                     # u is out of interval
                     pass 
-                elif type(u) is Combination and u.isMarked():
+                elif isinstance(u,Combination) and u.isMarked():
                     listResult.append(u)
-                elif type(u) is Unit and u.isMarked():
+                elif isinstance(u,Unit) and u.isMarked():
                     listResult.append(u)
 
         return listResult
@@ -513,7 +513,7 @@ class Cycle(TContainer):
         intResult = 0
         for v in self.child:
             for u in v:
-                if (type(u) is Unit and u.isCountable()) or type(u) is Combination:
+                if (isinstance(u,Unit) and u.isCountable()) or isinstance(u,Combination):
                     intResult += u.getDuration(skipType).total_seconds()
 
         return timedelta(seconds=intResult)
@@ -544,8 +544,8 @@ class Cycle(TContainer):
             pass
         #elif self.dateBegin is None or self.dateEnd is None:
         #    pass
-        #elif o is not None and type(o) is date and self.dateBegin <= o and o <= self.dateEnd:
-        elif o is not None and type(o) is date:
+        #elif o is not None and isinstance(o,date) and self.dateBegin <= o and o <= self.dateEnd:
+        elif o is not None and isinstance(o,date):
             self.dateFixed = o
             self.dateBegin = self.dateFixed
             self.dateEnd = self.dateBegin + timedelta(days = len(self.child) - 1)
@@ -566,7 +566,7 @@ class Cycle(TContainer):
                     if u.dt is None or (dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date()):
                         # u is out of interval
                         pass 
-                    elif (type(u) is Unit and u.isCountable()) or type(u) is Combination:
+                    elif (isinstance(u,Unit) and u.isCountable()) or isinstance(u,Combination):
                         self.data.extend(u.stat(skipType))
 
         return self.data
@@ -620,7 +620,7 @@ class Cycle(TContainer):
                     strResult += ' class="we"'
                 strResult += '>'
 
-                if not self.fPlan and len([u for u in v if type(u) is Unit]) > 0:
+                if not self.fPlan and len([u for u in v if isinstance(u,Unit)]) > 0:
                     # TODO: make link portable/configurable
                     strResult += '<a href="' + config.getURL(dt_i.strftime("%Y-%m-%d.*fitx")) + '">'
                     strResult += dt_i.strftime("%Y-%m-%d %a (%j)")
@@ -668,7 +668,7 @@ class Cycle(TContainer):
         strResult = ''
         for v in self.child:
             for u in v:
-                if type(u) is Unit:
+                if isinstance(u,Unit):
                     strResult += u.toSqlite()
 
         return strResult
@@ -725,12 +725,12 @@ class Cycle(TContainer):
                 n = ''
                 x_i = x
                 for u in v:
-                    if type(u) is Note:
+                    if isinstance(u,Note):
                         # collect all notes of day v
                         n += u.getDescriptionString() + ' '
                     else:
                         strResult += u.toSVG(x_i,y)
-                        if type(u) is Unit or type(u) is Combination:
+                        if isinstance(u,Unit) or isinstance(u,Combination):
                             x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist + 5
                     # TODO: add unit marker if u.isMarked()
                 if n:

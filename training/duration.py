@@ -35,7 +35,7 @@ class Duration(timedelta):
         
         if objArg == None:
             pass
-        elif type(objArg) is timedelta or type(objArg) is Duration:
+        elif isinstance(objArg,timedelta):
             intMin = round(objArg.total_seconds() / 60.0)
         elif type(objArg) is float:
             intMin = round(objArg)

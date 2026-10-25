@@ -169,7 +169,7 @@ class Period(TContainer):
         listResult = []
 
         for c in self.child:
-            if type(c) is Cycle or type(c) is Period:
+            if isinstance(c,Cycle) or isinstance(c,Period):
                 listResult.extend(c.getMarkers(dt0,dt1))
 
         return listResult
@@ -431,10 +431,10 @@ class Period(TContainer):
 
         """ overwrite the descendant cycle sequence by c """
 
-        if type(c) is Cycle:
+        if isinstance(c,Cycle):
             if d:
                 c = self.getContainerByDate(d)
-                if type(c) is Cycle:
+                if isinstance(c,Cycle):
                     c.insert((d - c.dateBegin).days,c,True)
             elif c.dateBegin:
                 self.overwrite(c,c.dateBegin)
@@ -547,7 +547,7 @@ class Period(TContainer):
 
         if type(o) is list:
             self.tag.extend(o)
-        elif type(o) is Phase:
+        elif isinstance(o,Phase):
             self.tag.append(o)
 
         return self
@@ -655,7 +655,7 @@ class Period(TContainer):
 
         strResult = ''
         for c in self.child:
-            if type(c) is Cycle or type(c) is Period:
+            if isinstance(c,Cycle) or isinstance(c,Period):
                 strResult += c.toSqlite()
 
         return strResult
@@ -773,7 +773,7 @@ class Period(TContainer):
 
         strResult += '<g id="tags">'
         for t in self.tag:
-            if type(t) is Phase:
+            if isinstance(t,Phase):
                 if (t.date + timedelta(days=t.duration) < d_0) or (t.date >= d_1):
                     # out of interval
                     continue
@@ -901,7 +901,7 @@ class Period(TContainer):
             fOutput = False
             for c in self.child:
                 c.to_ical(cal)
-                if type(c) is Cycle:
+                if isinstance(c,Cycle):
                     # output only, if there is a Cycle child involved
                     fOutput = True
 

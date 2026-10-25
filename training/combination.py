@@ -82,7 +82,7 @@ class Combination(TItem):
         n = 0
                 
         for c in self.child:
-            if type(c) is Combination or type(c) is ExerciseSet:
+            if isinstance(c,Combination) or isinstance(c,ExerciseSet):
                 n += c.getRepetitions()
                 
         return n
@@ -137,15 +137,15 @@ class Combination(TItem):
             dt = self.dt
             for u in self.child:
                 
-                if type(u) is Note:
+                if isinstance(u,Note):
                     u.setDate(dt)
-                elif type(u) is Combination:
-                    u.setDate(dt)
-                    i += 1
-                elif type(u) is ExerciseSet:
+                elif isinstance(u,Combination):
                     u.setDate(dt)
                     i += 1
-                elif type(u) is Unit:
+                elif isinstance(u,ExerciseSet):
+                    u.setDate(dt)
+                    i += 1
+                elif isinstance(u,Unit):
 
                     if i == 0:
                         # initial unit
@@ -170,7 +170,7 @@ class Combination(TItem):
                         
                     dt = u.setDate(dt)
                     i += 1
-                elif type(u) is Pause:
+                elif isinstance(u,Pause):
                     dt = u.setDate(dt)
                     i += 1
                 
@@ -183,7 +183,7 @@ class Combination(TItem):
 
         if dictArg is not None:
             for c in self.child:
-                if type(c) is Unit:
+                if isinstance(c,Unit):
                     c.updateValues(dictArg)
 
         return self
@@ -197,9 +197,9 @@ class Combination(TItem):
             # whole combination using pattern
             l = []
             for u in self.child:
-                if type(u) is Unit and u.match(p):
+                if isinstance(u,Unit) and u.match(p):
                     pass
-                elif type(u) is Pause:
+                elif isinstance(u,Pause):
                     pass
                 else:
                     l.append(u)
@@ -227,7 +227,7 @@ class Combination(TItem):
         """  """
 
         for u in self.child:
-            if type(u) is Unit:
+            if isinstance(u,Unit):
                 u.setDistStr(None)
 
         return self
@@ -243,7 +243,7 @@ class Combination(TItem):
             if u.dt is not None and ((dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date())):
                 # u is out of interval
                 pass 
-            elif type(u) is Unit and u.isCountable():
+            elif isinstance(u,Unit) and u.isCountable():
                 intResult += 1
 
         return intResult
@@ -258,12 +258,12 @@ class Combination(TItem):
         if not self.logicAnd:
             s_max = 0
             for u in self.child:
-                if type(u) is Unit:
+                if isinstance(u,Unit):
                     s = u.getDuration(skipType).total_seconds()
                     if s > s_max:
                         r = u
                         s_max = s
-                elif type(u) is Combination:
+                elif isinstance(u,Combination):
                     q = u.getRepresentativeAlternative(skipType)
                     if q is not None:
                         s = q.getDuration().total_seconds()
@@ -283,7 +283,7 @@ class Combination(TItem):
             pass
         elif self.logicAnd:
             for u in self.child:
-                if type(u) is Combination or type(u) is Unit or type(u) is ExerciseSet or type(u) is Pause:
+                if isinstance(u,Combination) or isinstance(u,Unit) or isinstance(u,ExerciseSet) or isinstance(u,Pause):
                     intResult += u.getDuration(skipType).total_seconds() + 15
         else:
             # Alternatives
@@ -313,7 +313,7 @@ class Combination(TItem):
 
         if self.logicAnd:
             for u in self.child:
-                if type(u) is Combination or type(u) is ExerciseSet or (type(u) is Unit and u.isCountable()):
+                if isinstance(u,Combination) or isinstance(u,ExerciseSet) or (isinstance(u,Unit) and u.isCountable()):
                     listResult.extend(u.stat(skipType))
         else:
             # stat longest unit of alternatives only
@@ -374,12 +374,12 @@ class Combination(TItem):
         t = timedelta(seconds=0)
 
         for u in self.child:
-            if type(u) is Combination:
+            if isinstance(u,Combination):
                 # nested Combination
                 strResult += '<tr><td>' + u.toHtmlSheet(fImages,fDescription) + '</td></tr>'
-            elif type(u) is ExerciseSet:
+            elif isinstance(u,ExerciseSet):
                 strResult += '<tr><td>' + str(t) + '</td>' + u.toHtmlSheet(fImages,fDescription) + '</tr>'
-            elif type(u) is Pause:
+            elif isinstance(u,Pause):
                 strResult += '<tr><td>' + str(t) + '</td><td>' + u.toHtmlTable() + '</td><td></td></tr>'
             else:
                 strResult += '<tr><td>' + u.toHtmlTable() + '</td></tr>'
@@ -442,7 +442,7 @@ class Combination(TItem):
         x_i = x
         if self.logicAnd:
             for u in self.child:
-                if type(u) is Unit or type(u) is Pause:
+                if isinstance(u,Unit) or isinstance(u,Pause):
                     strResult += u.toSVG(x_i,y)
                     x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
         else:
