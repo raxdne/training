@@ -27,29 +27,29 @@ class Duration(timedelta):
 
     """ extension class for timedelta (https://stackoverflow.com/questions/48461081/cant-inherit-from-timedelta) """
 
-    def __new__(cls,objArg):
+    def __new__(cls,o):
 
         """  """
 
         intMin = 0
         
-        if objArg == None:
+        if o == None:
             pass
-        elif isinstance(objArg,timedelta):
-            intMin = round(objArg.total_seconds() / 60.0)
-        elif type(objArg) is float:
-            intMin = round(objArg)
-        elif type(objArg) is int:
-            intMin = objArg
-        elif type(objArg) is str:
-            entry = objArg.split(':')
+        elif isinstance(o,timedelta):
+            intMin = round(o.total_seconds() / 60.0)
+        elif type(o) is float:
+            intMin = round(o)
+        elif type(o) is int:
+            intMin = o
+        elif type(o) is str:
+            entry = o.split(':')
             if len(entry) == 1:
                 # nothing to split
-                entry = objArg.split('min')
+                entry = o.split('min')
                 if len(entry) == 2:
                     intMin = round(float(entry[0]))
                 else:
-                    entry = objArg.split('h')
+                    entry = o.split('h')
                     if len(entry) == 2:
                         intMin = round(float(entry[0]) * 60.0)
             elif len(entry) == 2:

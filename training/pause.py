@@ -39,7 +39,7 @@ class Pause(TItem):
 
     """ class for training pauses """
 
-    def __init__(self,strArg=None,objArg=None):
+    def __init__(self,strArg=None,o=None):
 
         """  """
 
@@ -49,8 +49,8 @@ class Pause(TItem):
 
         if strArg is not None:
             self.setDuration(strArg)
-            if objArg is not None:
-                super().setDescription(objArg)
+            if o is not None:
+                super().setDescription(o)
 
         #print('New Pause: ' + str(self), file=sys.stderr)
 
@@ -125,18 +125,18 @@ class Pause(TItem):
         return self
 
 
-    def parse(self,objArg):
+    def parse(self,o):
 
         """  """
         
-        if objArg is None or not objArg:
+        if o is None or not o:
             return False
-        elif type(objArg) is str:
+        elif type(o) is str:
             self.color = "#ffff00"
-            entry = objArg.split(';')
+            entry = o.split(';')
             #print('Note {}'.format(str(entry)), file=sys.stderr)
             if len(entry) == 1:
-                self.appendDescription(objArg)
+                self.appendDescription(o)
                 return True
             elif len(entry) == 2:
                 self.setDateStr(entry[0])
@@ -144,10 +144,10 @@ class Pause(TItem):
                 return True
             else:
                 return self.parse(entry)
-        elif type(objArg) is list and len(objArg) > 3:
-            if objArg[0] and not objArg[1] and not objArg[2] and not objArg[3]:
-                self.setDateStr(objArg[0])
-                self.appendDescription(objArg[4:])
+        elif type(o) is list and len(o) > 3:
+            if o[0] and not o[1] and not o[2] and not o[3]:
+                self.setDateStr(o[0])
+                self.appendDescription(o[4:])
                 #print('Note {}'.format(str(self)), file=sys.stderr)
                 return True
             else:

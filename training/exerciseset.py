@@ -103,15 +103,15 @@ class ExerciseSet(TItem):
         return strResult
 
 
-    def setImageRef(self,objArg):
+    def setImageRef(self,o):
 
         """  """
         
-        if type(objArg) is list:
-            for i in objArg:
+        if type(o) is list:
+            for i in o:
                 self.img.append(i)
         else:
-            self.img.append(objArg)
+            self.img.append(o)
         
         return self
 

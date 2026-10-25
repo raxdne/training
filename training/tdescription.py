@@ -60,18 +60,18 @@ def _appendTo(intDepth=0,listArg=[],strArg=''):
     l.append([strArg])
 
 
-def _flatten(objArg):
+def _flatten(o):
 
     """ returns a string of nested self.listDescription """
 
     listResult=[]
 
-    if objArg is None:
+    if o is None:
         pass
-    elif type(objArg) is str and objArg:
-        listResult = [objArg]
-    elif type(objArg) is list and objArg:
-        for c in objArg:
+    elif type(o) is str and o:
+        listResult = [o]
+    elif type(o) is list and o:
+        for c in o:
             if not c:
                 pass
             elif type(c) is str:
@@ -110,16 +110,16 @@ class TDescription(ABC):
         return str(self.listDescription)
 
 
-    def setDescription(self,objArg=None):
+    def setDescription(self,o=None):
 
         """  """
 
-        if objArg is None or not objArg:
+        if o is None or not o:
             self.listDescription = []
-        elif type(objArg) is str:
-            self.listDescription = [objArg]
-        elif type(objArg) is list:
-            self.listDescription = [objArg]
+        elif type(o) is str:
+            self.listDescription = [o]
+        elif type(o) is list:
+            self.listDescription = [o]
         else:
             self.listDescription = []
 
@@ -131,18 +131,18 @@ class TDescription(ABC):
         return self.listDescription is not None and self.listDescription
 
 
-    def appendDescription(self,objArg):
+    def appendDescription(self,o):
 
         """  """
 
-        if objArg is None or not objArg:
+        if o is None or not o:
             pass
         elif not self.listDescription:
-            self.setDescription(objArg)
-        elif type(objArg) is str:
-            self.listDescription.append([objArg])
-        elif type(objArg) is list:
-            self.listDescription.append(objArg)
+            self.setDescription(o)
+        elif type(o) is str:
+            self.listDescription.append([o])
+        elif type(o) is list:
+            self.listDescription.append(o)
 
         return self
 

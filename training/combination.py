@@ -50,11 +50,11 @@ class Combination(TItem):
         self.child = []
         self.logicAnd = f
 
-        for objArg in listArg:
-            if objArg is None or (type(objArg) != Unit and type(objArg) != ExerciseSet and type(objArg) != Pause and type(objArg) != Note and type(objArg) != Combination):
-                print('error: ' + str(objArg), file=sys.stderr)
+        for o in listArg:
+            if o is None or (type(o) != Unit and type(o) != ExerciseSet and type(o) != Pause and type(o) != Note and type(o) != Combination):
+                print('error: ' + str(o), file=sys.stderr)
             else:
-                self.child.append(objArg.dup())
+                self.child.append(o.dup())
 
 
     def __str__(self):
@@ -209,15 +209,15 @@ class Combination(TItem):
         return self
 
 
-    def append(self,objArg):
+    def append(self,o):
 
         """  """
         
-        if type(objArg) is list:
-            for e in objArg:
+        if type(o) is list:
+            for e in o:
                 self.child.append(e)
         else:
-            self.child.append(objArg)
+            self.child.append(o)
         
         return self
 
