@@ -520,52 +520,6 @@ class TContainer(TTitle,TDescription):
 
 
     @final
-    def qy_YYY(self,**kwargs):
-        
-        """ """
-        
-        #if 'level' not in kwargs:
-        #    kwargs['level'] = 16
-        #    yield from self.qy(**kwargs)
-
-        #if kwargs['level'] < 1:
-        #    return
-        
-        #kwargs['level'] -= 1
-        
-        for i in range(len(self.child)):
-            if isinstance(self.child[i],TContainer) \
-                    and ('date' not in kwargs or self.child[i].isDateInContainer(kwargs['date'])) \
-                        and ('index' not in kwargs or (isinstance(kwargs['index'],int) and i == kwargs['index']) or (isinstance(kwargs['index'],list) and (i in kwargs['index']))):
-                if ('type' not in kwargs or isinstance(self.child[i],kwargs['type'])):
-                    yield self.child[i]
-                yield from self.child[i].qy(**kwargs)
-
-
-    @final
-    def qy_OK(self,**kwargs):
-        
-        """ """
-        
-        if 'level' in kwargs:
-            if kwargs['level'] < 0:
-                return
-            else:
-                kwargs['level'] -= 1
-
-        for i in range(len(self.child)):
-            if isinstance(self.child[i],TContainer):
-                if 'date' in kwargs and self.child[i].isDateInContainer(kwargs['date']):
-                    if 'type' not in kwargs or isinstance(self.child[i],kwargs['type']):
-                        yield self.child[i]
-                elif 'index' in kwargs and ((isinstance(kwargs['index'],int) and i == kwargs['index']) or (isinstance(kwargs['index'],list) and (i in kwargs['index']))):
-                    if 'type' not in kwargs or isinstance(self.child[i],kwargs['type']):
-                        yield self.child[i]
-
-                yield from self.child[i].qy(**kwargs)
-
-
-    @final
     def qy(self,**kwargs):
         
         """ flexible query method (index | date, type, level) """
