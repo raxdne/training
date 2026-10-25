@@ -213,13 +213,13 @@ class ExerciseSet(TItem):
         return listResult
 
 
-    def scale(self,floatScale,patternType=None):
+    def scale(self,f,p=None):
 
         """ returns a scaled copy of self """
 
         r = self.dup()
-        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
-            r.repetitions = round(r.repetitions * floatScale)
+        if f > 0.01 and  abs(f - 1.0) > 0.01:
+            r.repetitions = round(r.repetitions * f)
 
         return r
 

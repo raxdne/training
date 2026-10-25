@@ -292,15 +292,15 @@ class Combination(TItem):
         return Duration(intResult / 60)
 
 
-    def scale(self,floatScale,p=None):
+    def scale(self,f,p=None):
 
         """ returns a scaled copy of self """
 
         r = self.dup()
-        if floatScale > 0.01 and abs(floatScale - 1.0) > 0.01:
+        if f > 0.01 and abs(f - 1.0) > 0.01:
             for i in range(len(r.child)):
                 if type(r.child[i]) is Unit or type(r.child[i]) is ExerciseSet or type(r.child[i]) is Combination:
-                    r.child[i] = r.child[i].scale(floatScale,p)
+                    r.child[i] = r.child[i].scale(f,p)
 
         return r
 

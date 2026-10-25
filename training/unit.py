@@ -257,9 +257,9 @@ class Unit(TItem):
         return self
 
 
-    def match(self,patternType=None):
+    def match(self,p=None):
                             
-       return (self.type is None or patternType is None or re.match(patternType,self.type))
+       return (self.type is None or p is None or re.match(p,self.type))
 
 
     def isCountable(self):
@@ -269,21 +269,21 @@ class Unit(TItem):
         return ((type(self.type) is str and self.type) and ((type(self.dist) is float and self.dist > 0.0) or self.getDuration().total_seconds() > 0))
 
 
-    def scale(self,floatScale,patternType=None):
+    def scale(self,f,p=None):
 
         """ returns a scaled copy of self """
 
         r = self.dup()
-        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01 and (patternType is None or r.type is None or re.match(patternType,r.type)):
+        if f > 0.01 and  abs(f - 1.0) > 0.01 and (p is None or r.type is None or re.match(p,r.type)):
             if r.dist is not None:
                 if r.dist < 20.0:
-                    r.dist *= floatScale
+                    r.dist *= f
                 else:
                     # round distance to 5.0
-                    r.dist = round(r.dist * floatScale / 5.0) * 5.0
+                    r.dist = round(r.dist * f / 5.0) * 5.0
 
             if r.duration is not None:
-                r.duration = r.duration.scale(floatScale)
+                r.duration = r.duration.scale(f)
 
         return r
 

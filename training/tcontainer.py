@@ -203,7 +203,7 @@ class TContainer(TTitle,TDescription):
 
         """ summarize all self.data in self.summary and returns sum of durations in minutes """
 
-        floatResult = 0.0
+        r = 0.0
         self.summary.clear()
 
         for u in self.data:
@@ -214,9 +214,9 @@ class TContainer(TTitle,TDescription):
             self.summary[u[3]][0].append(u[1])
             self.summary[u[3]][1].append(u[2])
 
-            floatResult += u[2]
+            r += u[2]
 
-        return floatResult
+        return r
 
 
     def schedule(self, argDateOrYear=None, intMonth=1, intDay=1):

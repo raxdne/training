@@ -100,16 +100,16 @@ class Duration(timedelta):
         return super().__new__(Duration,seconds=self.total_seconds())
 
 
-    def scale(self,floatScale):
+    def scale(self,f):
 
         """  """
 
-        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
+        if f > 0.01 and  abs(f - 1.0) > 0.01:
             s = self.total_seconds()
             if s < 1800.0:
-                return super().__new__(Duration,seconds=round(s * floatScale))
+                return super().__new__(Duration,seconds=round(s * f))
             elif s < 3600.0:
-                return super().__new__(Duration,seconds=round(s * floatScale / 60.0) * 60.0)
+                return super().__new__(Duration,seconds=round(s * f / 60.0) * 60.0)
             else:
                 # round duration to 5:00 min
-                return super().__new__(Duration,seconds=round(s * floatScale / 300.0) * 300.0)
+                return super().__new__(Duration,seconds=round(s * f / 300.0) * 300.0)
