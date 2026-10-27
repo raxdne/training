@@ -17,9 +17,14 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
+import sys
+
+from datetime import date, timedelta
+
 from training.note import Note
 from training.unit import Unit
 from training.pause import Pause
+from training.exerciseset import ExerciseSet
 from training.combination import Combination
 from training.cycle import Cycle
 import training.config as config
@@ -42,16 +47,29 @@ c.appendDescription('Running Blocks')
 c1 = c.dup()
 #c1.scale(2.0,r"^R")
 
-t.insert(1,c1)
+#t.insert(1,c1)
 #t.insert(3,[Unit('08:00;3.5;Running Basics;25:00'),
 #            Unit('18:00;3.5;Running Basics;25:00')])
 #t.insert([5,8],c)
-t.insert(6,Unit('06:00;30;Biking Basics;02:00:00'))
-t.insert(8,Unit(';FB;25:00'))
-t.insert(10,Unit(';FB;25:00'))
-t.insert(13,Unit('08:00;30;Biking Basics;02:00:00'))
+#t.insert(6,Unit('06:00;30;Biking Basics;02:00:00'))
+#t.insert(8,Unit(';FB;25:00'))
+#t.insert(10,Unit(';FB;25:00'))
+#t.insert(13,Unit('08:00;30;Biking Basics;02:00:00'))
 
-t.schedule(2023,1,1)
+b = Cycle('Block',5)
+b.insert(0,Unit(';;Biking Basics;02:00:00'))
+b.insert(2,Unit(';;Biking Basics;02:00:00').mark())
+b.insert(4,Unit(';;Biking Basics;02:00:00'))
+t.fill(b,1.1)
+#t.insert(5,b)
+#t.insert(9,b.scale(2),True)
+
+#t.schedule(2023,1,1).updateValues({'Biking Basics': 20.0})
+
+#print(repr(t))
+
+#t.cutBefore(date(2023,1,2))
+#t.cutAfter(date(2023,1,10))
 print(t)
 
 #t.postpone(3)
@@ -65,6 +83,7 @@ print(t)
 #print(t)
 
 #t.scale(2.0)
+#t.stat()
 #print(t)
 
 #print(t.toHtml())
@@ -74,4 +93,4 @@ print(t)
 #print(t.toFreeMind())
 #print(t.toXML())
 
-print(t.report())
+#print(t.report(date(2023,1,10),date(2023,1,10) + timedelta(days=7)))

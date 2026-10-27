@@ -47,9 +47,9 @@ class Pause(Note):
 
         self.setDuration()
 
-        if strArg != None:
+        if strArg is not None:
             self.setDuration(strArg)
-            if objArg != None:
+            if objArg is not None:
                 super().setDescription(objArg)
 
         #print('New Pause: ' + str(self), file=sys.stderr)
@@ -60,18 +60,33 @@ class Pause(Note):
         """  """
 
         if self.getDuration().total_seconds() > 0:
-            return '{} {} Pause'.format(str(super().__str__()), str(self.getDuration()))
+            if self.hasDescription():
+                return f'{super().getDescriptionString()} {self.getDuration().toString()}'
+            else:
+                return f'Pause {self.getDuration().toString()}'
         else:
             return ''
+
+
+    def toStringShort(self):
+
+        """  """
+
+        strResult = ''
+
+        if self.getDuration().total_seconds() > 0:
+            strResult =  f'Pause {self.getDuration().toString()}'
+
+        return strResult
 
 
     def setDate(self,dtArg=None,dt_0=None,dt_1=None):
 
         """  """
 
-        if dtArg == None:
+        if dtArg is None:
             self.dt = None
-        elif type(dtArg) == date or dtArg.time() == time(0):
+        elif type(dtArg) is date or dtArg.time() == time(0):
             print(__name__ + ': requires a complete datetime ' + str(self), file=sys.stderr)
         else:
             # fully defined dtArg
@@ -85,7 +100,7 @@ class Pause(Note):
 
         """  """
 
-        if intArg == None:
+        if intArg is None:
             self.duration = Duration(0)
         else:
             self.duration = Duration(intArg)
@@ -93,11 +108,11 @@ class Pause(Note):
         return True
 
 
-    def getDuration(self):
+    def getDuration(self, skipType=None):
 
         """  """
         
-        if self.duration == None:
+        if self.duration is None:
             self.setDuration()
 
         return self.duration
@@ -107,29 +122,20 @@ class Pause(Note):
 
         """  """
 
-        if self.dt == None:
-            strResult = ''
-        else:
-            if self.type == None:
-                strResult = '{date};;;'.format(date=self.dt.isoformat())
-            elif self.dist == None:
-                strResult = '{date};;{type};{duration}'.format(date=self.dt.isoformat(), type=self.type, duration=str(self.getDuration()))
-            else:
-                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.isoformat(), dist=self.dist, type=self.type, duration=str(self.getDuration()))
-
-            strResult += ';' + self.__listDescriptionToString__()
+        strResult = ''
 
         return strResult
 
 
-    def toHtml(self):
+    def toHtmlTable(self):
 
         """  """
 
-        strResult = '<p>'
-        strResult += str(self)
-        strResult += '</p>'
-        
+        strResult = ''
+
+        if self.getDuration().total_seconds() > 0:
+            strResult =  f'<div {config.getClass(__name__)} style="background-color: {self.getColor()}">{str(self)}</div>'
+
         return strResult
 
 
@@ -139,8 +145,8 @@ class Pause(Note):
 
         strResult = ''
 
-        if self.duration == None or self.getDuration().total_seconds() < 60:
-            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.__listDescriptionToString__(), str(self))
+        if self.duration is None or self.getDuration().total_seconds() < 60:
+            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.getDescriptionString(), str(self))
         else:
             strResult += '<rect '
 
@@ -161,7 +167,7 @@ class Pause(Note):
 
         """  """
 
-        strResult = '<node TEXT="' + str(self) + '">'
+        strResult = '<node TEXT="' + self.toStringShort() + '">'
 
         strResult += '</node>\n'
 

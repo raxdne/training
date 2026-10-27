@@ -47,36 +47,66 @@ class Unit(Note):
         
         self.dist = None
         self.type = None
-
-        self.setDuration()
+        self.duration = None
+        
+        self.setDuration(0)
 
         self.parse(strArg)
+
+
+    def __repr__(self):
+
+        strResult = f'{self.__class__.__name__}([{self.dt!r},{self.dist!r},{self.type!r},{self.duration!r}])'
+        if self.hasDescription():
+            strResult += f'.appendDescription({self.listDescription!r})'
+
+        return strResult
 
 
     def __str__(self):
 
         """  """
 
-        if self.type == None and self.dist == None and self.dt == None:
+        if self.type is None and self.dist is None and self.dt is None:
             strResult = '-'
-        elif self.type == None:
-            if self.dt == None or self.dt.time() == time(0):
-                strResult = '{} {}'.format(self.dt.strftime("%Y-%m-%d"), str(self.getDuration()))
+        elif self.type is None:
+            if self.dt is None or self.dt.time() == time(0):
+                strResult = f'{self.dt.strftime("%Y-%m-%d")} {self.getDurationString()}'
             else:
-                strResult = '{} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), str(self.getDuration()))
-        elif self.dist == None:
-            if self.dt == None:
-                strResult = '{} {}'.format(self.type, str(self.getDuration()))
+                strResult = f'{self.dt.strftime("%Y-%m-%d %H:%M:%S")} {self.getDurationString()}'
+        elif self.dist is None:
+            if self.dt is None:
+                strResult = f'{self.type} {self.getDurationString()}'
             elif self.dt.time() == time(0):
-                strResult = '{} {} {}'.format(self.dt.strftime("%Y-%m-%d"), self.type, str(self.getDuration()))
+                strResult = f'{self.dt.strftime("%Y-%m-%d")} {self.type} {self.getDurationString()}'
             else:
-                strResult = '{} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.type, str(self.getDuration()))
-        elif self.dt == None:
-            strResult = '{:5.1f} {} {}'.format(self.dist, self.type, str(self.getDuration()))
+                strResult = f'{self.dt.strftime("%Y-%m-%d %H:%M:%S")} {self.type} {self.getDurationString()}'
+        elif self.dt is None:
+            strResult = f'{self.getDistString():>7} {self.type} {self.getDurationString()}'
         elif self.dt.time() == time(0):
-            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("%Y-%m-%d"), self.dist, self.type, str(self.getDuration()))
+            strResult = f'{self.dt.strftime("%Y-%m-%d")} {self.getDistString():>7} {self.type} {self.getDurationString()}'
         else:
-            strResult = '{} {:5.1f} {} {}'.format(self.dt.strftime("%Y-%m-%d %H:%M:%S"), self.dist, self.type, str(self.getDuration()))
+            strResult = f'{self.dt.strftime("%Y-%m-%d %H:%M:%S")} {self.getDistString():>7} {self.type} {self.getDurationString()}'
+
+        if self.isMarked():
+            strResult += '*'
+    
+        return strResult
+
+
+    def toStringShort(self):
+
+        """  """
+    
+        strResult = ''
+
+        if self.dist is not None:
+            strResult += self.getDistString() + ' '
+        
+        if self.type is not None:
+            strResult += self.type + ' '
+
+        strResult += self.getDurationString()
 
         return strResult
 
@@ -87,29 +117,29 @@ class Unit(Note):
 
         #print('setDate(' + dtArg.isoformat() + ' '  + dt_0.isoformat() + ' ' + dt_1.isoformat() + ') = ' + self.dt.isoformat() , file=sys.stderr)
 
-        if dtArg == None:
+        if dtArg is None:
             
             self.dt = None
             return self.dt
         
-        elif type(dtArg) == date:
+        elif type(dtArg) is date:
             
             return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
 
-        elif type(dtArg) == datetime:
+        elif type(dtArg) is datetime:
 
-            if self.tPlan == None:
+            if self.tPlan is None:
                 self.dt = dtArg
-            elif type(self.tPlan) == str and self.tPlan == 'sunrise' and dt_0 != None:
+            elif type(self.tPlan) is str and self.tPlan == 'sunrise' and dt_0 is not None:
                 # shift start time after twilight
                 self.dt = dt_0
                 # adjust to 15min steps
                 self.dt -= timedelta(minutes=(self.dt.minute % 15))
-            elif type(self.tPlan) == str and self.tPlan == 'sunset' and dt_1 != None:
+            elif type(self.tPlan) is str and self.tPlan == 'sunset' and dt_1 is not None:
                 # shift end time before twilight
                 self.dt = dt_1 - self.duration
                 self.dt -= timedelta(minutes=(self.dt.minute % 15))
-            elif type(self.tPlan) == time:
+            elif type(self.tPlan) is time:
                 self.dt = datetime.combine(dtArg.date(),self.tPlan).astimezone(None)
             else:
                 #self.dt = datetime.combine(dtArg.date(),time(0)).astimezone(None)
@@ -125,8 +155,8 @@ class Unit(Note):
 
         """  """
 
-        if strArg == None or strArg == '':
-            pass
+        if strArg is None or strArg == '':
+            return False
         elif config.max_length_type > 0 and config.max_length_type < 32:
             self.type = strArg[0:config.max_length_type]
         else:
@@ -135,11 +165,11 @@ class Unit(Note):
         return True
 
 
-    def setDistStr(self,strArg):
+    def setDistStr(self,strArg=None):
 
         """  """
 
-        if strArg == None or strArg == '':
+        if strArg is None or not strArg:
             self.dist = None
         else:
             try:
@@ -149,46 +179,108 @@ class Unit(Note):
             except ValueError:
                 self.dist = None
 
-        return True
+        return (self.dist is not None and self.dist > 0.1)
+
+
+    def getDistString(self):
+
+        """  """
+
+        strResult = ''
+        
+        if self.dist is None:
+            pass
+        elif self.dist < 1.0:
+             strResult = '{:.02f} {}'.format(self.dist, config.unit_distance)
+        elif self.dist < 10.0:
+             strResult = '{:.1f} {}'.format(self.dist, config.unit_distance)
+        else:
+             strResult = '{:.0f} {}'.format(self.dist, config.unit_distance)
+
+        return strResult
 
 
     def setDuration(self,intArg=None):
 
         """  """
 
-        if intArg == None:
+        if intArg is None or intArg == 0:
             self.duration = Duration(0)
         else:
             self.duration = Duration(intArg)
 
-        return True
+        return (self.duration is not None and self.duration != Duration(0))
 
 
-    def getDuration(self):
+    def getDuration(self, skipType=None):
 
         """  """
         
-        if self.duration == None:
+        if self.duration is None:
             self.setDuration()
 
-        return self.duration
+        if self.type is None or (skipType is not None and re.match(skipType,self.type)):
+            # ignoring no types and skip pattern matches
+            pass
+        elif self.type is not None and self.type:
+            return self.duration
+
+        return Duration(0)
+
+
+    def getDurationString(self):
+
+        """  """
+        
+        return self.getDuration().toString()
+
+
+    def updateValues(self,dictArg=None):
+
+        """  """
+
+        if dictArg is not None:
+            if self.type is not None and self.type in dictArg and dictArg[self.type] > 1.0 and self.duration is not None and self.duration > Duration(0):
+                if self.dist is None or self.dist < 0.1:
+                    # there is a defined default velocity
+                    self.dist = dictArg[self.type] * (self.duration.total_seconds() / 3600)
+                    #print('info updating distance: ' + str(self), file=sys.stderr)
+            elif self.type is not None and self.type in dictArg and dictArg[self.type] > 1.0 and self.dist is not None and self.dist > 0.1:
+                if self.duration is None or self.duration < Duration(1):
+                    # there is a defined default velocity
+                    self.duration = Duration(int(self.dist / dictArg[self.type] * 60))
+                    #print('info updating duration: ' + str(self), file=sys.stderr)
+
+        return self
+
+
+    def match(self,patternType=None):
+                            
+       return (self.type is None or patternType is None or re.match(patternType,self.type))
+
+
+    def isCountable(self):
+
+        """  """
+
+        return ((type(self.type) is str and self.type) and ((type(self.dist) is float and self.dist > 0.0) or self.getDuration().total_seconds() > 0))
 
 
     def scale(self,floatScale,patternType=None):
 
         """  """
 
-        if floatScale > 0.1 and (patternType == None or self.type == None or re.match(patternType,self.type)):
+        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01 and (patternType is None or self.type is None or re.match(patternType,self.type)):
 
-            if self.dist != None:
-                if self.dist < 15.0:
+            if self.dist is not None:
+                if self.dist < 20.0:
                     self.dist *= floatScale
                 else:
                     # round distance to 5.0
                     self.dist = round(self.dist * floatScale / 5.0) * 5.0
 
-            if self.duration != None:
-                self.duration.scale(floatScale)
+            if self.duration is not None:
+                self.duration = self.duration.scale(floatScale)
 
         return self
 
@@ -197,7 +289,7 @@ class Unit(Note):
 
         """  """
         
-        if objArg == None or len(objArg) < 1:
+        if objArg is None or not objArg:
             return False
         elif type(objArg) is str:
             entry = objArg.split(';')
@@ -207,8 +299,10 @@ class Unit(Note):
                 entry.insert(0,'')
                 entry.insert(0,'')
                 entry.append('')
+                entry.append('')
             elif len(entry) == 2:
                 # type + time only
+                entry.insert(0,'')
                 entry.insert(0,'')
                 entry.append('')
             elif len(entry) == 3:
@@ -216,7 +310,16 @@ class Unit(Note):
                 entry.insert(0,'')
             return self.parse(entry)
         elif type(objArg) is list and len(objArg) > 3:
-            if self.setDistStr(objArg[1]) and self.setTypeStr(objArg[2]) and self.setDuration(objArg[3]):
+
+            if self.setTypeStr(objArg[2]):
+                if self.setDuration(objArg[3]):
+                    if self.setDistStr(objArg[1]):
+                        pass
+                    else:
+                        self.setDistStr()
+                elif self.setDistStr(objArg[1]):
+                    self.setDuration()
+
                 self.setDateStr(objArg[0])
                 self.appendDescription(objArg[4:])
                 return True
@@ -226,39 +329,64 @@ class Unit(Note):
             return False
 
 
-    def stat(self, dictArg):
+    def stat(self, skipType=None):
 
         """  """
 
-        if dictArg == None:
-            print('error: ' + 'no dict', file=sys.stderr)
-        elif self.type != None and len(self.type) > 0:
-            if self.type not in dictArg:
-                dictArg[self.type] = [[],[]]
-                
-            if self.dist != None:
-                dictArg[self.type][0].append(self.dist)
-            else:
-                dictArg[self.type][0].append(0.0)
-                
-            dictArg[self.type][1].append(self.getDuration().total_seconds())
+        listResult = []
+        
+        if self.type is None or (skipType is not None and re.match(skipType,self.type)):
+            # ignoring no types and skip pattern matches
+            pass
+        elif self.dist is None or self.dist < 0.001:
+            #print('error: ' + 'no dist', file=sys.stderr)
+            listResult = [[0, 0.0, self.getDuration().total_seconds() / 60, self.type]]
+        elif self.duration is None:
+            #print('error: ' + 'no duration', file=sys.stderr)
+            listResult = [[0, self.dist, 0.0, self.type]]
+        elif self.dt is None:
+            listResult = [[0, self.dist, self.getDuration().total_seconds() / 60, self.type]]
+        else:
+            listResult = [[self.dt.toordinal(), self.dist, self.getDuration().total_seconds() / 60, self.type]]
+
+        return listResult
 
 
+    def getColor(self):
+
+        """  """
+        
+        strResult = ''
+        
+        if not hasattr(self,'color'):
+            pass
+        elif self.color is not None:
+            strResult = self.color
+        elif self.type is None or not self.type:
+            strResult = '#cccccc'
+        elif self.type in config.colors:
+            strResult = config.colors[self.type]
+        elif self.type[0] in config.colors:
+            strResult = config.colors[self.type[0]]
+
+        return strResult
+
+            
     def getSpeedStr(self):
 
         """  """
 
         strResult = ''
-        if self.dist == None or self.duration == None:
+        if self.dist is None or self.duration is None:
             pass
         else:
             s = float(self.getDuration().total_seconds())
             if s < 1:
                 pass
             else:
-                spk = s / self.dist
-                strResult += '{}:{:02} min/{} '.format(int(spk // 60), int(spk % 60), config.unit_distance)
-                strResult += '{:.0f} {}/h '.format(self.dist / (s / 3600), config.unit_distance)
+                min, sec = divmod(s / self.dist, 60)
+                strResult += f'{min:0.0f}:{sec:02.0f} min/{config.unit_distance} '
+                strResult += f'{self.dist / (s / 3600):.0f} {config.unit_distance}/h '
 
         return strResult
 
@@ -267,38 +395,39 @@ class Unit(Note):
 
         """  """
 
-        if self.dt == None:
+        if self.dt is None:
             strResult = ''
         else:
-            if self.type == None:
+            if self.type is None:
                 strResult = '{date};;;'.format(date=self.dt.strftime("%Y-%m-%d"))
-            elif self.dist == None:
-                strResult = '{date};;{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), type=self.type, duration=str(self.getDuration()))
+            elif self.dist is None:
+                strResult = '{date};;{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), type=self.type, duration=self.getDuration())
             else:
-                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=str(self.getDuration()))
+                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=self.getDuration())
 
-            strResult += ';' + self.__listDescriptionToString__()
+            strResult += ';' + self.getDescriptionString() + '\n'
 
         return strResult
 
 
-    def toHtml(self):
+    def toSqlite(self):
 
         """  """
 
-        strResult = '<p'
-        if self.type == None or len(self.type) < 1:
-            strResult += ' style="background-color: {}"'.format('#cccccc')
-        elif self.type[0] in config.colors:
-            strResult += ' style="background-color: {}"'.format(config.colors[self.type[0]])
-        elif self.color != None:
-            strResult += ' style="background-color: {}"'.format(self.color)
-        strResult += '>'
+        if self.dt is None or self.type is None or self.dist is None:
+            # not significant for reports
+            strResult = ''
+        else:
+            strResult = "INSERT INTO 'units' VALUES ('{date}',{dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self.dist, type=self.type, duration=self.getDuration(), description=self.getDescriptionString())
 
-        strResult += str(self) + ' ' + self.__listDescriptionToString__()
-        strResult += '</p>'
-        
         return strResult
+
+
+    def toHtmlTable(self):
+
+        """  """
+
+        return f'<div {config.getClass(__name__)} style="background-color: {self.getColor()}">{self.toStringShort()}{self.getDescriptionHTML()}</div>'
 
 
     def toSVG(self,x,y):
@@ -307,28 +436,31 @@ class Unit(Note):
 
         strResult = ''
 
-        if self.duration == None or self.getDuration().total_seconds() < 60:
-            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.__listDescriptionToSVG__(), str(self))
+        if self.duration is None or self.getDuration().total_seconds() < 60:
+            strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.getDescriptionSVG(), str(self))
         else:
-            strResult += '<rect '
+            strResult += '<rect fill="{}"'.format(self.getColor())
 
-            if self.type == None or len(self.type) < 1:
-                strResult += ' fill="{}"'.format('#cccccc')
-            elif self.type[0] in config.colors:
-                strResult += ' fill="{}"'.format(config.colors[self.type[0]])
-
-            if self.dist == None or True:
+            if self.dist is None or True:
                 # "about 25 distance units per hour"
                 bar_width = self.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
             else:
                 bar_width = self.dist * config.diagram_scale_dist
 
-            strResult += ' height="{}" stroke="black" stroke-width=".5" width="{:.0f}" x="{}" y="{}"'.format(config.diagram_bar_height, bar_width, x, y)
+            if self.isMarked():
+                strResult += ' stroke="red" stroke-width="1"'
+            else:
+                strResult += ' stroke="black" stroke-width=".5"'
+
+            strResult += ' height="{}" width="{:.0f}" x="{}" y="{}"'.format(config.diagram_bar_height, bar_width, x, y)
             strResult += '>'
 
-            strResult += '<title>{}: {}</title>'.format(str(self), self.__listDescriptionToString__())
+            strResult += '<title>{} {}</title>'.format(self.toStringShort(), self.getDescriptionString())
 
             strResult += '</rect>\n'
+
+            if self.isMarked():
+                strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2 + bar_width, y + config.diagram_bar_height, self.getDescriptionString(), str(self))
 
         return strResult
 
@@ -338,17 +470,14 @@ class Unit(Note):
         """  """
 
         strResult = '<node'
-
-        strResult += ' TEXT="' + str(self) + '"'
-
-        if self.type != None and len(self.type) > 0 and self.type[0] in config.colors:
-            strResult += ' BACKGROUND_COLOR="{}"'.format(config.colors[self.type[0]])
+        strResult += ' TEXT="' + self.toStringShort() + '"'
+        strResult += ' BACKGROUND_COLOR="{}"'.format(self.getColor())
         strResult += '>'
 
-        if self.dist != None:
+        if self.dist is not None:
             strResult += '<node TEXT="' + self.getSpeedStr() + '"/>'
 
-        strResult += self.__listDescriptionToFreemind__()
+        strResult += self.getDescriptionFreemind()
 
         strResult += '</node>\n'
 
@@ -361,17 +490,20 @@ class Unit(Note):
 
         event = Event()
 
-        if self.type == None:
-            event.add('summary', self.__listDescriptionToString__())
-        else:
-            event.add('summary', "{} {}".format(self.type, str(self.getDuration())))
+        if self.type is None:
             if self.hasDescription():
-                event.add('description', self.__listDescriptionToString__())
+                event.add('summary', self.getDescriptionString())
+        else:
+            event.add('summary', "{} {}".format(self.type, self.getDurationString()))
+            if self.hasDescription():
+                event.add('description', self.getDescriptionString())
 
-        if self.dt == None:
-            print('error: ' + str(self), file=sys.stderr)
-            pass
-        elif self.dt.time() == time(0) or self.duration == None:
+        if event.is_empty():
+            return
+        elif self.dt is None:
+            print('error ICAL: no date ' + str(self), file=sys.stderr)
+            return
+        elif self.dt.time() == time(0) or self.duration is None:
             # no time defined
             event.add('dtstart', self.dt.date())
             event.add('dtend', self.dt.date() + timedelta(days=1))
@@ -380,10 +512,10 @@ class Unit(Note):
             event.add('dtend', self.dt + self.duration)
 
             # TODO: add reminder
-            alarm = Alarm()
-            alarm.add('action', 'none')
-            alarm.add('trigger', self.dt - timedelta(minutes=15))
-            event.add_component(alarm)
+            #alarm = Alarm()
+            #alarm.add('action', 'DISPLAY')
+            #alarm.add('trigger', self.dt - timedelta(minutes=15))
+            #event.add_component(alarm)
         
         event.add('dtstamp', datetime.now().astimezone(None))
         cal.add_component(event)

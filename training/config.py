@@ -34,17 +34,84 @@ font_family = 'Arial'
 font_size = 8
 
 # default colors in diagram
-colors = {'W': '#ff5555', 'R': '#ffdddd', 'L': '#ddffdd', 'K': '#aaaaff', 'S': '#ddddff'}
+#colors = {'Bicycle': '#ffdddd', 'Running': '#ddffdd', 'Swimming': '#ddddff'}
+colors = {}
 
 # maximum for length of type string
 max_length_type = 20
 
 # distance unit 'mi' or 'km'
 unit_distance = 'km'
+# default velocity, used in Unit()
+v_defaults = {'Bicycle': 25.0, 'Running': 10.0, 'Swimming': 2.0}
 
 #
 twilight = 1800
 sun = None
+
+# minimum count of data
+plot_min = 1
+
+style = """
+<style>
+    /* body {font-family: Arial,sans-serif; font-size:12px;} */
+    section {padding: 3px;}
+    section > * {margin: 0.1em 0.5em 0.5em 0.1em;}
+    section > *:not(.header) {margin: 0.5em 2em 0.5em 2em;}
+    div.header {font-weight:bold;}
+    div:has(svg) {display: inline-block; white-space: nowrap;}
+    div.training-unit {margin: 2px 1px 2px 1px;}
+    div.training-cycle {margin: 5px 5px 5px 5px;}
+    div.training-period {margin: 5px 5px 5px 5px;}
+    div.training-combination {margin: 5px 5px 5px 5px;}
+    div.training-exerciseset {}
+    img {max-width:100%; max-height:100%;}
+    pre {padding: 6px;}
+    table {border-collapse: collapse; empty-cells:show; margin-left:0px; margin-right:0px;}
+    table.graph {border: none; vertical-align:top;}
+    table.training-combination {margin: 5px 5px 5px 5px;}
+    tr.training-exerciseset {}
+    /* tr:nth-of-type(odd) {background-color: #eeeeee;} */
+    th, td {padding: 3px}
+    td { vertical-align:top;}
+    td.we {background-color: #eeeeee;}
+    td.graph {border: none; vertical-align:top;}
+    ul, ol {padding: 0px 0px 0px 2em;}
+    div > ul {margin-top: 2px; margin-bottom: 3px;}
+    a:link {text-decoration:none;}
+    section, td { border: 1px solid #c7c7c7;}
+</style>
+"""
+
+def getURL(strArg):
+    
+    """ generates an URL for strArg """
+
+    return 'https://www.demo.com/url?id=' + strArg.replace('.','-')
+    
+    
+def getClass(strArg):
+    
+    """ """
+
+    return 'class="' + strArg.replace('.','-') + '"'
+
+
+script = """
+<script>
+  function removeDetails(elem) {
+      var c = Array.from(elem.parentNode.getElementsByTagName('section'));
+      if (c.length < 1) {
+        c = Array.from(elem.parentNode.getElementsByTagName('table'));
+      }
+
+      for (i in c) {
+          c[i].remove();}
+      }
+</script>
+"""
+
+footer = '<hr/><p align="right">Created using <a target="_blank" href="https://github.com/raxdne/training">training</a></p>\n'
 
 
 def getSettingsStr():
@@ -52,16 +119,17 @@ def getSettingsStr():
     """ returns a Python string containing all module settings """
 
     strResult = '# Diagram\n'
-    strResult += '{}.diagram_scale_dist = {}\n'.format(__name__, self.diagram_scale_dist)
-    strResult += '{}.diagram_bar_height = {}\n'.format(__name__, self.diagram_bar_height)
-    strResult += '{}.diagram_offset = {}\n'.format(__name__, self.diagram_offset)
-    strResult += '{}.diagram_width = {}\n'.format(__name__, self.diagram_width)
-    strResult += '{}.font_family = {}\n'.format(__name__, self.font_family)
-    strResult += '{}.font_size = {}\n'.format(__name__, self.font_size)
+    strResult += '{}.diagram_scale_dist = {}\n'.format(__name__, diagram_scale_dist)
+    strResult += '{}.diagram_bar_height = {}\n'.format(__name__, diagram_bar_height)
+    strResult += '{}.diagram_offset = {}\n'.format(__name__, diagram_offset)
+    strResult += '{}.diagram_width = {}\n'.format(__name__, diagram_width)
+    strResult += '{}.font_family = {}\n'.format(__name__, font_family)
+    strResult += '{}.font_size = {}\n'.format(__name__, font_size)
 
-    strResult += '{}.colors = {}\n'.format(__name__, self.colors)
-    strResult += '{}.max_length_type = {}\n'.format(__name__, self.max_length_type)
-    strResult += '{}.unit_distance = \'{}\'\n'.format(__name__, self.unit_distance)
+    strResult += '{}.colors = {}\n'.format(__name__, colors)
+    strResult += '{}.max_length_type = {}\n'.format(__name__, max_length_type)
+    strResult += '{}.unit_distance = \'{}\'\n'.format(__name__, unit_distance)
+    strResult += '{}.v_defaults = \'{}\'\n'.format(__name__, v_defaults)
 
     return strResult
 

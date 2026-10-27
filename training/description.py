@@ -18,28 +18,35 @@
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
 import sys
+import re
 
-def __fixIt__(listArg=[]):
+# https://uibakery.io/regex-library/url-regex-python
+url_pattern = "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$"
+
+re_garmin = re.compile('^garmin:([0-9]+)')
+prefix_garmin = 'https://connect.garmin.com/app/activity/'
+
+def _fixIt(listArg=[]):
 
     """ fix nesting """
 
     listResult = []
 
     if type(listArg) is list and len(listArg) == 1 and type(listArg[0]) is list:
-        return __fixIt__(listArg[0])
+        return _fixIt(listArg[0])
     elif type(listArg[0]) is str:
         for e in listArg[1:]:
             if type(e) is list and len(e) == 1 and type(e[0]) is str:
                 listResult.append(e[0])
             elif type(e) is list:
-                listResult.append(__fixIt__(e))
+                listResult.append(_fixIt(e))
 
         return [listArg[0],listResult]
     else:
         return listArg
 
 
-def __appendTo__(intDepth=0,listArg=[],strArg=''):
+def _appendTo(intDepth=0,listArg=[],strArg=''):
 
     # search for last element where depth < intDepth => parent list
 
@@ -49,8 +56,29 @@ def __appendTo__(intDepth=0,listArg=[],strArg=''):
         l = l[-1]
         d += 1
 
-    #print("{} {}".format(d, strArg))
     l.append([strArg])
+
+
+def _flatten(objArg):
+
+    """ returns a string of nested self.listDescription """
+
+    listResult=[]
+
+    if objArg is None:
+        pass
+    elif type(objArg) is str and objArg:
+        listResult = [objArg]
+    elif type(objArg) is list and objArg:
+        for c in objArg:
+            if not c:
+                pass
+            elif type(c) is str:
+                listResult.append(c)
+            elif type(c) is list:
+                listResult.extend(_flatten(c))
+
+    return listResult
 
 
 #
@@ -61,28 +89,39 @@ class Description:
 
     """ abstract class to handle (nested) description list """
 
+
+    def __new__(cls, *args, **kwargs):
+
+        if cls is Description:
+            raise TypeError("Cannot instantiate abstract class")
+        return super().__new__(cls)
+
+
     def __init__(self,strArg=None):
 
         """  """
         
         self.color = None
-        self.listDescription = []
-
         self.setDescription(strArg)
+
+
+    def __repr__(self):
+
+        return f'{self.__class__.__name__}({self.listDescription!r},{self.color!r})'
 
 
     def __str__(self):
 
         """ returns a string of nested self.listDescription """
 
-        return str(self.__listDescriptionToString__())
+        return str(self.listDescription)
 
 
     def setDescription(self,objArg=None):
 
         """  """
 
-        if objArg == None or len(objArg) < 1:
+        if objArg is None or not objArg:
             self.listDescription = []
         elif type(objArg) is str:
             self.listDescription.append([objArg])
@@ -96,21 +135,23 @@ class Description:
 
         """  """
 
-        return self.listDescription != None and len(self.listDescription) > 0
+        return self.listDescription is not None and self.listDescription
 
 
     def appendDescription(self,objArg):
 
         """  """
 
-        if objArg == None or len(objArg) < 1:
+        if objArg is None or not objArg:
             pass
-        elif len(self.listDescription) < 1:
+        elif not self.listDescription:
             self.setDescription(objArg)
         elif type(objArg) is str:
             self.listDescription.append([objArg])
         elif type(objArg) is list:
             self.listDescription.append(objArg)
+
+        return self
 
 
     def parseDescription(self,strArg):
@@ -142,16 +183,16 @@ class Description:
                     raise RuntimeError("Bad formatting")
 
             #print(f"{content} (depth: {depth})")
-            __appendTo__(depth,r,content)
+            _appendTo(depth,r,content)
 
-        self.appendDescription(__fixIt__(r))
+        self.appendDescription(_fixIt(r))
 
 
     def setColor(self,strColor=None):
 
         """  """
 
-        if strColor != None and len(strColor) > 0:
+        if strColor is not None and strColor:
             self.color = strColor
         else:
             self.color = None
@@ -159,98 +200,120 @@ class Description:
         return self
 
 
-    def __listDescriptionToString__(self,listArg=None):
+    def getDescriptionString(self,listArg=None):
 
-        """ returns a CSV string of nested self.listDescription """
+        """ returns a string of nested self.listDescription """
 
         strResult = ''
 
-        if listArg == None:
-            strResult += self.__listDescriptionToString__(self.listDescription)
+        if listArg is None:
+            strResult += self.getDescriptionString(self.listDescription)
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
-            strResult += ' {}'.format(listArg[0]) + self.__listDescriptionToString__(listArg[1])
-        elif type(listArg) is list and len(listArg) > 0:
+            strResult += ' {}'.format(listArg[0]) + self.getDescriptionString(listArg[1])
+        elif type(listArg) is list and listArg:
             for c in listArg:
                 if type(c) is str:
                     strResult += ' ' + c
                 elif type(c) is list:
-                    strResult += self.__listDescriptionToString__(c)
-                else:
-                    print('fail: ',c, file=sys.stderr)
+                    strResult += self.getDescriptionString(c)
 
         return strResult
 
 
-    def __listDescriptionToSVG__(self,listArg=None):
+    def getDescriptionSVG(self,listArg=None):
 
         """ returns a XML/SVG string of nested self.listDescription """
 
-        strResult = self.__listDescriptionToString__().replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
+        strResult = self.getDescriptionString().replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
 
         return strResult
 
 
-    def __listDescriptionToHtml__(self,listArg=None):
+    def getDescriptionHTML(self,listArg=None):
 
         """ returns a HTML string of nested self.listDescription """
 
-        #strResult = '<div>'
         strResult = ''
 
-        if listArg == None:
-            strResult += self.__listDescriptionToHtml__(self.listDescription)
+        if listArg is None:
+            f = _flatten(self.listDescription)
+            if len(f) == 1:
+                # only one item
+                if re.match(re_garmin, f[0]):
+                    strResult += f' <a target="_blank" href="{prefix_garmin}{re.match(re_garmin, f[0]).group(1)}">Garmin</a>'
+                elif re.match(url_pattern, f[0]):
+                    strResult += ' <a target="_blank" href="{url}">{url}</a>'.format(url=f[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+                else:
+                    strResult += ' <span>' + f[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;") + '</span>'
+            elif len(f) > 1:
+                strResult += '<ul>' + self.getDescriptionHTML(self.listDescription) + '</ul>'
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
             # list item + childs
-            strResult += '<li>' + listArg[0] + '</li>\n<ul>' + self.__listDescriptionToHtml__(listArg[1]) + '</ul>\n'
-        elif type(listArg) is list and len(listArg) > 0:
+            strResult += '<li>'
+            if re.match(re_garmin, listArg[0]):
+                strResult += f'<a target="_blank" href="{prefix_garmin}{re.match(re_garmin, listArg[0]).group(1)}">Garmin</a>'
+            elif re.match(url_pattern, listArg[0]):
+                strResult += '<a target="_blank" href="{url}">{url}</a>'.format(url=listArg[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+            else:
+                strResult += listArg[0]
+            strResult += '</li>\n'
+            strResult += '<ul>' + self.getDescriptionHTML(listArg[1]) + '</ul>\n'
+        elif type(listArg) is list and listArg:
             # list items
             for c in listArg:
-                if type(c) is str:
-                    strResult += '<li>' + c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;") + '</li>\n'
+                if type(c) is str and c:
+                    strResult += '<li>'
+                    if re.match(re_garmin, c):
+                        strResult += f'<a target="_blank" href="{prefix_garmin}{re.match(re_garmin, c).group(1)}">Garmin</a>'
+                    elif re.match(url_pattern, c):
+                        strResult += '<a target="_blank" href="{url}">{url}</a>'.format(url=c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+                    else:
+                        strResult += c.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
+                    strResult += '</li>\n'
                 elif type(c) is list:
-                    strResult += self.__listDescriptionToHtml__(c)
-                else:
-                    print('fail: ',c, file=sys.stderr)
-
-        #strResult += '</div>'
+                    strResult += self.getDescriptionHTML(c)
 
         return strResult
 
 
-    def __listDescriptionToFreemind__(self,listArg=None):
+    def getDescriptionFreemind(self,listArg=None):
 
         """ returns a Freemind XML string of nested self.listDescription """
 
         strResult = ''
 
-        if listArg == None:
-            strResult += self.__listDescriptionToFreemind__(self.listDescription)
-        elif type(listArg) is str and len(listArg) > 0:
-            strResult += '<node TEXT="{}"/>\n'.format(listArg.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+        if listArg is None:
+            strResult += self.getDescriptionFreemind(self.listDescription)
+        elif type(listArg) is str and listArg:
+            strResult += '<node TEXT="{}"'.format(listArg.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+            if re.match(url_pattern, listArg):
+                strResult += ' LINK="{}"'.format(listArg.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+            strResult += '/>\n'
         elif type(listArg) is list and len(listArg) == 2 and type(listArg[0]) is str and type(listArg[1]) is list:
             """ tupel (str . list) """
 
-            strResult += '<node FOLDED="{}" TEXT="{}">\n'.format('true',listArg[0]) + ''
+            strResult += '<node FOLDED="{}" TEXT="{}"'.format('true',listArg[0])
+            if re.match(url_pattern, listArg[0]):
+                strResult += ' LINK="{}"'.format(listArg[0].replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;"))
+            strResult += '>\n'
 
             for c in listArg[1:]:
-                strResult += self.__listDescriptionToFreemind__(c)
+                strResult += self.getDescriptionFreemind(c)
 
             strResult += '</node>\n'
 
         elif type(listArg) is list:
             """ a list, but single element only """
             for c in listArg:
-                strResult += self.__listDescriptionToFreemind__(c)
-        else:
-            print('fail: ',listArg, file=sys.stderr)
+                strResult += self.getDescriptionFreemind(c)
 
         return strResult
 
 
-    def __listDescriptionToXML__(self):
+    def getDescriptionXML(self):
 
         """  """
 
-        return self.__listDescriptionToString__().replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
+        return self.getDescriptionString().replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
 
 

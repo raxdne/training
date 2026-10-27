@@ -19,6 +19,8 @@
 
 import sys
 
+from pathlib import Path
+
 import math
 
 import copy
@@ -31,6 +33,8 @@ from datetime import timedelta, date, datetime, time
 
 from icalendar import Calendar, Event, Alarm
 
+import numpy as np
+
 from suntime import Sun
 
 from training import config as config
@@ -40,12 +44,13 @@ from training.note import Note
 from training.unit import Unit
 from training.pause import Pause
 from training.combination import Combination
+from training.plot import Plot
 
 #
 #
 #
 
-class Cycle(Title,Description):
+class Cycle(Title,Description,Plot):
 
     def __init__(self,strArg=None,intArg=7):
 
@@ -53,35 +58,45 @@ class Cycle(Title,Description):
 
         super(Title, self).__init__()
         super(Description, self).__init__()
-        
+        super(Plot, self).__init__()
+
         self.setTitleStr(strArg)
         self.setDescription()
+        self.setPlan()
+        self.setPlot()
 
+        self.summary = {}
+        self.data = []
         self.day = []
         for i in range(0,int(intArg)):
             self.day.append([])
 
         self.dateBegin = None
         self.dateEnd = None
+        self.dateFixed = None
 
         self.color = None
+        self.setVDefaults(config.v_defaults)
+        self.setSkipPattern()
+
+
+    def __repr__(self):
+
+        strResult = f'{self.__class__.__name__}({self.strTitle!r},{self.getLength()},{self.dateBegin!r},{self.dateEnd!r},{self.color!r},{self.day!r},{self.data!r})'
+        if self.hasDescription():
+            strResult += f'.appendDescription({self.listDescription!r})'
+
+        return strResult
 
 
     def __len__(self):
-
-        """  """
 
         return len(self.day)
 
 
     def __str__(self):
 
-        """  """
-
-        strResult = '\n** ' + super().getTitleStr()
-        if type(self.dateBegin) == date:
-            strResult += ' (' + str(len(self)) + ', ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')'
-        strResult += '\n\n'
+        strResult = '\n** ' + super().getTitleString() + ' ' + super().getDateString() + '\n\n'
 
         for v in self.day:
             for u in v:
@@ -90,12 +105,70 @@ class Cycle(Title,Description):
         return strResult
 
 
-    def appendDescription(self,objArg):
+    def insertDescription(self,objArgA,objArgB):
 
         """  """
 
-        if objArg != None and len(objArg) > 0:
-            super().appendDescription(objArg)
+        if objArgA is None or objArgB is None:
+            pass
+        elif type(objArgA) is list:
+            if len(objArgA) == 1:
+                self.insertDescription(objArgA[0],objArgB)
+        elif type(objArgA) is int:
+            if objArgA >= len(self.day):
+                print(f'error: there is no entry for index {objArgA}', file=sys.stderr)
+            elif type(objArgB) is list:
+                self.day[objArgA][0].appendDescription(objArgB)
+            elif type(objArgB) is str:
+                self.day[objArgA][0].appendDescription(objArgB)
+            elif type(objArgB) is Description:
+                self.day[objArgA][0].appendDescription(objArgB)
+
+        return self
+
+
+    def resetDescription(self):
+
+        """  """
+
+        self.setDescription(None)
+
+        for v in self.day:
+            for u in v:
+                u.setDescription(None)
+
+        return self
+
+
+    def setSkipPattern(self,skipType=None):
+
+        """  """
+
+        self.skipType = skipType
+
+        return self
+        
+
+    def setVDefaults(self,dictArg):
+
+        """  """
+
+        self.v_defaults = dictArg
+
+        return self
+
+
+    def updateValues(self,dictArg=None):
+
+        """  """
+
+        if dictArg is not None:
+            self.setVDefaults(dictArg)
+
+        for v in self.day:
+            for u in v:
+                if type(u) is Unit or type(u) is Combination:
+                    u.updateValues(self.v_defaults)
 
         return self
 
@@ -104,22 +177,46 @@ class Cycle(Title,Description):
 
         """  """
 
-        for i in range(len(self)):
+        for i in range(len(self.day)):
             self.day[i] = []
-            
+
+        self.data.clear()
+        #super(Plot, self).__init__()
+        Plot.__init__(self)
+
         return self
+
+
+    def setPlan(self,fPlan=True):
+
+        """  """
+
+        self.fPlan = fPlan
+
+        return self
+
+
+    def isPlan(self):
+
+        """  """
+
+        return self.fPlan
 
 
     def remove(self,intIndexA=-1,patternType=None):
 
-        """  """
+        """ BUG: removal of matching units in Combination() """
 
-        if intIndexA > -1 and intIndexA < len(self):
-            if patternType != None:
+        if intIndexA > -1 and intIndexA < len(self.day):
+            if patternType is not None:
                 # delete only matching elements in list of indexed day
                 dayNew = []
                 for u in self.day[intIndexA]:
-                    if u.type == None or re.match(patternType,u.type):
+                    if type(u) is Combination:
+                        c = u.remove(patternType)
+                        if c.getNumberOfUnits() > 0:
+                            daysNew.append(c)
+                    elif type(u) is Unit and u.match(patternType):
                         # to be ignored
                         pass
                     else:
@@ -127,31 +224,49 @@ class Cycle(Title,Description):
                 self.day[intIndexA] = copy.deepcopy(dayNew)
             else:
                 # delete whole list of indexed day
-                self.day[intIndexA] = []
-        elif patternType != None:
+                self.day[intIndexA].clear()
+        elif patternType is not None:
             # whole cycle using pattern
             daysNew = []
-            for i in range(0,len(self)):
+            for i in range(0,len(self.day)):
                 daysNew.append([])
                 for u in self.day[i]:
-                    if type(u) == Combination:
+                    if type(u) is Combination:
                         c = u.remove(patternType)
                         if c.getNumberOfUnits() > 0:
                             daysNew[i].append(c)
-                    elif type(u) == Unit and (u.type == None or re.match(patternType,u.type)):
+                    elif type(u) is Unit and u.match(patternType):
+                        # to be ignored
                         pass
                     else:
                         daysNew[i].append(u)
             self.day = daysNew
-            
+
         return self
 
 
-    def shift(self,intIndexA,intIndexB,flagReplace=False):
+    def shift(self,intIndexA,intIndexB=None,flagReplace=False):
 
         """  """
 
-        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self) and intIndexB < len(self) and intIndexA != intIndexB:
+        if type(intIndexA) != int:
+            print('error: shift of a cycle requires an integer value', file=sys.stderr)
+        elif intIndexB is None:
+            # shift
+            print('info: shift by ' + str(intIndexA), file=sys.stderr)
+            if intIndexA > 0 and intIndexA < len(self.day):
+                for i in range(0,intIndexA):
+                    self.day.insert(0,[])
+                for i in range(0,intIndexA):
+                    self.day.pop()
+            elif intIndexA < 0 and intIndexA > - len(self.day):
+                for i in range(0, - intIndexA):
+                    self.day.pop(0)
+                for i in range(0, - intIndexA):
+                    self.day.append([])
+        elif type(intIndexB) != int:
+            print('error: shift of a cycle requires an integer value', file=sys.stderr)
+        elif intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.day) and intIndexB < len(self.day) and intIndexA != intIndexB:
             self.copy(intIndexA,intIndexB,flagReplace)
             self.remove(intIndexA)
 
@@ -162,10 +277,10 @@ class Cycle(Title,Description):
 
         """  """
 
-        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self) and intIndexB < len(self) and intIndexA != intIndexB:
+        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.day) and intIndexB < len(self.day) and intIndexA != intIndexB:
             objCopy = copy.deepcopy(self.day[intIndexA])
             if flagReplace:
-                # override exisiting
+                # overwrite existing
                 self.day[intIndexB] = objCopy
             else:
                 self.day[intIndexB] += objCopy
@@ -177,7 +292,7 @@ class Cycle(Title,Description):
 
         """  """
 
-        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self) and intIndexB < len(self) and intIndexA != intIndexB:
+        if intIndexA > -1 and intIndexB > -1 and intIndexA < len(self.day) and intIndexB < len(self.day) and intIndexA != intIndexB:
             t = self.day[intIndexB]
             self.day[intIndexB] = self.day[intIndexA]
             self.day[intIndexA] = t
@@ -189,25 +304,93 @@ class Cycle(Title,Description):
 
         """  """
 
-        objResult = None
+        objResult = self
+        j = len(self.day)
 
-        if objArg == None:
-            print('error: ' + str(objArg), file=sys.stderr)
-        elif type(objIndex) == list and len(objIndex) > 0:
+        if objArg is None:
+
+            print('error: undefined object ' + str(objArg), file=sys.stderr)
+
+        elif type(objIndex) is list and objIndex:
+
             for i in objIndex:
                 self.insert(i,objArg,flagReplace)
-            return []
-        elif type(objArg) == list and len(objArg) > 0:
+
+        elif type(objArg) is list and objArg:
+
             for u in objArg:
                 self.insert(objIndex,u,flagReplace)
-            return []
-        elif (type(objArg) == Unit or type(objArg) == Combination or type(objArg) == Note) and objIndex > -1 and objIndex < len(self):
-            objResult = objArg.dup()
+
+        elif type(objIndex) is int and objIndex > -1 and objIndex < j and (type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note):
+
             if flagReplace:
-                # override exisiting
-                self.day[objIndex] = [objResult]
+                # overwrite existing
+                self.day[objIndex] = [objArg.dup()]
             else:
-                self.day[objIndex].append(objResult)
+                self.day[objIndex].append(objArg.dup())
+
+        elif type(objIndex) is int and objIndex > -1 and objIndex < j and type(objArg) is Cycle and len(objArg.day) > 0:
+
+            for i in range(objArg.getLength()):
+                k = objIndex + i
+                if k == j:
+                    break
+                elif len(objArg.day[i]) < 1:
+                    self.day[k].clear()
+                else:
+                    for u in objArg.day[i]:
+                        self.insert(k,u,flagReplace)
+                i += 1
+
+        else:
+            print(f'error: inserting {type(objArg)} at position {objIndex} of {j} {objArg}', file=sys.stderr)
+
+        return objResult
+
+
+    def fill(self,objArg,floatProgression=1.0):
+
+        """  """
+
+        flagReplace=False
+        objResult = self
+
+        if objArg is None:
+
+            print('error: undefined object ' + str(objArg), file=sys.stderr)
+
+        elif type(objArg) is list and objArg:
+
+            for u in objArg:
+                self.insert(u,flagReplace)
+
+        elif type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note:
+
+            i = 0
+            for v in objArg.day:
+                for u in v:
+                    self.insert(i,u,flagReplace)
+                i += 1
+
+        elif type(objArg) is Cycle and objArg.day:
+
+            i = 0
+            d = len(self.day)
+            b = len(objArg.day)
+            while i < d:
+                j = 0
+                while j < b and i < d:
+                    if objArg.day[j]:
+                        for u in objArg.day[j]:
+                            self.insert(i,u,flagReplace)
+                    elif flagReplace:
+                        self.day[i].clear()
+                    i += 1
+                    j += 1
+                objArg.scale(floatProgression)
+
+        else:
+            print(f'error: filling {type(objArg)} of {len(self.day)} {objArg}', file=sys.stderr)
 
         return objResult
 
@@ -218,14 +401,19 @@ class Cycle(Title,Description):
 
         objResult = None
 
-        if objArg == None or objArg.dt == None:
-            print('error: ' + str(objArg), file=sys.stderr)
-        elif type(objArg) == Unit or type(objArg) == Combination or type(objArg) == Note:
+        if objArg is None or objArg.dt is None:
+            print('error: undefined ' + str(objArg), file=sys.stderr)
+        elif self.dateBegin is None:
+            print('error: date begin', file=sys.stderr)
+        elif type(objArg) is Unit or type(objArg) is Combination or type(objArg) is Note:
             delta = objArg.dt.date() - self.dateBegin
-            if delta.days > -1 and objArg.dt.date() <= self.dateEnd:
+            if delta.days < 0 or delta.days >= len(self.day):
+                pass
+            elif objArg.dt.date() <= self.dateEnd:
+                #print(f'info: inserting {type(objArg)} at position {delta.days} of {len(self.day)} {objArg}', file=sys.stderr)
                 objResult = objArg.dup()
                 if flagReplace:
-                    # override exisiting
+                    # overwrite existing
                     self.day[delta.days] = [objResult]
                 else:
                     self.day[delta.days].append(objResult)
@@ -233,35 +421,79 @@ class Cycle(Title,Description):
         return objResult
 
 
-    def postpone(self,n=1):
+    def reverse(self):
 
         """  """
 
-        if type(n) == int and n > 0 and len(self.day) > n:
+        self.day.reverse()
 
-            d = self.day[:(len(self.day) - n)]
-            for i in range(0,n):
-                d.insert(0,[])
-
-            self.day = d
-            
         return self
 
 
-    def stretch(self,n=2):
+    def stretch(self,n=1,m=1):
+
+        """ insert every n-th day m extra days """
+
+        if type(n) is int and n > 0 and len(self.day) > n:
+
+            d = []
+            for i in range(len(self.day)):
+                d.append(self.day[i])
+                if i % n == 0:
+                    for j in range(m):
+                        d.append([])
+
+            self.day = d
+
+        return self
+
+
+    def extend(self,n):
+
+        """ append last n days at the end """
+
+        if type(n) is int and n > 0 and len(self.day) > n:
+            self.day.extend(self.day[-n:])
+
+        return self
+
+
+    def cut(self, d0, d1):
 
         """  """
 
-        if type(n) == int and n > 0 and len(self.day) > n:
+        return self.cutBefore(d0).cutAfter(d1)
 
-            d = []
-            for i in range(0,len(self.day)):
-                d.append(self.day[i])
-                for j in range(0,n-1):
-                    d.append([])
 
-            self.day = d
-            
+    def cutBefore(self,d):
+
+        """  """
+
+        assert type(d) is date
+
+        if self.dateBegin < d and d <= self.dateEnd:
+            delta = (d - self.dateBegin).days
+            if delta > 0:
+                del self.day[:delta]
+                self.data.clear()
+                self.schedule(d)
+
+        return self
+
+
+    def cutAfter(self,d):
+
+        """  """
+
+        assert type(d) is date
+
+        if self.dateBegin <= d and d < self.dateEnd:
+            delta = (d - self.dateBegin).days
+            if delta > -1:
+                self.data.clear()
+                del self.day[delta+1:]
+                self.schedule(self.dateBegin)
+
         return self
 
 
@@ -269,13 +501,13 @@ class Cycle(Title,Description):
 
         """  """
 
-        if objDate == None:
+        if objDate is None:
             return self.getCycleByDate(datetime.now())
-        elif type(objDate) == str:
+        elif type(objDate) is str:
             return self.getCycleByDate(datetime.fromisoformat(objDate))
-        elif type(objDate) == date:
+        elif type(objDate) is date:
             return self.getCycleByDate(datetime.combine(objDate,time(0)))
-        elif type(objDate) == datetime:
+        elif type(objDate) is datetime:
             for v in self.day:
                 if self.dateBegin <= objDate.date() and objDate.date() <= self.dateEnd:
                     return self
@@ -287,48 +519,105 @@ class Cycle(Title,Description):
 
         """  """
 
-        if strArg == None or strArg == '':
+        if strArg is None or strArg == '':
             pass
-        elif len(self) > intIndex and len(self.day[intIndex]) > 0:
+        elif len(self.day) > intIndex and self.day[intIndex]:
             self.day[intIndex][len(self.day[intIndex]) - 1].appendDescription(strArg)
 
         return self
 
-    
+
     def getPeriodDone(self):
 
         """  """
 
-        if self.dateBegin != None and date.today() >= self.dateBegin and self.dateEnd != None and date.today() <= self.dateEnd:
+        if not self.fPlan and self.dateBegin is not None and date.today() >= self.dateBegin and self.dateEnd is not None and date.today() <= self.dateEnd:
             return (date.today() - self.dateBegin).days + 1
         else:
-            return len(self)
+            return (self.dateEnd - self.dateBegin).days + 1
 
 
-    def getNumberOfUnits(self):
+    def getNumberOfUnits(self, dt0=None, dt1=None):
 
         """  """
+
+        # TODO: use self.data
 
         intResult = 0
         for v in self.day:
             for u in v:
-                if type(u) == Combination:
-                    intResult += u.getNumberOfUnits()
-                elif type(u) == Unit and u.type != None and len(u.type) > 0:
+                if u.dt is not None and ((dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date())):
+                    # u is out of interval
+                    pass 
+                elif type(u) is Combination:
+                    intResult += u.getNumberOfUnits(dt0,dt1)
+                elif type(u) is Unit and u.isCountable():
                     intResult += 1
 
         return intResult
 
 
-    def getDuration(self):
+    def getMarkers(self, dt0=None, dt1=None):
+
+        """  """
+
+        listResult = []
+        for v in self.day:
+            for u in v:
+                if u.dt is not None and ((dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date())):
+                    # u is out of interval
+                    pass 
+                elif type(u) is Combination and u.isMarked():
+                    listResult.append(u)
+                elif type(u) is Unit and u.isMarked():
+                    listResult.append(u)
+
+        return listResult
+
+
+    def getLength(self):
+
+        """ return length of cycle """
+
+        return len(self.day)
+
+
+    def getItem(self,index):
+
+        """ return item of index in cycle """
+
+        if type(index) is int:
+            if index < len(self.day):
+                return self.day[index]
+            else:
+                return self.day[-1]
+        elif type(index) is list:
+            if len(index) == 1:
+                return self.getItem(index[0])
+            elif len(index) > 1:
+                if index[0] < len(self.day):
+                    if index[1] < len(self.day[index[0]]):
+                        return self.day[index[0]][index[1]]
+                    elif len(self.day[index[0]]) > 0:
+                        return self.day[index[0]][-1]
+    
+        return None
+
+
+    def getDuration(self, skipType=None):
 
         """ return a timedelta """
+
+        # TODO: use self.data
+
+        if skipType is None:
+            skipType = self.skipType
 
         intResult = 0
         for v in self.day:
             for u in v:
-                if (type(u) == Unit or type(u) == Combination):
-                    intResult += u.getDuration().total_seconds()
+                if (type(u) is Unit and u.isCountable()) or type(u) is Combination:
+                    intResult += u.getDuration(skipType).total_seconds()
 
         return timedelta(seconds=intResult)
 
@@ -337,25 +626,43 @@ class Cycle(Title,Description):
 
         """  """
 
-        for v in self.day:
-            for u in v:
-                if type(u) == Unit or type(u) == Combination:
-                    u.scale(floatScale,patternType)
+        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
+            for v in self.day:
+                for u in v:
+                    if type(u) is Unit or type(u) is Combination:
+                        u.scale(floatScale,patternType)
 
         return self
 
 
-    def schedule(self, intYear, intMonth, intDay):
+    def schedule(self, argDateOrYear=None, intMonth=None, intDay=None):
 
         """  """
 
-        try:
-            self.dateBegin = date(intYear, intMonth, intDay)
-        except ValueError as e:
-            print('error: ' + str(e), file=sys.stderr)
+        if type(argDateOrYear) is bool and argDateOrYear is False:
+            # delete all dates
+            self.dateFixed = None
+            self.dateBegin = None
+            self.dateEnd = None
             return self
 
-        #if config.sun != None:
+        if self.dateFixed is not None:
+            # keep fixed date and schedule childs
+            self.dateBegin = self.dateFixed
+            self.dateEnd = self.dateBegin + timedelta(days=(len(self.day) - 1))
+        elif type(argDateOrYear) is date:
+            self.dateBegin = argDateOrYear
+            self.dateEnd = self.dateBegin + timedelta(days=(len(self.day) - 1))
+        else:
+            try:
+                self.dateBegin = date(argDateOrYear, intMonth, intDay)
+            except ValueError as e:
+                print('error: ' + str(e), file=sys.stderr)
+                return self
+
+            self.dateEnd = self.dateBegin + timedelta(days=(len(self.day) - 1))
+
+        #if config.sun is not None:
         #    print('sunrise/sunset: ' + str(config.twilight), file=sys.stderr)
 
         dt_earliest = None
@@ -364,7 +671,7 @@ class Cycle(Title,Description):
 
         for d in self.day:
 
-            if config.sun != None:
+            if config.sun is not None:
                 # fix 't' according to sunrise/sunset
                 dt_earliest = config.sun.get_local_sunrise_time(dt_i) + timedelta(seconds=config.twilight)
                 dt_latest   = config.sun.get_local_sunset_time(dt_i)  - timedelta(seconds=config.twilight)
@@ -374,71 +681,131 @@ class Cycle(Title,Description):
 
             dt_i += timedelta(days=1)
 
-        self.dateEnd = self.dateBegin + timedelta(days=(len(self) - 1))
+        return self
+
+
+    def fix(self, objArg):
+
+        """  """
+
+        if self.dateFixed is not None:
+            # keep fixed date
+            pass
+        #elif self.dateBegin is None or self.dateEnd is None:
+        #    pass
+        #elif objArg is not None and type(objArg) is date and self.dateBegin <= objArg and objArg <= self.dateEnd:
+        elif objArg is not None and type(objArg) is date:
+            self.dateFixed = objArg
+            self.dateBegin = self.dateFixed
+            self.dateEnd = self.dateBegin + timedelta(days = len(self.day) - 1)
 
         return self
-    
 
-    def stat(self, dictArg):
+
+    def stat(self, dt0=None, dt1=None, skipType=None):
+
+        """ stat all descendant data to self.data and returns it as a nested list  """
+
+        if self.day:
+            if skipType is None:
+                skipType = self.skipType
+            self.data.clear()
+            for v in self.day:
+                for u in v:
+                    if u.dt is None or (dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date()):
+                        # u is out of interval
+                        pass 
+                    elif (type(u) is Unit and u.isCountable()) or type(u) is Combination:
+                        self.data.extend(u.stat(skipType))
+
+        return self.data
+
+
+    def sum(self):
+
+        """ summarize all self.data in self.summary and returns sum of durations in minutes """
+
+        floatResult = 0.0
+        self.summary.clear()
+
+        for u in self.data:
+
+            if u[3] not in self.summary:
+                self.summary[u[3]] = [[],[]]
+
+            self.summary[u[3]][0].append(u[1])
+            self.summary[u[3]][1].append(u[2])
+
+            floatResult += u[2]
+
+        return floatResult
+
+
+    def report(self, dt0=None, dt1=None):
 
         """  """
-
-        for v in self.day:
-            for u in v:
-                if type(u) == Unit or type(u) == Combination:
-                    u.stat(dictArg)
-
-
-    def report(self, dictArg=None):
-
-        """  """
-
-        if dictArg == None:
-            dictArg = {}
-
-        self.stat(dictArg)
-        #print('info: ' + str(dictArg), file=sys.stderr)
-
-        sum_h = 0.0
-        for k in sorted(dictArg.keys()):
-            sum_h += sum(dictArg[k][1])
-        sum_h /= 3600
 
         strResult = ''
-        for k in sorted(dictArg.keys()):
-            # all registered kinds of units
-            sum_k = sum(dictArg[k][1]) / 3600
 
-            if len(dictArg[k][0]) < 1:
-                # no distances found
-                strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7}    {:7.01f} h {:.02f}\n").format(len(dictArg[k][0]),
-                                                                                                           k,
-                                                                                                           ' ',
-                                                                                                           round(sum_k, 2),
-                                                                                                           round(sum_k / sum_h, 2))
-            elif len(dictArg[k][0]) < 3:
-                # no statistics required
-                strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f}\n").format(len(dictArg[k][0]),
-                                                                                                               k,
-                                                                                                               sum(dictArg[k][0]),
-                                                                                                               config.unit_distance,
-                                                                                                               round(sum_k, 2),
-                                                                                                               round(sum_k / sum_h, 2))
+        if dt0 is not None and dt1 is None:
+            if type(dt0) is timedelta:
+                #
+                return self.report(date.today() - dt0, date.today())
+            elif type(dt0) is date:
+                #
+                return self.report(dt0, date.today())
             else:
-                strResult += ("{:4} x {:" + str(config.max_length_type) + "} {:7.01f} {} {:7.01f} h {:.02f} {:5.01f} /{:5.01f} /{:5.01f}\n").format(len(dictArg[k][0]),
-                                                                                                                                            k,
-                                                                                                                                            sum(dictArg[k][0]),
-                                                                                                                                            config.unit_distance,
-                                                                                                                                            round(sum_k, 2),
-                                                                                                                                            round(sum_k / sum_h, 2),
-                                                                                                                                            min(dictArg[k][0]),
-                                                                                                                                            mean(dictArg[k][0]),
-                                                                                                                                            max(dictArg[k][0]))
-        n = self.getNumberOfUnits()
+                print(f'error: interval {dt0} and {dt1}', file=sys.stderr)
+                return strResult
+        elif dt0 is not None and dt1 is not None:
+            if dt1 < dt0:
+                print(f'error: interval {dt0} > {dt1}', file=sys.stderr)
+                return self.report(dt1, dt0)
+            else:
+                p = (dt1 - dt0).days
+                strResult += 'Interval (' + str(p) + ' ' + dt0.strftime("%Y-%m-%d") + '/' + dt1.strftime("%Y-%m-%d") + ')\n\n'
+        else:
+            p = len(self.day)
+
+        n = self.getNumberOfUnits(dt0,dt1)
+        if not self.data and n > 0:
+            self.stat(dt0,dt1)
+
+        sum_h = self.sum() / 60
+        if sum_h < 0.1:
+            return strResult
+
+        for k in sorted(self.summary.keys()):
+            # all kinds of units
+            sum_d = sum(self.summary[k][0])
+            sum_k = sum(self.summary[k][1]) / 60.0
+
+            if sum_k > 0.01:
+                strResult += ("{:4} x {:" + str(config.max_length_type) + "} ").format(len(self.summary[k][0]), k)
+
+                if not self.summary[k][0]:
+                    strResult += ("{:7}    {:7.01f} h {:.02f}\n").format(' ',
+                                                                         sum_k,
+                                                                         sum_k / sum_h)
+                elif len(self.summary[k][0]) < 3:
+                    strResult += ("{:7.01f} {} {:7.01f} h {:.02f}\n").format(sum_d,
+                                                                             config.unit_distance,
+                                                                             sum_k,
+                                                                             sum_k / sum_h)
+                else:
+                    strResult += ("{:7.01f} {} {:7.02f} {} {:7.01f} h {:.02f} {:5.01f} /{:5.01f} /{:5.01f}\n").format(sum_d,
+                                                                                                                      config.unit_distance,
+                                                                                                                      sum_d / p * 7.0,
+                                                                                                                      config.unit_distance + '/Week',
+                                                                                                                      sum_k,
+                                                                                                                      sum_k / sum_h,
+                                                                                                                      min(self.summary[k][0]),
+                                                                                                                      mean(self.summary[k][0]),
+                                                                                                                      max(self.summary[k][0]))
+
         if n > 0:
-            p = self.getPeriodDone()
-            strResult += "\n{} Units {:.2f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(n, round(sum_h,2), p, sum_h * 7.0 / p, sum_h * 60 / p)
-        
+            strResult += "\n{} Units {:.1f} h in {} Days ≌ {:.2f} h/Week ≌ {:.0f} min/d\n".format(n, sum_h, p, sum_h * 7.0 / p, sum_h * 60 / p)
+
         return strResult
 
 
@@ -456,25 +823,102 @@ class Cycle(Title,Description):
         return str(self)
 
 
-    def toHtml(self):
+    def writeFiles(self, strDirArg, strId):
+
+        Path(strDirArg).mkdir(parents=True,exist_ok=True)
+
+        #periodArg.plotHist(strDirArg + '/' + strId + '-hist.svg')
+        #periodArg.plotTimeDist(strDirArg + '/' + strId + '-ts.svg')
+
+        f = open(strDirArg + '/' + strId + '.ics', 'wb')
+        f.write(self.toVCalendar())
+        f.close()
+
+        f = open(strDirArg + '/' + strId + '.html', 'w')
+        f.write(self.toHtmlFile())
+        f.close()
+
+        f = open(strDirArg + '/' + strId + '.svg', 'w')
+        f.write(self.toSVGDiagram())
+        f.close()
+
+        f = open(strDirArg + '/' + strId + '.mm', 'w')
+        f.write(self.toFreeMind())
+        f.close()
+
+        #f = open(strDirArg + '/' + strId + '.py', 'w')
+        #f.write(repr(self))
+        #f.close()
+
+
+    def toHtmlTable(self):
 
         """  """
-        
-        strResult = '<section class="{}"'.format(__name__)
 
-        if self.color != None:
+        strResult = f'<section {config.getClass(__name__)} id="{str(id(self))}"'
+
+        if self.color is not None:
             strResult += ' style="background-color: {}"'.format(self.color)
 
-        strResult += '><div class="header">' + self.getTitleXML() + ' (' + str(len(self)) + ', ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '</div>\n'
+        strResult += '><div class="header" ondblclick="removeDetails(this)">' + self.getTitleXML() + ' ' + self.getDateString() + '</div>\n'
 
-        strResult += '<ul>' + self.__listDescriptionToHtml__() + '</ul>'
+        strResult += self.getDescriptionHTML()
 
-        for v in self.day:
-            for u in v:
-                strResult += u.toHtml()
+        if self.getNumberOfUnits() > 0:
+            strResult += f'<pre {config.getClass(__name__)}>' + self.report() + '</pre>'
             
-        strResult += '<pre>' + self.report() + '</pre>'
-        
+        m = self.getMarkers()
+        if len(m) > 0:
+            strResult += '<p>Marked Units (Peaks)</p>'
+            strResult += '<ol>'
+            for u in m:
+                strResult += f'<li>{u}</li>'
+            strResult += '</ol>'
+
+        if False and self.fPlot:
+            strResult += '<div style="text-align: center;margin: 0px;">'
+            #strResult += self.plotAccumulationDuration()
+            #strResult += self.plotAccumulation()
+            #strResult += self.plotHist()
+            #strResult += self.plotTimeDist()
+            #strResult += self.toSVGGanttChart()
+            strResult += '</div>'
+            strResult += self.toSVGDiagram()
+        else:
+            strResult += '<table>\n'
+
+            strResult += '<colgroup><col span="1" style="width: 10%;"><col span="1" style="width: 90%;"></colgroup>\n'
+
+            strResult += '<tbody>'
+            dt_i = datetime.combine(self.dateBegin,time(0)).astimezone(None)
+            for v in self.day:
+                strResult += '<tr>'
+
+                strResult += '<td'
+                if dt_i.weekday() == 5 or dt_i.weekday() == 6:
+                    strResult += ' class="we"'
+                strResult += '>'
+
+                if not self.fPlan and len([u for u in v if type(u) is Unit]) > 0:
+                    # TODO: make link portable/configurable
+                    strResult += '<a href="' + config.getURL(dt_i.strftime("%Y-%m-%d.*fitx")) + '">'
+                    strResult += dt_i.strftime("%Y-%m-%d %a (%j)")
+                    strResult += '</a>'
+                else:
+                    strResult += dt_i.strftime("%Y-%m-%d %a (%j)")
+
+                strResult += '</td>'
+
+                strResult += '<td>'
+                if v:
+                    for u in v:
+                        strResult += u.toHtmlTable()
+                strResult += '</td>'
+                strResult += '</tr>'
+                dt_i += timedelta(days=1)
+
+            strResult += '</tbody></table>'
+
         strResult += '</section>'
 
         return strResult
@@ -491,14 +935,16 @@ class Cycle(Title,Description):
         strResult += "<head>"
 
         strResult += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
-        
+
         strResult += "<title></title>"
 
-        strResult += "<style>\nbody {font-family: Arial,sans-serif; font-size:12px; margin: 5px 5px 5px 5px;}\nsection {border-left: 1px dotted #aaaaaa;}\nsection > * {margin: 0px 0px 0px 2px;}\nsection > *:not(.header) {margin: 0.5em 0.5em 0.5em 2em;}\ndiv.header {font-weight:bold;}\nul, ol {padding: 0px 0px 0px 2em;}\npre {background-color: #f8f8f8;border: 1px solid #cccccc;padding: 6px 3px;border-radius: 3px;}</style>\n"
+        strResult += config.style
+
+        strResult += config.script
 
         strResult += "</head>"
 
-        strResult += "<body>" + self.toHtml() + "</body>"
+        strResult += "<body>" + self.toHtmlTable() + "</body>"
 
         strResult += "</html>"
 
@@ -509,29 +955,60 @@ class Cycle(Title,Description):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleStr() + ' (' + str(len(self)) + ', ' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '\n'
+        strResult = '{};;;;Cycle "{}" {}\n'.format(self.dateBegin.strftime("%Y-%m-%d"), self.getTitleString(), self.getDateString())
         for v in self.day:
             for u in v:
-                if type(u) == Unit:
-                    strResult += u.toCSV() + '\n'
+                strResult += u.toCSV()
+        strResult += '\n'
 
         return strResult
 
 
-    def toSVG(self, x = config.diagram_offset, y=20):
+    def toSqlite(self):
+
+        """  """
+
+        strResult = ''
+        for v in self.day:
+            for u in v:
+                if type(u) is Unit:
+                    strResult += u.toSqlite()
+
+        return strResult
+
+
+    def toSVGGanttMarker(self,dateBase):
+
+        """  """
+
+        strResult = ''
+
+        if self.day:
+            strResult += '<g>'
+            for v in self.day:
+                for u in v:
+                    if u.isMarked():
+                        x_i = (u.dt.date() - dateBase).days * 2
+                        strResult += '<line stroke="red" stroke-width="1" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(x_i, 0, x_i, config.diagram_width)
+                        strResult += f'<title>{u}</title>\n'
+                        strResult += '</line>'
+            strResult += '</g>'
+
+        return strResult
+
+
+    def toSVG(self, x = config.diagram_offset, y=0):
 
         """  """
 
         strResult = '<g>'
 
-        strResult += '<line stroke="black" stroke-width=".5" stroke-dasharray="2,10" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0,y,x+config.diagram_width,y)
+        if self.color is not None:
+            strResult += '<rect fill="{}" opacity=".5" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self.day))-2,x+config.diagram_width-4)
 
-        if self.color != None:
-            strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format(self.color,1,y+1,((config.diagram_bar_height * 2)*len(self))-2,x+config.diagram_width-4)
+        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleXML(), self.getDateString(), (self.getTitleXML() + self.getDateString() + '\n\n' + self.getDescriptionString() + '\n\n' + self.report()))
 
-        strResult += '<text x="{}" y="{}" style="vertical-align:top" text-anchor="right"><tspan x="10" dy="1.5em">{}</tspan><tspan x="10" dy="1.5em">{}</tspan><title>{}</title></text>\n'.format(0,y,self.getTitleXML(), '(' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ') ', (self.getTitleXML() + ' (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report()))
-
-        if len(self) < 1:
+        if not self.day:
             pass
         else:
             y += config.diagram_bar_height / 2
@@ -542,17 +1019,25 @@ class Cycle(Title,Description):
 
                 if d.month == t.month and d.day == t.day:
                     strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format('#ffaaaa',x,y-1,config.diagram_bar_height+2,config.diagram_width - config.diagram_offset)
-                    if d.year == t.year:
-                        strResult +=  '<foreignObject x="{}" y="{}" height="{}" width="{}"><a xmlns="http://www.w3.org/1999/xhtml" name="today"/></foreignObject>\n'.format(x,y-1,config.diagram_bar_height+2,config.diagram_width - config.diagram_offset)
+                    #if d.year == t.year:
+                    #    strResult +=  '<foreignObject x="{}" y="{}" height="{}" width="{}"><a xmlns="http://www.w3.org/1999/xhtml" name="today"/></foreignObject>\n'.format(x,y-1,config.diagram_bar_height+2,config.diagram_width - config.diagram_offset)
                 elif d.isoweekday() == 6 or d.isoweekday() == 7:
                     strResult += '<rect fill="{}" x="{}" y="{}" height="{}" width="{}"/>\n'.format('#eeeeee',x,y-1,config.diagram_bar_height+2,config.diagram_width - config.diagram_offset)
                 d += timedelta(days=1)
 
+                n = ''
                 x_i = x
                 for u in v:
-                    strResult += u.toSVG(x_i,y)
-                    if type(u) == Unit or type(u) == Combination:
-                        x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist + 5
+                    if type(u) is Note:
+                        # collect all notes of day v
+                        n += u.getDescriptionString() + ' '
+                    else:
+                        strResult += u.toSVG(x_i,y)
+                        if type(u) is Unit or type(u) is Combination:
+                            x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist + 5
+                    # TODO: add unit marker if u.isMarked()
+                if n:
+                    strResult += '<text x="{}" y="{}" style="">{}</text>\n'.format(x_i + 2,y + config.diagram_bar_height,n)
 
                 y += config.diagram_bar_height * 2
 
@@ -565,72 +1050,23 @@ class Cycle(Title,Description):
 
         """  """
 
-        diagram_height = len(self) * (config.diagram_bar_height * 2) + 100
+        diagram_height = len(self.day) * (config.diagram_bar_height * 2) + 0
+
         strResult = '<svg baseProfile="full" height="{}" version="1.1" width="{}" xmlns="http://www.w3.org/2000/svg" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xlink="http://www.w3.org/1999/xlink">'.format(diagram_height, config.diagram_width)
 
         strResult += '<style type="text/css">svg { font-family: ' + config.font_family + '; font-size: ' + str(config.font_size) + 'pt; }</style>'
+        strResult += '<g>'
 
-        #strResult += '<g transform="rotate(90)">'
-        #'<text x="210" y="110">Period 2.2021</text>
+        strResult += '<rect fill="transparent" stroke="{}" stroke-width="2" x="{}" y="{}" rx="3" ry="3" height="{}" width="{}"/>\n'.format('#aaaaaa', 0, 0, diagram_height, config.diagram_width)
 
         for i in [3600/4,3600/2,3600,2*3600,3*3600,4*3600,5*3600,6*3600]:
-            w = i / 3600 * 25 * config.diagram_scale_dist
-            strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format( config.diagram_offset + w, 20, config.diagram_offset + w, diagram_height)
+            w = config.diagram_offset + i / 3600 * 25 * config.diagram_scale_dist
+            strResult += '<line stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(w, 0, w, diagram_height)
 
         strResult += self.toSVG()
-        #strResult += '</g>'
-        strResult += '</svg>\n'
 
-        return strResult
-
-
-    def toSVGGantt(self,dateBase,y=0):
-
-        """  """
-    
-        try:
-            l = self.getPeriodDone()
-            x_i = (self.dateBegin - dateBase).days * 2
-        except ValueError as e:
-            print('error: ' + str(e), file=sys.stderr)
-            return ''
-        
-        strResult = '<g>'
-
-        if self.color == None:
-            color = '#ffaaaa'
-        else:
-            color = self.color
-            
-        strResult += '<rect opacity=".75" stroke="red" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}" rx="2">\n'.format(color, x_i, y, config.diagram_bar_height*2, len(self) * 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ') ' + self.__listDescriptionToString__())
-        strResult += '</rect>'
-
-        # TODO: make config.diagram_height configurable
-        config.diagram_height = 40 * (config.diagram_bar_height * 2) + 100
-
-        h = round(self.getDuration().total_seconds() / 60 / l)
-
-        if self.color != None:
-            scolor = 'red'
-            color = self.color
-        elif h > 20:
-            scolor = 'green'
-            color = '#aaffaa'
-        elif h > 4:
-            scolor = 'red'
-            color = '#ffaaaa'
-        else:
-            h = 2
-            scolor = 'red'
-            color = 'red'
-            
-        strResult += '<rect opacity=".75" stroke="{}" stroke-width=".5" fill="{}" x="{}" y="{}" height="{}" width="{}">\n'.format(scolor, color, x_i + 1, config.diagram_height - h - 10, h, l * 2 - 2)
-        strResult += '<title>{}</title>\n'.format(self.getTitleXML() + ' (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')\n\n' + self.__listDescriptionToString__() + '\n\n' + self.report())
-        strResult += '</rect>'
-
-        #strResult += '<text x="{}" y="{}">{}</text>\n'.format(x_i,y,self.getTitleXML())
         strResult += '</g>'
+        strResult += '</svg>\n'
 
         return strResult
 
@@ -664,8 +1100,8 @@ class Cycle(Title,Description):
                 color = 'black'
             else:
                 color = 'red'
-                
-            strResult += '<line stroke-dasharray="8" stroke="{}" stroke-width="1" opacity="0.25" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(color,w, 0, w, diagram_height)
+
+            strResult += '<line stroke-dasharray="8" stroke="{}" stroke-width="1" opacity="0.5" x1="{}" y1="{}" x2="{}" y2="{}">\n'.format(color,w, 0, w, diagram_height)
             strResult += '<title>{}</title>\n'.format(d_i.strftime("%Y-%m-%d"))
             strResult += '</line>'
             strResult += '<g transform="translate({},{})">'.format(w+8, diagram_height - 105)
@@ -680,8 +1116,11 @@ class Cycle(Title,Description):
 
         for i in [0,30,45,60,90]:
             strResult += '<line stroke-dasharray="2" stroke="black" stroke-width=".5" x1="{}" y1="{}" x2="{}" y2="{}"/>\n'.format(0, diagram_height - 10 - i, diagram_width, diagram_height - 10 - i)
-            
-        strResult += self.toSVGGantt(d_0)
+
+        strResult += self.toSVGGanttBar(d_0)
+        
+        # TODO: add unit marker if u.isMarked()
+
         strResult += '</g>'
         strResult += '</svg>\n'
 
@@ -694,17 +1133,17 @@ class Cycle(Title,Description):
 
         strResult = '<node'
 
-        if self.color != None:
+        if self.color is not None:
             strResult += ' BACKGROUND_COLOR="{}"'.format(self.color)
         elif self.getNumberOfUnits() < 1:
             strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')
         else:
             strResult += ' FOLDED="{}"'.format('true')
 
-        strResult += ' TEXT="' + self.getTitleXML() + '&#xa;(' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
-        strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
+        strResult += ' LOCALIZED_STYLE_REF="default" TEXT="' + self.getTitleXML() + ' ' + self.getDateString() + '&#xa;' + self.report().replace('\n','&#xa;') + '">\n'
+        #strResult += '<font BOLD="false" NAME="Monospaced" SIZE="12"/>'
 
-        strResult += self.__listDescriptionToFreemind__()
+        strResult += self.getDescriptionFreemind()
 
         d_i = self.dateBegin
         for v in self.day:
@@ -716,7 +1155,7 @@ class Cycle(Title,Description):
                 strResult += u.toFreemindNode()
             strResult += '</node>\n'
             d_i += timedelta(days=1)
-            
+
         strResult += '</node>\n'
 
         return strResult
@@ -738,7 +1177,7 @@ class Cycle(Title,Description):
         """  """
 
         event = Event()
-        event.add('summary', 'Cycle: {}'.format(self.getTitleStr()))
+        event.add('summary', 'Cycle: {}'.format(self.getTitleString()))
         event.add('dtstart', self.dateBegin)
         event.add('dtend', self.dateEnd + timedelta(days=1))
         event.add('dtstamp', datetime.now().astimezone(None))
@@ -754,7 +1193,7 @@ class Cycle(Title,Description):
         """  """
 
         cal = Calendar()
-        cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleStr()))
+        cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleString()))
         cal.add('version', '2.0')
         self.to_ical(cal)
         return cal.to_ical()

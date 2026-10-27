@@ -25,11 +25,42 @@ from training.unit import Unit
 
 print('Module Test: ' + __file__ + '\n')
 
-#t = Unit('2020-03-03T17:00:00+1:00;10;RG;20min')
-t = Unit('10:00;10;R Basics;20min')
-t.setDate(date(2025, 1, 7))
+t = Unit()
+t.setDistStr('40')
+t.setTypeStr('Biking')
+t.setDuration('2h')
+print(repr(t))
+
+t = Unit()
+t.setTypeStr('Biking')
+t.setDuration('30min')
+t.setDistStr()
 print(t)
+
+t = Unit('Running')
+t.setDistStr('20')
+t.setDuration()
+t.setDate(date(2025, 1, 7))
+print(repr(t))
+
+t = Unit(['2020-03-02', '10,0', 'Biking', '1h'])
+print(repr(t))
+
+t = Unit('2020-03-03T17:00:00+1:00;10;Biking;20min').appendDescription(['WWW',['YYY','ZZZ','http://www.demo.org/','garmin:12345678']])
+#print(t.toHtmlTable())
+#print(t.toCSV())
+#print(t.toSqlite())
+print(t)
+
+t = Unit(';;Biking;45min').updateValues({'Biking': 25.0})
+print(t)
+t = Unit(';45;Biking;').updateValues({'Biking': 25.0})
+print(t)
+
+#quit()
+
 t.scale(2)
+t.mark()
 print(t)
 
 #t.setClock()
@@ -41,7 +72,7 @@ print(t)
 #t.setDate(datetime(2025, 1, 7, 22, 0).astimezone(None),datetime(2025, 1, 7, 8, 0).astimezone(None),datetime(2025, 1, 7, 20, 0).astimezone(None))
 #t.setClock(time(0))
 #t.setColor('#ffaaaa')
-#print(t.toHtml())
+print(t.toHtmlTable())
 #print(t.toXML())
 
 #t = Unit('08:00;10;RG;20min')

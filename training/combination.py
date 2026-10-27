@@ -19,42 +19,42 @@
 
 import sys
 
-import math
-
 import copy
-
-import re
-
-from statistics import mean
 
 from datetime import timedelta, date, datetime, time
 
 from icalendar import Calendar, Event, Alarm
 
 from training import config as config
+from training.duration import Duration
 from training.description import Description
 from training.title import Title
 from training.note import Note
 from training.unit import Unit
+from training.exerciseset import ExerciseSet
 from training.pause import Pause
 
 #
 #
 #
 
-class Combination(Title,Description):
+class Combination(Title,Note):
 
-    def __init__(self,listArg=[]):
+    def __init__(self,listArg=[],flagAnd=True):
 
         """  """
 
         super(Title, self).__init__()
-        super(Description, self).__init__()
+        super(Note, self).__init__()
+
+        self.setDescription()
         
         self.child = []
+        self.logicAnd = flagAnd
+        self.dt = None
 
         for objArg in listArg:
-            if objArg == None or (type(objArg) != Unit and type(objArg) != Pause and type(objArg) != Note):
+            if objArg is None or (type(objArg) != Unit and type(objArg) != ExerciseSet and type(objArg) != Pause and type(objArg) != Note and type(objArg) != Combination):
                 print('error: ' + str(objArg), file=sys.stderr)
             else:
                 self.child.append(objArg.dup())
@@ -64,22 +64,80 @@ class Combination(Title,Description):
 
         """  """
 
-        strResult = 'Combination: {} {}\n'.format(self.getDuration(), super().__listDescriptionToString__())
+        if self.isCircuit():
+            strResult = 'Circuit '
+        elif self.logicAnd:
+            strResult = 'Combination '
+        else:
+            strResult = 'Alternatives '
+
+        strResult += self.getDuration().toString() + ' ' + self.getTitleString() + ' ' + self.getDescriptionString() + '\n'
 
         for u in self.child:
-            strResult += '\t' + str(u) + '\n'
+            strResult += '\t + ' + str(u) + '\n'
         strResult += '\n'
 
         return strResult
 
 
-    def appendDescription(self,objArg):
+    def getRepetitions(self):
 
         """  """
 
-        super().appendDescription(objArg)
+        n = 0
+                
+        for c in self.child:
+            if type(c) is Combination or type(c) is ExerciseSet:
+                n += c.getRepetitions()
+                
+        return n
 
-        return self
+
+    def isCircuit(self):
+
+        """  """
+
+        for i in range(len(self.child)):
+            if type(self.child[i]) is Combination and self.child[i].isCircuit():
+                pass
+            elif type(self.child[i]) is ExerciseSet or type(self.child[i]) is Pause:
+                pass
+            else:
+                return False
+            
+        return True
+
+
+    def toStringShort(self):
+
+        """  """
+
+        # common date
+        strDate = ''
+
+        strResult = ''
+
+        if self.isCircuit():
+            strResult += 'Circuit'
+        else:
+            for i in range(len(self.child)):
+                if type(self.child[i]) is Note:
+                    pass
+                else:
+                    if i < 1:
+                        pass
+                    elif self.logicAnd:
+                        # Combination
+                        strResult += ' & '
+                    else:
+                        # Alternatives
+                        strResult += ' | '
+                    strResult += self.child[i].toStringShort()
+
+                    if not strDate and type(self.child[i]) is Unit and self.child[i].dt is not None:
+                        strDate = self.child[i].dt.strftime("%Y-%m-%d ")
+
+        return f'({strResult} {self.getTitleString()} {self.getDescriptionString()})'
 
 
     def setDate(self,dtArg=None,dt_0=None,dt_1=None):
@@ -88,33 +146,44 @@ class Combination(Title,Description):
 
         #print(__name__ + ': ' + str(self), file=sys.stderr)
 
-        if dtArg == None:
+        if dtArg is None:
             return None
-        elif type(dtArg) == date:
+        elif type(dtArg) is date:
             return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
+        elif not self.logicAnd:
+            m = self.getRepresentativeAlternative()
+            if m is not None:
+                dt = m.setDate(dtArg)
         else:
             i = 0
-            dt = dtArg
+            self.dt = dtArg
+            dt = self.dt
             for u in self.child:
                 
-                if type(u) == Note:
+                if type(u) is Note:
                     u.setDate(dt)
-                elif type(u) == Unit:
+                elif type(u) is Combination:
+                    u.setDate(dt)
+                    i += 1
+                elif type(u) is ExerciseSet:
+                    u.setDate(dt)
+                    i += 1
+                elif type(u) is Unit:
 
                     if i == 0:
                         # initial unit
-                        if u.tPlan == None:
+                        if u.tPlan is None:
                             #dt = dt_0
                             pass
-                        elif type(u.tPlan) == str and u.tPlan == 'sunrise' and dt_0 != None:
+                        elif type(u.tPlan) is str and u.tPlan == 'sunrise' and dt_0 is not None:
                             # shift start time after twilight
                             dt = dt_0
                             dt += timedelta(minutes=(dt.minute % 15))
-                        elif type(u.tPlan) == str and u.tPlan == 'sunset' and dt_1 != None:
+                        elif type(u.tPlan) is str and u.tPlan == 'sunset' and dt_1 is not None:
                             # shift end time before twilight
                             dt = dt_1 - self.getDuration()
                             dt -= timedelta(minutes=(dt.minute % 15))
-                        elif type(u.tPlan) == time:
+                        elif type(u.tPlan) is time:
                             dt = datetime.combine(dtArg.date(),u.tPlan).astimezone(None)
                         else:
                             #dt = datetime.combine(dtArg.date(),u.tPlan).astimezone(None)
@@ -124,27 +193,36 @@ class Combination(Title,Description):
                         
                     dt = u.setDate(dt)
                     i += 1
-                elif type(u) == Pause:
-                    if i == 0:
-                        print(__name__ + ': ignoring initial' + str(self), file=sys.stderr)
-                    else:
-                        dt = u.setDate(dt)
-                        i += 1
+                elif type(u) is Pause:
+                    dt = u.setDate(dt)
+                    i += 1
                 
         return dt
+
+
+    def updateValues(self,dictArg=None):
+
+        """  """
+
+        if dictArg is not None:
+            for c in self.child:
+                if type(c) is Unit:
+                    c.updateValues(dictArg)
+
+        return self
 
 
     def remove(self,patternType=None):
 
         """  """
 
-        if patternType != None:
+        if patternType is not None:
             # whole combination using pattern
             childsNew = []
             for u in self.child:
-                if type(u) == Unit and (u.type == None or re.match(patternType,u.type)):
+                if type(u) is Unit and u.match(patternType):
                     pass
-                elif type(u) == Pause:
+                elif type(u) is Pause:
                     pass
                 else:
                     childsNew.append(u)
@@ -154,63 +232,117 @@ class Combination(Title,Description):
         return self
 
 
+    def append(self,objArg):
+
+        """  """
+        
+        if type(objArg) is list:
+            for e in objArg:
+                self.child.append(e)
+        else:
+            self.child.append(objArg)
+        
+        return self
+
+
     def resetDistances(self):
 
         """  """
 
         for u in self.child:
-            if type(u) == Unit:
+            if type(u) is Unit:
                 u.setDistStr(None)
 
         return self
 
 
-    def getNumberOfUnits(self):
+    def getNumberOfUnits(self, dt0=None, dt1=None):
 
         """  """
 
         intResult = 0
 
         for u in self.child:
-            if type(u) == Unit and u.type != None and len(u.type) > 0:
+            if u.dt is not None and ((dt0 is not None and u.dt.date() < dt0) or (dt1 is not None and dt1 < u.dt.date())):
+                # u is out of interval
+                pass 
+            elif type(u) is Unit and u.isCountable():
                 intResult += 1
 
         return intResult
 
 
-    def getDuration(self):
+    def getRepresentativeAlternative(self, skipType=None):
+
+        """ return the representative Unit of this combination (longest duration) """
+
+        r = None
+
+        if not self.logicAnd:
+            s_max = 0
+            for u in self.child:
+                if type(u) is Unit:
+                    s = u.getDuration(skipType).total_seconds()
+                    if s > s_max:
+                        r = u
+                        s_max = s
+                elif type(u) is Combination:
+                    q = u.getRepresentativeAlternative(skipType)
+                    if q is not None:
+                        s = q.getDuration().total_seconds()
+                        if s > s_max:
+                            r = q
+                            s_max = s
+
+        return r
+
+
+    def getDuration(self, skipType=None):
 
         """ return a timedelta """
 
         intResult = 0
-        for u in self.child:
-            if (type(u) == Unit or type(u) == Pause):
-                intResult += u.getDuration().total_seconds()
+        if self.logicAnd:
+            for u in self.child:
+                if type(u) is Combination or type(u) is Unit or type(u) is ExerciseSet or type(u) is Pause:
+                    intResult += u.getDuration(skipType).total_seconds()
+        else:
+            # Alternatives
+            intResult = self.getRepresentativeAlternative(skipType).getDuration().total_seconds()
 
-        return timedelta(seconds=intResult)
+        return Duration(intResult / 60)
 
 
     def scale(self,floatScale,patternType=None):
 
         """  """
 
-        for u in self.child:
-            if type(u) == Unit:
-                u.scale(floatScale,patternType)
+        r = self.dup()
+        if floatScale > 0.01 and abs(floatScale - 1.0) > 0.01:
+            for u in r.child:
+                if type(u) is Unit or type(u) is ExerciseSet or type(u) is Combination:
+                    u.scale(floatScale,patternType)
 
-        return self
+        return r
 
 
-    def stat(self, dictArg):
+    def stat(self, skipType=None):
 
         """  """
 
-        if dictArg == None:
-            print('error: ' + 'no dict', file=sys.stderr)
-        else:
+        listResult = []
+
+        if self.logicAnd:
             for u in self.child:
-                if type(u) == Unit:
-                    u.stat(dictArg)
+                if type(u) is Combination or type(u) is ExerciseSet or (type(u) is Unit and u.isCountable()):
+                    listResult.extend(u.stat(skipType))
+        else:
+            # stat longest unit of alternatives only
+            m = self.getRepresentativeAlternative()
+            if m is not None:
+                listResult.extend(m.stat(skipType))
+
+        return listResult
 
 
     def dup(self):
@@ -220,21 +352,109 @@ class Combination(Title,Description):
         return copy.deepcopy(self)
 
 
-    def toHtml(self):
+    def toHtmlTable(self):
 
         """  """
-        
-        strResult = '<section class="{}"'.format(__name__)
 
-        if self.color != None:
+        strResult = ''
+
+        if len(self.child) > 1:
+            strResult = f'<div {config.getClass(__name__)}'
+            if self.color is not None:
+                strResult += ' style="background-color: {}"'.format(self.color)
+            strResult += '>'
+
+            if self.hasTitle():
+                strResult += self.getTitleString() + ' ' + self.getDuration().toString()
+            elif self.isCircuit():
+                strResult += 'Circuit: ' + str(self.getRepetitions()) + ' Repetitions in ' + self.getDuration().toString()
+            elif self.logicAnd:
+                strResult += 'Combination: ' + self.getDuration().toString()
+            else:
+                strResult += 'Alternatives: max. ' + self.getDuration().toString()
+
+            strResult += self.getDescriptionHTML()
+
+            if not self.isCircuit():
+                # append the details if it is not a Circuit
+                if self.logicAnd:
+                    strResult += '<ol style="margin-block-start: 2px; margin-block-end: 2px;">'
+                else:
+                    strResult += '<ol style="list-style-type: lower-latin; margin-block-start: 2px; margin-block-end: 2px;">'
+
+                for u in self.child:
+                    strResult += '<li>' + u.toHtmlTable() + '</li>'
+                strResult += '</ol>'
+
+            strResult += '</div>'
+
+        elif self.child:
+            strResult = '<div>' + self.child[0].toHtmlTable() + '</div>'
+
+        return strResult
+
+
+    def toHtmlSheet(self,fImages=True,fDescription=True):
+
+        """  """
+
+        strResult = f'<table {config.getClass(__name__)}'
+        if self.color is not None:
             strResult += ' style="background-color: {}"'.format(self.color)
+        strResult += '>'
 
-        strResult += '>\n<ul>' + super().__listDescriptionToHtml__() + '</ul>'
+        strResult += '<tbody>'
+
+        if self.hasTitle():
+            strResult += '<tr><th colspan="4">' + self.getTitleString() + '</th></tr>'
+
+        #strResult += self.getDescriptionHTML()
+        t = timedelta(seconds=0)
 
         for u in self.child:
-            strResult += u.toHtml()
-        
-        strResult += '</section>'
+            if type(u) is Combination:
+                # nested Combination
+                strResult += '<tr><td>' + u.toHtmlSheet(fImages,fDescription) + '</td></tr>'
+            elif type(u) is ExerciseSet:
+                strResult += '<tr><td>' + str(t) + '</td>' + u.toHtmlSheet(fImages,fDescription) + '</tr>'
+                t += u.getDuration() + timedelta(seconds=15)
+            elif type(u) is Pause:
+                strResult += '<tr><td>' + str(t) + '</td><td>' + u.toHtmlTable() + '</td><td></td></tr>'
+                t += u.getDuration() + timedelta(seconds=15)
+            else:
+                strResult += '<tr><td>' + u.toHtmlTable() + '</td></tr>'
+
+        strResult += '<tr><td>' + str(t) + '</td><td>Duration</td><td></td></tr>'
+                    
+        strResult += '</tbody>'
+        strResult += '</table>'
+
+        return strResult
+
+
+    def toHtmlFile(self,fImages=True,fDescription=True):
+
+        """ returns html/body + content """
+
+        strResult = '<!doctype html public "-//IETF//DTD HTML 4.0//EN">'
+
+        strResult += "<html>"
+
+        strResult += "<head>"
+
+        strResult += '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>'
+
+        strResult += "<title></title>"
+
+        strResult += config.style
+
+        strResult += config.script
+
+        strResult += "</head>"
+
+        strResult += "<body>" + self.toHtmlSheet(fImages,fDescription) + "</body>"
+
+        strResult += "</html>"
 
         return strResult
 
@@ -243,11 +463,11 @@ class Combination(Title,Description):
 
         """  """
 
-        strResult = '\n* ' + self.getTitleStr() + ' (' + self.dateBegin.strftime("%Y-%m-%d") + ' .. ' + self.dateEnd.strftime("%Y-%m-%d") + ')' + '\n'
-        for v in self.child:
-            for u in v:
-                if type(u) == Unit:
-                    strResult += u.toCSV() + '\n'
+        # TODO: if self.logicAnd:
+
+        strResult = ''
+        for u in self.child:
+            strResult += u.toCSV()
 
         return strResult
 
@@ -259,9 +479,16 @@ class Combination(Title,Description):
         strResult = '<g>'
 
         x_i = x
-        for u in self.child:
-            strResult += u.toSVG(x_i,y)
-            x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
+        if self.logicAnd:
+            for u in self.child:
+                if type(u) is Unit or type(u) is Pause:
+                    strResult += u.toSVG(x_i,y)
+                    x_i += u.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
+        else:
+            m = self.getRepresentativeAlternative()
+            if m is not None:
+                strResult += m.toSVG(x_i,y)
+                x_i += m.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
              
         strResult += '</g>'
 
@@ -272,32 +499,96 @@ class Combination(Title,Description):
 
         """  """
 
-        strResult = '<node'
+        strResult = ''
 
-        if self.color != None:
-            strResult += ' BACKGROUND_COLOR="{}"'.format(self.color)
-        elif self.getNumberOfUnits() < 1:
-            strResult += ' BACKGROUND_COLOR="{}"'.format('#ffaaaa')
-        else:
-            strResult += ' FOLDED="{}"'.format('true')
+        if len(self.child) > 1:
+            strResult = '<node'
+            if self.color is not None:
+                strResult += f' BACKGROUND_COLOR="{self.color}"'
+            elif self.getNumberOfUnits() < 1:
+                strResult += f' BACKGROUND_COLOR="#ffaaaa"'
+            else:
+                strResult += f' FOLDED="true"'
 
-        strResult += ' TEXT="Combination">\n'
+            if self.logicAnd:
+                strResult += ' TEXT="Combination ' + self.getDuration().toString() + '"'
+            else:
+                strResult += ' TEXT="Alternatives"'
+            strResult += '>\n'
 
-        strResult += self.__listDescriptionToFreemind__()
+            strResult += self.getDescriptionFreemind()
 
-        for u in self.child:
-            strResult += u.toFreemindNode()
-                        
-        strResult += '</node>\n'
+            for u in self.child:
+                strResult += u.toFreemindNode()
+                            
+            strResult += '</node>\n'
+        elif self.child:
+            # only a single child
+            strResult += self.child[0].toFreemindNode()
 
         return strResult
 
 
-    def to_ical(self,cal):
+    def to_ical(self,cal=None):
 
         """  """
         
-        for u in self.child:
-            u.to_ical(cal)
+        if len(self.child) > 1:
+            event = Event()
+            event.add('dtstamp', datetime.now().astimezone(None))
+            if self.logicAnd:
+                m = self.child[0]
+                event.add('summary', f'Combination: {self.toStringShort()}')
+                if m.dt is None and m.tPlan is not None:
+                    # no day defined
+                    dt = datetime.combine(date.today(), m.tPlan)
+                    event.add('dtstart', dt)
+                    event.add('dtend', dt + self.getDuration())
+                elif m.dt is None:
+                    # no day defined
+                    pass
+                elif type(m.tPlan) is datetime.time:
+                    # day defined
+                    dt = datetime.combine(m.dt, m.tPlan)
+                    event.add('dtstart', dt)
+                    event.add('dtend', dt + self.getDuration())
+                elif m.dt.time() == time(0) or self.getDuration() is None:
+                    # no time defined
+                    event.add('dtstart', m.dt.date())
+                    event.add('dtend', m.dt.date() + timedelta(days=1))
+                else:
+                    event.add('dtstart', m.dt)
+                    event.add('dtend', m.dt + self.getDuration())
 
+                cal.add_component(event)
+
+            else:
+                m = self.getRepresentativeAlternative()
+
+                if m is not None and not (m.dt is None and m.tPlan is None) and cal is not None and event is not None:
+                    event.add('summary', f'Alternatives: {self.toStringShort()}')
+                    if m.dt is None and m.tPlan is not None:
+                        # no day defined
+                        dt = datetime.combine(date.today(), m.tPlan)
+                        event.add('dtstart', dt)
+                        event.add('dtend', dt + m.duration)
+                    elif m.tPlan is not None:
+                        # day defined
+                        dt = datetime.combine(m.dt, m.tPlan)
+                        event.add('dtstart', dt)
+                        event.add('dtend', dt + m.duration)
+                    elif m.dt.time() == time(0) or m.duration is None:
+                        # no time defined
+                        event.add('dtstart', m.dt.date())
+                        event.add('dtend', m.dt.date() + timedelta(days=1))
+                    else:
+                        event.add('dtstart', m.dt)
+                        event.add('dtend', m.dt + m.duration)
+
+                    cal.add_component(event)
+                else:
+                    print('error: ' + 'not defined', file=sys.stderr)
+        elif self.child:
+            # only a single child
+            self.child[0].to_ical(cal)
 

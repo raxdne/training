@@ -20,30 +20,39 @@
 #
 #
 #
+from datetime import date
 
 class Title:
 
     """ abstract class to handle title """
 
-    def __init__(self,strArg=None):
+    def __new__(cls, *args, **kwargs):
 
-        """  """
+        if cls is Title:
+            raise TypeError("Cannot instantiate abstract class")
+        return super().__new__(cls)
+
+
+    def __init__(self,strArg=None):
 
         self.setTitleStr(strArg)
 
 
+    def __repr__(self):
+
+        return f'{self.__class__.__name__}({self.strTitle!r})'
+
+
     def __str__(self):
 
-        """  """
-
-        return self.strTitle
+        return str(self.strTitle)
 
 
     def setTitleStr(self,strArg):
 
         """  """
 
-        if strArg == None:
+        if strArg is None or type(strArg) is not str:
             self.strTitle = '-'
         else:
             self.strTitle = strArg
@@ -55,15 +64,32 @@ class Title:
 
         """  """
 
-        return self.strTitle != None and len(self.strTitle) > 0
+        return hasattr(self,'strTitle') and self.strTitle is not None and len(self.strTitle) > 1
 
 
-    def getTitleStr(self):
+    def getTitleString(self):
 
         """  """
 
-        return self.strTitle
-        #return str(self)
+        if self.hasTitle():
+            return self.strTitle
+        else:
+            return ''
+
+
+    def getDateString(self):
+
+        """  """
+
+        strResult = ' '
+
+        if type(self.dateBegin) is date and self.dateBegin is not None and type(self.dateEnd) is date and self.dateEnd is not None:
+            if hasattr(self,'day'):
+                strResult += '(' + str(len(self.day)) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + '/' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+            else:
+                strResult += '(' + str((self.dateEnd - self.dateBegin).days + 1) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + '/' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+
+        return strResult
 
 
     def getTitleXML(self):
@@ -73,4 +99,9 @@ class Title:
         return self.strTitle.replace("&", "&amp;").replace("\"", "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+    def getTitleLineTableOfContent(self,strIndent=''):
+
+        """  """
+
+        return '{}<a href="#{}">{}</a>'.format(strIndent, str(id(self)), self.getTitleXML())
 

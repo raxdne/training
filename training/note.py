@@ -42,39 +42,55 @@ class Note(Description):
 
         """  """
 
-        super().__init__()
+        super(Description, self).__init__()
+        self.setDescription()
         
         self.dt = None
         self.tPlan = None
+        self.marker = False
+        self.color = None
+        self.parse(strArg)
 
-        if strArg != None and len(strArg) > 0:
-            self.parse(strArg)
-            #print('New Unit: ' + strArg + ' -> {} {} {} {} {}'.format(self.dt, self.dist, self.type, self.duration, self.__listDescriptionToString__()), file=sys.stderr)
+
+    def __repr__(self):
+
+        strResult = f'{self.__class__.__name__}({self.dt!r})'
+        if self.hasDescription():
+            strResult += f'.appendDescription({self.listDescription!r})'
+
+        return strResult
 
 
     def __str__(self):
 
         """  """
 
-        if self.dt == None:
+        if self.dt is None:
             strResult = ''
-        elif self.dt.time() == time(0):
+        elif type(self.dt) is date or self.dt.time() == time(0):
             strResult = self.dt.strftime("%Y-%m-%d")
         else:
             strResult = self.dt.strftime("%Y-%m-%d %H:%M:%S")
             
-        strResult += ' ' + super().__str__()
+        strResult += ' ' + self.getDescriptionString()
 
         return strResult
 
 
-    def appendDescription(self,objArg):
+    def mark(self):
 
         """  """
 
-        super().appendDescription(objArg)
+        self.marker = True
 
         return self
+
+
+    def isMarked(self):
+
+        """  """
+
+        return hasattr(self,'marker') and self.marker == True
 
 
     def setClock(self,timeArg=None):
@@ -90,21 +106,21 @@ class Note(Description):
 
         """  """
 
-        if dtArg == None:
+        if dtArg is None:
             self.dt = None
-        elif type(dtArg) == date:
-            if self.tPlan == None:
+        elif type(dtArg) is date:
+            if self.tPlan is None:
                 return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
             else:
                 return self.setDate(datetime.combine(dtArg,self.tPlan).astimezone(None),dt_0,dt_1)
-        elif type(dtArg) == datetime:
-            if self.tPlan != None and dtArg.time() == time(0):
+        elif type(dtArg) is datetime:
+            if self.tPlan is not None and dtArg.time() == time(0):
                 return self.setDate(datetime.combine(dtArg.date(),self.tPlan).astimezone(None),dt_0,dt_1)
             else:
                 self.dt = dtArg
                 return self.dt
         else:
-            print('error: ' + str(dtArg), file=sys.stderr)
+            print('error: date ' + str(dtArg), file=sys.stderr)
 
         return None
 
@@ -113,7 +129,7 @@ class Note(Description):
 
         """  """
 
-        if strArg == None or strArg == '':
+        if strArg is None or strArg == '':
             pass
         elif strArg == '+':
             # it's a combined unit (starts after its predecessor unit, same date)
@@ -125,7 +141,7 @@ class Note(Description):
         else:
             # canonical ISO Date+Time
             m = re.match(r"\s*([0-9]{4}-*[0-9]{2}-*[0-9]{2})[\sT]+([0-2][0-9]:[0-5][0-9])\s*",strArg)
-            if m != None:
+            if m is not None:
                 try:
                     self.dt = datetime.fromisoformat(m.group(0)).astimezone(None)
                 except ValueError as e:
@@ -133,8 +149,8 @@ class Note(Description):
                     return False
             else:
                 # german Date
-                m = re.match(r"([0-9]{2})\.([0-9]{2})\.([0-9]{4})",strArg)
-                if m != None:
+                m = re.match(r"\b([0-9]{2})\.([0-9]{2})\.([0-9]{4})\b",strArg)
+                if m is not None:
                     try:
                         self.dt = datetime(int(m.group(3)), int(m.group(2)), int(m.group(1)),0,0,0).astimezone(None)
                     except ValueError as e:
@@ -142,8 +158,8 @@ class Note(Description):
                         return False
                 else:
                     # canonical ISO Date
-                    m = re.match(r"([0-9]{4})-*([0-9]{2})-*([0-9]{2})",strArg)
-                    if m != None:
+                    m = re.match(r"\b([0-9]{4})-*([0-9]{2})-*([0-9]{2})\b",strArg)
+                    if m is not None:
                         try:
                             self.dt = datetime(int(m.group(1)), int(m.group(2)), int(m.group(3)),0,0,0).astimezone(None)
                         except ValueError as e:
@@ -151,10 +167,10 @@ class Note(Description):
                             return False
                     else:
                         # plan time only
-                        m = re.match(r"([0-2][0-9]:[0-5][0-9])",strArg)
-                        if m != None:
+                        m = re.match(r"\b([0-2][0-9]:[0-5][0-9])\b",strArg)
+                        if m is not None:
                             #print("time: ",m.group(1), file=sys.stderr)
-                            self.tPlan = time.fromisoformat("{}:00".format(m.group(1)))
+                            self.tPlan = time.fromisoformat(m.group(1) + ':00')
                         else:
                             print('ignoring: ',strArg, file=sys.stderr)
 
@@ -174,9 +190,10 @@ class Note(Description):
 
         #self.__init__()
         
-        if objArg == None or len(objArg) < 1:
+        if objArg is None or not objArg:
             return False
         elif type(objArg) is str:
+            self.color = "#ffff00"
             entry = objArg.split(';')
             #print('Note {}'.format(str(entry)), file=sys.stderr)
             if len(entry) == 1:
@@ -189,7 +206,7 @@ class Note(Description):
             else:
                 return self.parse(entry)
         elif type(objArg) is list and len(objArg) > 3:
-            if len(objArg[0]) > 0 and len(objArg[1]) == 0 and len(objArg[2]) == 0 and  len(objArg[3]) == 0 and (len(objArg[4]) > 0 or len(objArg[5]) > 0):
+            if objArg[0] and not objArg[1] and not objArg[2] and not objArg[3]:
                 self.setDateStr(objArg[0])
                 self.appendDescription(objArg[4:])
                 #print('Note {}'.format(str(self)), file=sys.stderr)
@@ -200,6 +217,18 @@ class Note(Description):
             return False
 
 
+    def getColor(self):
+
+        """  """
+        
+        strResult = ''
+        
+        if self.color is not None:
+            strResult = self.color
+
+        return strResult
+
+
     def toString(self):
 
         """  """
@@ -207,20 +236,18 @@ class Note(Description):
         return str(self)
 
 
-    def toHtml(self):
+    def toHtmlTable(self):
 
         """  """
 
-        strResult = '<p>' + str(self) + '</p>'
-        
-        return strResult
+        return f'<div {config.getClass(__name__)} style="background-color: {self.getColor()}">{self.getDescriptionString()}</div>'
 
 
     def toCSV(self):
 
         """  """
 
-        strResult = ';' + self.__listDescriptionToString__()
+        strResult = '{};;;;{}\n'.format(self.dt.strftime("%Y-%m-%d"), self.getDescriptionString())
 
         return strResult
 
@@ -229,7 +256,7 @@ class Note(Description):
 
         """  """
 
-        strResult = '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.__listDescriptionToString__(), str(self))
+        strResult = '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.getDescriptionString(), str(self))
 
         return strResult
 
@@ -238,7 +265,8 @@ class Note(Description):
 
         """  """
 
-        strResult = self.__listDescriptionToFreemind__()
+        strResult = self.getDescriptionFreemind()
+        # TODO: handle color properties (s. Unit)
 
         return strResult
 
@@ -247,13 +275,18 @@ class Note(Description):
 
         """  """
 
-        if self.dt != None:
+        if self.dt is not None and type(self.dt) is datetime:
             event = Event()
 
-            event.add('summary', self.__listDescriptionToString__())
-            event.add('dtstart', self.dt.date())
-            event.add('dtend', self.dt.date() + timedelta(days=1))
-        
+            event.add('summary', self.getDescriptionString())
+
+            if type(self.dt) is datetime:
+                event.add('dtstart', self.dt.date())
+                event.add('dtend', self.dt.date() + timedelta(days=1))
+            else:
+                event.add('dtstart', self.dt)
+                event.add('dtend', self.dt + timedelta(days=1))
+                
             event.add('dtstamp', datetime.now().astimezone(None))
             cal.add_component(event)
 

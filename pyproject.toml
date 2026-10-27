@@ -1,0 +1,23 @@
+[project]
+name = "training"
+version = "2026.5.1"
+dependencies = [
+	     "suntime",
+	     "icalendar",
+	     "numpy",
+	     "matplotlib",
+]
+authors = [
+	  {name = "Alexander Tenbusch", email = "raxdne@web.de"}
+	]
+description = "simple Data Management for Physical Training"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+keywords = ["endurance","training"]
+
+[project.urls]
+Repository = "https://github.com/raxdne/training"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

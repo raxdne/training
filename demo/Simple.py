@@ -2,6 +2,10 @@
 #
 #
 
+#import pdb
+
+import sys
+
 from datetime import date
 
 from training.unit import Unit
@@ -9,12 +13,13 @@ from training.cycle import Cycle
 from training.period import Period
 import training.config as config
 
+#config.max_length_type = 3
 
 def RegenerationGeneral():
     r = Cycle('General Regeneration')
-    r.insert(1,Unit('30;Bicycle;1:15:00'))
-    r.insert(3,Unit('3.5;Running;25:00'))
-    r.insert(6,Unit('30;Bicycle;1:15:00'))
+    r.insert(1,Unit(';Bicycle;1:15:00'))
+    r.insert(3,Unit(';Running;25:00'))
+    r.insert(6,Unit(';Bicycle;1:15:00'))
 
     return r
 
@@ -105,7 +110,7 @@ def BicycleSimple():
     
     p.append(BasicsBicycle())
     p.append(BuildupBicycleSpeed())
-    p.append(Period('Buildup Bicycle Speed',21))
+    p.append(Period('Buildup Bicycle Speed',21).define([';Bicycle;10h']))
     p.append(BasicsBicycle())
     p.append(BuildupBicycleSpeed())
 
@@ -197,9 +202,19 @@ def PlanSimple(strArg):
 
 #print(config.getSettingsStr())
 
-s = PlanSimple('Season Simple').schedule(date.today().year,1,1)
+s = PlanSimple('Season Simple').schedule(date.today().year,1,1).updateValues()
+#s.updateValues({'Running': 6.0, 'Bicycle': 20.0})
 
-s.remove(patternType=r'^[^B]')
+# patch some days using a scheduled cycle
+c = Cycle('Pause Running').insert([1,3,5],Unit('10;Running;3:00:00')).schedule(date.today().year,7,2)
+print('info: ' + str(c), file=sys.stderr)
+#breakpoint()
+s.insertByDate(c,True)
+
+#s.append(Period('Insert',14).define(';Swimming;10h'))   
+#s.append(Cycle('Insert'))
+#s.remove(patternType=r'^[^B]')
+s.schedule(date.today().year,1,1).updateValues()
 
 print(s.report())
 

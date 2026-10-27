@@ -25,15 +25,16 @@ d = Description(['ABC','DEF'])
 print(repr(d))
 print(d)
 
-d.appendDescription(['WWW',['YYY','ZZZ']])
+d.appendDescription(['WWW',['YYY','ZZZ','http://www.demo.org/']])
+d.appendDescription('garmin:12345678')
 
-print(d.__listDescriptionToString__())
+print(d.getDescriptionString())
 
-print(d.__listDescriptionToHtml__())
+print(d.getDescriptionHTML())
 
-print(d.__listDescriptionToXML__())
+print(d.getDescriptionXML())
 
-print(d.__listDescriptionToFreemind__())
+print(d.getDescriptionFreemind())
 
 print(d.hasDescription())
 

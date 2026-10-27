@@ -27,25 +27,29 @@ class Duration(timedelta):
 
     """ extension class for timedelta (https://stackoverflow.com/questions/48461081/cant-inherit-from-timedelta) """
 
-    def __new__(cls,strArg):
+    def __new__(cls,objArg):
 
         """  """
 
         intMin = 0
         
-        if strArg == None:
+        if objArg == None:
             pass
-        elif type(strArg) == int:
-            intMin = strArg
-        elif type(strArg) == str:
-            entry = strArg.split(':')
+        elif type(objArg) is timedelta or type(objArg) is Duration:
+            intMin = int(objArg.total_seconds() / 60.0)
+        elif type(objArg) is float:
+            intMin = int(objArg)
+        elif type(objArg) is int:
+            intMin = objArg
+        elif type(objArg) is str:
+            entry = objArg.split(':')
             if len(entry) == 1:
                 # nothing to split
-                entry = strArg.split('min')
+                entry = objArg.split('min')
                 if len(entry) == 2:
                     intMin = int(entry[0])
                 else:
-                    entry = strArg.split('h')
+                    entry = objArg.split('h')
                     if len(entry) == 2:
                         intMin = int(float(entry[0]) * 60.0)
             elif len(entry) == 2:
@@ -61,12 +65,31 @@ class Duration(timedelta):
         """  """
 
         seconds = super().total_seconds()
+        hour, remainder = divmod(seconds, 3600)
+        min, sec = divmod(remainder, 60)
         
-        if seconds > 0:        
-            strResult = '{:02}:{:02}:{:02}'.format(int(seconds // 3600), int((seconds % 3600) // 60), int(seconds % 60))
+        return f'{hour:02.0f}:{min:02.0f}:{sec:02.0f}'
+
+
+    def toString(self):
+
+        """  """
+
+        seconds = super().total_seconds()
+        hour, remainder = divmod(seconds, 3600)
+        min, sec = divmod(remainder, 60)
+
+        if seconds > 3599:        
+            strResult = f'{hour:.0f}:{min:02.0f} h'
+        elif seconds > 900:        
+            strResult = f'{min:.0f} min'
+        elif seconds > 30:        
+            strResult = f'{min:.0f}:{sec:02.0f} min'
+        elif seconds > 0:        
+            strResult = f'{sec:.0f} s'
         else:
-            strResult = ''
-            
+            strResult = '-:--'
+
         return strResult
 
 
@@ -81,9 +104,12 @@ class Duration(timedelta):
 
         """  """
 
-        s = self.total_seconds()
-        if s < 900.0:
-            return super().__new__(Duration,seconds=s * floatScale)
-        else:
-            # round duration to 5:00 min
-            return super().__new__(Duration,seconds=(round(s * floatScale / 300.0) * 300.0))
+        if floatScale > 0.01 and  abs(floatScale - 1.0) > 0.01:
+            s = self.total_seconds()
+            if s < 1800.0:
+                return super().__new__(Duration,seconds=round(s * floatScale))
+            elif s < 3600.0:
+                return super().__new__(Duration,seconds=round(s * floatScale / 60.0) * 60.0)
+            else:
+                # round duration to 5:00 min
+                return super().__new__(Duration,seconds=round(s * floatScale / 300.0) * 300.0)
