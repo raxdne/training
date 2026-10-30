@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,7 +31,8 @@ t1 = t.dup()
 print(t1)
 
 t = Pause()
-t.setDuration(3)
+t.d = 3
+t *= 2.5
 t.setDescription(['AAA',['BBB','CCC'],['DDD','EEE']])
 print(t)
 
@@ -41,9 +42,9 @@ t.setDate(date(2025,1,1))
 t.setDescription('YYY')
 print(t)
 
-t.setDuration('30min')
+t.d = '30min'
 t.setDescription(['AAA',['BBB','CCC'],['DDD','EEE']])
 print(t.toHtmlTable())
 
-t.setDuration('3:30:00')
+t.d = '3:30:00'
 print(t)

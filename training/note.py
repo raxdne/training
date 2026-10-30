@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,13 +36,13 @@ from training.titem import TItem
 
 class Note(TItem):
 
-    """ basis class for standalone notes and for training units """
+    """ class for standalone notes """
 
     def __repr__(self):
 
-        strResult = f'{self.__class__.__name__}{self.strTitle}({self.dt!r})'
+        strResult = f'{self.__class__.__name__}{self.title}({self.dt!r})'
         if self.hasDescription():
-            strResult += f'.appendDescription({self.listDescription!r})'
+            strResult += f'.appendDescription({self.description!r})'
 
         return strResult
 
@@ -58,9 +58,20 @@ class Note(TItem):
         else:
             strResult = self.dt.strftime("%Y-%m-%d %H:%M:%S")
             
-        strResult += self.strTitle + ' ' + self.getDescriptionString()
+        strResult += self.title + ' ' + self.getDescriptionString()
 
         return strResult
+
+
+    def set(self,**kwargs):
+        
+        """ generic setter """
+        
+        for key, value in kwargs.items():
+            if key in ['dt','description','title']:
+                setattr(self, key, value)
+
+        return self
 
 
     def parse(self,o):
@@ -95,6 +106,15 @@ class Note(TItem):
             return False
 
 
+    def scale(self,f,p=None):
+
+        """ returns a copy of self """
+
+        r = self.dup()
+
+        return r
+
+
     def stat(self, skipType=None):
 
         """  """
@@ -106,14 +126,14 @@ class Note(TItem):
 
         """  """
 
-        return f'<div {config.getClass(__name__)} style="background-color: {self.getColor()}">{self.getTitleXML()}{self.getDescriptionString()}</div>'
+        return f'<div {config.getClass(__name__)} style="background-color: {self.color}">{self.getTitleXML()}{self.getDescriptionString()}</div>'
 
 
     def toCSV(self):
 
         """  """
 
-        return f'{self.dt.strftime("%Y-%m-%d")};;;;{self.strTitle}{self.getDescriptionString()}\n'
+        return f'{self.dt.strftime("%Y-%m-%d")};;;;{self.title}{self.getDescriptionString()}\n'
 
 
     def toSVG(self,x,y):

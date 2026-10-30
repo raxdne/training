@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
 import sys
-
+import re
 import copy
 
 from datetime import timedelta, date, datetime, time
@@ -66,13 +66,24 @@ class Combination(TItem):
         else:
             strResult = 'Alternatives '
 
-        strResult += self.getDuration().toString() + ' ' + self.getTitleString() + ' ' + self.getDescriptionString() + '\n'
+        strResult += self.getDuration().toString() + ' ' + self.title + ' ' + self.getDescriptionString() + '\n'
 
         for u in self.child:
             strResult += '\t + ' + str(u) + '\n'
         strResult += '\n'
 
         return strResult
+
+
+    def set(self,**kwargs):
+        
+        """ generic setter """
+        
+        for key, value in kwargs.items():
+            if key in ['dt','color','logicAnd','description','d']:
+                setattr(self, key, value)
+
+        return self
 
 
     def getRepetitions(self):
@@ -114,7 +125,7 @@ class Combination(TItem):
                 if not strDate and type(self.child[i]) is Unit and self.child[i].dt is not None:
                     strDate = self.child[i].dt.strftime("%Y-%m-%d ")
 
-        return f'({strResult} {self.getTitleString()} {self.getDescriptionString()})'
+        return f'({strResult} {self.title} {self.getDescriptionString()})'
 
 
     def setDate(self,dtArg=None,dt_0=None,dt_1=None):
@@ -333,8 +344,8 @@ class Combination(TItem):
             strResult += ' style="background-color: {}"'.format(self.color)
         strResult += '>'
 
-        if self.hasTitle():
-            strResult += self.getTitleString() + ' ' + self.getDuration().toString()
+        if hasattr(self,'title'):
+            strResult += self.title + ' ' + self.getDuration().toString()
         elif self.logicAnd:
             strResult += 'Combination: ' + self.getDuration().toString()
         else:
@@ -367,8 +378,8 @@ class Combination(TItem):
 
         strResult += '<tbody>'
 
-        if self.hasTitle():
-            strResult += '<tr><th colspan="4">' + self.getTitleString() + '</th></tr>'
+        if hasattr(self,'title'):
+            strResult += '<tr><th colspan="4">' + self.title + '</th></tr>'
 
         #strResult += self.getDescriptionHTML()
         t = timedelta(seconds=0)

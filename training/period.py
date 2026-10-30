@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ from training.bunch import Bunch
 
 class Period(TContainer):
 
-    def __init__(self,t=None,l=None):
+    def __init__(self,t=None,l=0):
 
         """  """
 
@@ -207,6 +207,17 @@ class Period(TContainer):
             #self.schedule()
         else:
             print('error: ' + str(o), file=sys.stderr)
+
+        return self
+
+
+    def extend(self,n=7):
+
+        """ append last n days at the end """
+
+        if type(n) is int and n > 0 and self.periodInt >= n:
+            self.scale((self.periodInt + n) / self.periodInt)
+            self.setPeriod(self.periodInt + n)
 
         return self
 
@@ -407,7 +418,7 @@ class Period(TContainer):
         """  """
 
         for i in range(len(self.child)):
-            if isinstance(self.child[i],TContainer) and self.child[i].getTitleString() == t:
+            if isinstance(self.child[i],TContainer) and self.child[i].title == t:
                 return i
         return -1
 
@@ -624,7 +635,7 @@ class Period(TContainer):
         strResult = ""
         if self.dateBegin is not None:
             strResult += self.dateBegin.strftime("%Y-%m-%d")
-        strResult += ';;;;Period "{}" {}\n\n'.format(self.getTitleString(), self.getDateString())
+        strResult += ';;;;Period "{}" {}\n\n'.format(self.title, self.getDateString())
 
         for c in self.child:
             strResult += c.toCSV()
@@ -891,7 +902,7 @@ class Period(TContainer):
 
         if not self.child:
             event = Event()
-            event.add('summary', 'Period: {}'.format(self.getTitleString()))
+            event.add('summary', 'Period: {}'.format(self.title))
             event.add('dtstart', self.dateBegin)
             event.add('dtend', self.dateEnd + timedelta(days=1))
             event.add('dtstamp', datetime.now().astimezone(None))
@@ -905,17 +916,17 @@ class Period(TContainer):
                     # output only, if there is a Cycle child involved
                     fOutput = True
 
-            if fOutput and self.dateBegin is not None and self.hasTitle():
+            if fOutput and self.dateBegin is not None and hasattr(self,'title'):
                 event = Event()
-                event.add('summary', 'Begin Period: ' + self.getTitleString())
+                event.add('summary', 'Begin Period: ' + self.title)
                 event.add('dtstart', self.dateBegin)
                 event.add('dtend', self.dateBegin + timedelta(days=1))
                 event.add('dtstamp', datetime.now().astimezone(None))
                 cal.add_component(event)
 
-            if fOutput and self.dateEnd is not None and self.hasTitle():
+            if fOutput and self.dateEnd is not None and hasattr(self,'title'):
                 event = Event()
-                event.add('summary', 'End Period: ' + self.getTitleString())
+                event.add('summary', 'End Period: ' + self.title)
                 event.add('dtstart', self.dateEnd)
                 event.add('dtend', self.dateEnd + timedelta(days=1))
                 event.add('dtstamp', datetime.now().astimezone(None))
@@ -927,10 +938,174 @@ class Period(TContainer):
         """  """
 
         cal = Calendar()
-        cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleString()))
+        cal.add('prodid', '-//{title}//  //'.format(title=self.title))
         cal.add('version', '2.0')
         self.to_ical(cal)
         return cal.to_ical()
+
+
+    #
+    #
+    #
+
+    @staticmethod
+    def CalendarYearPeriod(intYear,strArg=None):
+
+        """ returns a plain calendar year period """
+
+        r = Period(strArg)
+        
+        try:
+            date(intYear, 2, 29)
+            r.append(Cycle(str(intYear),366))
+        except ValueError:
+            r.append(Cycle(str(intYear),365))
+
+        if strArg is not None and strArg:
+            r.set(title=strArg)
+
+        r.schedule(intYear,1,1)
+
+        return r
+
+
+    @staticmethod
+    def CalendarSeasonPeriod(intYear,strArg=None):
+
+        """ returns a plain calendar year containing seasons periods """
+
+        r = Period(strArg)
+
+        # begin of year
+        d_0 = date(intYear,1,1)
+
+        s = 'Winter {}'.format(intYear)
+        # begin of spring
+        d_1 = date(intYear,3,21)
+        r.append(Period(s).append(Cycle(s, round((d_1 - d_0).total_seconds() / (24 * 60 * 60)))))
+
+        s = 'Spring {}'.format(intYear)
+        # begin of summer
+        d_2 = date(intYear,6,21)
+        r.append(Period(s).append(Cycle(s, round((d_2 - d_1).total_seconds() / (24 * 60 * 60)))))
+
+        # begin of autumn
+        s = 'Summer {}'.format(intYear)
+        d_3 = date(intYear,9,21)
+        r.append(Period(s).append(Cycle(s, round((d_3 - d_2).total_seconds() / (24 * 60 * 60)))))
+
+        s = 'Autumn {}'.format(intYear)
+        # begin of winter
+        d_4 = date(intYear,12,21)
+        r.append(Period(s).append(Cycle(s, round((d_4 - d_3).total_seconds() / (24 * 60 * 60)))))
+
+        s = 'Winter ' + str(intYear+1)
+        # begin of next year
+        d_5 = date(intYear+1,1,1)
+        r.append(Period(s).append(Cycle(s, round((d_5 - d_4).total_seconds() / (24 * 60 * 60)))))
+
+        if strArg is not None and strArg:
+            r.set(title=strArg)
+
+        r.schedule(intYear,1,1)
+
+        return r
+
+
+    @staticmethod
+    def CalendarWeekPeriod(intYear,strArg=None):
+
+        """ fills a period calendar year containing week periods """
+
+        r = Period(strArg)
+
+        for w in range(1,54):
+            r.append(Cycle('CW{}/{}'.format(w, intYear), 7))
+
+        d = date(intYear,1,1)
+        if d.isoweekday() > 4:
+            # skip to next monday
+            d += timedelta(days=(8 - d.isoweekday()))
+        else:
+            # skip to previous monday
+            d -= timedelta(days=(d.isoweekday() - 1))
+
+        if strArg is not None and strArg:
+            r.set(title=strArg)
+
+        r.schedule(d)
+
+        return r
+
+
+    @staticmethod
+    def CalendarMonthPeriod(intYear,strArg=None):
+
+        """ returns a calendar year containing month periods """
+
+        r = Period(strArg)
+
+        for m in range(1,13):
+            if m > 11:
+                d = date(intYear+1,1,1) - date(intYear,m,1)
+            else:
+                d = date(intYear,m+1,1) - date(intYear,m,1)
+
+            r.append(Cycle('{}.{}'.format(intYear,m), d.days))
+
+        if strArg is not None and strArg:
+            r.set(title=strArg)
+
+        r.schedule(intYear)
+
+        return r
+
+
+    @staticmethod
+    def CalendarLastWeeksPeriod(intWeek=26,strArg=None):
+
+        """ returns a last weeks as periods """
+
+        r = Period(strArg)
+
+        dt_0 = datetime.now().date()
+        dt_i = dt_0 + timedelta(days=(7 - dt_0.weekday())) - timedelta(weeks=intWeek)
+        r.dateFixed = dt_i
+
+        for m in range(0,intWeek):
+            r.append(Cycle(dt_i.strftime("%Y-W%U")))
+            dt_i += timedelta(weeks=1)
+
+        if strArg is not None and strArg:
+            r.set(title=strArg)
+
+        r.schedule()
+
+        return r
+
+
+    @staticmethod
+    def CalendarLastMonthsPeriod(intMonth=6,strArg=None):
+
+        """ returns a last months (= 4 weeks) as periods """
+
+        r = Period(strArg)
+
+        dt_0 = datetime.now().date()
+        dt_i = dt_0 + timedelta(days=(7 - dt_0.weekday())) - timedelta(weeks = intMonth * 4)
+        r.dateFixed = dt_i
+
+        for m in range(0,intMonth):
+            r.append(Cycle(dt_i.strftime("%Y-M%m"),4*7))
+            dt_i += timedelta(weeks=4)
+
+        if strArg is not None and strArg:
+            r.set(title=strArg)
+
+        r.schedule()
+
+        return r
+
 
 
 if __name__ == '__main__':

@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -66,13 +66,19 @@ t.fill(b,1.1)
 
 t.insert(3,Cycle('C1.1'),True)
 
-t.schedule(2023,1,1).updateValues({'Biking Basics': 30.0})
+t.schedule(2023,1,1).updateValues({'Biking Basics': 25.0})
+t *= 2.0
 
 #print(repr(t))
 
 #t.cutBefore(date(2023,1,2))
 #t.cutAfter(date(2023,1,10))
 print(t)
+
+with t as days:
+    for d in days:
+        for u in d:
+            print(u)
 
 #t.postpone(3)
 #t.stretch()

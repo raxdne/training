@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -390,7 +390,7 @@ class Bunch(TContainer):
 
         """  """
 
-        strResult = '{};;;;Cycle "{}" {}\n'.format(self.dateBegin.strftime("%Y-%m-%d"), self.getTitleString(), self.getDateString())
+        strResult = '{};;;;Cycle "{}" {}\n'.format(self.dateBegin.strftime("%Y-%m-%d"), self.title, self.getDateString())
         for v in self.child:
             u = v[1]
             strResult += u.toCSV()
@@ -591,7 +591,7 @@ class Bunch(TContainer):
         """  """
 
         cal = Calendar()
-        cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleString()))
+        cal.add('prodid', '-//{title}//  //'.format(title=self.title))
         cal.add('version', '2.0')
         #self.to_ical(cal)
         return cal.to_ical()

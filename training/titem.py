@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,17 +18,11 @@
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
 import io
-
 import os
-
 from pathlib import Path
-
 import sys
-
 import math
-
 import copy
-
 import re
 
 from abc import ABC, abstractmethod
@@ -42,28 +36,29 @@ from suntime import Sun
 from icalendar import Calendar, Event, Alarm
 
 from training import config as config
-from training.ttitle import TTitle
-from training.tdescription import TDescription
+from training.tcore import TCore
 
 #
 #
 #
 
-class TItem(TTitle,TDescription):
+class TItem(TCore):
 
-    def __init__(self,strArg=None):
+    def __init__(self,t=''):
 
         """  """
 
-        super(TTitle, self).__init__()
-        super(TDescription, self).__init__()
-        #super(Plot, self).__init__()
+        super().__init__(t)
 
-        self.setTitleStr(strArg)
         self.dt = None
         self.tPlan = None
         self.marker = False
         self.color = None
+
+
+    def __repr__(self):
+
+        return f'{self.__class__.__name__}({self.title!r},{self.description!r},{self.dt!r})'
 
 
     @abstractmethod
@@ -74,38 +69,12 @@ class TItem(TTitle,TDescription):
         pass
 
 
-    def __enter__(self):
-
-        """  """
-
-        return self
-
-
-    def __exit__(self, exc_type, exc_value, exc_tb):    
-
-        """  """
-
-        pass        
-
-
     @abstractmethod
     def stat(self, skipType=None):
 
         """  """
 
         pass
-
-
-    def getColor(self):
-
-        """  """
-        
-        strResult = ''
-        
-        if self.color is not None:
-            strResult = self.color
-
-        return strResult
 
 
     def mark(self):
@@ -206,21 +175,5 @@ class TItem(TTitle,TDescription):
                             print('ignoring: ',strArg, file=sys.stderr)
 
         return True
-
-
-    @final
-    def dup(self):
-
-        """  """
-
-        return copy.deepcopy(self)
-
-
-    def toString(self):
-
-        """  """
-
-        return str(self)
-
 
 

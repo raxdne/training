@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -99,7 +99,7 @@ class Plot():
 
             if self.strPlotAccumulation is None:
 
-                #print(f'info: new plot of "{self.getTitleString()}"', file=sys.stderr)
+                #print(f'info: new plot of "{self.title}"', file=sys.stderr)
                 self.stat()
 
                 # make data
@@ -162,7 +162,7 @@ class Plot():
                         plt.savefig(fileNameOut)
 
             elif self.strPlotAccumulation:
-                print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
+                print(f'info: re-using plot of "{self.title}"', file=sys.stderr)
 
             if self.strPlotAccumulation is not None:
                 strResult = self.strPlotAccumulation
@@ -196,7 +196,7 @@ class Plot():
 
             if self.strPlotAccumulationDuration is None:
 
-                #print(f'info: new plot of "{self.getTitleString()} {self.dateBegin.toordinal()}"', file=sys.stderr)
+                #print(f'info: new plot of "{self.title} {self.dateBegin.toordinal()}"', file=sys.stderr)
                 self.stat()
                 # make data
                 x = np.array(list(map(lambda lst: lst[0], self.data)))
@@ -256,7 +256,7 @@ class Plot():
                         plt.savefig(fileNameOut)
             elif self.strPlotAccumulationDuration:
                 # use existing plot
-                print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
+                print(f'info: re-using plot of "{self.title}"', file=sys.stderr)
 
             if self.strPlotAccumulationDuration is not None:
                 strResult = self.strPlotAccumulationDuration
@@ -275,7 +275,7 @@ class Plot():
 
             if self.strPlotHist is None:
 
-                #print(f'info: new plot of "{self.getTitleString()}"', file=sys.stderr)
+                #print(f'info: new plot of "{self.title}"', file=sys.stderr)
                 self.stat()
 
                 # make data
@@ -304,7 +304,7 @@ class Plot():
                         plt.savefig(fileNameOut)
             elif self.strPlotHist:
                 # use existing plot
-                print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
+                print(f'info: re-using plot of "{self.title}"', file=sys.stderr)
 
             if self.strPlotHist is not None:
                 strResult = self.strPlotHist
@@ -341,7 +341,7 @@ class Plot():
 
             if self.strPlotTimeDist is None:
 
-                #print(f'info: new plot of "{self.getTitleString()}"', file=sys.stderr)
+                #print(f'info: new plot of "{self.title}"', file=sys.stderr)
                 self.stat()
                 if len(self.data) >= config.plot_min:
                     # plot:
@@ -414,7 +414,7 @@ class Plot():
                         plt.savefig(fileNameOut)
             elif self.strPlotTimeDist:
                 # use existing plot
-                print(f'info: re-using plot of "{self.getTitleString()}"', file=sys.stderr)
+                print(f'info: re-using plot of "{self.title}"', file=sys.stderr)
 
             if self.strPlotTimeDist is not None:
                 strResult = self.strPlotTimeDist

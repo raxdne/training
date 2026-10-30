@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,22 +17,39 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
-from training.title import Title
+from training.tcore import TCore
+
+#
+#
+#
+
+class Dummy(TCore):
+
+    """ class for Testing only """
+
+    def __init__(self,t=None):
+
+        """  """
+
+        super().__init__(t)
+
+
 
 print('Module Test: ' + __file__ + '\n')
 
-#
-#
-#
-
-t = Title()
-print(t)
-
-t = Title(1.0)
-print(t)
-
-t = Title('AAA & "BB" C')
+t = Dummy('XYZ')
 print(repr(t))
-print(t.getTitleString())
-print(t.getTitleXML())
+print(t)
+
+t1 = t.dup()
+print(t1)
+
+t = Dummy()
+t.title = 'DEF GHI'
+t.description = ['AAA',['BBB','CCC'],['DDD','EEE']]
+t.description.extend(['WWW',['YYY','ZZZ','http://www.demo.org/']])
+
+t.appendDescription('garmin:12345678')
+
+print(t)
 

@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,23 +46,22 @@ from training.titem import TItem
 
 class ExerciseSet(TItem):
 
-    def __init__(self,strArg=None,iArg=1):
+    def __init__(self,t,iArg=1):
 
         """  """
 
-        super().__init__(strArg)
+        super().__init__(t)
 
         self.repetitions = iArg
         self.img = []
-        self.setDescription()
-        self.setShortNote()
+        self.strNote = ''
 
 
     def __repr__(self):
 
-        strResult = f'{self.__class__.__name__}({self.strTitle!r})'
+        strResult = f'{self.__class__.__name__}({self.title!r})'
         if self.hasDescription():
-            strResult += f'.appendDescription({self.listDescription!r})'
+            strResult += f'.appendDescription({self.description!r})'
 
         return strResult
 
@@ -74,12 +73,23 @@ class ExerciseSet(TItem):
 
     def __str__(self):
 
-        return f'{self.repetitions} x {self.strTitle} {self.strNote}'
+        return f'{self.repetitions} x {self.title} {self.strNote}'
+
+
+    def set(self,**kwargs):
+        
+        """ generic setter """
+        
+        for key, value in kwargs.items():
+            if key in ['dt','description','repetitions','d']:
+                setattr(self, key, value)
+
+        return self
 
 
     def getRepetitions(self):
 
-        """  """
+        """ legacy """
         
         return self.repetitions
 
@@ -127,23 +137,9 @@ class ExerciseSet(TItem):
 
         """  """
         
-        self.strNote = strArg
+        self.set(strNote=strArg)
                 
         return self
-
-
-    def dup(self):
-
-        """  """
-
-        return copy.deepcopy(self)
-
-
-    def toString(self):
-
-        """  """
-
-        return str(self)
 
 
     def toStringShort(self):
@@ -180,7 +176,7 @@ class ExerciseSet(TItem):
             #    strResult += f' style="background-color: {self.color}"'
             #strResult += '>'
             #strResult += '<td>' + str(self.getDuration()) + '</td>'
-            strResult += '<td>' + self.strTitle + ' ' + self.strNote + '</td><td>' + str(self.repetitions) + '</td>'
+            strResult += '<td>' + self.title + ' ' + self.strNote + '</td><td>' + str(self.repetitions) + '</td>'
             if fDescription:
                 strResult += '<td>' + self.getDescriptionHTML() + '</td>'
             if fImages:

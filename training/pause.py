@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,33 +39,56 @@ class Pause(TItem):
 
     """ class for training pauses """
 
-    def __init__(self,strArg=None,o=None):
+    def __init__(self,d=None,t=None):
 
         """  """
 
-        super().__init__()
+        super().__init__(t)
+        self.d = d
 
-        self.setDuration()
 
-        if strArg is not None:
-            self.setDuration(strArg)
-            if o is not None:
-                super().setDescription(o)
+    def __repr__(self):
 
-        #print('New Pause: ' + str(self), file=sys.stderr)
+        strResult = f'{self.__class__.__name__}([{self.dt!r},{self._d!r}])'
+        if self.hasDescription():
+            strResult += f'.appendDescription({self.description!r})'
 
- 
+        return strResult
+
+
     def __str__(self):
 
         """  """
 
-        if self.getDuration().total_seconds() > 0:
+        if self.d.total_seconds() > 0:
             if self.hasDescription():
-                return f'{super().getDescriptionString()} {self.getDuration().toString()}'
+                return f'{super().getDescriptionString()} {self.d.toString()}'
             else:
-                return f'Pause {self.getDuration().toString()}'
+                return f'Pause {self.d.toString()}'
         else:
             return ''
+
+
+    def set(self,**kwargs):
+        
+        """ generic setter """
+        
+        for key, value in kwargs.items():
+            if key in ['dt','description','d']:
+                setattr(self, key, value)
+
+        return self
+
+
+    def scale(self,f,p=None):
+
+        """ returns a scaled copy of self """
+
+        r = self.dup()
+        if f > 0.01 and  abs(f - 1.0) > 0.01 and (p is None or r.type is None or re.match(p,r.type)):
+            r.d = r.d.scale(f)
+
+        return r
 
 
     def toStringShort(self):
@@ -74,8 +97,8 @@ class Pause(TItem):
 
         strResult = ''
 
-        if self.getDuration().total_seconds() > 0:
-            strResult =  f'Pause {self.getDuration().toString()}'
+        if self.d.total_seconds() > 0:
+            strResult =  f'Pause {self.d.toString()}'
 
         return strResult
 
@@ -91,31 +114,32 @@ class Pause(TItem):
         else:
             # fully defined dtArg
             self.dt = dtArg
-            return self.dt + self.duration
+            return self.dt + self.d
 
         return None
 
 
-    def setDuration(self,intArg=None):
+    @property
+    def d(self):
 
         """  """
 
-        if intArg is None:
-            self.duration = Duration(0)
-        else:
-            self.duration = Duration(intArg)
+        return self._d
 
-        return True
+
+    @d.setter
+    def d(self, *args, **kwargs):
+
+        """  """
+
+        self._d = Duration(*args, **kwargs)
 
 
     def getDuration(self, skipType=None):
 
         """  """
         
-        if self.duration is None:
-            self.setDuration()
-
-        return self.duration
+        return self.d
 
 
     def stat(self, skipType=None):
@@ -171,8 +195,8 @@ class Pause(TItem):
 
         strResult = ''
 
-        if self.getDuration().total_seconds() > 0:
-            strResult =  f'<div {config.getClass(__name__)} style="background-color: {self.getColor()}">{str(self)}</div>'
+        if self.d.total_seconds() > 0:
+            strResult =  f'<div {config.getClass(__name__)} style="background-color: {self.color}">{str(self)}</div>'
 
         return strResult
 
@@ -183,13 +207,13 @@ class Pause(TItem):
 
         strResult = ''
 
-        if self.duration is None or self.getDuration().total_seconds() < 60:
+        if self.d.total_seconds() < 60:
             strResult += '<text x="{}" y="{}">{}<title>{}</title></text>\n'.format(x + config.diagram_bar_height / 2, y + config.diagram_bar_height, self.getDescriptionString(), str(self))
         else:
             strResult += '<rect '
 
             # "about 25 distance units per hour"
-            bar_width = self.getDuration().total_seconds() / 3600 * 25 * config.diagram_scale_dist
+            bar_width = self.d.total_seconds() / 3600 * 25 * config.diagram_scale_dist
 
             strResult += ' height="{}" opacity=".25" stroke="black" stroke-width=".5" width="{:.0f}" x="{}" y="{}"'.format(config.diagram_bar_height, bar_width, x, y)
             strResult += '>'
@@ -220,8 +244,8 @@ if __name__ == '__main__':
 
     print('Module Test: ' + __file__ + '\n')
     
-    t = Pause('TEST').appendDescription('First Test')
+    t = Pause(11,'TEST').appendDescription('First Test')
     t.setDate(datetime(2023,11,22,12,9,11))
-    t.setDuration(22)
+    t.d = 22
 
     print(t)

@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,39 +27,41 @@ class Duration(timedelta):
 
     """ extension class for timedelta (https://stackoverflow.com/questions/48461081/cant-inherit-from-timedelta) """
 
-    def __new__(cls,o):
+    def __new__(cls, *args, **kwargs):
 
-        """  """
-
-        intMin = 0
-        
-        if o == None:
-            pass
-        elif isinstance(o,timedelta):
-            intMin = round(o.total_seconds() / 60.0)
-        elif type(o) is float:
-            intMin = round(o)
-        elif type(o) is int:
-            intMin = o
-        elif type(o) is str:
-            entry = o.split(':')
-            if len(entry) == 1:
-                # nothing to split
-                entry = o.split('min')
-                if len(entry) == 2:
-                    intMin = round(float(entry[0]))
-                else:
-                    entry = o.split('h')
-                    if len(entry) == 2:
-                        intMin = round(float(entry[0]) * 60.0)
-            elif len(entry) == 2:
-                intMin = int(entry[0]) + round(int(entry[1]) / 60.0)
-            elif len(entry) == 3:
-                intMin = int(entry[0]) * 60.0 + int(entry[1]) + int(entry[2]) / 60
+        if len(args) == 1:
+            o = args[0]
+            intMin = 0
             
-        return super().__new__(cls,minutes=intMin)
+            if o == None:
+                pass
+            elif isinstance(o,timedelta):
+                intMin = round(o.total_seconds() / 60.0)
+            elif type(o) is float:
+                intMin = round(o)
+            elif type(o) is int:
+                intMin = o
+            elif type(o) is str:
+                entry = o.split(':')
+                if len(entry) == 1:
+                    # nothing to split
+                    entry = o.split('min')
+                    if len(entry) == 2:
+                        intMin = round(float(entry[0]))
+                    else:
+                        entry = o.split('h')
+                        if len(entry) == 2:
+                            intMin = round(float(entry[0]) * 60.0)
+                elif len(entry) == 2:
+                    intMin = int(entry[0]) + round(int(entry[1]) / 60.0)
+                elif len(entry) == 3:
+                    intMin = int(entry[0]) * 60.0 + int(entry[1]) + int(entry[2]) / 60
 
-    
+            kwargs['minutes'] = intMin
+
+        return super().__new__(Duration, **kwargs)
+
+
     def __str__(self):
 
         """  """

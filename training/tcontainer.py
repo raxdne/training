@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,17 +18,10 @@
 # Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 
 import io
-
 import os
-
 from pathlib import Path
-
 import sys
-
 import math
-
-import copy
-
 import re
 
 from abc import ABC, abstractmethod
@@ -36,16 +29,12 @@ from typing import final
 from statistics import mean
 
 from datetime import timedelta, date, datetime, time, timezone
-
 from suntime import Sun
-
 from icalendar import Calendar, Event, Alarm
-
 import numpy as np
 
 from training import config as config
-from training.tdescription import TDescription
-from training.ttitle import TTitle
+from training.tcore import TCore
 from training.titem import TItem
 
 from training.phase import Phase
@@ -54,22 +43,15 @@ from training.phase import Phase
 #
 #
 
-class TContainer(TTitle,TDescription):
+class TContainer(TCore):
 
-    def __init__(self,t=None,l=None):
+    def __init__(self,t=None,l=0):
 
         """  """
 
-        super(TTitle, self).__init__()
-        super(TDescription, self).__init__()
-        #super(Plot, self).__init__()
+        super().__init__(t)
+        self.periodInt = l
 
-        self.setTitleStr(t)
-        self.setDescription()
-
-        self.setPeriod(l)
-
-        self.summary = {}
         self.child = []
 
         self.color = None
@@ -85,7 +67,7 @@ class TContainer(TTitle,TDescription):
         self.setTextOnly()
         self.setPlot()
         #self.setTextOnly(False)
-        #self.setVDefaults()
+        self.setVDefaults()
         self.setSkipPattern()
 
         self.setVDefaults(config.v_defaults)
@@ -95,14 +77,14 @@ class TContainer(TTitle,TDescription):
 
         strResult = f'{self.__class__.__name__}([{self.dateBegin!r},{self.dateEnd!r},{self.child!r},{self.periodInt!r}])'
         if self.hasDescription():
-            strResult += f'.appendDescription({self.listDescription!r})'
+            strResult += f'.appendDescription({self.description!r})'
             
         return strResult
 
 
     def __str__(self):
 
-        strResult = '\n* ' + self.getTitleString() + ' ' + self.getDateString() + '\n\n'
+        strResult = '\n* ' + self.title + ' ' + self.getDateString() + '\n\n'
 
         strResult += self.getDescriptionString() + '\n\n'
 
@@ -114,6 +96,20 @@ class TContainer(TTitle,TDescription):
     def __len__(self):
 
         return self.getLength()
+
+
+    def __enter__(self):
+
+        """  """
+
+        return self.child
+
+
+    def __exit__(self, exc_type, exc_value, exc_tb):    
+
+        """  """
+
+        pass        
 
 
     @abstractmethod
@@ -140,14 +136,22 @@ class TContainer(TTitle,TDescription):
         pass
 
 
+    @abstractmethod
+    def extend(self,n=7):
+
+        """ append last n days at the end """
+
+        pass
+
+
     def reverse(self):
 
         """  """
 
-        c = copy.deepcopy(self)
-        c.child.reverse()
+        r = self.dup()
+        r.child.reverse()
         
-        return c
+        return r
 
 
     @final
@@ -363,13 +367,25 @@ class TContainer(TTitle,TDescription):
         return self
 
 
-    def _appendChildDescription(self,o):
+    def appendChildDescription(self,o):
 
         """  """
 
         self.child[-1].appendDescription(o)
 
         return self
+
+
+    def getDateString(self):
+
+        """  """
+
+        strResult = ' '
+
+        if type(self.dateBegin) is date and self.dateBegin is not None and type(self.dateEnd) is date and self.dateEnd is not None:
+            strResult += '(' + str((self.dateEnd - self.dateBegin).days + 1) + ' ' + self.dateBegin.strftime("%Y-%m-%d") + '/' + self.dateEnd.strftime("%Y-%m-%d") + ')'
+
+        return strResult
 
 
     def getItem(self,index):
@@ -494,6 +510,19 @@ class TContainer(TTitle,TDescription):
 
 
     @final
+    def set(self,**kwargs):
+        
+        """ generic setter """
+        
+        if 'title' in kwargs:
+            self.title = kwargs['title']
+        elif 'color' in kwargs:
+            self.color = kwargs['color']
+
+        return self
+
+
+    @final
     def query(self,**kwargs):
         
         """ """
@@ -588,19 +617,32 @@ class TContainer(TTitle,TDescription):
         """  """
 
         for i in range(len(self.child)):
-            if isinstance(self.child[i],TContainer) and self.child[i].getTitleString() == t:
+            if isinstance(self.child[i],TContainer) and self.child[i].title == t:
                 return i
         return -1
+
+
+    @property
+    def periodInt(self):
+
+        """  """
+
+        return self._period.days
+
+
+    @periodInt.setter
+    def periodInt(self, *args, **kwargs):
+
+        """  """
+
+        self._period = timedelta(*args, **kwargs)
 
 
     def setPeriod(self, l=None):
 
         """  """
 
-        if l is None:
-            self.periodInt = 0
-        else:
-            self.periodInt = l
+        self.periodInt = l
 
         return self
 
@@ -733,14 +775,6 @@ class TContainer(TTitle,TDescription):
         return strResult
 
 
-    @final
-    def dup(self):
-
-        """  """
-
-        return copy.deepcopy(self)
-
-
     def toString(self):
 
         """  """
@@ -761,7 +795,7 @@ class TContainer(TTitle,TDescription):
 
         """  """
 
-        strResult = self.getTitleLineTableOfContent(strIndent) + self.getDateString() + '\n'
+        strResult = f'{strIndent}<a href="#{str(id(self))}">{self.getTitleXML()}</a>' + self.getDateString() + '\n'
 
         for c in self.child:
             if isinstance(c,TContainer):
@@ -972,7 +1006,7 @@ class TContainer(TTitle,TDescription):
         strResult = ""
         if self.dateBegin is not None:
             strResult += self.dateBegin.strftime("%Y-%m-%d")
-        strResult += ';;;;TContainer "{}" {}\n\n'.format(self.getTitleString(), self.getDateString())
+        strResult += ';;;;TContainer "{}" {}\n\n'.format(self.title, self.getDateString())
 
         if hasattr(self,'child'):
             for c in self.child:
@@ -1088,7 +1122,7 @@ class TContainer(TTitle,TDescription):
         """  """
 
         cal = Calendar()
-        cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleString()))
+        cal.add('prodid', '-//{title}//  //'.format(title=self.title))
         cal.add('version', '2.0')
         self.to_ical(cal)
         return cal.to_ical()

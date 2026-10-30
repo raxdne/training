@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -53,8 +53,8 @@ def Liegestütz(n=1):
 
     return ExerciseSet('Liegestütz',n).appendDescription('flach')
 
-#c = Combination([Liegestütz(12),ExerciseSet('E1',24).appendDescription(['AAA','BBB']),Pause('10min','Halt'),ExerciseSet('E2',24),ExerciseSet('E3',24)]).setTitleStr('My Circle')
-c = Combination([Liegestütz(12),ExerciseSet('E1',24),ExerciseSet('E2',24),Pause('10min','Halt'),ExerciseSet('E3',24)]).setTitleStr('My Circle')
+#c = Combination([Liegestütz(12),ExerciseSet('E1',24).appendDescription(['AAA','BBB']),Pause('10min','Halt'),ExerciseSet('E2',24),ExerciseSet('E3',24)]).set(title='My Circle')
+c = Combination([Liegestütz(12),ExerciseSet('E1',24),ExerciseSet('E2',24),Pause('10min','Halt'),ExerciseSet('E3',24)]).set(title='My Circle')
 s = Combination([c,c.scale(2),c])
 #s.append([c,c.scale(2),c])
 
@@ -85,14 +85,14 @@ t = Combination([Unit('08:11:00;3.5;RB;25:00'),
 #print(t)
 #print(t.toStringShort())
 #print(t.toFreemindNode())
-print(t.toHtmlTable())
+#print(t.toHtmlTable())
 
 t = Combination([Combination([Unit('sr;3.5;AB;25:00'), Pause('20min'), Unit(';3.5;BB;25:00')]),
                  Unit(';3.5;RB;25:00')],
                  False)
 
 #t.appendDescription('Running Blocks')
-#t.setTitleStr('My Combination')
+#t.set(title='My Combination')
 #t.remove(r'^R')
 #print(t.getDuration())
 #print(t.getRepresentativeAlternative())
@@ -124,7 +124,7 @@ f.close()
 #print(t.toSVG(0,0))
 
 cal = Calendar()
-#cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleString()))
+#cal.add('prodid', '-//{title}//  //'.format(title=self.title))
 cal.add('version', '2.0')
 t.to_ical(cal)
 

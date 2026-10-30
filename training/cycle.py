@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -652,7 +652,7 @@ class Cycle(TContainer):
 
         """  """
 
-        strResult = '{};;;;Cycle "{}" {}\n'.format(self.dateBegin.strftime("%Y-%m-%d"), self.getTitleString(), self.getDateString())
+        strResult = '{};;;;Cycle "{}" {}\n'.format(self.dateBegin.strftime("%Y-%m-%d"), self.title, self.getDateString())
         for v in self.child:
             for u in v:
                 strResult += u.toCSV()
@@ -910,7 +910,7 @@ class Cycle(TContainer):
         """  """
 
         event = Event()
-        event.add('summary', 'Cycle: {}'.format(self.getTitleString()))
+        event.add('summary', 'Cycle: {}'.format(self.title))
         event.add('dtstart', self.dateBegin)
         event.add('dtend', self.dateEnd + timedelta(days=1))
         event.add('dtstamp', datetime.now().astimezone(None))
@@ -926,7 +926,7 @@ class Cycle(TContainer):
         """  """
 
         cal = Calendar()
-        cal.add('prodid', '-//{title}//  //'.format(title=self.getTitleString()))
+        cal.add('prodid', '-//{title}//  //'.format(title=self.title))
         cal.add('version', '2.0')
         self.to_ical(cal)
         return cal.to_ical()

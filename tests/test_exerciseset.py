@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,7 +25,8 @@ t = ExerciseSet('E1',24)
 t.setShortNote('15kg')
 t.appendDescription(['Step 1','Step 2','Step 3'])
 
-t.scale(2)
+#t = t.scale(2)
+t *= 2.00
 
 print(t)
 print(t.toHtmlSheet())

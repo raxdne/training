@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,20 +26,19 @@ from training.unit import Unit
 print('Module Test: ' + __file__ + '\n')
 
 t = Unit()
-t.setDistStr('40')
-t.setTypeStr('Biking')
-t.setDuration('2h')
+t.type = 'Biking'
+t.d = 120
+t.dist = 40
 print(repr(t))
 
 t = Unit()
 t.setTypeStr('Biking')
-t.setDuration('30min')
+t.d = '30min'
 t.setDistStr()
 print(t)
 
 t = Unit('Running')
 t.setDistStr('20')
-t.setDuration()
 t.setDate(date(2025, 1, 7))
 print(repr(t))
 
@@ -59,9 +58,12 @@ print(t)
 
 #quit()
 
-t.scale(2)
+#t = t.scale(2)
+t *= 2.5
 t.mark()
 print(t)
+
+t = Unit().set(color='#ffaaaa',title='LMN',dist=11,type='Running',dt=datetime(2025, 1, 7, 11).astimezone(None))
 
 #t.setClock()
 #print(t)
@@ -72,11 +74,11 @@ print(t)
 #t.setDate(datetime(2025, 1, 7, 22, 0).astimezone(None),datetime(2025, 1, 7, 8, 0).astimezone(None),datetime(2025, 1, 7, 20, 0).astimezone(None))
 #t.setClock(time(0))
 #t.setColor('#ffaaaa')
-print(t.toHtmlTable())
+#print(t.toHtmlTable())
 #print(t.toXML())
 
 #t = Unit('08:00;10;RG;20min')
-#print(t)
+print(t)
 
 #d = {}
 #t.stat(d)

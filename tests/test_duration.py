@@ -1,7 +1,7 @@
 #
 # Data Management for Physical Training
 #
-# Copyright (C) 2021,2022,2023 by Alexander Tenbusch
+# Copyright (C) 2021,2022,2023,2026 by Alexander Tenbusch
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,6 +30,10 @@ print(t)
 t1 = copy.deepcopy(t)
 print(repr(t1))
 print(t1)
+
+t = Duration(minutes=10)
+print(repr(t))
+print(t)
 
 t = Duration('3:30')
 print(repr(t))
