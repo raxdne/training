@@ -29,8 +29,7 @@ def BasicsGeneral():
     p.appendDescription('Regeneration')
 
     c = Cycle('General Endurance')
-    c.insert(1,Unit(';Running;45min'))
-    c.copy(1,3)
+    c.insert([1,3],Unit(';Running;45min'))
     c.insert(5,Unit(';Strength;30min'))
     c.insert(6,Unit(';Bicycle;1h'))
 
@@ -110,7 +109,6 @@ def BicycleSimple():
     
     p.append(BasicsBicycle())
     p.append(BuildupBicycleSpeed())
-    p.append(Period('Buildup Bicycle Speed',21).define([';Bicycle;10h']))
     p.append(BasicsBicycle())
     p.append(BuildupBicycleSpeed())
 
@@ -200,49 +198,22 @@ def PlanSimple(strArg):
     return s
 
 
-#print(config.getSettingsStr())
+if __name__ == '__main__':
 
-s = PlanSimple('Season Simple').schedule(date.today().year,1,1).updateValues()
-#s.updateValues({'Running': 6.0, 'Bicycle': 20.0})
+    s = PlanSimple('Season Simple').schedule(date.today().year,1,1).updateValues()
+    #s.updateValues({'Running': 6.0, 'Bicycle': 20.0})
 
-# patch some days using a scheduled cycle
-c = Cycle('Pause Running').insert([1,3,5],Unit('10;Running;3:00:00')).schedule(date.today().year,7,2)
-print('info: ' + str(c), file=sys.stderr)
-#breakpoint()
-s.insertByDate(c,True)
+    # patch some days using a scheduled cycle
+    c = Cycle('Pause Running').insert([1,3,5],Unit('10;Running;3:00:00')).schedule(date.today().year,7,2)
+    print('info: ' + str(c), file=sys.stderr)
+    #breakpoint()
+    #s.insertByDate(c,True)
 
-#s.append(Period('Insert',14).define(';Swimming;10h'))   
-#s.append(Cycle('Insert'))
-#s.remove(patternType=r'^[^B]')
-s.schedule(date.today().year,1,1).updateValues()
+    #s.append(Period('Insert',14).define(';Swimming;10h'))   
+    #s.append(Cycle('Insert'))
+    #s.remove(patternType=r'^[^B]')
+    s.schedule(date.today().year,1,1).updateValues()
 
-print(s.report())
+    print(s.report())
 
-f = open('SimplePlanGantt.svg', encoding='utf-8', mode='w')
-f.write(s.toSVGGanttChart())
-f.close()
-
-f = open('SimplePlan.svg', encoding='utf-8', mode='w')
-f.write(s.toSVGDiagram())
-f.close()
-
-f = open('SimplePlan.mm', encoding='utf-8', mode='w')
-f.write(s.toFreeMind())
-f.close()
-
-f = open('SimplePlan.ics', 'wb')
-f.write(s.toVCalendar())
-f.close()
-
-f = open('SimplePlan.txt', encoding='utf-8', mode='w')
-f.write(s.toString())
-f.close()
-
-f = open('SimplePlan.csv', encoding='utf-8', mode='w')
-f.write(s.toCSV())
-f.close()
-
-f = open('SimplePlan.html', encoding='utf-8', mode='w')
-f.write(s.toHtmlFile())
-f.close()
-
+    s.writeFiles('Output','SeasonSimple')

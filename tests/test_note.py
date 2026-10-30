@@ -27,10 +27,12 @@ print('Module Test: ' + __file__ + '\n')
 
 t = Note()
 
-t.setDateStr('2020-04-04')
+#t.setDateStr('2020-04-04')
+t.setDate(datetime(2025, 1, 7, 22, 0).astimezone(None))
 t.appendDescription(['TEST','AAA & "BBB"'])
 print(repr(t))
 print(t.toString())
+print(t.toHtmlTable())
 
 t1 = t.dup()
 print(t1.getDescriptionHTML())

@@ -34,7 +34,7 @@ def RegenerationGeneral():
 def BasicsGeneral():
     p = Period('General Basics')
     p.appendDescription('Regeneration')
-    p.setColor('#eeeeee')
+    p.set(color='#eeeeee')
 
     c = Cycle('General Endurance')
 
@@ -268,7 +268,7 @@ def BuildupRunningSpeed():
     c.appendDescription('Test 1000m speed run')
     c.insert(1,Unit('30;BR;1:25:00'))
     c.insert(3,Unit('5;BI;25:00'))
-    c.insertDescriptionStr(3,'Test 3 x 1000m speed run')
+    #c.insertDescriptionStr(3,'Test 3 x 1000m speed run')
     c.insert(3,Unit(';FB;25:00'))
     c.insert(6,Unit('5;BI;02:30:00'))
     
@@ -338,7 +338,8 @@ def Season(strArg):
 
 if __name__ == '__main__':
 
-    s = Season('Season Basics').schedule(datetime.date.today().year,3,1)
+    s = Season('Season 2021').schedule(2021,1,4)
     print(s.report())
-    s.writeFiles('output','SeasonBasics')
+    s.setTextOnly(False)
+    s.writeFiles('Output','Season2021')
 

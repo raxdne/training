@@ -15,9 +15,8 @@ import training.config as config
 
 def RegenerationGeneral():
     r = Cycle('General Regeneration')
-    r.insert(1,Unit('30;Cycling;1:15:00'))
+    r.insert([1,6],Unit('30;Cycling;1:15:00'))
     r.insert(3,Unit('3.5;Running;25:00'))
-    r.insert(6,Unit('30;Cycling;1:15:00'))
 
     return r
 
@@ -27,14 +26,14 @@ def BasicsGeneral():
     p.appendDescription('Regeneration')
 
     c = Cycle('General Endurance')
-    c.insert(1,Unit('3.5;Running;25:00'))
-    c.insert(3,Unit('3.5;Running;25:00'))
+    c.insert([1,3],Unit('3.5;Running;25:00'))
     c.insert(5,Unit(';Strength;25:00'))
     c.insert(6,Unit('30;Cycling;02:00:00'))
 
     p.append(c)
     p.append(c)
     p.append(RegenerationGeneral())
+    c *= 1.2
     p.append(c)
     p.append(c)
     p.append(RegenerationGeneral())
@@ -57,8 +56,8 @@ def BasicsCycling():
     p.append(c)
     p.appendChildDescription('Test 5km Time trial')
     p.append(RegenerationGeneral())
+    c *= 1.25
     p.append(c)
-    c.scale(1.2)
     p.append(c)
     p.append(c)
     p.append(RegenerationGeneral())
@@ -71,16 +70,15 @@ def BasicsRunning():
     p.appendDescription('Change of Focus')
 
     c = Cycle('Focus Running')
-    c.insert(2,Unit('3.5;Running;25:00'))
+    c.insert([2,4],Unit('3.5;Running;25:00'))
     c.insert(3,Unit(';Strength;25:00'))
-    c.insert(4,Unit('3.5;Running;02:30:00'))
     c.insert(6,Unit('30;Cycling;1:25:00'))
     
     p.append(c)
     p.append(c)
     p.appendChildDescription('Test 1000m speed run')
     p.append(RegenerationGeneral())
-    c.scale(1.2)
+    c *= 1.25
     p.append(c)
     p.append(c)
     p.appendChildDescription('Test 1000m speed run')
@@ -102,8 +100,8 @@ def BasicsSwimming():
     p.append(c)
     p.appendChildDescription('Test 5km Time trial')
     p.append(RegenerationGeneral())
+    c *= 1.25
     p.append(c)
-    c.scale(1.2)
     p.append(c)
     p.append(RegenerationGeneral())
 
@@ -124,7 +122,7 @@ def BasicsCombination():
     p.appendChildDescription('Test 5km Time trial')
     p.append(RegenerationGeneral())
     p.append(c)
-    c.scale(1.2)
+    c *= 1.2
     p.append(c)
     p.append(RegenerationGeneral())
 
@@ -164,4 +162,5 @@ if __name__ == '__main__':
 
     s = Season('Season Triathlon Basics').schedule(date.today().year,3,1)
     print(s.report())
-    s.writeFiles('output','Triathlon')
+    s.setTextOnly(False)
+    s.writeFiles('Output','Triathlon')
