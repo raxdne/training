@@ -122,6 +122,13 @@ class Note(TItem):
         return self
 
 
+    def toStringShort(self):
+
+        """  """
+
+        return str(self) + self.getDescriptionString()
+
+
     def toHtmlTable(self):
 
         """  """
@@ -175,6 +182,18 @@ class Note(TItem):
                 
             event.add('dtstamp', datetime.now().astimezone(None))
             cal.add_component(event)
+
+
+    def toSqlite(self):
+
+        """  """
+
+        strResult = ''
+
+        #if self.dt is not None:
+        #    strResult = "INSERT INTO 'units' VALUES ('{date}',{_dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self._dist, type=self.type, duration=self.d, description=self.getDescriptionString())
+
+        return strResult
 
 
 if __name__ == '__main__':

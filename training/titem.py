@@ -77,6 +77,14 @@ class TItem(TCore):
         pass
 
 
+    @abstractmethod
+    def toStringShort(self):
+
+        """  """
+
+        pass
+
+
     def mark(self):
 
         """  """

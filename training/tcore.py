@@ -71,6 +71,38 @@ class TCore(ABC):
         return str(self)
 
 
+    @abstractmethod
+    def toCSV(self):
+
+        """  """
+
+        pass
+
+
+    @abstractmethod
+    def toSqlite(self):
+
+        """  """
+
+        pass
+
+
+    @abstractmethod
+    def to_ical(self,cal):
+
+        """  """
+
+        pass
+
+
+    @abstractmethod
+    def toFreemindNode(self):
+
+        """  """
+
+        pass
+
+
     def __repr__(self):
 
         return f'{self.__class__.__name__}({self.title!r},{self._descr!r})'

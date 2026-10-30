@@ -57,6 +57,11 @@ class Combination(TItem):
                 self.child.append(o.dup())
 
 
+    def __len__(self):
+
+        return len(self.child)
+
+
     def __str__(self):
 
         """  """
@@ -128,66 +133,6 @@ class Combination(TItem):
         return f'({strResult} {self.title} {self.getDescriptionString()})'
 
 
-    def setDate(self,dtArg=None,dt_0=None,dt_1=None):
-
-        """ fix 'dt' according to sunrise/sunset """
-
-        #print(__name__ + ': ' + str(self), file=sys.stderr)
-
-        if dtArg is None:
-            return None
-        elif type(dtArg) is date:
-            return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
-        elif not self.logicAnd:
-            m = self.getRepresentativeAlternative()
-            if m is not None:
-                dt = m.setDate(dtArg)
-        else:
-            i = 0
-            self.dt = dtArg
-            dt = self.dt
-            for u in self.child:
-                
-                if isinstance(u,Note):
-                    u.setDate(dt)
-                elif isinstance(u,Combination):
-                    u.setDate(dt)
-                    i += 1
-                elif isinstance(u,ExerciseSet):
-                    u.setDate(dt)
-                    i += 1
-                elif isinstance(u,Unit):
-
-                    if i == 0:
-                        # initial unit
-                        if u.tPlan is None:
-                            #dt = dt_0
-                            pass
-                        elif type(u.tPlan) is str and u.tPlan == 'sunrise' and dt_0 is not None:
-                            # shift start time after twilight
-                            dt = dt_0
-                            dt += timedelta(minutes=(dt.minute % 15))
-                        elif type(u.tPlan) is str and u.tPlan == 'sunset' and dt_1 is not None:
-                            # shift end time before twilight
-                            dt = dt_1 - self.getDuration()
-                            dt -= timedelta(minutes=(dt.minute % 15))
-                        elif type(u.tPlan) is time:
-                            dt = datetime.combine(dtArg.date(),u.tPlan).astimezone(None)
-                        else:
-                            #dt = datetime.combine(dtArg.date(),u.tPlan).astimezone(None)
-                            dt = dtArg
-                                
-                        #print(__name__ + ': set start to ' + str(dt), file=sys.stderr)
-                        
-                    dt = u.setDate(dt)
-                    i += 1
-                elif isinstance(u,Pause):
-                    dt = u.setDate(dt)
-                    i += 1
-                
-        return dt
-
-
     def updateValues(self,dictArg=None):
 
         """  """
@@ -230,17 +175,6 @@ class Combination(TItem):
         else:
             self.child.append(o)
         
-        return self
-
-
-    def resetDistances(self):
-
-        """  """
-
-        for u in self.child:
-            if isinstance(u,Unit):
-                u.setDistStr(None)
-
         return self
 
 
@@ -333,6 +267,29 @@ class Combination(TItem):
                 listResult.extend(m.stat(skipType))
 
         return listResult
+
+
+    def toSqlite(self):
+
+        """  """
+
+        strResult = ''
+
+        #if self.dt is not None:
+        #    strResult = "INSERT INTO 'units' VALUES ('{date}',{_dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self._dist, type=self.type, duration=self.d, description=self.getDescriptionString())
+
+        return strResult
+
+
+    def toCSV(self):
+
+        """  """
+
+        strResult = ''
+        for u in self.child:
+            strResult += str(u) + ', '
+
+        return strResult
 
 
     def toHtmlTable(self):
@@ -431,19 +388,6 @@ class Combination(TItem):
         return strResult
 
 
-    def toCSV(self):
-
-        """  """
-
-        # TODO: if self.logicAnd:
-
-        strResult = ''
-        for u in self.child:
-            strResult += u.toCSV()
-
-        return strResult
-
-
     def toSVG(self,x,y):
 
         """  """
@@ -501,7 +445,7 @@ class Combination(TItem):
         return strResult
 
 
-    def to_ical(self,cal=None):
+    def to_ical(self,cal):
 
         """  """
         

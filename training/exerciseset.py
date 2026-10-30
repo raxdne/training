@@ -149,6 +149,17 @@ class ExerciseSet(TItem):
         return str(self) + self.getDescriptionString()
 
 
+    def toCSV(self):
+
+        """  """
+
+        strResult = ''
+        for u in self.child:
+            strResult += str(u) + ', '
+
+        return strResult
+
+
     def toHtmlTable(self):
 
         """  """
@@ -194,6 +205,25 @@ class ExerciseSet(TItem):
         if self.color is not None:
             strResult += f' BACKGROUND_COLOR="{self.color}"'
         strResult += ' TEXT="' + self.getTitleXML() + ' x ' + str(self.repetitions) + '"/>'
+
+        return strResult
+
+
+    def to_ical(self,cal):
+
+        """  """
+        
+        pass
+    
+    
+    def toSqlite(self):
+
+        """  """
+
+        strResult = ''
+
+        #if self.dt is not None:
+        #    strResult = "INSERT INTO 'units' VALUES ('{date}',{_dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self._dist, type=self.type, duration=self.d, description=self.getDescriptionString())
 
         return strResult
 

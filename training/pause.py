@@ -103,22 +103,6 @@ class Pause(TItem):
         return strResult
 
 
-    def setDate(self,dtArg=None,dt_0=None,dt_1=None):
-
-        """  """
-
-        if dtArg is None:
-            self.dt = None
-        elif type(dtArg) is date or dtArg.time() == time(0):
-            print(__name__ + ': requires a complete datetime ' + str(self), file=sys.stderr)
-        else:
-            # fully defined dtArg
-            self.dt = dtArg
-            return self.dt + self.d
-
-        return None
-
-
     @property
     def d(self):
 

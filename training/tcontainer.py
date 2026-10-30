@@ -612,16 +612,6 @@ class TContainer(TCore):
         return None
 
 
-    def getChildIndexByTitle(self,t):
-
-        """  """
-
-        for i in range(len(self.child)):
-            if isinstance(self.child[i],TContainer) and self.child[i].title == t:
-                return i
-        return -1
-
-
     @property
     def periodInt(self):
 

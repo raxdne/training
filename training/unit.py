@@ -121,49 +121,6 @@ class Unit(TItem):
         return self
 
 
-    def setDate(self,dtArg=None,dt_0=None,dt_1=None):
-
-        """ fix 'dt' according to sunrise dt_0 or sunset dt_1 """
-
-        #print('setDate(' + dtArg.isoformat() + ' '  + dt_0.isoformat() + ' ' + dt_1.isoformat() + ') = ' + self.dt.isoformat() , file=sys.stderr)
-
-        if dtArg is None:
-            
-            self.dt = None
-            return self.dt
-        
-        elif type(dtArg) is date:
-            
-            return self.setDate(datetime.combine(dtArg,time(0)).astimezone(None),dt_0,dt_1)
-
-        elif type(dtArg) is datetime:
-
-            if self.tPlan is None:
-                self.dt = dtArg
-            elif type(self.tPlan) is str and self.tPlan == 'sunrise' and dt_0 is not None:
-                # shift start time after twilight
-                self.dt = dt_0
-                # adjust to 15min steps
-                self.dt -= timedelta(minutes=(self.dt.minute % 15))
-            elif type(self.tPlan) is str and self.tPlan == 'sunset' and dt_1 is not None:
-                # shift end time before twilight
-                self.dt = dt_1 - self._d
-                self.dt -= timedelta(minutes=(self.dt.minute % 15))
-            elif type(self.tPlan) is time:
-                self.dt = datetime.combine(dtArg.date(),self.tPlan).astimezone(None)
-            else:
-                #self.dt = datetime.combine(dtArg.date(),time(0)).astimezone(None)
-                self.dt = dtArg
-        
-        else:
-            print('error: date type unknown', file=sys.stderr)
-                
-        return self.dt + self._d
-        
-
-    schedule = setDate
-
-
     @property
     def type(self):
 
@@ -205,7 +162,7 @@ class Unit(TItem):
     @dist.setter
     def dist(self, o):
 
-        """  """
+        """ accepts different types of o """
 
         if o is None:
             self._dist = None
@@ -219,6 +176,7 @@ class Unit(TItem):
             except ValueError:
                 self._dist = None
         else:
+            # REQ: handle string with unit "11.23 mi" or "456m"
             return NotImplemented
 
         if self._dist is not None and self._dist < 0.001:
@@ -236,7 +194,7 @@ class Unit(TItem):
 
     def getDistString(self):
 
-        """  """
+        """ returns a formatted string containing distance and unit """
 
         strResult = ''
         

@@ -413,16 +413,6 @@ class Period(TContainer):
         return objResult
 
 
-    def getChildIndexByTitle(self,t):
-
-        """  """
-
-        for i in range(len(self.child)):
-            if isinstance(self.child[i],TContainer) and self.child[i].title == t:
-                return i
-        return -1
-
-
     def scale(self,f,p=None):
 
         """ returns a copy of self, scaled by f and matching pattern p if not None """
