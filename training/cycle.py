@@ -78,6 +78,17 @@ class Cycle(TContainer):
         return strResult
 
 
+    def set(self,**kwargs):
+        
+        """ generic setter """
+        
+        for key, value in kwargs.items():
+            if key in ['color','description','title']:
+                setattr(self, key, value)
+
+        return self
+
+
     def getLength(self):
 
         """ return length of cycle """
@@ -620,13 +631,17 @@ class Cycle(TContainer):
                     strResult += ' class="we"'
                 strResult += '>'
 
-                if not self.fPlan and len([u for u in v if isinstance(u,Unit)]) > 0:
-                    # TODO: make link portable/configurable
+                #a = (not self.fPlan and len([u for u in v if isinstance(u,Unit)]) > 0)
+                a = False
+                
+                strResult += '<div class="training-date">'
+                if a:
+                    # REQ: make link portable/configurable
                     strResult += '<a href="' + config.getURL(dt_i.strftime("%Y-%m-%d.*fitx")) + '">'
-                    strResult += dt_i.strftime("%Y-%m-%d %a (%j)")
+                strResult += dt_i.strftime("%Y-%m-%d %a (%j)")
+                if a:
                     strResult += '</a>'
-                else:
-                    strResult += dt_i.strftime("%Y-%m-%d %a (%j)")
+                strResult += '</div>'
 
                 strResult += '</td>'
 

@@ -190,9 +190,6 @@ class Note(TItem):
 
         strResult = ''
 
-        #if self.dt is not None:
-        #    strResult = "INSERT INTO 'units' VALUES ('{date}',{_dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self._dist, type=self.type, duration=self.d, description=self.getDescriptionString())
-
         return strResult
 
 
@@ -204,3 +201,4 @@ if __name__ == '__main__':
     t.setDate(date(2023,11,22))
 
     print(t)
+    print(t.toHtmlTable())

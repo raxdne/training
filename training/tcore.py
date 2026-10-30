@@ -39,8 +39,9 @@ class TCore(ABC):
 
         """  """
 
-        self.title = t
+        self.title = str(t)
         self._descr = []
+        self.color = None
 
 
     def __imul__(self,f):
@@ -48,6 +49,14 @@ class TCore(ABC):
         return self.scale(f)
 
 
+    @abstractmethod
+    def set(self,**kwargs):
+        
+        """ generic setter """
+
+        pass
+
+        
     @abstractmethod
     def scale(self,f,p=None):
 

@@ -60,6 +60,7 @@ style = """
     section > *:not(.header) {margin: 0.5em 2em 0.5em 2em;}
     div.header {font-weight:bold;}
     div:has(svg) {display: inline-block; white-space: nowrap;}
+    div.training-date {margin: 2px 1px 2px 1px;}
     div.training-unit {margin: 2px 1px 2px 1px;}
     div.training-cycle {margin: 5px 5px 5px 5px;}
     div.training-period {margin: 5px 5px 5px 5px;}
@@ -82,6 +83,8 @@ style = """
     section, td { border: 1px solid #c7c7c7;}
 </style>
 """
+
+# REQ: style_addon = f'' OR style_list = []
 
 def getURL(strArg):
     

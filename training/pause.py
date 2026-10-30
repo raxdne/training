@@ -224,6 +224,15 @@ class Pause(TItem):
 
         """  """
 
+    def toSqlite(self):
+
+        """  """
+
+        strResult = ''
+
+        return strResult
+
+
 if __name__ == '__main__':
 
     print('Module Test: ' + __file__ + '\n')

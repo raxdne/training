@@ -54,7 +54,6 @@ class TContainer(TCore):
 
         self.child = []
 
-        self.color = None
         self.tag = []
         self.data = []
         self.summary = {}
@@ -507,19 +506,6 @@ class TContainer(TCore):
             return False
 
         return (self.dateBegin is not None and self.dateEnd is not None and self.dateBegin <= dt and dt <= self.dateEnd)
-
-
-    @final
-    def set(self,**kwargs):
-        
-        """ generic setter """
-        
-        if 'title' in kwargs:
-            self.title = kwargs['title']
-        elif 'color' in kwargs:
-            self.color = kwargs['color']
-
-        return self
 
 
     @final

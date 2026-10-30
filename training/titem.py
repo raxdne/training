@@ -53,7 +53,6 @@ class TItem(TCore):
         self.dt = None
         self.tPlan = None
         self.marker = False
-        self.color = None
 
 
     def __repr__(self):

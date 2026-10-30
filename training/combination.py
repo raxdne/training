@@ -275,9 +275,6 @@ class Combination(TItem):
 
         strResult = ''
 
-        #if self.dt is not None:
-        #    strResult = "INSERT INTO 'units' VALUES ('{date}',{_dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self._dist, type=self.type, duration=self.d, description=self.getDescriptionString())
-
         return strResult
 
 
@@ -301,7 +298,7 @@ class Combination(TItem):
             strResult += ' style="background-color: {}"'.format(self.color)
         strResult += '>'
 
-        if hasattr(self,'title'):
+        if hasattr(self,'title') and len(self.title) > 0:
             strResult += self.title + ' ' + self.getDuration().toString()
         elif self.logicAnd:
             strResult += 'Combination: ' + self.getDuration().toString()

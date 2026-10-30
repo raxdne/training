@@ -105,7 +105,7 @@ class Unit(TItem):
         if self.type is not None:
             strResult += self.type + ' '
 
-        strResult += str(self._d)
+        strResult += self._d.toString()
 
         return strResult
 
@@ -391,7 +391,7 @@ class Unit(TItem):
             elif self._dist is None:
                 strResult = '{date};;{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), type=self.type, duration=self.d)
             else:
-                strResult = '{date};{_dist:.1f};{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), dist=self._dist, type=self.type, duration=self.d)
+                strResult = '{date};{dist:.1f};{type};{duration}'.format(date=self.dt.strftime("%Y-%m-%d"), dist=self._dist, type=self.type, duration=self.d)
 
             strResult += ';' + self.getDescriptionString() + '\n'
 
@@ -406,7 +406,7 @@ class Unit(TItem):
             # not significant for reports
             strResult = ''
         else:
-            strResult = "INSERT INTO 'units' VALUES ('{date}',{_dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self._dist, type=self.type, duration=self.d, description=self.getDescriptionString())
+            strResult = "INSERT INTO 'units' VALUES ('{date}',{dist:.1f},'{type}','{duration}','{description}');\n".format(date=self.dt.strftime("%Y-%m-%d"), dist=self._dist, type=self.type, duration=self.d, description=self.getDescriptionString())
 
         return strResult
 

@@ -77,6 +77,17 @@ class Period(TContainer):
         return strResult + '\n\n'
 
 
+    def set(self,**kwargs):
+        
+        """ generic setter """
+        
+        for key, value in kwargs.items():
+            if key in ['title','color','description']:
+                setattr(self, key, value)
+
+        return self
+
+
     def updateValues(self,dictArg=None):
 
         """  """
@@ -201,10 +212,12 @@ class Period(TContainer):
         elif isinstance(o,list):
             for a in o:
                 self.append(a)
-        elif isinstance(o,TContainer) or isinstance(o,Note):
+        elif isinstance(o,TContainer):
             self.child.append(o.dup())
             self.periodInt += o.getLength()
             #self.schedule()
+        elif isinstance(o,Note):
+            self.child.append(o.dup())
         else:
             print('error: ' + str(o), file=sys.stderr)
 

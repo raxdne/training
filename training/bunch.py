@@ -81,6 +81,17 @@ class Bunch(TContainer):
         return strResult + '\n\n'
 
 
+    def set(self,**kwargs):
+        
+        """ generic setter """
+        
+        for key, value in kwargs.items():
+            if key in ['dt','color','description']:
+                setattr(self, key, value)
+
+        return self
+
+
     def resetDistances(self):
 
         """  """
@@ -197,6 +208,8 @@ class Bunch(TContainer):
             if len(o.child) > 0:
                 self.child.append(o.child)
             self.setPeriod(self.periodInt + o.periodInt)
+        elif isinstance(o,TItem):
+            self.child.append((1,o))
         elif isinstance(o,tuple):
             self.child.extend([o])
 
